@@ -1,0 +1,169 @@
+#include <iostream.h>
+#include <fstream.h>
+#include <math.h>
+
+void przyklad()
+{
+
+
+  // wczytanie danych
+
+  Int_t n=99,i,j ;
+
+ Float_t x1[99],x2[99],x3[99],x4[99],x5[99],x6[99], y1;
+
+  ifstream d;
+
+   d.open("density");
+   // pod windows
+   //   d.open("D:\\Users\\moje\\plik.txt");
+
+   for(i=0;i<99;i=i+1)
+     {
+       d>>x1[i]>>x2[i]>>x3[i]>>x4[i]>>x5[i];
+
+// operacje na danych
+
+         x6[i]=x1[i]+8.*x4[i];
+
+
+      }
+   d.close();
+
+   // deklarowanie histogramu "jednowymiarowego"  .... liczba klas, przedział
+
+   TH1F *im1 = new TH1F("im1","jestem histogramem ",50,0.,220.);
+   TH1F *im2 = new TH1F("im2","ja tez jedno ",50,0.,220.);
+
+
+   TH2F *imd2 = new TH2F("imd2","jestem histogramem-2wym ",50,0.,220.,50,0,200.);
+
+      for(i=0;i<99;i=i+1)
+        { 
+	  im1->Fill(x6[i]);
+	  im2->Fill(x1[i]);
+	}
+    for(j=0;j<99;j=j+1)
+      {
+          imd2->Fill(x6[j],x3[j]);
+	}
+         
+    //skalowanie histogramu
+
+    /*      float scale_const=0.25;
+           im2->Scale(scale_const);
+    */
+    ///stworzenie canwy do rysunku
+TCanvas *test = new TCanvas("test","test");
+test->SetFillColor(0);
+// podzial na 2 pady
+test->Divide(2,1); 
+// przejscie do pada z niumerem 2
+ test->cd(1);
+
+         im2->Draw();
+
+      TH1F im3=8.* (*im2);
+
+      // opcje rysowania histogramu
+   im1->SetFillColor(2);
+   im1->SetFillStyle(3002);
+ test->cd(2);
+         im1->Draw();
+	 // narysowanie dwoch histogramowna jednym rysunku
+	 im2->Draw("same");
+
+
+	 // nowa canwa do rysowania
+
+TCanvas *test2 = new TCanvas("test2","test2");
+// tlo biale ?? 
+test2->SetFillColor(0);
+//dzielenie na pady
+
+
+//cos na temat statystyki
+//ok np gStyle->SetOptStat(111);
+test2->Divide(2,2); 
+ test2->cd(1);
+ // opcje draw : lego, box, cont4z
+        imd2->Draw();
+
+	test2->cd(2);
+        imd2->Draw("lego");
+
+	test2->cd(3);
+        imd2->Draw("box");
+
+	test2->cd(4);
+        imd2->Draw("cont4z");
+
+
+//tworzenie graphu bez bledow z n punków, x1, x2 tablice dla wspolrzednych z i y
+
+
+TGraph *gr3 =new TGraph(99,x1,x4);
+
+// opcje wykresu lini(typ, kolor, grybosc lini) i punktow(typ wielkosc) 
+
+ gr3->SetLineColor(kBlue);
+ gr3->SetLineWidth(2);
+ gr3->SetLineStyle(1);
+
+  gr3->SetMarkerColor(3);
+  //gr3->SetMarkerStyle(21),
+  //gr3->SetMarkerSize(2);
+
+ //rysowanie na domyslnej canwie– A aby były osie; L polaczone linią; P – zazanczone punkty
+TCanvas *test3 = new TCanvas("test3","test3");
+test->SetFillColor(0);
+
+  gr3->Draw("ALP");
+  // definiowanie funcji do dopasowania
+TF1 *ff = new TF1("ff","[0]+[1]*x-[2]*pow(x,2)",40.,80.);
+  gr3->Fit(ff);
+
+
+  
+}
+  /*
+//tworzenie wykresow z bledami
+  Float_t erx[80];
+  for(Int_t i=0;i<n;i++){erx[i]=0.;}
+
+TGraph *gr =new TgraphErrors(n,x1,x2,erx,x3);
+
+ gr->SetLineColor(1);
+ gr->SetMarkerColor(1);
+ gr->SetMarkerStyle(3),
+ gr->SetMarkerSize(2);
+ gr->SetLineStyle(1);
+ gr->SetLineWidth(2);
+  gr->Draw("ALP");
+
+
+//Opcje Draw()
+//Draw(ap) - os i punkty"
+ gr->Draw("Ap");
+
+//Draw(al) - os i laczenie punktow odcinkami
+ gr1->Draw("Al");
+
+//Draw(alp)-os, punkty oraz laczenie punktow odcinkami
+ gr2->Draw("Alp");
+
+//Draw(acp) - os, punkty oraz z interpolacja typu cubic spline
+ gr4->Draw("Acp");
+
+
+//Dopasowywanie funkcji do danych ( fitowanie)
+//def funkcji do fitowania
+TF1 *ff1 = new TF1("ff1","[0]*pow(x,[1])*exp(-[2]*x)",0,1000);
+
+// ustalenie parametrów - w tej byly trzy parametry, to nie jest zawsze konieczne
+// ff1->SetParameters(0.1,2.,0.01);
+
+ //fitowane obiektu o nazwie gr1
+gr1->Fit(ff1);
+}
+*/
