@@ -93,37 +93,38 @@ int main(int argc, char* argv[])
 	energy = Count_Energy(area, width, height);
 	__int32 energy_total{};
 	energy_total = (-1) * J * energy;
-	for (size_t i = 0; i < iterations; i++)
-	{
-		//fc_i.Push_Data(dis(generator));						//nowy silnik stl random  
-		__int32 temp{energy_total};
-		//_STD cout << "Energy: " << energy_total << NEW_LINE;
-		//TIME TO SPIN !
-		size_t x = dis_x(generator);
-		size_t y = dis_y(generator);
-		//area[x][y] *= (-1);
-		/*_STD cout << x << ' ' << y << NEW_LINE;*/
-//		energy = Count_Energy(area, width, height);
-//		energy_total = (-1) * J * energy;
+	_STD cout << energy_total << NEW_LINE;
+//	for (size_t i = 0; i < iterations; i++)
+//	{
+//		//fc_i.Push_Data(dis(generator));						//nowy silnik stl random  
+//		__int32 temp{energy_total};
+//		//_STD cout << "Energy: " << energy_total << NEW_LINE;
+//		//TIME TO SPIN !
+//		size_t x = dis_x(generator);
+//		size_t y = dis_y(generator);
+//		//area[x][y] *= (-1);
+//		/*_STD cout << x << ' ' << y << NEW_LINE;*/
+////		energy = Count_Energy(area, width, height);
+////		energy_total = (-1) * J * energy;
+////
+////		__int32 roznica = (temp - energy_total);
+//////		_STD cout << demon_energy << NEW_LINE;
+////		if (roznica > demon_energy)
+////		{
+////			_STD cout << "Koniec: " << demon_energy << NEW_LINE;
+////			break;
+////		}
 //
-//		__int32 roznica = (temp - energy_total);
-////		_STD cout << demon_energy << NEW_LINE;
-//		if (roznica > demon_energy)
-//		{
-//			_STD cout << "Koniec: " << demon_energy << NEW_LINE;
-//			break;
-//		}
-
-		//SPIN FLIP BY DEMON MA ENERGI NA TO BY TO WYKONAC
-		/*
-			Przyjmijmy: energia to -32 a po spinie to -24, spadla o 8, a demon ma 12 energi wiec spin sie wykona.
-			Lecz, gdyby mial 4 energi to musimy pominac spin flipa i poczekac na takiego ktorego moze zrobic
-			Jak energia to -32 a po spinie np. -34 to demonowi dodajemy 2 energie do gory ! jesli mial 20 to ma 22	
-			Jak energia to -32 a po spinie np. -30 to demonowi odejmujemy 2 energie do dolu ! jesli mial 20 to ma 18
-
-			Jak mamy same 1 to na samym poczatku policz energie !! -2 * width * height
-			*/
-	}
+//		//SPIN FLIP BY DEMON MA ENERGI NA TO BY TO WYKONAC
+//		/*
+//			Przyjmijmy: energia to -32 a po spinie to -24, spadla o 8, a demon ma 12 energi wiec spin sie wykona.
+//			Lecz, gdyby mial 4 energi to musimy pominac spin flipa i poczekac na takiego ktorego moze zrobic
+//			Jak energia to -32 a po spinie np. -34 to demonowi dodajemy 2 energie do gory ! jesli mial 20 to ma 22	
+//			Jak energia to -32 a po spinie np. -30 to demonowi odejmujemy 2 energie do dolu ! jesli mial 20 to ma 18
+//
+//			Jak mamy same 1 to na samym poczatku policz energie !! -2 * width * height
+//			*/
+//	}
 	/*
 		NA ZA TYDZIEN POCZYTAJ O AUTOMACIE WOLFRAMA, 256 regul, topologia, stany. Zwroc uwage na 
 		oznaczanie regul ! Regula jest konkretna liczba z zakresu 0-255
@@ -195,27 +196,45 @@ const unsigned __int32 Count_Energy(short* const* const area, const __int32& wid
 	{
 		for (size_t j = 0; j < static_cast<size_t>(height); ++j)
 		{
-			// bottom
-			if (j == height - 1)
+			//
+			if (i < (width - 1) && j < (height - 1))
 			{
-				// edge case
-				energy += area[i][j] * area[i][0];
+				energy += area[i+1][j] * area[i][j + 1];
 			}
-			else
+			else if (i == (width - 1) && j < (height - 1))
 			{
-				energy += area[i][j] * area[i][j + 1];
+				energy += area[0][j] * area[i][j + 1];
+			}
+			else if (i < (width - 1) && j == (height - 1))
+			{
+				energy += area[i][0] * area[i+1][j];
+			}
+			else if (i < (width - 1) && j == (height - 1))
+			{
+				energy += area[i][0] * area[i + 1][j];
 			}
 
-			// right
-			if (i == width - 1)
-			{
-				// edge case
-				energy += area[i][j] * area[0][j];
-			}
-			else
-			{
-				energy += area[i][j] * area[i + 1][j];
-			}
+			//// bottom
+			//if (j == height - 1)
+			//{
+			//	// edge case
+			//	energy += area[i][j] * area[i][0];
+			//}
+			//else
+			//{
+			//	energy += area[i][j] * area[i][j + 1];
+			//}
+
+			//// right
+			//if (i == width - 1)
+			//{
+			//	// edge case
+			//	energy += area[i][j] * area[0][j];
+			//}
+			//else
+			//{
+			//	energy += area[i][j] * area[i + 1][j];
+			//}
 		}
 	}
 	return energy;
