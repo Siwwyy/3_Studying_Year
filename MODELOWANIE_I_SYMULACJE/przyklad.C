@@ -1,30 +1,30 @@
-#include <iostream.h>
-#include <fstream.h>
-#include <math.h>
+#include <iostream>
+#include <fstream>
+#include <cmath>
 
 void przyklad()
 {
-
+using namespace std;
 
   // wczytanie danych
 
-  Int_t n=99,i,j ;
+  Int_t n=500,i,j ;
 
- Float_t x1[99],x2[99],x3[99],x4[99],x5[99],x6[99], y1;
+ Float_t x1[n],x2[n],x3[n],x4[n],x5[n],x6[n], y1;
 
   ifstream d;
 
-   d.open("density");
+  // d.open("density");
    // pod windows
-   //   d.open("D:\\Users\\moje\\plik.txt");
+      d.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\First\\First\\file1.out");
 
-   for(i=0;i<99;i=i+1)
+   for(i=0;i<n;i=i+1)
      {
-       d>>x1[i]>>x2[i]>>x3[i]>>x4[i]>>x5[i];
+       d>>x1[i]>>x2[i];
 
 // operacje na danych
 
-         x6[i]=x1[i]+8.*x4[i];
+         //x6[i]=x1[i]+8.*x4[i];
 
 
       }
@@ -32,20 +32,20 @@ void przyklad()
 
    // deklarowanie histogramu "jednowymiarowego"  .... liczba klas, przedział
 
-   TH1F *im1 = new TH1F("im1","jestem histogramem ",50,0.,220.);
-   TH1F *im2 = new TH1F("im2","ja tez jedno ",50,0.,220.);
+   TH1F *im1 = new TH1F("im1","jestem histogramem ",0.0,0.,2.0);
+   TH1F *im2 = new TH1F("im2","ja tez jedno ",0.0,0.,2.0);
 
 
-   TH2F *imd2 = new TH2F("imd2","jestem histogramem-2wym ",50,0.,220.,50,0,200.);
+   TH2F *imd2 = new TH2F("imd2","jestem histogramem-2wym ",0.0,0.,2.0,0.0,0.,2.0);
 
-      for(i=0;i<99;i=i+1)
+      for(i=0;i<n;i=i+1)
         { 
-	  im1->Fill(x6[i]);
-	  im2->Fill(x1[i]);
+	  im1->Fill(x1[i]);
+	  im2->Fill(x2[i]);
 	}
-    for(j=0;j<99;j=j+1)
+    for(j=0;j<n;j=j+1)
       {
-          imd2->Fill(x6[j],x3[j]);
+          imd2->Fill(x1[j],x2[j]);
 	}
          
     //skalowanie histogramu
@@ -102,7 +102,7 @@ test2->Divide(2,2);
 //tworzenie graphu bez bledow z n punków, x1, x2 tablice dla wspolrzednych z i y
 
 
-TGraph *gr3 =new TGraph(99,x1,x4);
+TGraph *gr3 =new TGraph(n,x1,x2);
 
 // opcje wykresu lini(typ, kolor, grybosc lini) i punktow(typ wielkosc) 
 
