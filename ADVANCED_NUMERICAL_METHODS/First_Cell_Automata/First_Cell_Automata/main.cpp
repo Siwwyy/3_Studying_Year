@@ -47,7 +47,6 @@ int main(int argc, char* argv[])
 
 
 	//SPIN FLIP
-	/*area[1][1] = static_cast<short>(-1);*/
 	std::default_random_engine generator;
 	std::uniform_int_distribution<> dis_x(0, width - 1);			//zakres naszego losowania
 	std::uniform_int_distribution<> dis_y(0, height - 1);			//zakres naszego losowania
@@ -59,37 +58,17 @@ int main(int argc, char* argv[])
 	energy = Count_Energy(area, width, height);
 	energy_total = energy_sum(J,energy);
 
-	//_STD cout << energy_total << NEW_LINE; //this two statements work
-	//_STD cin.get();	//too
 
 	for (size_t i = 0; i < iterations; i++)
 	{
 		temp_energy = energy_total;
 		x = dis_x(generator);
 		y = dis_y(generator);
-
-		//_STD cout << x << ' ' << y << NEW_LINE; //it works
 		//TIME TO SPIN !
 		area[x][y] *= (-1);
 
 		energy = Count_Energy(area, width, height);
 		energy_total = energy_sum(J, energy);
-
-		//if (energy_total > temp_energy)	//here may be a problem with positive values !
-		//{
-		//	spin_value = ((temp_energy) - (energy_total));
-		//	if (demon_energy < 0)
-		//	{
-		//		//demon_energy -= ((temp_energy) - (energy_total));
-		//		area[x][y] *= (-1);
-		//	}
-		//	spin_value *= (-1);
-		//}
-		//else if (temp_energy > energy_total)
-		//{
-		//	spin_value = ((energy_total) - (temp_energy));
-		//}
-		//spin_value = ()
 
 		if (energy_total > temp_energy)	//here may be a problem with positive values !
 		{
@@ -105,16 +84,6 @@ int main(int argc, char* argv[])
 			demon_energy += spin_value;
 		}
 
-	/*	if (demon_energy >= ((-1) * spin_value))
-		{
-			demon_energy += spin_value;
-		}*/
-		//else
-		//{
-		//	//demon_energy += spin_value;
-		//}
-		//_STD cout << spin_value << ' ';
-		//_STD cout << demon_energy << NEW_LINE;
 		_STD cout << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << energy << " Total energy: " << energy_total << NEW_LINE;
 		x = NULL;
 		y = NULL;
@@ -134,31 +103,6 @@ int main(int argc, char* argv[])
 		NA ZA TYDZIEN POCZYTAJ O AUTOMACIE WOLFRAMA, 256 regul, topologia, stany. Zwroc uwage na
 		oznaczanie regul ! Regula jest konkretna liczba z zakresu 0-255
 	*/
-
-
-//	for (size_t i = 0; i < iterations; i++)
-//	{
-//		//fc_i.Push_Data(dis(generator));						//nowy silnik stl random  
-//		__int32 temp{energy_total};
-//		//_STD cout << "Energy: " << energy_total << NEW_LINE;
-//		//TIME TO SPIN !
-//		size_t x = dis_x(generator);
-//		size_t y = dis_y(generator);
-//		//area[x][y] *= (-1);
-//		/*_STD cout << x << ' ' << y << NEW_LINE;*/
-////		energy = Count_Energy(area, width, height);
-////		energy_total = (-1) * J * energy;
-////
-////		__int32 roznica = (temp - energy_total);
-//////		_STD cout << demon_energy << NEW_LINE;
-////		if (roznica > demon_energy)
-////		{
-////			_STD cout << "Koniec: " << demon_energy << NEW_LINE;
-////			break;
-////		}
-//
-
-	
 	
 	//memory free
 	for (size_t i = 0; i < static_cast<size_t>(width); ++i)
@@ -211,9 +155,7 @@ void Initialize_Area(short* const* const area, const __int32& width, const __int
 		for (size_t j = 0; j < static_cast<size_t>(height); ++j)
 		{
 			*(*(area + i) + j) = static_cast<short>(1);
-			//*(*(area + i) + j) = static_cast<short>((i* height) + j) + 1;
 		}
-		//_STD cout << NEW_LINE;
 	}
 }
 
