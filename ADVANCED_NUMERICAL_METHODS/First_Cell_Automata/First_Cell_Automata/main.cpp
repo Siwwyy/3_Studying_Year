@@ -144,7 +144,6 @@ void Initialize_Area(short* const* const area, const __int32& width, const __int
 const unsigned __int32 Count_Energy(short* const* const area, const __int32& width, const __int32& height)
 {
 	unsigned __int32 energy{};
-
 	for (size_t i = 0; i < static_cast<size_t>(width); ++i)
 	{
 		for (size_t j = 0; j < static_cast<size_t>(height); ++j)
