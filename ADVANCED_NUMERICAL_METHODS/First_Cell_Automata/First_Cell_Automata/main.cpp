@@ -10,7 +10,7 @@
 void Read_File(const _STD string& file_path, __int32& width, __int32& height);
 void Print_Area(const short* const* const area, const __int32& width,const __int32& height);
 void Initialize_Area(short* const* const area, const __int32& width,const __int32& height);
-const unsigned __int32 Count_Energy(short* const* const area, const __int32& width,const __int32& height);
+const __int32 Count_Energy(short* const* const area, const __int32& width,const __int32& height);
 
 int main(int argc, char* argv[])
 {
@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	///////////////////////////////////////
 	__int32 width{}, height{};
 	__int32 J{ 1 };
-	unsigned __int32 energy{};
+	__int32 energy{};
 	__int32 energy_total{};
 	short** area{};
 	size_t x{};
@@ -29,6 +29,7 @@ int main(int argc, char* argv[])
 	__int32 temp_energy{};
 	size_t iterations{ 100 };
 	__int32 demon_energy{ 20 };
+	__int32 spin_value{ 0 };
 	///////////////////////////////////////
 
 
@@ -42,7 +43,7 @@ int main(int argc, char* argv[])
 	}
 
 	Initialize_Area(area, width, height);
-	Print_Area(area, width, height);
+	//Print_Area(area, width, height);	//uncomment if you want to display 2D matrix
 
 
 	//SPIN FLIP
@@ -74,22 +75,50 @@ int main(int argc, char* argv[])
 		energy = Count_Energy(area, width, height);
 		energy_total = energy_sum(J, energy);
 
+		//if (energy_total > temp_energy)	//here may be a problem with positive values !
+		//{
+		//	spin_value = ((temp_energy) - (energy_total));
+		//	if (demon_energy < 0)
+		//	{
+		//		//demon_energy -= ((temp_energy) - (energy_total));
+		//		area[x][y] *= (-1);
+		//	}
+		//	spin_value *= (-1);
+		//}
+		//else if (temp_energy > energy_total)
+		//{
+		//	spin_value = ((energy_total) - (temp_energy));
+		//}
+		//spin_value = ()
+
 		if (energy_total > temp_energy)	//here may be a problem with positive values !
 		{
-			demon_energy += ((temp_energy)-(energy_total));
-			if (demon_energy < 0)
+			spin_value = ((temp_energy)-(energy_total));
+			if (demon_energy >= ((-1) * spin_value))
 			{
-				demon_energy -= ((temp_energy) - (energy_total));
-				area[x][y] *= (-1);
+				demon_energy += spin_value;
 			}
 		}
-		else
+		else 
 		{
-			demon_energy -= ((energy_total) - (temp_energy));
+			spin_value = ((energy_total)-(temp_energy)) * (-1);
+			demon_energy += spin_value;
 		}
-		_STD cout << demon_energy << NEW_LINE;
-		x = 0;
-		y = 0;
+
+	/*	if (demon_energy >= ((-1) * spin_value))
+		{
+			demon_energy += spin_value;
+		}*/
+		//else
+		//{
+		//	//demon_energy += spin_value;
+		//}
+		//_STD cout << spin_value << ' ';
+		//_STD cout << demon_energy << NEW_LINE;
+		_STD cout << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << energy << " Total energy: " << energy_total << NEW_LINE;
+		x = NULL;
+		y = NULL;
+		spin_value = NULL;
 	}
 
 	//SPIN FLIP BY DEMON MA ENERGI NA TO BY TO WYKONAC
@@ -188,9 +217,9 @@ void Initialize_Area(short* const* const area, const __int32& width, const __int
 	}
 }
 
-const unsigned __int32 Count_Energy(short* const* const area, const __int32& width, const __int32& height)
+const __int32 Count_Energy(short* const* const area, const __int32& width, const __int32& height)
 {
-	unsigned __int32 energy{};
+	unsigned energy{};
 	for (size_t i = 0; i < static_cast<size_t>(width); ++i)
 	{
 		for (size_t j = 0; j < static_cast<size_t>(height); ++j)
