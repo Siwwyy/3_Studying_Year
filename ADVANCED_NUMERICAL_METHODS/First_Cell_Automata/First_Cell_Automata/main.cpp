@@ -59,6 +59,10 @@ int main(int argc, char* argv[])
 	energy_total = energy_sum(J,energy);
 
 
+	//OUTPUT FILE
+	std::fstream file_out;
+	file_out.open("file.out", std::ios_base::out);
+
 	for (size_t i = 0; i < iterations; i++)
 	{
 		temp_energy = energy_total;
@@ -84,7 +88,8 @@ int main(int argc, char* argv[])
 			demon_energy += spin_value;
 		}
 
-		_STD cout << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << energy << " Total energy: " << energy_total << NEW_LINE;
+		//_STD cout << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << energy << " Total energy: " << energy_total << NEW_LINE;
+		file_out << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << energy << " Total energy: " << energy_total << NEW_LINE;
 		x = NULL;
 		y = NULL;
 		spin_value = NULL;
@@ -110,6 +115,8 @@ int main(int argc, char* argv[])
 		delete[] *(area + i);
 	}
 	delete[] area;
+
+	file_out.close();
 
 	system("pause");
 	return 0;
