@@ -32,56 +32,8 @@ int main(int argc, char* argv[])
 	}
 
 	Initialize_Area(area, width, height);
-	//Print_Area(area, width, height);
+	Print_Area(area, width, height);
 
-
-	//for (size_t i = 0; i < static_cast<size_t>(width); ++i)
-	//{
-	//	for (size_t j = 0; j < static_cast<size_t>(height); ++j)
-	//	{
-	//		/*if (i == 0)
-	//		{
-
-	//		}
-	//		else if (i == (width - 1))
-	//		{
-
-	//		}
-	//		else
-	//		{
-
-	//		}*/
-	//		if (i < (width - 1) && j < (height - 1))
-	//		{
-	//		/*	if (area[i + 1][j] == 1 && area[i][j + 1] == 1)
-	//			{
-	//				energy += area[i + 1][j] * area[i][j + 1];
-	//			}*/
-	//			energy += area[i + 1][j] * area[i][j + 1];
-	//		}
-	//		else if (i < (width - 1) && j == (height - 1))
-	//		{
-	//			if (area[i][0] == 1 && area[i + 1][j] == 1)
-	//			{
-	//				energy += area[i][0] * area[i + 1][j];
-	//			}
-	//		}
-	//		else if (i == (width - 1) && j < (height - 1))
-	//		{
-	//			if (area[0][j] == 1 && area[i][j + 1] == 1)
-	//			{
-	//				energy += area[0][j] * area[i][j + 1];
-	//			}
-	//		}
-	//		
-	//		//excluded right and bottom
-	//			
-	//		/*	else
-	//			{
-	//				++pairs;
-	//			}*/
-	//	}
-	//}
 
 	//SPIN FLIP
 	/*area[1][1] = static_cast<short>(-1);*/
@@ -90,6 +42,7 @@ int main(int argc, char* argv[])
 	std::uniform_int_distribution<> dis_y(0, height - 1);			//zakres naszego losowania
 	size_t iterations{ 100 };
 	__int32 demon_energy{ 20 };
+
 	energy = Count_Energy(area, width, height);
 	__int32 energy_total{};
 	energy_total = (-1) * J * energy;
@@ -145,8 +98,6 @@ int main(int argc, char* argv[])
 void Read_File(const _STD string& file_path, __int32 & width, __int32 & height)
 {
 	std::fstream file_in;
-	/*__int32 width{};
-	__int32 height{};*/
 	file_in.open(file_path, std::ios_base::in);
 	if (file_in.good() == false)
 	{
@@ -184,6 +135,7 @@ void Initialize_Area(short* const* const area, const __int32& width, const __int
 		for (size_t j = 0; j < static_cast<size_t>(height); ++j)
 		{
 			*(*(area + i) + j) = static_cast<short>(1);
+			//*(*(area + i) + j) = static_cast<short>((i* height) + j) + 1;
 		}
 		//_STD cout << NEW_LINE;
 	}
@@ -192,50 +144,30 @@ void Initialize_Area(short* const* const area, const __int32& width, const __int
 const unsigned __int32 Count_Energy(short* const* const area, const __int32& width, const __int32& height)
 {
 	unsigned __int32 energy{};
+
 	for (size_t i = 0; i < static_cast<size_t>(width); ++i)
 	{
 		for (size_t j = 0; j < static_cast<size_t>(height); ++j)
 		{
-			//
-			if (i < (width - 1) && j < (height - 1))
+			if (i == static_cast<size_t>(width - static_cast<size_t>(1)))
 			{
-				energy += area[i+1][j] * area[i][j + 1];
+				energy += (area[i][j] * area[0][j]);
 			}
-			else if (i == (width - 1) && j < (height - 1))
+			else
 			{
-				energy += area[0][j] * area[i][j + 1];
-			}
-			else if (i < (width - 1) && j == (height - 1))
-			{
-				energy += area[i][0] * area[i+1][j];
-			}
-			else if (i < (width - 1) && j == (height - 1))
-			{
-				energy += area[i][0] * area[i + 1][j];
+				energy += (area[i][j] * area[i+1][j]);
 			}
 
-			//// bottom
-			//if (j == height - 1)
-			//{
-			//	// edge case
-			//	energy += area[i][j] * area[i][0];
-			//}
-			//else
-			//{
-			//	energy += area[i][j] * area[i][j + 1];
-			//}
-
-			//// right
-			//if (i == width - 1)
-			//{
-			//	// edge case
-			//	energy += area[i][j] * area[0][j];
-			//}
-			//else
-			//{
-			//	energy += area[i][j] * area[i + 1][j];
-			//}
+			if (j == static_cast<size_t>(height - static_cast<size_t>(1)))
+			{
+				energy += (area[i][j] * area[i][0]);
+			}
+			else
+			{
+				energy += (area[i][j] * area[i][j + 1]);
+			}
 		}
 	}
+
 	return energy;
 }
