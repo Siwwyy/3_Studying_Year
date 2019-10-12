@@ -18,11 +18,21 @@ int main(int argc, char* argv[])
 	using _STD cin;
 	using _STD endl;
 
+	///////////////////////////////////////
 	__int32 width{}, height{};
 	__int32 J{ 1 };
 	unsigned __int32 energy{};
+	__int32 energy_total{};
 	short** area{};
-	Read_File("file.in", width, height);
+	size_t x{};
+	size_t y{};
+	__int32 temp_energy{};
+	size_t iterations{ 100 };
+	__int32 demon_energy{ 20 };
+	///////////////////////////////////////
+
+
+	Read_File("file.in", width, height);	//file reader
 
 	area = new short* [width];
 
@@ -40,13 +50,63 @@ int main(int argc, char* argv[])
 	std::default_random_engine generator;
 	std::uniform_int_distribution<> dis_x(0, width - 1);			//zakres naszego losowania
 	std::uniform_int_distribution<> dis_y(0, height - 1);			//zakres naszego losowania
-	size_t iterations{ 100 };
-	__int32 demon_energy{ 20 };
+
+
+	//lambda case
+	auto energy_sum = [](const __int32& J, const __int32& energy) -> __int32 { return (-1) * J * energy; };
 
 	energy = Count_Energy(area, width, height);
-	__int32 energy_total{};
-	energy_total = (-1) * J * energy;
-	_STD cout << energy_total << NEW_LINE;
+	energy_total = energy_sum(J,energy);
+
+	//_STD cout << energy_total << NEW_LINE; //this two statements work
+	//_STD cin.get();	//too
+
+	for (size_t i = 0; i < iterations; i++)
+	{
+		temp_energy = energy_total;
+		x = dis_x(generator);
+		y = dis_y(generator);
+
+		//_STD cout << x << ' ' << y << NEW_LINE; //it works
+		//TIME TO SPIN !
+		area[x][y] *= (-1);
+
+		energy = Count_Energy(area, width, height);
+		energy_total = energy_sum(J, energy);
+
+		if (energy_total > temp_energy)	//here may be a problem with positive values !
+		{
+			demon_energy += ((temp_energy)-(energy_total));
+			if (demon_energy < 0)
+			{
+				demon_energy -= ((temp_energy) - (energy_total));
+				area[x][y] *= (-1);
+			}
+		}
+		else
+		{
+			demon_energy -= ((energy_total) - (temp_energy));
+		}
+		_STD cout << demon_energy << NEW_LINE;
+		x = 0;
+		y = 0;
+	}
+
+	//SPIN FLIP BY DEMON MA ENERGI NA TO BY TO WYKONAC
+	/*
+		Przyjmijmy: energia to -32 a po spinie to -24, spadla o 8, a demon ma 12 energi wiec spin sie wykona.
+		Lecz, gdyby mial 4 energi to musimy pominac spin flipa i poczekac na takiego ktorego moze zrobic
+		Jak energia to -32 a po spinie np. -34 to demonowi dodajemy 2 energie do gory ! jesli mial 20 to ma 22	
+		Jak energia to -32 a po spinie np. -30 to demonowi odejmujemy 2 energie do dolu ! jesli mial 20 to ma 18
+
+		Jak mamy same 1 to na samym poczatku policz energie !! -2 * width * height
+	*/
+	/*
+		NA ZA TYDZIEN POCZYTAJ O AUTOMACIE WOLFRAMA, 256 regul, topologia, stany. Zwroc uwage na
+		oznaczanie regul ! Regula jest konkretna liczba z zakresu 0-255
+	*/
+
+
 //	for (size_t i = 0; i < iterations; i++)
 //	{
 //		//fc_i.Push_Data(dis(generator));						//nowy silnik stl random  
@@ -68,20 +128,7 @@ int main(int argc, char* argv[])
 ////			break;
 ////		}
 //
-//		//SPIN FLIP BY DEMON MA ENERGI NA TO BY TO WYKONAC
-//		/*
-//			Przyjmijmy: energia to -32 a po spinie to -24, spadla o 8, a demon ma 12 energi wiec spin sie wykona.
-//			Lecz, gdyby mial 4 energi to musimy pominac spin flipa i poczekac na takiego ktorego moze zrobic
-//			Jak energia to -32 a po spinie np. -34 to demonowi dodajemy 2 energie do gory ! jesli mial 20 to ma 22	
-//			Jak energia to -32 a po spinie np. -30 to demonowi odejmujemy 2 energie do dolu ! jesli mial 20 to ma 18
-//
-//			Jak mamy same 1 to na samym poczatku policz energie !! -2 * width * height
-//			*/
-//	}
-	/*
-		NA ZA TYDZIEN POCZYTAJ O AUTOMACIE WOLFRAMA, 256 regul, topologia, stany. Zwroc uwage na 
-		oznaczanie regul ! Regula jest konkretna liczba z zakresu 0-255
-	*/
+
 	
 	
 	//memory free
