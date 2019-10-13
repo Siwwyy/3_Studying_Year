@@ -70,7 +70,7 @@ public:
 	virtual ~_Djikstra_Element();
 };
 
-//CLASS OF _MST
+//CLASS OF _Djikstra
 
 class _Djikstra
 {
