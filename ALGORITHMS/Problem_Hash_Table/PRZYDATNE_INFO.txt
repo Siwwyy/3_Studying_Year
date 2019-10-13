@@ -1,0 +1,15 @@
+2^31 ale 2^20 np.
+
+do 2 miliardow
+
+10 elementow tablica ma
+modulo sprawdz, 11 element 11 modulo z rozmiaru tablicy
+jak wszystkie zajete to nadpisuje (zobaczymy !!)
+
+Ilosc przypadkow
+ >> N
+Size >> Cos_Tam
+enter itp
+
+po stopie czyscimy bufory itp itd wszystko
+hashtag nie bedzie sie powtarzac
