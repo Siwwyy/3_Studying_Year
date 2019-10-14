@@ -21,22 +21,29 @@ int main(int argc, char* argv[])
 	using _STD endl;
 
 	///////////////////////////////////////
-	__int32 value = 47;
+	__int32 value = 126;
 	_STD bitset<sizeof(__int32) * 8> bits = value;
 	bool array_start_status[SIZE]{};
 	bool array_final_status[SIZE]{};
-	size_t iterations{40};
+	bool array_final_status_temp[SIZE]{};
+	size_t iterations{39};
 	///////////////////////////////////////
 
 	Fill_Array(array_start_status, bits);
 	//Display_Array(array_start_status);
+	Print(array_start_status);
 	Wolfram_Rule(array_start_status, bits, array_final_status);
-	//Display_Array(array_final_status);
 
-	Print(array_final_status);
+	//Print(array_start_status);
 
 	for (size_t i = 0; i < iterations; ++i)
 	{
+		Print(array_final_status);
+		for (size_t j = 0; j < SIZE; ++j)
+		{
+			array_final_status_temp[j] = array_final_status[j];
+		}
+		Wolfram_Rule(array_final_status_temp, bits, array_final_status);
 
 	}
 
@@ -61,11 +68,11 @@ void Fill_Array(bool array[], _STD bitset<sizeof(__int32) * 8>& bits)
 	//array[11] = true;
 	//array[12] = false;
 	///
-	/*for (size_t i = 0; i < bits.size(); ++i)
+	for (size_t i = 0; i < SIZE; ++i)
 	{
-
-	}*/
-	array[(SIZE / 2)] = 1;
+		array[i] = false;
+	}
+	array[(SIZE / 2)] = true;
 }
 
 void Display_Array(bool array[])
