@@ -22,4 +22,12 @@
   <ItemGroup>
     <None Include="file.in" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FreqCounter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="_Single_Variable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

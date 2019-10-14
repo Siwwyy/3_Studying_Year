@@ -4,6 +4,7 @@
 #include <fstream>
 #include <random>
 
+#include "FreqCounter.h"
 
 #define NEW_LINE '\n'
 
@@ -28,7 +29,7 @@ int main(int argc, char* argv[])
 	size_t y{};
 	__int32 temp_energy{};
 	size_t iterations{ 1000 };
-	__int32 demon_energy{ 20 };
+	__int32 demon_energy{ 10000 };
 	__int32 magnetization{ 0 };
 	__int32 spin_value{ 0 };
 	///////////////////////////////////////
@@ -46,6 +47,7 @@ int main(int argc, char* argv[])
 	Initialize_Area(area, width, height);
 	//Print_Area(area, width, height);	//uncomment if you want to display 2D matrix
 
+	FreqCounter<__int32> Object;
 
 	//SPIN FLIP
 	std::default_random_engine generator;
@@ -56,6 +58,7 @@ int main(int argc, char* argv[])
 	//lambda case
 	auto energy_sum = [](const __int32& J, const __int32& energy) -> __int32 { return (-1) * J * energy; };
 
+	//energy = (-2) *width*height;//= Count_Energy(area, width, height);
 	energy = Count_Energy(area, width, height);
 	energy_total = energy_sum(J,energy);
 
@@ -75,13 +78,19 @@ int main(int argc, char* argv[])
 
 		energy = Count_Energy(area, width, height);
 		energy_total = energy_sum(J, energy);
-
+		//popraw energie
 		if (energy_total > temp_energy)	//here may be a problem with positive values !
 		{
 			spin_value = ((temp_energy)-(energy_total));
 			if (demon_energy >= ((-1) * spin_value))
 			{
 				demon_energy += spin_value;
+				//energy_total = temp_energy;
+			}
+			else
+			{
+				area[x][y] *= (-1);
+				energy_total = temp_energy;
 			}
 		}
 		else 
@@ -97,14 +106,15 @@ int main(int argc, char* argv[])
 				magnetization += area[j][k];
 			}
 		}
-		_STD cout << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
+		Object.Push_Data(iterations,magnetization);
+		//_STD cout << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
 		//file_out << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
 		x = NULL;
 		y = NULL;
 		magnetization = NULL;
 		spin_value = NULL;
 	}
-
+	Object.Create_Chart();
 	//SPIN FLIP BY DEMON MA ENERGI NA TO BY TO WYKONAC
 	/*
 		Przyjmijmy: energia to -32 a po spinie to -24, spadla o 8, a demon ma 12 energi wiec spin sie wykona.

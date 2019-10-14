@@ -128,6 +128,10 @@
   <ItemGroup>
     <None Include="file.in" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FreqCounter.h" />
+    <ClInclude Include="_Single_Variable.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
