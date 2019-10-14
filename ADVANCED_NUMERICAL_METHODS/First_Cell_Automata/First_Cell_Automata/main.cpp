@@ -27,8 +27,9 @@ int main(int argc, char* argv[])
 	size_t x{};
 	size_t y{};
 	__int32 temp_energy{};
-	size_t iterations{ 100 };
+	size_t iterations{ 1000 };
 	__int32 demon_energy{ 20 };
+	__int32 magnetization{ 0 };
 	__int32 spin_value{ 0 };
 	///////////////////////////////////////
 
@@ -61,7 +62,8 @@ int main(int argc, char* argv[])
 
 	//OUTPUT FILE
 	std::fstream file_out;
-	file_out.open("file.out", std::ios_base::out);
+	//file_out.open("file.out", std::ios_base::out);
+	//file_out << "For iterations: " << iterations << " Begin demon energy: " << demon_energy << NEW_LINE;
 
 	for (size_t i = 0; i < iterations; i++)
 	{
@@ -87,11 +89,19 @@ int main(int argc, char* argv[])
 			spin_value = ((energy_total)-(temp_energy)) * (-1);
 			demon_energy += spin_value;
 		}
-
-		//_STD cout << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << energy << " Total energy: " << energy_total << NEW_LINE;
-		file_out << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << energy << " Total energy: " << energy_total << NEW_LINE;
+		
+		for (size_t j = 0; j < width; ++j)
+		{
+			for (size_t k = 0; k < height; ++k)
+			{
+				magnetization += area[j][k];
+			}
+		}
+		_STD cout << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
+		//file_out << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
 		x = NULL;
 		y = NULL;
+		magnetization = NULL;
 		spin_value = NULL;
 	}
 
@@ -116,7 +126,7 @@ int main(int argc, char* argv[])
 	}
 	delete[] area;
 
-	file_out.close();
+	//file_out.close();
 
 	system("pause");
 	return 0;
