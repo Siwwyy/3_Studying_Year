@@ -503,7 +503,7 @@ _Djikstra::_Djikstra(const _Djikstra& Object) :
 		this->Djikstra_Matrix[i].set_verticle(static_cast<int>((i + 1)));
 		this->Djikstra_Matrix[i].set_cost(1);
 		this->Djikstra_Matrix[i].set_edge(0);
-		this->Visited_Nodes[i] = (-1);
+		this->Visited_Nodes[i] = static_cast<int>((-1));
 	}
 }
 
@@ -519,19 +519,23 @@ void _Djikstra::push_directions(const int from, const int to, const int way_leng
 
 void _Djikstra::minimal_spanning_tree_creator(const int the_beginning)
 {
-	//for (size_t i = 0; i < _Djikstra_Matrix_lenght; ++i)
-	//{
-	//	Djikstra_Matrix[i].set_cost(1);	//means its a infinity
-	//	Djikstra_Matrix[i].set_edge(0);
-	//}
+	for (size_t i = 0; i < _Djikstra_Matrix_lenght; ++i)
+	{
+		Djikstra_Matrix[i].set_cost(1);	//means its a infinity
+		Djikstra_Matrix[i].set_edge(0);
+	}
 
 	int current_verticle = (the_beginning - 1);	//choose the beginning (by position in array (nr index))
 	int the_smallest_cost = 0;
 	int the_smallest_cost_position = 0;
 
+	
+
+	Djikstra_Matrix[current_verticle].set_cost(0);
+	Djikstra_Matrix[current_verticle].set_edge((current_verticle + 1));
+
 	print_graph();
 	print_djikstra_matrix();
-	_STD cin.get();
 	_STD cin.get();
 
 	for (size_t i = 0; i < this->_Graph_lenght; ++i)
@@ -541,11 +545,30 @@ void _Djikstra::minimal_spanning_tree_creator(const int the_beginning)
 
 		for (size_t j = 0; j < Graph[current_verticle].get_connections_size(); ++j)
 		{
-			if ((Djikstra_Matrix[j].get_cost() == 1 || Djikstra_Matrix[j].get_cost())&& Visited_Nodes[j] != (j+1))
+			if ((Djikstra_Matrix[j].get_cost() == 1 || (Djikstra_Matrix[current_verticle].get_cost() + Graph[j].get_cost()) <= Djikstra_Matrix[j].get_cost()) && Visited_Nodes[j] != (j + 1))
 			{
-
+				Djikstra_Matrix[j].set_cost(Graph[j].get_cost());
+				Djikstra_Matrix[j].set_cost(Graph[j].get_edge());
 			}
 		}
+
+		//Seeking for the smallest element in Prim's Matrix
+
+		for (size_t j = 0; j < _Djikstra_Matrix_lenght; ++j)
+		{
+			if (Djikstra_Matrix[j].get_cost() <= the_smallest_cost && Visited_Nodes[i] != (j+1))
+			{
+				the_smallest_cost = Djikstra_Matrix[i].get_cost();
+				the_smallest_cost_position = static_cast<int>(i);
+			}
+		}
+		current_verticle = the_smallest_cost_position;
+		the_smallest_cost = 0;
+		the_smallest_cost_position = 0;
+		print_graph();
+		print_djikstra_matrix();
+		_STD cin.get();
+
 	}
 }
 
