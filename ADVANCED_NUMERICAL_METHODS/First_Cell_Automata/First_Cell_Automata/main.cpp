@@ -28,10 +28,11 @@ int main(int argc, char* argv[])
 	size_t x{};
 	size_t y{};
 	__int32 temp_energy{};
-	size_t iterations{ 1000 };
-	__int32 demon_energy{ 10000 };
+	size_t iterations{ 100000 };
+	__int32 demon_energy{ 100000 };
 	__int32 magnetization{ 0 };
 	__int32 spin_value{ 0 };
+	double test{};
 	///////////////////////////////////////
 
 
@@ -47,7 +48,7 @@ int main(int argc, char* argv[])
 	Initialize_Area(area, width, height);
 	//Print_Area(area, width, height);	//uncomment if you want to display 2D matrix
 
-	FreqCounter<__int32> Object;
+	//FreqCounter<__int32> Object;
 
 	//SPIN FLIP
 	std::default_random_engine generator;
@@ -65,8 +66,8 @@ int main(int argc, char* argv[])
 
 	//OUTPUT FILE
 	std::fstream file_out;
-	//file_out.open("file.out", std::ios_base::out);
-	//file_out << "For iterations: " << iterations << " Begin demon energy: " << demon_energy << NEW_LINE;
+	file_out.open("file_test.out", std::ios_base::out);
+	file_out << "For iterations: " << iterations << " Begin demon energy: " << demon_energy << NEW_LINE;
 
 	for (size_t i = 0; i < iterations; i++)
 	{
@@ -106,15 +107,16 @@ int main(int argc, char* argv[])
 				magnetization += area[j][k];
 			}
 		}
-		Object.Push_Data(iterations,magnetization);
+		//Object.Push_Data(iterations,magnetization);
 		//_STD cout << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
-		//file_out << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
+		file_out << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
+		test += magnetization;
 		x = NULL;
 		y = NULL;
 		magnetization = NULL;
 		spin_value = NULL;
 	}
-	Object.Create_Chart();
+	//Object.Create_Chart();
 	//SPIN FLIP BY DEMON MA ENERGI NA TO BY TO WYKONAC
 	/*
 		Przyjmijmy: energia to -32 a po spinie to -24, spadla o 8, a demon ma 12 energi wiec spin sie wykona.
@@ -136,7 +138,9 @@ int main(int argc, char* argv[])
 	}
 	delete[] area;
 
-	//file_out.close();
+	file_out << double(test / iterations);
+
+	file_out.close();
 
 	system("pause");
 	return 0;
