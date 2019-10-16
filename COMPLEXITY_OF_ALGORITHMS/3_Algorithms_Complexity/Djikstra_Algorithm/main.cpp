@@ -183,8 +183,8 @@ void inserter()
 			std::cin >> c2;
 			std::cin >> p;
 			//both times cause each road is in both ways
-			Djikstra_Object->push(c1, c2, (-1) * p);
-			Djikstra_Object->push(c2, c1, (-1) * p);
+			Djikstra_Object->push(c1, c2, p);
+			Djikstra_Object->push(c2, c1, p);
 			--d;
 			c1 = 0;
 			c2 = 0;
@@ -405,7 +405,7 @@ void _Djikstra::find_way(const int from, const int to, const int way_lenght)
 			visited[i] = 0;
 		}
 
-		double the_smallest_way = -999999999;
+		double the_smallest_way = 999999999;
 		int current_verticle = (from - 1);
 		int destination_verticle = to;
 		bool founded_destination = false;
@@ -424,7 +424,9 @@ void _Djikstra::find_way(const int from, const int to, const int way_lenght)
 		}
 
 		minimal_spanning_tree_creator(to_he);	//create MST for this case
-
+		print_graph();
+		print_djikstra_matrix();
+		_STD cin.get();
 		/*current_verticle = Djikstra_Matrix[(from_he - 1)].get_edge();
 		if (the_smallest_way < Djikstra_Matrix[(from_he - 1)].get_cost())
 		{
@@ -501,7 +503,7 @@ _Djikstra::_Djikstra(const _Djikstra& Object) :
 	{
 		this->Graph[i].set_connections_size(this->_Graph_lenght);
 		this->Djikstra_Matrix[i].set_verticle(static_cast<int>((i + 1)));
-		this->Djikstra_Matrix[i].set_cost(1);
+		this->Djikstra_Matrix[i].set_cost(-1);
 		this->Djikstra_Matrix[i].set_edge(0);
 		this->Visited_Nodes[i] = static_cast<int>((-1));
 	}
@@ -521,12 +523,12 @@ void _Djikstra::minimal_spanning_tree_creator(const int the_beginning)
 {
 	for (size_t i = 0; i < _Djikstra_Matrix_lenght; ++i)
 	{
-		Djikstra_Matrix[i].set_cost(1);	//means its a infinity
+		Djikstra_Matrix[i].set_cost(-1);	//means its a infinity
 		Djikstra_Matrix[i].set_edge(0);
 	}
 
 	int current_verticle = (the_beginning - 1);	//choose the beginning (by position in array (nr index))
-	int the_smallest_cost = 0;
+	int the_smallest_cost = 999999999;
 	int the_smallest_cost_position = 0;
 
 	
@@ -540,35 +542,29 @@ void _Djikstra::minimal_spanning_tree_creator(const int the_beginning)
 
 	for (size_t i = 0; i < this->_Graph_lenght; ++i)
 	{
-		//Graph[current_verticle].set_visited_or_not(true);
 		Visited_Nodes[current_verticle] = (current_verticle + 1);
 
 		for (size_t j = 0; j < Graph[current_verticle].get_connections_size(); ++j)
 		{
-			if ((Djikstra_Matrix[j].get_cost() == 1 || (Djikstra_Matrix[current_verticle].get_cost() + Graph[j].get_cost()) <= Djikstra_Matrix[j].get_cost()) && Visited_Nodes[j] != (j + 1))
+			if (Graph[current_verticle].get_connections_array(j) != 0 && Visited_Nodes[j] != (j + 1))
 			{
-				Djikstra_Matrix[j].set_cost(Graph[j].get_cost());
-				Djikstra_Matrix[j].set_cost(Graph[j].get_edge());
-			}
+				if ((Djikstra_Matrix[j].get_cost() == -1) || ((Djikstra_Matrix[current_verticle].get_cost() + Graph[current_verticle].get_connections_array(j)) <= Djikstra_Matrix[j].get_cost()))
+				{
+					Djikstra_Matrix[j].set_cost(Djikstra_Matrix[current_verticle].get_cost() + Graph[current_verticle].get_connections_array(j));
+					Djikstra_Matrix[j].set_edge((current_verticle + 1));
+				}
+			}			
 		}
-
-		//Seeking for the smallest element in Prim's Matrix
-
+		//Seeking for the smallest element in Djikstra's Matrix
 		for (size_t j = 0; j < _Djikstra_Matrix_lenght; ++j)
 		{
-			if (Djikstra_Matrix[j].get_cost() <= the_smallest_cost && Visited_Nodes[i] != (j+1))
+			if ((Djikstra_Matrix[j].get_cost() <= the_smallest_cost && Djikstra_Matrix[j].get_cost() != (-1))  && Visited_Nodes[j] != (j+1))
 			{
-				the_smallest_cost = Djikstra_Matrix[i].get_cost();
-				the_smallest_cost_position = static_cast<int>(i);
+				the_smallest_cost = Djikstra_Matrix[j].get_cost();
+				current_verticle = static_cast<int>(j);
 			}
 		}
-		current_verticle = the_smallest_cost_position;
-		the_smallest_cost = 0;
-		the_smallest_cost_position = 0;
-		print_graph();
-		print_djikstra_matrix();
-		_STD cin.get();
-
+		the_smallest_cost = 999999999;
 	}
 }
 
