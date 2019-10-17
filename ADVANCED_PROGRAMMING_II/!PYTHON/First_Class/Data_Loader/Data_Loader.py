@@ -1,15 +1,52 @@
 import pandas as pd
 
+
+def select_columns(data_frame, column_names):
+    new_frame = data_frame.loc[:, column_names]
+    return new_frame
+
+
 currency_rating = pd.read_csv("currency_rating_2019.csv",engine = "python", delimiter = ";", encoding="cp1250", decimal = ",", sep = ",")
 
-print(currency_rating)
-print(currency_rating.columns)
-print("\n")
-print(currency_rating[['data','1USD']])
-print("\n")
-print("\n")
+#print(currency_rating)
+#print(currency_rating.columns)
+#print("\n")
+#print(currency_rating[['data','1USD']])
+#print("\n")
+#print("\n")
 #print("{0} {1}",currency_rating[['data']][0:-2],currency_rating[['1USD']][0:-2].min())
 #print(currency_rating[['1USD']][0:-2].min())
-min_usd = currency_rating[['1USD']][2:-3].astype('float64')
-row_id = min_usd.idxmin();
-print(currency_rating.loc[row_id])
+#min_usd = currency_rating[['1USD']][2:-3].astype('float64')
+#print(currency_rating.loc[row_id])
+
+#average = currency_rating[['1USD']][0:-2].mean();
+#print("Average: ", average);#currency_rating[['data']]>'20190101' & currency_rating[['data']]<'20191010']
+#data_frame = pd.DataFrame(currency_rating)
+#selected_columns = ['data','1USD']
+#data_frame_copy = select_columns(data_frame, selected_columns)
+##print(data_frame)
+#print(data_frame_copy)
+#mask = (data_frame_copy['data'] > '20190101') & (data_frame_copy['data'] < '20191010')
+#average = (data_frame_copy.loc[mask, '1USD']).astype('float64')
+#mediana = (data_frame_copy.loc[mask, '1USD']).astype('float64')
+#print("Average: ", average.mean())
+#print("Median: ", mediana.median())
+#print("Average: ", ((currency_rating[['1USD']][1:-3]).astype('float64')).mean())
+#print("Average: ", ((currency_rating[['1USD']][1:-3]).astype('float64')).median())
+
+def Average_Median_Specified_Month(currency,from_date,to_date):
+    data_frame = pd.DataFrame(currency_rating)
+    selected_columns = ['data','1USD']
+    data_frame_copy = select_columns(data_frame, selected_columns)
+#    print(data_frame_copy)
+    mask = (data_frame_copy['data'] > from_date) & (data_frame_copy['data'] < to_date)
+    average = (data_frame_copy.loc[mask, currency]).astype('float64')
+    mediana = (data_frame_copy.loc[mask, currency]).astype('float64')
+    print("++++++++++++++++++++++++++++++++++++")
+    print("     Date: {0} to {1}".format(from_date, to_date))
+    print("     Average: ", average.mean())
+    print("     Median: ", mediana.median())
+    print("++++++++++++++++++++++++++++++++++++")
+
+
+Average_Median_Specified_Month('1USD','20190101','20190631') 
