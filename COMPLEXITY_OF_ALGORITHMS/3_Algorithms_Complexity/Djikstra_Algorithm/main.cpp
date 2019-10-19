@@ -203,11 +203,9 @@ void inserter()
 			{
 				//here call all needed functions for solve the problem cause if s and e will be equal to 0 problem will be stopped immediately
 				///////////////////////////////////////////////
-				//Djikstra_Object->print_graph();
 				Djikstra_Object->get_results();
 				///////////////////////////////////////////////
-				//delete Djikstra_Object;
-				_STD cin.get();
+				delete Djikstra_Object;
 				exit(0);
 			}
 			s = 0;
@@ -399,68 +397,41 @@ void _Djikstra::find_way(const int from, const int to, const int way_lenght)
 	}
 	else
 	{
-		int* visited = new int[this->_Graph_lenght];
-		for (size_t i = 0; i < _Graph_lenght; ++i)
-		{
-			visited[i] = 0;
-		}
-
-		double the_smallest_way = 999999999;
-		int current_verticle = (from - 1);
-		int destination_verticle = to;
-		bool founded_destination = false;
-		int from_he = 0;
-		int to_he = 0;
+		int current_verticle = 0;
+		int destination_verticle = 0;
+		int from_ = 0;
+		int to_ = 0;
 
 		if (from < to)
 		{
-			from_he = to;
-			to_he = from;
+			from_ = from;
+			to_ = to;
 		}
 		else
 		{
-			from_he = from;
-			to_he = to;
+			from_ = to;
+			to_ = from;
 		}
+		destination_verticle = from_;
+		current_verticle = to_;
+		minimal_spanning_tree_creator(from_);	//create Djikstra for this case
 
-		minimal_spanning_tree_creator(to_he);	//create MST for this case
-		print_graph();
-		print_djikstra_matrix();
-		_STD cin.get();
-		current_verticle = Djikstra_Matrix[(from_he - 1)].get_edge();
-		if (the_smallest_way < Djikstra_Matrix[(from_he - 1)].get_cost())
+		_STD cout << "Road through: ";
+		for (int i = _Djikstra_Matrix_lenght - 1; i >= 0; --i)
 		{
-			the_smallest_way = Djikstra_Matrix[(from_he - 1)].get_cost();
-		}
-		visited[(current_verticle)-1] = Djikstra_Matrix[(from_he - 1)].get_verticle();
-		while (founded_destination == false)
-		{
-			for (int i = _Djikstra_Matrix_lenght - 1; i >= 0; --i)
+			if (Djikstra_Matrix[i].get_verticle() == destination_verticle)
 			{
-				if (Djikstra_Matrix[i].get_verticle() == (current_verticle))
-				{
-					visited[(current_verticle)-1] = current_verticle;
-					current_verticle = Djikstra_Matrix[i].get_edge();
-					if (the_smallest_way < Djikstra_Matrix[i].get_cost())
-					{
-						the_smallest_way = Djikstra_Matrix[i].get_cost();
-					}
-					break;
-				}
-				if ((current_verticle) == Djikstra_Matrix[(to_he - 1)].get_verticle())
-				{
-					founded_destination = true;
-					break;
-				}
+				_STD cout << Djikstra_Matrix[i].get_verticle();
+				break;
 			}
-
+			else if (Djikstra_Matrix[i].get_verticle() == current_verticle)
+			{
+				current_verticle = Djikstra_Matrix[i].get_edge();
+				_STD cout << Djikstra_Matrix[i].get_verticle() << " -> ";
+			}
 		}
-		the_smallest_way *= 1;
-		the_smallest_way -= 1;
-		double result = ceil(static_cast<double>(((static_cast<double>(way_lenght) / (the_smallest_way)))));
-		std::cout << result << '\n';
-		_STD cin.get();
-		delete[] visited;
+		_STD cout << NEW_LINE;
+		system("pause");
 	}
 }
 
@@ -526,6 +497,7 @@ void _Djikstra::minimal_spanning_tree_creator(const int the_beginning)
 	{
 		Djikstra_Matrix[i].set_cost(-1);	//means its a infinity
 		Djikstra_Matrix[i].set_edge(0);
+		Visited_Nodes[i] = (-1);
 	}
 
 	int current_verticle = (the_beginning - 1);	//choose the beginning (by position in array (nr index))

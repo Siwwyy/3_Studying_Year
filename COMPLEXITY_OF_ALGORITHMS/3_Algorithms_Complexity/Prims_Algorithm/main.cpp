@@ -530,7 +530,7 @@ void _MST::find_way(const int from, const int to, const int way_lenght)
 
 		minimal_spanning_tree_creator(to_he);	//create MST for this case
 		
-		current_verticle = Prims_Matrix[(from_he - 1)].get_edge();
+		/*current_verticle = Prims_Matrix[(from_he - 1)].get_edge();
 		if (the_smallest_way < Prims_Matrix[(from_he - 1)].get_cost())
 		{
 			the_smallest_way = Prims_Matrix[(from_he - 1)].get_cost();
@@ -561,7 +561,7 @@ void _MST::find_way(const int from, const int to, const int way_lenght)
 		the_smallest_way *= -1;
 		the_smallest_way -= 1;
 		double result = ceil(static_cast<double>(((static_cast<double>(way_lenght) / (the_smallest_way)))));
-		std::cout << result << '\n';
+		std::cout << result << '\n';*/
 		delete[] visited;
 	}
 }
