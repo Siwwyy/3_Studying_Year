@@ -427,7 +427,7 @@ void _Djikstra::find_way(const int from, const int to, const int way_lenght)
 		print_graph();
 		print_djikstra_matrix();
 		_STD cin.get();
-		/*current_verticle = Djikstra_Matrix[(from_he - 1)].get_edge();
+		current_verticle = Djikstra_Matrix[(from_he - 1)].get_edge();
 		if (the_smallest_way < Djikstra_Matrix[(from_he - 1)].get_cost())
 		{
 			the_smallest_way = Djikstra_Matrix[(from_he - 1)].get_cost();
@@ -455,10 +455,11 @@ void _Djikstra::find_way(const int from, const int to, const int way_lenght)
 			}
 
 		}
-		the_smallest_way *= -1;
+		the_smallest_way *= 1;
 		the_smallest_way -= 1;
 		double result = ceil(static_cast<double>(((static_cast<double>(way_lenght) / (the_smallest_way)))));
-		std::cout << result << '\n';*/
+		std::cout << result << '\n';
+		_STD cin.get();
 		delete[] visited;
 	}
 }
@@ -531,14 +532,8 @@ void _Djikstra::minimal_spanning_tree_creator(const int the_beginning)
 	int the_smallest_cost = 999999999;
 	int the_smallest_cost_position = 0;
 
-	
-
 	Djikstra_Matrix[current_verticle].set_cost(0);
 	Djikstra_Matrix[current_verticle].set_edge((current_verticle + 1));
-
-	print_graph();
-	print_djikstra_matrix();
-	_STD cin.get();
 
 	for (size_t i = 0; i < this->_Graph_lenght; ++i)
 	{
