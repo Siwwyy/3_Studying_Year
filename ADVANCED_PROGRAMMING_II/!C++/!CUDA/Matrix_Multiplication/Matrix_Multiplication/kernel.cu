@@ -19,7 +19,7 @@
 #define OK cudaSuccess
 #define NEW_LINE '\n'
 
-#define SIZE 2
+#define SIZE 4
 
 //CPU FUNCTIONS
 void Show_Matrix(const __int32* const* const Matrix);
@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 	//Show_Matrix_GPU << <SIZE, SIZE >> > (Matrix_GPU_A);
 	//Show_Matrix_GPU << <SIZE, SIZE >> > (Matrix_GPU_B);
 	//Show_Matrix_GPU << <SIZE, SIZE >> > (Matrix_GPU_C);
-	Multiply_Matrices <<<SIZE, SIZE>>> (Matrix_GPU_A, Matrix_GPU_B, Matrix_GPU_C);
+	Multiply_Matrices <<<1, SIZE>>> (Matrix_GPU_A, Matrix_GPU_B, Matrix_GPU_C);
 	//Show_Matrix_GPU <<<SIZE, SIZE>>> (Matrix_GPU_A);
 	//Show_Matrix_GPU <<<SIZE, SIZE>>> (Matrix_GPU_B);
 	//Show_Matrix_GPU <<<SIZE, SIZE>>> (Matrix_GPU_C);
@@ -179,32 +179,43 @@ __global__ void Multiply_Matrices(const __int32* const Matrix_GPU_A, const __int
 {
 	int id_x = threadIdx.x + blockIdx.x * blockDim.x;
 	int id_y = threadIdx.y + blockIdx.y * blockDim.y;
-	//__int32 temp{};
+	__int32 temp{};
+
+	while (id_x < SIZE)
+	{
+		while (id_y < SIZE)
+		{
+			printf("A[%d][%d]\n", id_y, id_x);
+			id_y += blockDim.y * gridDim.y;
+		}
+		id_x += blockDim.x * gridDim.x;
+	}
+	printf("\n");
 	//int i{};
 	//while (id_x < SIZE)
-	if (id_x < SIZE && id_y < SIZE)
-	{
-		//while (id_y < SIZE)
-		//while (i < SIZE)
-		//{
-		//	//Matrix_GPU_C[id_y * SIZE + id_x] += Matrix_GPU_A[id_y * SIZE + id_x] * Matrix_GPU_B[id_y * SIZE + id_x];
-		//	//Matrix_GPU_C[id_y * SIZE + id_x] += Matrix_GPU_A[id_y * SIZE + id_x] * Matrix_GPU_B[id_y * SIZE + id_x];
-		//	//temp += Matrix_GPU_A[id_y * SIZE + id_x] * Matrix_GPU_B[id_y * SIZE + id_x];
-		//	//temp += Matrix_GPU_A[id_y * SIZE + id_x] * Matrix_GPU_B[id_y * SIZE + id_x];
-		//	Matrix_GPU_C[id_x * SIZE + i] += Matrix_GPU_A[id_x * SIZE + i] * Matrix_GPU_B[i * SIZE + id_y];
-		//	//id_y++;
-		//	++i;
-		//}
-		__int32 temp{};
-		for (size_t i = 0; i < SIZE; ++i)
-		{
-			temp += Matrix_GPU_A[id_x * SIZE + i] * Matrix_GPU_B[i * SIZE + id_y];
-		}
-		Matrix_GPU_C[id_x * SIZE + id_y] = temp;
-		//Matrix_GPU_C[id_x * SIZE + id_y] = temp;
-	/*	id_x += blockDim.x * gridDim.x;
-		id_y += blockDim.y * gridDim.y;*/
-	}
+	//if (id_x < SIZE && id_y < SIZE)
+	//{
+	//	//while (id_y < SIZE)
+	//	//while (i < SIZE)
+	//	//{
+	//	//	//Matrix_GPU_C[id_y * SIZE + id_x] += Matrix_GPU_A[id_y * SIZE + id_x] * Matrix_GPU_B[id_y * SIZE + id_x];
+	//	//	//Matrix_GPU_C[id_y * SIZE + id_x] += Matrix_GPU_A[id_y * SIZE + id_x] * Matrix_GPU_B[id_y * SIZE + id_x];
+	//	//	//temp += Matrix_GPU_A[id_y * SIZE + id_x] * Matrix_GPU_B[id_y * SIZE + id_x];
+	//	//	//temp += Matrix_GPU_A[id_y * SIZE + id_x] * Matrix_GPU_B[id_y * SIZE + id_x];
+	//	//	Matrix_GPU_C[id_x * SIZE + i] += Matrix_GPU_A[id_x * SIZE + i] * Matrix_GPU_B[i * SIZE + id_y];
+	//	//	//id_y++;
+	//	//	++i;
+	//	//}
+	//	__int32 temp{};
+	//	for (size_t i = 0; i < SIZE; ++i)
+	//	{
+	//		temp += Matrix_GPU_A[id_x * SIZE + i] * Matrix_GPU_B[i * SIZE + id_y];
+	//	}
+	//	Matrix_GPU_C[id_x * SIZE + id_y] = temp;
+	//	//Matrix_GPU_C[id_x * SIZE + id_y] = temp;
+	///*	id_x += blockDim.x * gridDim.x;
+	//	id_y += blockDim.y * gridDim.y;*/
+	//}
 	//int row = blockIdx.y * SIZE + threadIdx.y;
 	//int col = blockIdx.x * SIZE + threadIdx.x;
 
@@ -220,4 +231,14 @@ __global__ void Multiply_Matrices(const __int32* const Matrix_GPU_A, const __int
 	//		row += blockDim.x * gridDim.x;
 	//		col += blockDim.y * gridDim.y;
 	//	}
+
+	//if (id_x < SIZE && id_y < SIZE) 
+	//{
+	//	// each thread computes one element of the block sub-matrix
+	//	for (int i = 0; i < SIZE; i++)
+	//	{
+	//		temp += Matrix_GPU_A[id_x * SIZE + i] * Matrix_GPU_B[i * SIZE + id_y];
+	//	}
+	//}
+	//Matrix_GPU_C[id_x * SIZE + id_y] = temp;
 }
