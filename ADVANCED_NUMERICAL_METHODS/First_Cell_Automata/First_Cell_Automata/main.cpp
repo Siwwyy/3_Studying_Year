@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 	size_t y{};
 	__int32 temp_energy{};
 	size_t iterations{ 15000 };
-	__int32 demon_energy{ 100000 };
+	__int32 demon_energy{ 500000 };
 	__int32 magnetization{ 0 };
 	__int32 spin_value{ 0 };
 	double test{};
@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
 
 	//OUTPUT FILE
 	std::fstream file_out;
-	file_out.open("file_to_csv1.out", std::ios_base::out);
+	file_out.open("file_to_csv2.csv", std::ios_base::out);
 	file_out << "For iterations: " << iterations << " Initial energy of demon: " << demon_energy << NEW_LINE;
 
 	for (size_t i = 0; i < iterations; i++)
@@ -109,8 +109,8 @@ int main(int argc, char* argv[])
 		}
 		//Object.Push_Data(iterations,magnetization);
 		//_STD cout << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
-		file_out << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
-		//file_out << i << "," << magnetization << NEW_LINE;
+		//file_out << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
+		file_out << i << "," << magnetization << NEW_LINE;
 		test += magnetization;
 		x = NULL;
 		y = NULL;
