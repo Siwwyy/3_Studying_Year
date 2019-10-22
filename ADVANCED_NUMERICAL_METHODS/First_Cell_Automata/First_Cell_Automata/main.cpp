@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 	size_t x{};
 	size_t y{};
 	__int32 temp_energy{};
-	size_t iterations{ 2400 };
+	size_t iterations{ 10000 };
 	__int32 demon_energy{ 10000 };
 	__int32 magnetization{ 0 };
 	__int32 spin_value{ 0 };
@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 
 	//OUTPUT FILE
 	std::fstream file_out;
-	file_out.open("file_to_histogram.csv", std::ios_base::out);
+	file_out.open("file_to_csv3.csv", std::ios_base::out);
 	file_out << "For iterations: " << iterations << " Initial energy of demon: " << demon_energy << NEW_LINE;
 
 	//nx = ny = 100
@@ -118,13 +118,13 @@ int main(int argc, char* argv[])
 		//_STD cout << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
 		//file_out << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
 		//file_out << i << "," << magnetization << NEW_LINE;
+		file_out << i << ',' << demon_energy << NEW_LINE;
 		
-		if (i > 1399)
-		{
-			test += demon_energy;
-			freq[demon_energy]++;
-			//file_out << demon_energy << NEW_LINE;
-		}
+		//if (i > 1399)
+		//{
+		//	/*test += demon_energy;
+		//	freq[demon_energy]++;
+		//}
 		/*if (i > 1399)
 		{
 			test += magnetization;
@@ -134,10 +134,10 @@ int main(int argc, char* argv[])
 		magnetization = NULL;
 		spin_value = NULL;
 	}
-	for (auto& x : freq)
+	/*for (auto& x : freq)
 	{
 		file_out << x.first << ',' << x.second << NEW_LINE;
-	}
+	}*/
 	//Object.Create_Chart();
 	//SPIN FLIP BY DEMON MA ENERGI NA TO BY TO WYKONAC
 	/*
