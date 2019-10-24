@@ -19,7 +19,7 @@
 #define OK cudaSuccess
 #define NEW_LINE '\n'
 
-#define SIZE 2
+#define SIZE 5
 #define DIM 2
 
 //CPU FUNCTIONS
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 	Fill_Matrix(Matrix_CPU_B,5);
 	Fill_Matrix(Matrix_CPU_C,0);
 
-	Matrix_CPU_A[0][0] = 1;
+	/*Matrix_CPU_A[0][0] = 1;
 	Matrix_CPU_A[0][1] = 2;
 	Matrix_CPU_A[1][0] = 3;
 	Matrix_CPU_A[1][1] = 4;
@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
 	Matrix_CPU_C[0][0] = 0;
 	Matrix_CPU_C[0][1] = 0;
 	Matrix_CPU_C[1][0] = 0;
-	Matrix_CPU_C[1][1] = 0;
+	Matrix_CPU_C[1][1] = 0;*/
 
 	//SHOW FILLED UP ARRAY
 	//Show_Matrix(Matrix_CPU_A);
@@ -100,9 +100,10 @@ int main(int argc, char* argv[])
 	}
 
 	////////////////////////////////////////////////////
-	dim3 grid(2, 1);
+	dim3 blocks(SIZE,SIZE);
+	dim3 threads(1);
 	//MULTIPLY THE MATRICES
-	Multiply_Matrices <<<grid, 1>>> (Matrix_GPU_A, Matrix_GPU_B, Matrix_GPU_C);
+	Multiply_Matrices <<<blocks, threads>>> (Matrix_GPU_A, Matrix_GPU_B, Matrix_GPU_C);
 	//COPY FROM GPU TO CPU
 	//HANDLE_ERROR(cudaMemcpy(Matrix_CPU, Matrix_GPU, (SIZE * SIZE) * sizeof(__int32), DeviceToHost));	//only for statics array
 
@@ -163,7 +164,7 @@ void Fill_Matrix(__int32* const* const Matrix, const __int32 initial_value)
 		for (size_t j = 0; j < SIZE; ++j)
 		{
 			//Matrix[i][j] = (i*SIZE)+j+initial_value;
-			//Matrix[i][j] = initial_value;
+			Matrix[i][j] = initial_value;
 		}
 	}
 }
@@ -190,33 +191,16 @@ __global__ void Multiply_Matrices(const __int32* const Matrix_GPU_A, const __int
 	int id_x = blockIdx.x;
 	//int id_y = threadIdx.y + blockIdx.y * blockDim.y;
 	int id_y = blockIdx.y;
-	/*while (id_x < SIZE)
+	__int32 temporary{};
+	while (id_x < SIZE && id_y < SIZE)
 	{
-		while (id_y < SIZE)
+		for (size_t i = 0; i < SIZE; ++i)
 		{
-			for (int i = 0; i < SIZE; i++)
-			{
-				Matrix_GPU_C[id_x * SIZE + id_y] += Matrix_GPU_A[i * SIZE + id_y] * Matrix_GPU_B[i * SIZE + id_x];
-			}
-			id_y += blockDim.y * gridDim.y;
+			temporary += Matrix_GPU_A[id_x * SIZE + i] * Matrix_GPU_B[i * SIZE + id_y];
 		}
-		id_x += blockDim.x * gridDim.x;
-	}*/
-	/*while (id_x < SIZE && id_y < SIZE)
-	{
-		printf("A[%d][%d]\n", id_y, id_x);
-		id_x += blockDim.x * gridDim.x;
-		id_y += blockDim.y * gridDim.y;
-	}
-	printf("\n");*/
-	while (id_x < SIZE)
-	{
-		while (id_y < SIZE)
-		{
-			printf("A[%d][%d]\n", id_x, id_y);
-			id_y += gridDim.y;
-		}
+		Matrix_GPU_C[id_x * SIZE + id_y] = temporary;
+		temporary = NULL;
 		id_x += gridDim.x;
+		id_y += gridDim.y;
 	}
-	printf("\n");
 }
