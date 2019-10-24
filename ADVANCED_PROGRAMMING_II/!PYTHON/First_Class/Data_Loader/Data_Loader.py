@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 import numpy as np
 import pylab
 
@@ -77,5 +78,12 @@ def Plot_Something(currency,from_date,to_date,data_frame_1):
 ######################################################################################
 ######################################################################################
 
-Average_Median_Specified_Month('1USD','20190101','20190831',data_frame_copy) 
-Plot_Something('1USD','20190101','20190831',data_frame_copy)
+#Average_Median_Specified_Month('1USD','20190101','20190831',data_frame_copy) 
+#Plot_Something('1USD','20190101','20190831',data_frame_copy)
+
+img=mpimg.imread('download.png')
+imgplot = plt.imshow(img)
+
+from cv2
+image = Image.open("download.png")
+image.show()
