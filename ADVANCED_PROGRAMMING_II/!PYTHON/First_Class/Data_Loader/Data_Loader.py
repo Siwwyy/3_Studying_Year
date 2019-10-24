@@ -57,10 +57,19 @@ def Average_Median_Specified_Month(currency,from_date,to_date,data_frame_1):
 
 def Plot_Something(currency,from_date,to_date,data_frame_1):
     mask = (data_frame_1['data'] > from_date) & (data_frame_1['data'] < to_date)
+    #plt.figure(figsize = (200,200))
+    fig= plt.figure(figsize=(10,10))
+
+    axes= fig.add_axes([0.1,0.1,0.8,0.8])
+
     x = (data_frame_1.loc[mask, currency]).astype('float64')
-    y = pd.to_numeric(data_frame_1['data'][mask])
-    pylab.plot(x,y)
-    pylab.show()
+    #y = pd.to_numeric(data_frame_1['data'][mask],errors='coerce')
+    #array = pd.to_numeric(data_frame_1['data'][mask]).astype(int)
+    y = pd.to_numeric(data_frame_1['data'][mask]).astype(int)
+    #print(array[mask])
+    axes.plot(x,y)
+    plt.show()
+    #print(pd.to_numeric(data_frame_1['data'][mask]).astype('float64'))
 
 
 
@@ -68,5 +77,5 @@ def Plot_Something(currency,from_date,to_date,data_frame_1):
 ######################################################################################
 ######################################################################################
 
-Average_Median_Specified_Month('1USD','20190101','20190631',data_frame_copy) 
-Plot_Something('1USD','20190101','20190631',data_frame_copy)
+Average_Median_Specified_Month('1USD','20190101','20190831',data_frame_copy) 
+Plot_Something('1USD','20190101','20190831',data_frame_copy)
