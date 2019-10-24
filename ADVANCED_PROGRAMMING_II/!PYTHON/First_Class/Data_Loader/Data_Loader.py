@@ -1,4 +1,8 @@
 import pandas as pd
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+import pylab
 
 
 def select_columns(data_frame, column_names):
@@ -15,6 +19,7 @@ currency_rating = pd.read_csv("currency_rating_2019.csv",engine = "python", deli
 #print("\n")
 #print("\n")
 #print("{0} {1}",currency_rating[['data']][0:-2],currency_rating[['1USD']][0:-2].min())
+#print(currency_rating[['data']][0:-2])
 #print(currency_rating[['1USD']][0:-2].min())
 #min_usd = currency_rating[['1USD']][2:-3].astype('float64')
 #print(currency_rating.loc[row_id])
@@ -33,15 +38,16 @@ currency_rating = pd.read_csv("currency_rating_2019.csv",engine = "python", deli
 #print("Median: ", mediana.median())
 #print("Average: ", ((currency_rating[['1USD']][1:-3]).astype('float64')).mean())
 #print("Average: ", ((currency_rating[['1USD']][1:-3]).astype('float64')).median())
+data_frame = pd.DataFrame(currency_rating)
+selected_columns = ['data','1USD']
+data_frame_copy = select_columns(data_frame, selected_columns)
 
-def Average_Median_Specified_Month(currency,from_date,to_date):
-    data_frame = pd.DataFrame(currency_rating)
-    selected_columns = ['data','1USD']
-    data_frame_copy = select_columns(data_frame, selected_columns)
+
+def Average_Median_Specified_Month(currency,from_date,to_date,data_frame_1):
 #    print(data_frame_copy)
-    mask = (data_frame_copy['data'] > from_date) & (data_frame_copy['data'] < to_date)
-    average = (data_frame_copy.loc[mask, currency]).astype('float64')
-    mediana = (data_frame_copy.loc[mask, currency]).astype('float64')
+    mask = (data_frame_1['data'] > from_date) & (data_frame_1['data'] < to_date)
+    average = (data_frame_1.loc[mask, currency]).astype('float64')
+    mediana = (data_frame_1.loc[mask, currency]).astype('float64')
     print("++++++++++++++++++++++++++++++++++++")
     print("     Date: {0} to {1}".format(from_date, to_date))
     print("     Average: ", average.mean())
@@ -49,4 +55,18 @@ def Average_Median_Specified_Month(currency,from_date,to_date):
     print("++++++++++++++++++++++++++++++++++++")
 
 
-Average_Median_Specified_Month('1USD','20190101','20190631') 
+def Plot_Something(currency,from_date,to_date,data_frame_1):
+    mask = (data_frame_1['data'] > from_date) & (data_frame_1['data'] < to_date)
+    x = (data_frame_1.loc[mask, currency]).astype('float64')
+    y = pd.to_numeric(data_frame_1['data'][mask])
+    pylab.plot(x,y)
+    pylab.show()
+
+
+
+######################################################################################
+######################################################################################
+######################################################################################
+
+Average_Median_Specified_Month('1USD','20190101','20190631',data_frame_copy) 
+Plot_Something('1USD','20190101','20190631',data_frame_copy)
