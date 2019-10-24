@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Matrix_Multiplication", "Matrix_Multiplication\Matrix_Multiplication.vcxproj", "{D7442BD5-52A4-434E-9E6B-C62423FC471A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Matrix_Multiplication_Threads", "Matrix_Multiplication_Threads\Matrix_Multiplication_Threads.vcxproj", "{8D7A5FAB-FBF1-4AE0-8326-3F9018B4063F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -15,6 +17,10 @@ Global
 		{D7442BD5-52A4-434E-9E6B-C62423FC471A}.Debug|x64.Build.0 = Debug|x64
 		{D7442BD5-52A4-434E-9E6B-C62423FC471A}.Release|x64.ActiveCfg = Release|x64
 		{D7442BD5-52A4-434E-9E6B-C62423FC471A}.Release|x64.Build.0 = Release|x64
+		{8D7A5FAB-FBF1-4AE0-8326-3F9018B4063F}.Debug|x64.ActiveCfg = Debug|x64
+		{8D7A5FAB-FBF1-4AE0-8326-3F9018B4063F}.Debug|x64.Build.0 = Debug|x64
+		{8D7A5FAB-FBF1-4AE0-8326-3F9018B4063F}.Release|x64.ActiveCfg = Release|x64
+		{8D7A5FAB-FBF1-4AE0-8326-3F9018B4063F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
