@@ -8,19 +8,22 @@ using namespace std;
 
   // wczytanie danych
 
-  Int_t n=500,i,j ;
+  Int_t n=10000,i,j ;
 
  Float_t x1[n],x2[n],x3[n],x4[n],x5[n],x6[n], y1;
 
   ifstream d;
+  ifstream d2;
 
   // d.open("density");
    // pod windows
-      d.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\First\\First\\file1.out");
+      d.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\Dystrybuanta\\Dystrybuanta\\4_case.out");
+      d2.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\Dystrybuanta\\Dystrybuanta\\5_case.out");
 
    for(i=0;i<n;i=i+1)
      {
-       d>>x1[i]>>x2[i];
+       d>>x1[i];
+       d2>>x2[i];
 
 // operacje na danych
 
@@ -32,8 +35,8 @@ using namespace std;
 
    // deklarowanie histogramu "jednowymiarowego"  .... liczba klas, przedział
 
-   TH1F *im1 = new TH1F("im1","jestem histogramem ",0.0,0.,2.0);
-   TH1F *im2 = new TH1F("im2","ja tez jedno ",0.0,0.,2.0);
+   TH1F *im1 = new TH1F("im1","jestem histogramem ", 30,-1.,2.);
+   TH1F *im2 = new TH1F("im2","ja tez jedno ",30,-1.,2.);
 
 
    TH2F *imd2 = new TH2F("imd2","jestem histogramem-2wym ",0.0,0.,2.0,0.0,0.,2.0);
@@ -43,10 +46,10 @@ using namespace std;
 	  im1->Fill(x1[i]);
 	  im2->Fill(x2[i]);
 	}
-    for(j=0;j<n;j=j+1)
-      {
-          imd2->Fill(x1[j],x2[j]);
-	}
+   // for(j=0;j<n;j=j+1)
+   //   {
+        //  imd2->Fill(x1[j],x1[j]);
+	//}
          
     //skalowanie histogramu
 
