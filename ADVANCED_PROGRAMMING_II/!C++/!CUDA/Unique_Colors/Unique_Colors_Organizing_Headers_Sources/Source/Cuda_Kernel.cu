@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 
 ////////////////////////////////////////////////////
 
@@ -88,16 +89,16 @@ void My_Kernel::Kernel(const __int32& repeat_amount)
 		printf("%cKernel executed with code error: %d !\n", NEW_LINE, final_error);
 	}
 
-	//free(static_cast<void*>(&loop_repeat));
+	cudaFree(loop_repeat);
 }
 
 void My_Kernel::Print_String(const char * my_string)
 {
+	size_t temp{};
+	temp = Get_String_Length(my_string);	//get the string length
 	//GPU MEMORY ALLOCATION
 	size_t* my_string_length{};
 	cudaMalloc((void**)&my_string_length, sizeof(size_t));
-
-	size_t temp = Get_String_Length(my_string);	//get the string length
 	//COPY VALUE FROM CPU(RAM) TO GPU
 	cudaMemcpy(my_string_length, &temp, sizeof(size_t), HostToDevice);
 
@@ -111,7 +112,7 @@ void My_Kernel::Print_String(const char * my_string)
 	dim3 grid_size(1);
 	dim3 block_size((*my_string_length));
 
-	Print << < grid_size, block_size >> > (string_GPU, my_string_length);
+	Print <<< grid_size, block_size >>> (string_GPU, my_string_length);
 
 	cudaError_t final_error = cudaDeviceSynchronize();	//for synchronization e.g Hello_World then printf
 	if (final_error == cudaSuccess)
@@ -123,7 +124,7 @@ void My_Kernel::Print_String(const char * my_string)
 		printf("%cKernel executed with code error: %d !\n", NEW_LINE, final_error);
 	}
 
-	//free(string_GPU);
+	cudaFree(string_GPU);
 }
 
 const size_t My_Kernel::Get_String_Length(const char* const __string)
