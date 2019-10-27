@@ -7,6 +7,8 @@ namespace My_Kernel
 {
 
 	void Kernel(const __int32 & repeat_amount);
+	void Print_String(const char * my_string);
+	const size_t Get_String_Length(const char* const __string);
 
 }
 
