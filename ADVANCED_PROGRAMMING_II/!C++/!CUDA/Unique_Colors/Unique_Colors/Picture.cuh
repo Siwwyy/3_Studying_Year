@@ -4,14 +4,17 @@
 
 #include "cuda_runtime.h"
 #include "cuda_runtime_api.h"
-#ifndef __CUDACC__
-#define __CUDACC__
-#endif
+#include "thrust/device_vector.h"
+//#ifndef __CUDACC__
+//#define __CUDACC__
+//#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
 
 #include "Pixel.cuh"
+#include "../../Unique_Colors/Unique_Colors/Pixel.cuh"
+
 
 class Picture
 {
@@ -19,7 +22,8 @@ private:
 	/*
 		PRIVATE VARIABLES
 	*/
-
+	//Pixel Pix;
+	//thurst::device_vector<Pixel> Vector_GPU;
 	//////////////////////////////////////////////////////////////////////////////
 protected:
 	/*

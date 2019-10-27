@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Unique_Colors", "Unique_Colors\Unique_Colors.vcxproj", "{BC6FC402-35FE-4443-ADDD-8D71B6B1C95E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Unique_Colors_Organizing_Headers_Sources", "Unique_Colors_Organizing_Headers_Sources\Unique_Colors_Organizing_Headers_Sources.vcxproj", "{758CDDDA-3F4E-47D3-96F7-5EB7B8D95CA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -15,6 +17,10 @@ Global
 		{BC6FC402-35FE-4443-ADDD-8D71B6B1C95E}.Debug|x64.Build.0 = Debug|x64
 		{BC6FC402-35FE-4443-ADDD-8D71B6B1C95E}.Release|x64.ActiveCfg = Release|x64
 		{BC6FC402-35FE-4443-ADDD-8D71B6B1C95E}.Release|x64.Build.0 = Release|x64
+		{758CDDDA-3F4E-47D3-96F7-5EB7B8D95CA6}.Debug|x64.ActiveCfg = Debug|x64
+		{758CDDDA-3F4E-47D3-96F7-5EB7B8D95CA6}.Debug|x64.Build.0 = Debug|x64
+		{758CDDDA-3F4E-47D3-96F7-5EB7B8D95CA6}.Release|x64.ActiveCfg = Release|x64
+		{758CDDDA-3F4E-47D3-96F7-5EB7B8D95CA6}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

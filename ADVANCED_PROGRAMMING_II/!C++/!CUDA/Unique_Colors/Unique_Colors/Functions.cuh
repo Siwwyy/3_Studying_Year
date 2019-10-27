@@ -9,9 +9,9 @@
 
 #include "cuda_runtime.h"
 #include "cuda_runtime_api.h"
-#ifndef __CUDACC__
-#define __CUDACC__
-#endif
+//#ifndef __CUDACC__
+//#define __CUDACC__
+//#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
