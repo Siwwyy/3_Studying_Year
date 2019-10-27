@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 	size_t y{};
 	__int32 temp_energy{};
 	size_t iterations{ 10000 };
-	__int32 demon_energy{ 10000 };
+	__int32 demon_energy{ 20000 };
 	__int32 magnetization{ 0 };
 	__int32 spin_value{ 0 };
 	double test{};
@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 
 	//OUTPUT FILE
 	std::fstream file_out;
-	file_out.open("file_to_csv3.csv", std::ios_base::out);
+	file_out.open("file_to_csv_temperature20000.csv", std::ios_base::out);
 	file_out << "For iterations: " << iterations << " Initial energy of demon: " << demon_energy << NEW_LINE;
 
 	//nx = ny = 100
