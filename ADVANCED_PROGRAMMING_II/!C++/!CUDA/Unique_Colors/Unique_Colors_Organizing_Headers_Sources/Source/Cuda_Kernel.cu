@@ -1,4 +1,4 @@
-#include "../Include/cuda_kernel.cuh"
+#include "../Include/Cuda_Kernel.cuh"
 
 ////////////////////////////////////////////////////
 //GPU
@@ -45,6 +45,7 @@ __global__ void Print(const char* const __string, const size_t* const loop_repea
 __global__ void Hello_World(const size_t* const loop_repeat)
 {
 	//int id_x = blockIdx.x;	//for blocks (copies of blocks)
+	//printf("%d\n", *loop_repeat);
 	int id_x = blockDim.x * blockIdx.x + threadIdx.x;
 	while (id_x < static_cast<int>(*loop_repeat))
 	{
@@ -58,10 +59,11 @@ __global__ void Hello_World(const size_t* const loop_repeat)
 __global__ void Print(const char* const __string, const size_t* const loop_repeat)
 {
 	int id_x = blockDim.x * blockIdx.x + threadIdx.x;
+	printf("MOJ STRING: %c", __string);
 	while (id_x < static_cast<int>(*loop_repeat))
 	{
 		printf("%c", __string[id_x]);
-		__syncthreads();
+		//__syncthreads();
 		id_x += blockDim.x * gridDim.x;
 	}
 }
@@ -103,14 +105,14 @@ void My_Kernel::Print_String(const char * my_string)
 	cudaMemcpy(my_string_length, &temp, sizeof(size_t), HostToDevice);
 
 	char* string_GPU{};
-	cudaMalloc((void**)&string_GPU, (*my_string_length) * sizeof(char*));
+	cudaMalloc((void**)&string_GPU, (temp) * sizeof(char));
 
 	//COPY VALUE FROM CPU(RAM) TO GPU
-	cudaMemcpy(string_GPU, &my_string, (*my_string_length) * sizeof(char*), HostToDevice);
+	cudaMemcpy(string_GPU, &my_string, (temp) * sizeof(char), HostToDevice);
 
 
 	dim3 grid_size(1);
-	dim3 block_size((*my_string_length));
+	dim3 block_size((temp));
 
 	Print <<< grid_size, block_size >>> (string_GPU, my_string_length);
 
@@ -124,6 +126,7 @@ void My_Kernel::Print_String(const char * my_string)
 		printf("%cKernel executed with code error: %d !\n", NEW_LINE, final_error);
 	}
 
+	cudaFree(my_string_length);
 	cudaFree(string_GPU);
 }
 
