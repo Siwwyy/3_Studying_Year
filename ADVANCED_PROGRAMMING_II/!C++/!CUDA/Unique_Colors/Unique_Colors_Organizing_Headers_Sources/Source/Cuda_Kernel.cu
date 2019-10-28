@@ -58,12 +58,11 @@ __global__ void Hello_World(const size_t* const loop_repeat)
 
 __global__ void Print(const char* const __string, const size_t* const loop_repeat)
 {
-	int id_x = blockDim.x * blockIdx.x + threadIdx.x;
-	printf("MOJ STRING: %c", __string);
+	int id_x = threadIdx.x + blockIdx.x * blockDim.x;
 	while (id_x < static_cast<int>(*loop_repeat))
 	{
 		printf("%c", __string[id_x]);
-		//__syncthreads();
+		__syncthreads();
 		id_x += blockDim.x * gridDim.x;
 	}
 }
@@ -108,14 +107,13 @@ void My_Kernel::Print_String(const char * my_string)
 	cudaMalloc((void**)&string_GPU, (temp) * sizeof(char));
 
 	//COPY VALUE FROM CPU(RAM) TO GPU
-	cudaMemcpy(string_GPU, &my_string, (temp) * sizeof(char), HostToDevice);
-
+	cudaMemcpy(string_GPU, my_string, (temp) * sizeof(char), HostToDevice);
 
 	dim3 grid_size(1);
 	dim3 block_size((temp));
 
-	Print <<< grid_size, block_size >>> (string_GPU, my_string_length);
 
+	Print <<< grid_size, temp >>> (string_GPU, my_string_length);
 	cudaError_t final_error = cudaDeviceSynchronize();	//for synchronization e.g Hello_World then printf
 	if (final_error == cudaSuccess)
 	{
