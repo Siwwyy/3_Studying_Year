@@ -540,65 +540,6 @@ void _MST::find_way(const int from, const int to, const int way_lenght)
 			}
 		}
 		_STD cout << NEW_LINE;
-		//int * visited = new int[this->_Graph_lenght];
-		//for (size_t i = 0; i < _Graph_lenght; ++i)
-		//{
-		//	visited[i] = 0;
-		//}
-
-		//double the_smallest_way = -999999999;
-		//int current_verticle = (from - 1);
-		//int destination_verticle = to;
-		//bool founded_destination = false;
-		//int from_he = 0;
-		//int to_he = 0;
-
-		//if (from < to)
-		//{
-		//	from_he = to;
-		//	to_he = from;
-		//}
-		//else
-		//{
-		//	from_he = from;
-		//	to_he = to;
-		//}
-
-		//minimal_spanning_tree_creator(to_he);	//create MST for this case
-		
-		/*current_verticle = Prims_Matrix[(from_he - 1)].get_edge();
-		if (the_smallest_way < Prims_Matrix[(from_he - 1)].get_cost())
-		{
-			the_smallest_way = Prims_Matrix[(from_he - 1)].get_cost();
-		}
-		visited[(current_verticle)-1] = Prims_Matrix[(from_he - 1)].get_verticle();
-		while (founded_destination == false)
-		{
-			for (int i = _Prims_Matrix_lenght - 1; i >= 0; --i)
-			{
-				if (Prims_Matrix[i].get_verticle() == (current_verticle))
-				{
-					visited[(current_verticle)-1] = current_verticle;
-					current_verticle = Prims_Matrix[i].get_edge();
-					if (the_smallest_way < Prims_Matrix[i].get_cost())
-					{
-						the_smallest_way = Prims_Matrix[i].get_cost();
-					}
-					break;
-				}
-				if ((current_verticle) == Prims_Matrix[(to_he - 1)].get_verticle())
-				{
-					founded_destination = true;
-					break;
-				}
-			}
-
-		}
-		the_smallest_way *= -1;
-		the_smallest_way -= 1;
-		double result = ceil(static_cast<double>(((static_cast<double>(way_lenght) / (the_smallest_way)))));
-		std::cout << result << '\n';
-		//delete[] visited;*/
 	}
 }
 

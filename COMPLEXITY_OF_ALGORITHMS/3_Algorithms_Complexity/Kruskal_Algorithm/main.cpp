@@ -1,0 +1,233 @@
+/*
+ *			   Copyright (c) by Damian Andrysiak. All rights reserved.
+ *					I hope that alghoritm will make right work
+ *							Greetings for everyone!
+*/
+
+#include <iostream>
+#include <vector>
+#include <math.h>
+
+#define NEW_LINE '\n'
+
+//CLASS OF _MST_ELEMENT, for inserting values
+
+class _Kruskal_Element
+{
+private:
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		ZMIENNE PRIVATE
+	*/
+	int Verticle;
+	int Cost;
+	int Edge;
+	//////////////////////////////////
+	int* Connections;
+	size_t _Connections_size;
+	//////////////////////////////////////////////////////////////////////////////
+public:
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		KONSTRUKTORY PUBLIC
+	*/
+	_Kruskal_Element();
+	_Kruskal_Element(const int Verticle, const int Cost, const int Edge);
+	_Kruskal_Element(const _Kruskal_Element& Object);
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		FUNKCJE PUBLIC
+	*/
+
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		SETTERY PUBLIC
+	*/
+	void set_connections_size(const size_t _Connections_size);
+	void set_connection(const int value, const size_t counter);
+	void set_way(const int destination, const int way_lenght);
+	void set_verticle(const int verticle);
+	void set_cost(const int cost);
+	void set_edge(const int edge);
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		OPERATORY PUBLIC
+	*/
+	//JEDNOARGUMENTOWE
+	_Kruskal_Element& operator=(const _Kruskal_Element& Object);
+	//DWUARGUMENTOWE
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		GETTERY PUBLIC
+	*/
+	int get_verticle() const;
+	int get_cost() const;
+	int get_edge() const;
+	size_t get_connections_size() const;
+	int& get_connections_array(const size_t counter) const;
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		DESTRUKTOR
+	*/
+	virtual ~_Kruskal_Element();
+};
+
+//CLASS OF _MST
+
+class _Kruskal
+{
+private:
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		ZMIENNE PRIVATE
+	*/
+	/////////////////////////////////////////////////////////////////////////
+	_Kruskal_Element* Graph;
+	size_t _Graph_lenght;
+	/////////////////////////////////////////////////////////////////////////
+	_Kruskal_Element* Prims_Matrix;
+	size_t _Prims_Matrix_lenght;
+	/////////////////////////////////////////////////////////////////////////
+	int* Q;
+	size_t _Q_lenght;
+	int _Q_counter;
+	/////////////////////////////////////////////////////////////////////////
+	std::vector<_Kruskal_Element> F;
+	//////////////////////////////////////////////////////////////////////////////
+	std::vector<std::pair<std::pair<int, int>, int>> Destinations;
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		FUNKCJE PRIVATE
+	*/
+	void find_way(const int from, const int to, const int way_lenght);
+	//////////////////////////////////////////////////////////////////////////////
+public:
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		KONSTRUKTORY PUBLIC
+	*/
+	_Kruskal();
+	_Kruskal(const size_t _Graph_lenght);
+	_Kruskal(const _Kruskal& Object);
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		FUNKCJE PUBLIC
+	*/
+	void push(const int value, const int destination, const int way_lenght);
+	void push_directions(const int from, const int to, const int way_lenght);
+	void minimal_spanning_tree_creator(const int the_beginning);
+	void get_results();
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		SETTERY PUBLIC
+	*/
+
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		GETTERY PUBLIC
+	*/
+	//////////////////////////////////////////////////////////////////////////////
+
+	/*
+		OPERATORY PUBLIC
+	*/
+	//JEDNOARGUMENTOWE
+	_Kruskal& operator=(const _Kruskal& Object);
+	//DWUARGUMENTOWE
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		DESTRUKTOR
+	*/
+	virtual ~_Kruskal();
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+//FUNCTION FOR INSERTING VALUES FROM file_in
+void inserter();
+//////////////////////////////////////////////////////////////////////////////
+
+int main(int argc, char* argv[])
+{
+	inserter();
+	return EXIT_SUCCESS;
+}
+
+//////////////////////////////////////////////////////
+/*
+				BODY OF FUNCTIONS
+*/
+//////////////////////////////////////////////////////
+
+void inserter()
+{
+	int m = 0;			//amount of cities
+	int d = 0;			//amount of ways
+	int c1 = 0;			//number of city
+	int c2 = 0;			//number of city
+	int p = 0;			//amount of max passengers between one course
+	int s = 0;			//the beginning of way
+	int e = 0;			//the end of way
+	int t = 0;			//amount of max passengers to move by bus
+	while (true)
+	{
+		std::cin >> m;
+		std::cin >> d;
+		//_MST* MST_Object = new _MST(m);
+		while (d > 0)
+		{
+			std::cin >> c1;
+			std::cin >> c2;
+			std::cin >> p;
+			//both times cause each road is in both ways
+			//MST_Object->push(c1, c2, (-1) * p);
+			//MST_Object->push(c2, c1, (-1) * p);
+			--d;
+			c1 = 0;
+			c2 = 0;
+			p = 0;
+		}
+		while (true)
+		{
+			std::cin >> s;
+			std::cin >> e;
+			if (s != 0 && e != 0)
+			{
+				std::cin >> t;
+				//MST_Object->push_directions(s, e, t);
+			}
+			else
+			{
+				//here call all needed functions for solve the problem cause if s and e will be equal to 0 problem will be stopped immediately
+				///////////////////////////////////////////////
+				//MST_Object->get_results();
+				///////////////////////////////////////////////
+				//delete MST_Object;
+				exit(0);
+			}
+			s = 0;
+			e = 0;
+			t = 0;
+		}
+		d = 0;
+		m = 0;
+	}
+}
+
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+/*
+	_Kruskal_Element CLASS METHOD'S BODIES
+*/
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+/*
+	_Kruskal CLASS METHOD'S BODIES
+*/
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////

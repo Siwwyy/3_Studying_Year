@@ -61,10 +61,23 @@ __global__ void Print(const char* const __string, const size_t* const loop_repea
 	int id_x = threadIdx.x + blockIdx.x * blockDim.x;
 	while (id_x < static_cast<int>(*loop_repeat))
 	{
+		//remember, threads execute in unpredictable order !
 		printf("%c", __string[id_x]);
 		__syncthreads();
 		id_x += blockDim.x * gridDim.x;
 	}
+	//int id_x = threadIdx.x + blockIdx.x * blockDim.x;
+	//int warp_ID = threadIdx.x >> 5;
+	//while (id_x < static_cast<int>(*loop_repeat))
+	//{
+	//	if (warp_ID == 0)
+	//		printf("%c", __string[id_x]);
+	//	__syncthreads();
+	//	if (warp_ID == 1)
+	//		printf("%c", __string[id_x]);
+	//	__syncthreads();
+	//	id_x += blockDim.x * gridDim.x;
+	//}
 }
 
 void My_Kernel::Kernel(const __int32& repeat_amount)
