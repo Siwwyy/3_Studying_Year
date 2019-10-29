@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <vector>
+#include <set>
 #include <math.h>
 
 #define NEW_LINE '\n'
@@ -22,9 +23,6 @@ private:
 	int Verticle;
 	int Cost;
 	int Edge;
-	//////////////////////////////////
-	int* Connections;
-	size_t _Connections_size;
 	//////////////////////////////////////////////////////////////////////////////
 public:
 	//////////////////////////////////////////////////////////////////////////////
@@ -43,9 +41,6 @@ public:
 	/*
 		SETTERY PUBLIC
 	*/
-	void set_connections_size(const size_t _Connections_size);
-	void set_connection(const int value, const size_t counter);
-	void set_way(const int destination, const int way_lenght);
 	void set_verticle(const int verticle);
 	void set_cost(const int cost);
 	void set_edge(const int edge);
@@ -63,8 +58,6 @@ public:
 	int get_verticle() const;
 	int get_cost() const;
 	int get_edge() const;
-	size_t get_connections_size() const;
-	int& get_connections_array(const size_t counter) const;
 	//////////////////////////////////////////////////////////////////////////////
 	/*
 		DESTRUKTOR
@@ -82,17 +75,7 @@ private:
 		ZMIENNE PRIVATE
 	*/
 	/////////////////////////////////////////////////////////////////////////
-	_Kruskal_Element* Graph;
-	size_t _Graph_lenght;
-	/////////////////////////////////////////////////////////////////////////
-	_Kruskal_Element* Prims_Matrix;
-	size_t _Prims_Matrix_lenght;
-	/////////////////////////////////////////////////////////////////////////
-	int* Q;
-	size_t _Q_lenght;
-	int _Q_counter;
-	/////////////////////////////////////////////////////////////////////////
-	std::vector<_Kruskal_Element> F;
+	_STD set<_Kruskal_Element> Graph;
 	//////////////////////////////////////////////////////////////////////////////
 	std::vector<std::pair<std::pair<int, int>, int>> Destinations;
 	//////////////////////////////////////////////////////////////////////////////
@@ -173,15 +156,15 @@ void inserter()
 	{
 		std::cin >> m;
 		std::cin >> d;
-		//_MST* MST_Object = new _MST(m);
+		_Kruskal* Kruskal_Object = new _Kruskal;
 		while (d > 0)
 		{
 			std::cin >> c1;
 			std::cin >> c2;
 			std::cin >> p;
 			//both times cause each road is in both ways
-			//MST_Object->push(c1, c2, (-1) * p);
-			//MST_Object->push(c2, c1, (-1) * p);
+			Kruskal_Object->push(c1, c2, (-1) * p);
+			Kruskal_Object->push(c2, c1, (-1) * p);
 			--d;
 			c1 = 0;
 			c2 = 0;
@@ -194,13 +177,13 @@ void inserter()
 			if (s != 0 && e != 0)
 			{
 				std::cin >> t;
-				//MST_Object->push_directions(s, e, t);
+				Kruskal_Object->push_directions(s, e, t);
 			}
 			else
 			{
 				//here call all needed functions for solve the problem cause if s and e will be equal to 0 problem will be stopped immediately
 				///////////////////////////////////////////////
-				//MST_Object->get_results();
+				Kruskal_Object->get_results();
 				///////////////////////////////////////////////
 				//delete MST_Object;
 				exit(0);
@@ -223,6 +206,76 @@ void inserter()
 ////////////////////////////////////////////////////
 
 
+_Kruskal_Element::_Kruskal_Element():
+	Verticle(0),
+	Cost(0),
+	Edge(0)
+{
+
+}
+
+_Kruskal_Element::_Kruskal_Element(const int Verticle, const int Cost, const int Edge) :
+	Verticle(Verticle),
+	Cost(Cost),
+	Edge(Edge)
+{
+
+}
+
+_Kruskal_Element::_Kruskal_Element(const _Kruskal_Element& Object) :
+	Verticle(Object.Verticle),
+	Cost(Object.Cost),
+	Edge(Object.Edge)
+{
+
+}
+
+void _Kruskal_Element::set_verticle(const int verticle)
+{
+	this->Verticle = verticle;
+}
+
+void _Kruskal_Element::set_cost(const int cost)
+{
+	this->Cost = cost;
+}
+
+void _Kruskal_Element::set_edge(const int edge)
+{
+	this->Edge = edge;
+}
+
+_Kruskal_Element& _Kruskal_Element::operator=(const _Kruskal_Element& Object)
+{
+	if (this != &Object)
+	{
+		this->Verticle = Object.Verticle;
+		this->Cost = Object.Cost;
+		this->Edge = Object.Edge;
+	}
+	return *this;
+}
+
+int _Kruskal_Element::get_verticle() const
+{
+	return 0;
+}
+
+int _Kruskal_Element::get_cost() const
+{
+	return 0;
+}
+
+int _Kruskal_Element::get_edge() const
+{
+	return 0;
+}
+
+_Kruskal_Element::~_Kruskal_Element()
+{
+
+}
+
 
 ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////
@@ -231,3 +284,58 @@ void inserter()
 */
 ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////
+
+
+void _Kruskal::find_way(const int from, const int to, const int way_lenght)
+{
+
+}
+
+_Kruskal::_Kruskal()
+{
+
+}
+
+_Kruskal::_Kruskal(const size_t _Graph_lenght)
+{
+
+}
+
+_Kruskal::_Kruskal(const _Kruskal& Object)
+{
+
+}
+
+void _Kruskal::push(const int value, const int destination, const int way_lenght)
+{
+
+}
+
+void _Kruskal::push_directions(const int from, const int to, const int way_lenght)
+{
+
+}
+
+void _Kruskal::minimal_spanning_tree_creator(const int the_beginning)
+{
+
+}
+
+void _Kruskal::get_results()
+{
+
+}
+
+_Kruskal& _Kruskal::operator=(const _Kruskal& Object)
+{
+	if (this != &Object)
+	{
+
+	}
+	return *this;
+}
+
+_Kruskal::~_Kruskal()
+{
+
+}
