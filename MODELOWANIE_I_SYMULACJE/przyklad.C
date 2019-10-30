@@ -17,8 +17,8 @@ using namespace std;
 
   // d.open("density");
    // pod windows
-      d.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\Dystrybuanta\\Dystrybuanta\\4_case.out");
-      d2.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\Dystrybuanta\\Dystrybuanta\\5_case.out");
+      d.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\Dystrybuanta\\Dystrybuanta_3\\4_case.out");
+      d2.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\Dystrybuanta\\Dystrybuanta_3\\5_case.out");
 
    for(i=0;i<n;i=i+1)
      {
@@ -35,8 +35,8 @@ using namespace std;
 
    // deklarowanie histogramu "jednowymiarowego"  .... liczba klas, przedział
 
-   TH1F *im1 = new TH1F("im1","jestem histogramem ", 30,-1.,2.);
-   TH1F *im2 = new TH1F("im2","ja tez jedno ",30,-1.,2.);
+   TH1F *im1 = new TH1F("im1","jestem histogramem ", 30,2.,3.);
+   TH1F *im2 = new TH1F("im2","ja tez jedno ",30,2.,3.);
 
 
    TH2F *imd2 = new TH2F("imd2","jestem histogramem-2wym ",0.0,0.,2.0,0.0,0.,2.0);
