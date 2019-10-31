@@ -91,7 +91,7 @@ private:
 		FUNKCJE PRIVATE
 	*/
 	void find_way(const int from, const int to, const int way_lenght);
-	const bool Is_in_Tree(const int & _Elem);
+	const bool Is_in_Tree(const int& _Elem, const bool condition);
 	//////////////////////////////////////////////////////////////////////////////
 public:
 	//////////////////////////////////////////////////////////////////////////////
@@ -375,6 +375,7 @@ void _Kruskal::find_way(const int from, const int to, const int way_lenght)
 		minimal_spanning_tree_creator(from_);	//create Djikstra for this case
 
 		_STD cout << "Road through: ";
+		_STD cout << current_verticle << " -> ";
 		for (int i = MST.size() - 1; i >= 0; --i)
 		{
 			if (MST[i].get_verticle() == destination_verticle)
@@ -382,9 +383,9 @@ void _Kruskal::find_way(const int from, const int to, const int way_lenght)
 				_STD cout << MST[i].get_verticle();
 				break;
 			}
-			else if (MST[i].get_verticle() == current_verticle)
+			else if (MST[i].get_edge() == current_verticle)
 			{
-				current_verticle = MST[i].get_edge();
+				current_verticle = MST[i].get_verticle();
 				_STD cout << MST[i].get_verticle() << " -> ";
 			}
 		}
@@ -393,13 +394,26 @@ void _Kruskal::find_way(const int from, const int to, const int way_lenght)
 	}
 }
 
-const bool _Kruskal::Is_in_Tree(const int& _Elem)
+const bool _Kruskal::Is_in_Tree(const int& _Elem, const bool condition)
 {
-	for (size_t i = 0; i < MST.size(); ++i)
+	if (condition == 1)
 	{
-		if (MST[i].get_verticle() == _Elem || MST[i].get_edge() == _Elem)
+		for (size_t i = 0; i < MST.size(); ++i)
 		{
-			return true;
+			if (MST[i].get_edge() == _Elem)
+			{
+				return true;
+			}
+		}
+	}
+	else
+	{
+		for (size_t i = 0; i < MST.size(); ++i)
+		{
+			if (MST[i].get_verticle() == _Elem)
+			{
+				return true;
+			}
 		}
 	}
 	return false;
@@ -432,11 +446,9 @@ void _Kruskal::push_directions(const int from, const int to, const int way_lengh
 
 void _Kruskal::minimal_spanning_tree_creator(const int the_beginning)
 {
-	int current_verticle = (the_beginning - 1);	//choose the beginning (by position in array (nr index))
-
 	for (typename _STD multiset<_Kruskal_Element>::const_iterator multiset_iterator = Graph.begin(); multiset_iterator != Graph.end(); ++multiset_iterator)
 	{
-		if (Is_in_Tree((*multiset_iterator).get_verticle()) == true && Is_in_Tree((*multiset_iterator).get_edge()) == true)
+		if ((Is_in_Tree((*multiset_iterator).get_verticle(), 0) == true && Is_in_Tree((*multiset_iterator).get_edge(), 0) == true))// || (Is_in_Tree((*multiset_iterator).get_verticle(), 1) == true && Is_in_Tree((*multiset_iterator).get_edge(), 1) == true))
 		{
 			continue;
 		}
@@ -446,6 +458,7 @@ void _Kruskal::minimal_spanning_tree_creator(const int the_beginning)
 			MST.emplace_back(_Kruskal_Element({ (*multiset_iterator).get_verticle(),(*multiset_iterator).get_edge(),(*multiset_iterator).get_cost() }));
 		}
 	}
+	//MST.emplace_back(_Kruskal_Element({ 6,7,30 }));
 	this->Print_MST();
 }
 

@@ -415,7 +415,6 @@ void _Djikstra::find_way(const int from, const int to, const int way_lenght)
 		destination_verticle = from_;
 		current_verticle = to_;
 		minimal_spanning_tree_creator(from_);	//create Djikstra for this case
-
 		_STD cout << "Road through: ";
 		for (int i = _Djikstra_Matrix_lenght - 1; i >= 0; --i)
 		{
