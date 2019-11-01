@@ -95,7 +95,8 @@ private:
 	*/
 	void find_way(const int from, const int to, const int way_lenght);
 	const bool Is_in_Same_Set(const int& _Left, const int& _Right);
-	const void Add_To_Set(const _Kruskal_Element & _Elem);
+	const bool Merge(const size_t& _Left, const size_t& _Right);
+	const size_t Find_Element(const int& _Elem);
 	//////////////////////////////////////////////////////////////////////////////
 public:
 	//////////////////////////////////////////////////////////////////////////////
@@ -403,6 +404,8 @@ const bool _Kruskal::Is_in_Same_Set(const int& _Left, const int& _Right)
 	bool left_is = false;
 	bool right_is = false;
 	size_t where{};
+	size_t where_left{};
+	size_t where_right{};
 	for (size_t i = 0; i < Set.size(); ++i)
 	{
 		for (typename _STD set<__int32>::const_iterator set_iterator = Set[i].begin(); set_iterator != Set[i].end(); ++set_iterator)
@@ -410,10 +413,12 @@ const bool _Kruskal::Is_in_Same_Set(const int& _Left, const int& _Right)
 			if ((*set_iterator) == _Left)
 			{
 				left_is = true;
+				//where_left = i;
 			}
 			else if ((*set_iterator) == _Right)
 			{
 				right_is = true;
+				//where_right = i;
 			}
 		}
 		if (left_is == true || right_is == true)
@@ -422,30 +427,92 @@ const bool _Kruskal::Is_in_Same_Set(const int& _Left, const int& _Right)
 			break;
 		}
 	}
-	
-	//if (left_is == true && right_is == true)
-	//{
-	//	return true;
-	//}
-	//else if (left_is == false && right_is == false)
-	//{
-	//	Set[where].insert(_Left);
-	//	Set[where].insert(_Right);
-	//}
-	//else if (left_is == false && right_is == true)
-	//{
-	//	Set[where].insert(_Left);
-	//}
-	//else if (left_is == true && right_is == false)
-	//{
-	//	Set[where].insert(_Right);
-	//}
+	//if(Set[where].size() >= Set[where].size())
+	if (left_is == true && right_is == true)
+	{
+		return true;
+	}
+	else if (left_is == false && right_is == false)
+	{
+		Set[(static_cast<size_t>(_Left) - 1)].insert(_Left);
+		Set[(static_cast<size_t>(_Left) - 1)].insert(_Right);
+	}
+	else if (left_is == false && right_is == true)
+	{
+		if (Merge(Find_Element(_Left), Find_Element(_Right)) == true)
+		{
+			//
+		}
+		else
+		{
+			Set[where].insert(_Left);
+		}
+	}
+	else if (left_is == true && right_is == false)
+	{
+		if (Merge(Find_Element(_Left), Find_Element(_Right)) == true)
+		{
+			//
+		}
+		else
+		{
+			Set[where].insert(_Right);
+		}
+		//_STD cout << Find_Element(_Left) << NEW_LINE;
+		//_STD cout << Find_Element(_Right);
+		//_STD cin.get();
+	}
 	return false;
 }
 
-const void _Kruskal::Add_To_Set(const _Kruskal_Element& _Elem)
+const bool _Kruskal::Merge(const size_t& _Left, const size_t& _Right)
 {
-	
+	if (_Right != _Left)
+	{
+		if (Set[_Left].size() > 0)
+		{
+			if ((Set[_Left].size() >= Set[_Right].size()) && (Set[_Right].size() > 0))
+			{
+				for (typename _STD set<__int32>::const_iterator set_iterator = Set[_Right].begin(); set_iterator != Set[_Right].end(); ++set_iterator)
+				{
+					Set[_Left].insert((*set_iterator));
+				}
+				Set[_Right].clear();
+				return true;
+			}
+		}
+		else if (Set[_Right].size() > 0)
+		{
+			if ((Set[_Right].size() >= Set[_Left].size()) && (Set[_Left].size() > 0))
+			{
+				for (typename _STD set<__int32>::const_iterator set_iterator = Set[_Left].begin(); set_iterator != Set[_Left].end(); ++set_iterator)
+				{
+					Set[_Right].insert((*set_iterator));
+				}
+				Set[_Left].clear();
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+const size_t _Kruskal::Find_Element(const int& _Elem)
+{
+	size_t where{};
+	for (size_t i = 0; i < Set.size(); ++i)
+	{
+		for (typename _STD set<__int32>::const_iterator set_iterator = Set[i].begin(); set_iterator != Set[i].end(); ++set_iterator)
+		{
+			if ((*set_iterator) == _Elem)
+			{
+				where = i;
+				return where;
+			}
+		}
+	}
+	return where;
 }
 
 _Kruskal::_Kruskal():
