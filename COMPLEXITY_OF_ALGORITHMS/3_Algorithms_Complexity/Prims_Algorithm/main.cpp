@@ -540,6 +540,7 @@ void _MST::find_way(const int from, const int to, const int way_lenght)
 			}
 		}
 		_STD cout << NEW_LINE;
+		system("pause");
 	}
 }
 

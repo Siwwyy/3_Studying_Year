@@ -81,9 +81,6 @@ private:
 	/////////////////////////////////////////////////////////////////////////
 	_STD multiset<_Kruskal_Element> Graph;
 	//////////////////////////////////////////////////////////////////////////////
-	__int16* Universal_Set;
-	size_t Size_Universal_Set;
-	//////////////////////////////////////////////////////////////////////////////
 	_STD vector<_Kruskal_Element> MST;
 	//////////////////////////////////////////////////////////////////////////////
 	_STD vector<_STD set<__int32>> Set;
@@ -204,14 +201,10 @@ void inserter()
 			else
 			{
 				//here call all needed functions for solve the problem cause if s and e will be equal to 0 problem will be stopped immediately
-				Kruskal_Object->Print_Graph();
-				_STD cin.get();
-				//Kruskal_Object->Print_MST();
-				_STD cin.get();
 				///////////////////////////////////////////////
 				Kruskal_Object->get_results();
 				///////////////////////////////////////////////
-				//delete MST_Object;
+				delete Kruskal_Object;
 				exit(0);
 			}
 			s = 0;
@@ -404,8 +397,6 @@ const bool _Kruskal::Is_in_Same_Set(const int& _Left, const int& _Right)
 	bool left_is = false;
 	bool right_is = false;
 	size_t where{};
-	size_t where_left{};
-	size_t where_right{};
 	for (size_t i = 0; i < Set.size(); ++i)
 	{
 		for (typename _STD set<__int32>::const_iterator set_iterator = Set[i].begin(); set_iterator != Set[i].end(); ++set_iterator)
@@ -413,12 +404,10 @@ const bool _Kruskal::Is_in_Same_Set(const int& _Left, const int& _Right)
 			if ((*set_iterator) == _Left)
 			{
 				left_is = true;
-				//where_left = i;
 			}
 			else if ((*set_iterator) == _Right)
 			{
 				right_is = true;
-				//where_right = i;
 			}
 		}
 		if (left_is == true || right_is == true)
@@ -427,7 +416,6 @@ const bool _Kruskal::Is_in_Same_Set(const int& _Left, const int& _Right)
 			break;
 		}
 	}
-	//if(Set[where].size() >= Set[where].size())
 	if (left_is == true && right_is == true)
 	{
 		return true;
@@ -441,7 +429,7 @@ const bool _Kruskal::Is_in_Same_Set(const int& _Left, const int& _Right)
 	{
 		if (Merge(Find_Element(_Left), Find_Element(_Right)) == true)
 		{
-			//
+			//NOTHING HERE
 		}
 		else
 		{
@@ -452,15 +440,12 @@ const bool _Kruskal::Is_in_Same_Set(const int& _Left, const int& _Right)
 	{
 		if (Merge(Find_Element(_Left), Find_Element(_Right)) == true)
 		{
-			//
+			//NOTHING HERE
 		}
 		else
 		{
 			Set[where].insert(_Right);
 		}
-		//_STD cout << Find_Element(_Left) << NEW_LINE;
-		//_STD cout << Find_Element(_Right);
-		//_STD cin.get();
 	}
 	return false;
 }
@@ -515,33 +500,20 @@ const size_t _Kruskal::Find_Element(const int& _Elem)
 	return where;
 }
 
-_Kruskal::_Kruskal():
-	Size_Universal_Set(0)
+_Kruskal::_Kruskal()
 {
-	Universal_Set = new __int16[0];
-	Set.resize(Size_Universal_Set);
+	Set.resize(1);
 }
 
-_Kruskal::_Kruskal(const size_t _Graph_lenght):
-	Size_Universal_Set(_Graph_lenght)
+_Kruskal::_Kruskal(const size_t _Graph_lenght)
 {
-	Universal_Set = new __int16[this->Size_Universal_Set];
-	Set.resize(Size_Universal_Set);
-	for (size_t i = 0; i < this->Size_Universal_Set; ++i)
-	{
-		Universal_Set[i] = (i + 1);
-	}
+	Set.resize(_Graph_lenght);
 }
 
-_Kruskal::_Kruskal(const _Kruskal& Object) :
-	Size_Universal_Set(Object.Size_Universal_Set)
-	
+_Kruskal::_Kruskal(const _Kruskal& Object) 
 {
-	Universal_Set = new __int16[this->Size_Universal_Set];
-	for (size_t i = 0; i < this->Size_Universal_Set; ++i)
-	{
-		Universal_Set[i] = (i + 1);
-	}
+	this->Destinations = Object.Destinations;
+	this->Graph = Object.Graph;
 }
 
 void _Kruskal::push(const int value, const int destination, const int way_lenght)
@@ -558,15 +530,6 @@ void _Kruskal::minimal_spanning_tree_creator(const int the_beginning)
 {
 	for (typename _STD multiset<_Kruskal_Element>::const_iterator multiset_iterator = Graph.begin(); multiset_iterator != Graph.end(); ++multiset_iterator)
 	{
-		//if ((Is_in_Tree((*multiset_iterator).get_verticle(), 0) == true && Is_in_Tree((*multiset_iterator).get_edge(), 0) == true))// || (Is_in_Tree((*multiset_iterator).get_verticle(), 1) == true && Is_in_Tree((*multiset_iterator).get_edge(), 1) == true))
-		//{
-		//	continue;
-		//}
-		//else
-		//{
-		//	//MST.emplace_back({ (*multiset_iterator).get_verticle(),(*multiset_iterator).get_edge(),(*multiset_iterator).get_cost() });
-		//	MST.emplace_back(_Kruskal_Element({ (*multiset_iterator).get_verticle(),(*multiset_iterator).get_edge(),(*multiset_iterator).get_cost() }));
-		//}
 		if ((Is_in_Same_Set((*multiset_iterator).get_verticle(), (*multiset_iterator).get_edge()) == true))
 		{
 			continue;
@@ -576,8 +539,6 @@ void _Kruskal::minimal_spanning_tree_creator(const int the_beginning)
 			MST.emplace_back(_Kruskal_Element({ (*multiset_iterator).get_verticle(),(*multiset_iterator).get_edge(),(*multiset_iterator).get_cost() }));
 		}
 	}
-	//MST.emplace_back(_Kruskal_Element({ 6,7,30 }));
-	this->Print_MST();
 }
 
 void _Kruskal::get_results()
@@ -608,17 +569,9 @@ _Kruskal& _Kruskal::operator=(const _Kruskal& Object)
 {
 	if (this != &Object)
 	{
-		this->Size_Universal_Set = Object.Size_Universal_Set;
-		delete[] this->Universal_Set;
 		Destinations.clear();
 		Graph.clear();
 		Set.clear();
-
-		Universal_Set = new __int16[this->Size_Universal_Set];
-		for (size_t i = 0; i < this->Size_Universal_Set; ++i)
-		{
-			Universal_Set[i] = NULL;
-		}
 		this->Destinations = Object.Destinations;
 		this->Graph = Object.Graph;
 	}
@@ -630,6 +583,4 @@ _Kruskal::~_Kruskal()
 	Destinations.clear();
 	Graph.clear();
 	Set.clear();
-	this->Size_Universal_Set = NULL;
-	delete[] this->Universal_Set;
 }
