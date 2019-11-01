@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Djikstra_Algorithm", "Djiks
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kruskal_Algorithm", "Kruskal_Algorithm\Kruskal_Algorithm.vcxproj", "{F5F2A20F-3FAC-44DD-9160-F77E2385D553}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Djikstra_GPU", "Djikstra_GPU\Djikstra_GPU.vcxproj", "{A793A356-81D1-49BF-BB20-7EA79366146F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,12 @@ Global
 		{F5F2A20F-3FAC-44DD-9160-F77E2385D553}.Release|x64.Build.0 = Release|x64
 		{F5F2A20F-3FAC-44DD-9160-F77E2385D553}.Release|x86.ActiveCfg = Release|Win32
 		{F5F2A20F-3FAC-44DD-9160-F77E2385D553}.Release|x86.Build.0 = Release|Win32
+		{A793A356-81D1-49BF-BB20-7EA79366146F}.Debug|x64.ActiveCfg = Debug|x64
+		{A793A356-81D1-49BF-BB20-7EA79366146F}.Debug|x64.Build.0 = Debug|x64
+		{A793A356-81D1-49BF-BB20-7EA79366146F}.Debug|x86.ActiveCfg = Debug|x64
+		{A793A356-81D1-49BF-BB20-7EA79366146F}.Release|x64.ActiveCfg = Release|x64
+		{A793A356-81D1-49BF-BB20-7EA79366146F}.Release|x64.Build.0 = Release|x64
+		{A793A356-81D1-49BF-BB20-7EA79366146F}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
