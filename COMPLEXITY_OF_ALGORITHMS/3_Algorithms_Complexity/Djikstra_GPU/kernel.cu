@@ -358,7 +358,7 @@ void Find_Way(const int from, const int to, const int way_lenght)
 		dim3 blocks(1);
 		dim3 threads(512);
 		//printf("\n");
-		Minimal_Spanning_Tree_Creator <<<1, 1>>> (from_GPU, Graph_GPU, _Graph_lenght_GPU, Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght_GPU, Visited_Nodes_GPU, _Visited_Nodes_lenght_GPU);	//create Djikstra for this case
+		Minimal_Spanning_Tree_Creator <<<1, 10>>> (from_GPU, Graph_GPU, _Graph_lenght_GPU, Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght_GPU, Visited_Nodes_GPU, _Visited_Nodes_lenght_GPU);	//create Djikstra for this case
 		//cudaDeviceSynchronize();
 		//cudaDeviceSynchronize();
 		//cudaDeviceSynchronize();
@@ -442,7 +442,7 @@ void Copy_Values_From_CPU_To_GPU_In_Class()
 
 __global__ void Print_Graph_GPU(const _Djikstra_Element* const Graph_GPU, const size_t* const _Graph_lenght_GPU)
 {
-	int id_x = threadIdx.x + blockDim.x * gridDim.x;
+	int id_x = threadIdx.x + blockIdx.x * blockDim.x;
 	while (id_x < *(_Graph_lenght_GPU))
 	{
 		Graph_GPU[id_x].print_connections_GPU();
@@ -462,7 +462,7 @@ __global__ void Print_Djikstra_Matrix_GPU(const _Djikstra_Element* const _Djikst
 
 __global__  void Print_Visited_Nodes_GPU(const int* const Visited_Nodes_GPU, const size_t* const _Visited_Nodes_lenght_GPU)
 {
-	int id_x = threadIdx.x + blockDim.x * gridDim.x;
+	int id_x = threadIdx.x + blockIdx.x * blockDim.x;
 	while (id_x < *(_Visited_Nodes_lenght_GPU))
 	{
 		printf(" Visited: %d ", Visited_Nodes_GPU[id_x]);
@@ -475,7 +475,7 @@ __global__  void Print_Visited_Nodes_GPU(const int* const Visited_Nodes_GPU, con
 __global__ void Minimal_Spanning_Tree_Creator(const int* the_beginning, _Djikstra_Element* Graph_GPU, const size_t* const _Graph_lenght_GPU, _Djikstra_Element* _Djikstra_Matrix_GPU, const size_t* const _Djikstra_Matrix_lenght_GPU, int* Visited_Nodes_GPU, const size_t* const _Visited_Nodes_lenght_GPU)
 {
 	//printf("%d \n", *the_beginning);
-	int id_x = threadIdx.x + blockDim.x * gridDim.x;
+	int id_x = threadIdx.x + blockIdx.x * blockDim.x;
 	
 //	cudaDeviceSynchronize();
 	//Print_Djikstra_Matrix_GPU(_Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght_GPU);
@@ -490,6 +490,7 @@ __global__ void Minimal_Spanning_Tree_Creator(const int* the_beginning, _Djikstr
 	while (id_x < (*_Visited_Nodes_lenght_GPU))
 	{
 		Visited_Nodes_GPU[id_x] = (1);
+		__syncthreads();
 		id_x += blockDim.x * gridDim.x;
 	}
 
