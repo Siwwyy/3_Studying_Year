@@ -29,6 +29,5 @@
   <ItemGroup>
     <Text Include="wejscie.txt" />
     <Text Include="wejscie_99.txt" />
-    <Text Include="wejscie999.txt" />
   </ItemGroup>
 </Project>

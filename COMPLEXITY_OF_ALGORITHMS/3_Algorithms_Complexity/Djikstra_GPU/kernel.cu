@@ -11,6 +11,8 @@
 #include <windows.h>
 #include <iostream>
 #include <vector>
+#define STOPWATCH_ON
+#include "StopWatch.h"
 
 ////////////////////////////////////////////////////
 //GPU
@@ -137,7 +139,6 @@ void Find_Way(const int from, const int to, const int way_lenght);
 void Copy_Values_From_CPU_To_GPU_In_Class();
 void Copy_Values_From_GPU_To_CPU_In_Class();
 void Print_Djikstra_Matrix();
-void Djikstra_CPU(const int the_beginning);
 //GPU FUNCTION
 __global__ void Print_Graph_GPU(const _Djikstra_Element* const Graph_GPU, const size_t* const _Graph_lenght_GPU);
 __global__ void Print_Djikstra_Matrix_GPU(const _Djikstra_Element* const _Djikstra_Matrix_GPU, const size_t* const _Djikstra_Matrix_lenght_GPU);
@@ -149,32 +150,6 @@ __global__ void Minimal_Spanning_Tree_Creator(const int * the_beginning, _Djikst
 int main(int argc, char* argv[])
 {
 	inserter();
-	//cudaDeviceProp prop;
-	//cudaGetDeviceProperties(&prop, 0);
-	//printf(" --- Memory Information for device %d ---\n");
-	//printf("Total global mem: %ld\n", prop.totalGlobalMem);
-	//printf("Total constant Mem: %ld\n", prop.totalConstMem);
-	//printf("Max mem pitch: %ld\n", prop.memPitch);
-	//printf("Texture Alignment: %ld\n", prop.textureAlignment);
-
-	//printf(" --- MP Information for device %d ---\n");
-	//printf("Multiprocessor count: %d\n",
-	//	prop.multiProcessorCount);
-	//printf("Shared mem per mp: %ld\n", prop.sharedMemPerBlock);
-	//printf("Registers per mp: %d\n", prop.regsPerBlock);
-	//printf("Threads in warp: %d\n", prop.warpSize);
-	//printf("Max threads per block: %d\n",
-	//	prop.maxThreadsPerBlock);
-	//printf("Max thread dimensions: (%d, %d, %d)\n",
-	//	prop.maxThreadsDim[0], prop.maxThreadsDim[1],
-	//	prop.maxThreadsDim[2]);
-	//printf("Max grid dimensions: (%d, %d, %d)\n",
-	//	prop.maxGridSize[0], prop.maxGridSize[1],
-	//	prop.maxGridSize[2]);
-	//printf("\n");
-
-
-	system("pause");
 	return 0;
 }
 
@@ -193,7 +168,6 @@ void inserter()
 	{
 		std::cin >> m;
 		std::cin >> d;
-		//_Djikstra* Djikstra_Object = new _Djikstra(m);
 		Construct(m);
 		while (d > 0)
 		{
@@ -201,9 +175,7 @@ void inserter()
 			std::cin >> c2;
 			std::cin >> p;
 			//both times cause each road is in both ways
-			//Djikstra_Object->push(c1, c2, p);
 			Push(c1, c2, p);
-			//Djikstra_Object->push(c2, c1, p);
 			Push(c2, c1, p);
 			--d;
 			c1 = 0;
@@ -218,17 +190,17 @@ void inserter()
 			if (s != 0 && e != 0)
 			{
 				std::cin >> t;
-				//Djikstra_Object->push_directions(s, e, t);
 				Push_Directions(s, e, t);
 			}
 			else
 			{
 				//here call all needed functions for solve the problem cause if s and e will be equal to 0 problem will be stopped immediately
 				///////////////////////////////////////////////
-				//Djikstra_Object->get_results();
+				START_STOPWATCH
 				Get_Results();
+				STOP_STOPWATCH
 				///////////////////////////////////////////////
-				//delete Djikstra_Object;
+				system("pause");
 				exit(0);
 			}
 			s = 0;
@@ -354,36 +326,12 @@ void Find_Way(const int from, const int to, const int way_lenght)
 
 		//HERE PASTE ALL OF FUN BETWEEN CPU AND GPU !
 		dim3 blocks(_Graph_lenght);
-		dim3 threads(512);
-		//Djikstra_CPU(from_);
-		//printf("\n");
-		Minimal_Spanning_Tree_Creator <<<1, _Djikstra_Matrix_lenght >>> (from_GPU, Graph_GPU, _Graph_lenght_GPU, Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght_GPU, Visited_Nodes_GPU, _Visited_Nodes_lenght_GPU);	//create Djikstra for this case
+		dim3 threads(_Djikstra_Matrix_lenght, _Djikstra_Matrix_lenght);
+		Minimal_Spanning_Tree_Creator <<<1, threads >>> (from_GPU, Graph_GPU, _Graph_lenght_GPU, Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght_GPU, Visited_Nodes_GPU, _Visited_Nodes_lenght_GPU);	//create Djikstra for this case
 		cudaDeviceSynchronize();
 
-
-		//Print_Graph_GPU<<<1,1>>>(Graph_GPU, _Graph_lenght_GPU);	//works
-		//cudaDeviceSynchronize();
-		//printf("\n");
-		//Print_Djikstra_Matrix_GPU <<<1, 1 >>>(Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght_GPU);	//works
-		//cudaDeviceSynchronize();
-		//printf("\n");
-		//Print_Visited_Nodes_GPU <<<1, 1 >>>(Visited_Nodes_GPU, _Visited_Nodes_lenght_GPU);	//works
-		//cudaDeviceSynchronize();
-		//printf("\n");
-
 		Copy_Values_From_GPU_To_CPU_In_Class();
-		//COPYING FROM GPU TO CPU
-		//COPY GRAPH 
-		cudaMemcpy(Graph, Graph_GPU , _Graph_lenght * sizeof(_Djikstra_Element), DeviceToHost);
-		////////////////////////////////////////////////////////////////////////////
-		//COPY Djikstra Matrix 
-		//cudaMemcpy(Djikstra_Matrix, Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght * sizeof(_Djikstra_Element), DeviceToHost);
-		//////////////////////////////////////////////////////////////////////////////
-		//COPY Visited Nodes 
-		cudaMemcpy(Visited_Nodes, Visited_Nodes_GPU, _Visited_Nodes_lenght * sizeof(int), DeviceToHost);
-		////////////////////////////////////////////////////////////////////////////
 
-		_STD cout << Visited_Nodes[0] << ' ' << Visited_Nodes[1] << ' ' << Visited_Nodes[2] << ' ' <<  Visited_Nodes[3] << ' ' << Visited_Nodes[4] << ' ' << Visited_Nodes[5] << ' ' << Visited_Nodes[6] << NEW_LINE;
 		_STD cout << "Road through: ";
 		for (int i = ::_Djikstra_Matrix_lenght - 1; i >= 0; --i)
 		{
@@ -399,6 +347,7 @@ void Find_Way(const int from, const int to, const int way_lenght)
 			}
 		}
 		_STD cout << NEW_LINE;
+		//Print_Djikstra_Matrix();
 		/*
 			MEMORY FREE
 		*/
@@ -428,7 +377,6 @@ void Copy_Values_From_GPU_To_CPU_In_Class()
 {
 	for (size_t i = 0; i < _Graph_lenght; ++i)
 	{
-		//Graph[i].Copy_Values_From_GPU_To_CPU();
 		Djikstra_Matrix[i].Copy_Values_From_GPU_To_CPU();
 	}
 }
@@ -441,50 +389,6 @@ void Print_Djikstra_Matrix()
 		_STD cout << NEW_LINE;
 	}
 	_STD cout << NEW_LINE;
-}
-
-void Djikstra_CPU(const int the_beginning)
-{
-	for (size_t i = 0; i < _Djikstra_Matrix_lenght; ++i)
-	{
-		Djikstra_Matrix[i].set_cost(-1);	//means its a infinity
-		Djikstra_Matrix[i].set_edge(0);
-		Visited_Nodes[i] = (-1);
-	}
-
-	int current_verticle = (the_beginning - 1);	//choose the beginning (by position in array (nr index))
-	int the_smallest_cost = 999999999;
-	int the_smallest_cost_position = 0;
-
-	Djikstra_Matrix[current_verticle].set_cost(0);
-	Djikstra_Matrix[current_verticle].set_edge((current_verticle + 1));
-
-	for (size_t i = 0; i < _Graph_lenght; ++i)
-	{
-		Visited_Nodes[current_verticle] = (current_verticle + 1);
-
-		for (size_t j = 0; j < Graph[current_verticle].get_connections_size(); ++j)
-		{
-			if (Graph[current_verticle].get_connections_array(j) != 0 && Visited_Nodes[j] != (j + 1))
-			{
-				if ((Djikstra_Matrix[j].get_cost() == -1) || ((Djikstra_Matrix[current_verticle].get_cost() + Graph[current_verticle].get_connections_array(j)) <= Djikstra_Matrix[j].get_cost()))
-				{
-					Djikstra_Matrix[j].set_cost(Djikstra_Matrix[current_verticle].get_cost() + Graph[current_verticle].get_connections_array(j));
-					Djikstra_Matrix[j].set_edge((current_verticle + 1));
-				}
-			}
-		}
-		//Seeking for the smallest element in Djikstra's Matrix
-		for (size_t j = 0; j < _Djikstra_Matrix_lenght; ++j)
-		{
-			if ((Djikstra_Matrix[j].get_cost() <= the_smallest_cost && Djikstra_Matrix[j].get_cost() != (-1)) && Visited_Nodes[j] != (j + 1))
-			{
-				the_smallest_cost = Djikstra_Matrix[j].get_cost();
-				current_verticle = static_cast<int>(j);
-			}
-		}
-		the_smallest_cost = 999999999;
-	}
 }
 
 __global__ void Print_Graph_GPU(const _Djikstra_Element* const Graph_GPU, const size_t* const _Graph_lenght_GPU)
@@ -523,7 +427,7 @@ __global__  void Print_Visited_Nodes_GPU(const int* const Visited_Nodes_GPU, con
 __global__ void Minimal_Spanning_Tree_Creator(const int* the_beginning, _Djikstra_Element* Graph_GPU, const size_t* const _Graph_lenght_GPU, _Djikstra_Element* _Djikstra_Matrix_GPU, const size_t* const _Djikstra_Matrix_lenght_GPU, int* Visited_Nodes_GPU, const size_t* const _Visited_Nodes_lenght_GPU)
 {
 	int id_x = threadIdx.x + blockIdx.x * blockDim.x;
-	if (id_x < *_Djikstra_Matrix_lenght_GPU)
+	if (id_x < (*_Djikstra_Matrix_lenght_GPU))
 	{
 		_Djikstra_Matrix_GPU[id_x].set_cost_GPU(-1);	//means its a infinity
 		_Djikstra_Matrix_GPU[id_x].set_edge_GPU(0);
@@ -549,7 +453,6 @@ __global__ void Minimal_Spanning_Tree_Creator(const int* the_beginning, _Djikstr
 				_Djikstra_Matrix_GPU[id_x].set_edge_GPU((current_verticle + 1));
 			}
 		}
-		__syncthreads();
 		//Seeking for the smallest element in Djikstra's Matrix
 		for (size_t j = 0; j < (*_Djikstra_Matrix_lenght_GPU); ++j)
 		{
@@ -560,7 +463,6 @@ __global__ void Minimal_Spanning_Tree_Creator(const int* the_beginning, _Djikstr
 			}
 		}
 		the_smallest_cost = 999999999;
-		__syncthreads();
 	}
 }
 

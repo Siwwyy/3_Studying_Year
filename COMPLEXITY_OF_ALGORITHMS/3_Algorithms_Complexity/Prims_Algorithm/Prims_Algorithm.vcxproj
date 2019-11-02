@@ -134,7 +134,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="wejscie.txt" />
-    <Text Include="wejscie999.txt" />
     <Text Include="wejscie_99.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

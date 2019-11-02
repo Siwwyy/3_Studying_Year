@@ -7,6 +7,8 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
+#define STOPWATCH_ON	//or #define STOPWATCH_OFF
+#include "StopWatch.h"
 
 #define NEW_LINE '\n'
 
@@ -203,7 +205,10 @@ void inserter()
 			{
 				//here call all needed functions for solve the problem cause if s and e will be equal to 0 problem will be stopped immediately
 				///////////////////////////////////////////////
+				START_STOPWATCH
 				Djikstra_Object->get_results();
+				STOP_STOPWATCH
+				system("pause");
 				///////////////////////////////////////////////
 				delete Djikstra_Object;
 				exit(0);
@@ -430,7 +435,6 @@ void _Djikstra::find_way(const int from, const int to, const int way_lenght)
 			}
 		}
 		_STD cout << NEW_LINE;
-		system("pause");
 	}
 }
 
