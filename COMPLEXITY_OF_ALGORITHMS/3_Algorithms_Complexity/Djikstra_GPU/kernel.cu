@@ -338,9 +338,6 @@ void Find_Way(const int from, const int to, const int way_lenght)
 		//////////////////////////////////////////////////////////////////////////////
 		
 
-
-
-
 		//COPYING FROM CPU TO GPU
 		//COPY GRAPH 
 		cudaMemcpy(Graph_GPU, Graph, _Graph_lenght * sizeof(_Djikstra_Element), HostToDevice);
@@ -360,20 +357,19 @@ void Find_Way(const int from, const int to, const int way_lenght)
 		dim3 threads(512);
 		//Djikstra_CPU(from_);
 		//printf("\n");
-		Minimal_Spanning_Tree_Creator <<<1, 10>>> (from_GPU, Graph_GPU, _Graph_lenght_GPU, Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght_GPU, Visited_Nodes_GPU, _Visited_Nodes_lenght_GPU);	//create Djikstra for this case
+		Minimal_Spanning_Tree_Creator <<<1, _Djikstra_Matrix_lenght >>> (from_GPU, Graph_GPU, _Graph_lenght_GPU, Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght_GPU, Visited_Nodes_GPU, _Visited_Nodes_lenght_GPU);	//create Djikstra for this case
 		cudaDeviceSynchronize();
 
 
-
-		Print_Graph_GPU<<<1,1>>>(Graph_GPU, _Graph_lenght_GPU);	//works
-		cudaDeviceSynchronize();
-		printf("\n");
-		Print_Djikstra_Matrix_GPU <<<1, 1 >>>(Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght_GPU);	//works
-		cudaDeviceSynchronize();
-		printf("\n");
-		Print_Visited_Nodes_GPU <<<1, 1 >>>(Visited_Nodes_GPU, _Visited_Nodes_lenght_GPU);	//works
-		cudaDeviceSynchronize();
-		printf("\n");
+		//Print_Graph_GPU<<<1,1>>>(Graph_GPU, _Graph_lenght_GPU);	//works
+		//cudaDeviceSynchronize();
+		//printf("\n");
+		//Print_Djikstra_Matrix_GPU <<<1, 1 >>>(Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght_GPU);	//works
+		//cudaDeviceSynchronize();
+		//printf("\n");
+		//Print_Visited_Nodes_GPU <<<1, 1 >>>(Visited_Nodes_GPU, _Visited_Nodes_lenght_GPU);	//works
+		//cudaDeviceSynchronize();
+		//printf("\n");
 
 		Copy_Values_From_GPU_To_CPU_In_Class();
 		//COPYING FROM GPU TO CPU
@@ -387,7 +383,7 @@ void Find_Way(const int from, const int to, const int way_lenght)
 		cudaMemcpy(Visited_Nodes, Visited_Nodes_GPU, _Visited_Nodes_lenght * sizeof(int), DeviceToHost);
 		////////////////////////////////////////////////////////////////////////////
 
-		//_STD cout << Visited_Nodes[0] << ' ' << Visited_Nodes[1] << ' ' << Visited_Nodes[2] << ' ' <<  Visited_Nodes[3] << ' ' << Visited_Nodes[4] << ' ' << Visited_Nodes[5] << ' ' << Visited_Nodes[6] << NEW_LINE;
+		_STD cout << Visited_Nodes[0] << ' ' << Visited_Nodes[1] << ' ' << Visited_Nodes[2] << ' ' <<  Visited_Nodes[3] << ' ' << Visited_Nodes[4] << ' ' << Visited_Nodes[5] << ' ' << Visited_Nodes[6] << NEW_LINE;
 		_STD cout << "Road through: ";
 		for (int i = ::_Djikstra_Matrix_lenght - 1; i >= 0; --i)
 		{
@@ -403,10 +399,6 @@ void Find_Way(const int from, const int to, const int way_lenght)
 			}
 		}
 		_STD cout << NEW_LINE;
-		//system("pause");
-
-		Print_Djikstra_Matrix();
-		//system("pause");
 		/*
 			MEMORY FREE
 		*/
@@ -530,9 +522,7 @@ __global__  void Print_Visited_Nodes_GPU(const int* const Visited_Nodes_GPU, con
 //GPU FUNCTION
 __global__ void Minimal_Spanning_Tree_Creator(const int* the_beginning, _Djikstra_Element* Graph_GPU, const size_t* const _Graph_lenght_GPU, _Djikstra_Element* _Djikstra_Matrix_GPU, const size_t* const _Djikstra_Matrix_lenght_GPU, int* Visited_Nodes_GPU, const size_t* const _Visited_Nodes_lenght_GPU)
 {
-	///printf("%d \n", Graph_GPU[0].get_connections_array_GPU(1));
 	int id_x = threadIdx.x + blockIdx.x * blockDim.x;
-	//int block_id = 
 	if (id_x < *_Djikstra_Matrix_lenght_GPU)
 	{
 		_Djikstra_Matrix_GPU[id_x].set_cost_GPU(-1);	//means its a infinity
@@ -547,22 +537,19 @@ __global__ void Minimal_Spanning_Tree_Creator(const int* the_beginning, _Djikstr
 	_Djikstra_Matrix_GPU[current_verticle].set_cost_GPU(0);
 	_Djikstra_Matrix_GPU[current_verticle].set_edge_GPU((current_verticle + 1));
 
-
 	for (size_t i = 0; i < (*_Graph_lenght_GPU); ++i)
 	{
 		Visited_Nodes_GPU[current_verticle] = (current_verticle + 1);
 
-		for (size_t j = 0; j < Graph_GPU[current_verticle].get_connections_size_GPU(); ++j)
+		if (Graph_GPU[current_verticle].get_connections_array_GPU(id_x) != 0 && Visited_Nodes_GPU[id_x] != (id_x + 1))
 		{
-			if (Graph_GPU[current_verticle].get_connections_array_GPU(j) != 0 && Visited_Nodes_GPU[j] != (j + 1))
+			if ((_Djikstra_Matrix_GPU[id_x].get_cost_GPU() == -1) || ((_Djikstra_Matrix_GPU[current_verticle].get_cost_GPU() + Graph_GPU[current_verticle].get_connections_array_GPU(id_x)) <= _Djikstra_Matrix_GPU[id_x].get_cost_GPU()))
 			{
-				if ((_Djikstra_Matrix_GPU[j].get_cost_GPU() == -1) || ((_Djikstra_Matrix_GPU[current_verticle].get_cost_GPU() + Graph_GPU[current_verticle].get_connections_array_GPU(j)) <= _Djikstra_Matrix_GPU[j].get_cost_GPU()))
-				{
-					_Djikstra_Matrix_GPU[j].set_cost_GPU(_Djikstra_Matrix_GPU[current_verticle].get_cost_GPU() + Graph_GPU[current_verticle].get_connections_array_GPU(j));
-					_Djikstra_Matrix_GPU[j].set_edge_GPU((current_verticle + 1));
-				}
+				_Djikstra_Matrix_GPU[id_x].set_cost_GPU(_Djikstra_Matrix_GPU[current_verticle].get_cost_GPU() + Graph_GPU[current_verticle].get_connections_array_GPU(id_x));
+				_Djikstra_Matrix_GPU[id_x].set_edge_GPU((current_verticle + 1));
 			}
 		}
+		__syncthreads();
 		//Seeking for the smallest element in Djikstra's Matrix
 		for (size_t j = 0; j < (*_Djikstra_Matrix_lenght_GPU); ++j)
 		{
@@ -574,7 +561,6 @@ __global__ void Minimal_Spanning_Tree_Creator(const int* the_beginning, _Djikstr
 		}
 		the_smallest_cost = 999999999;
 		__syncthreads();
-		//id_x += blockDim.x * gridDim.x;
 	}
 }
 
@@ -677,8 +663,7 @@ __device__ void _Djikstra_Element::set_cost_GPU(const int cost)
 
 __device__ void _Djikstra_Element::set_edge_GPU(const int edge)
 {
-	(*Edge_GPU) = edge;
-	printf("%d\n", (*Edge_GPU));
+	*(this->Edge_GPU) = edge;
 }
 
 __host__ void _Djikstra_Element::print_connections() const
@@ -714,7 +699,6 @@ __host__ void _Djikstra_Element::Copy_Values_From_GPU_To_CPU()
 {
 	cudaMemcpy(this->Connections, this->Connections_GPU, this->_Connections_size * sizeof(int), DeviceToHost);
 	cudaMemcpy(&this->_Connections_size, this->_Connections_size_GPU, sizeof(size_t), DeviceToHost);
-	//cudaMemset(&Verticle_GPU, 1000, sizeof(int));
 	cudaMemcpy(&Verticle, this->Verticle_GPU, sizeof(int), DeviceToHost);
 	cudaMemcpy(&Edge, this->Edge_GPU, sizeof(int), DeviceToHost);
 	cudaMemcpy(&Cost, this->Cost_GPU, sizeof(int), DeviceToHost);
