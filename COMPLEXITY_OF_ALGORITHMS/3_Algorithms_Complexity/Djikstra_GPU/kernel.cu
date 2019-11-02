@@ -235,8 +235,6 @@ void Construct(const size_t _Graph_lenght)
 	{
 		Graph[i].set_connections_size(_Graph_lenght);
 		Djikstra_Matrix[i].set_verticle(static_cast<int>((i + 1)));
-		Djikstra_Matrix[i].set_cost(0);
-		Djikstra_Matrix[i].set_edge(0);
 		Visited_Nodes[i] = (-1);
 	}
 }
@@ -407,7 +405,6 @@ __global__ void Print_Djikstra_Matrix_GPU(const _Djikstra_Element* const _Djikst
 	while (id_x < *(_Djikstra_Matrix_lenght_GPU))
 	{
 		printf("V: %d E: %d C: %d\n", _Djikstra_Matrix_GPU[id_x].get_verticle_GPU(), _Djikstra_Matrix_GPU[id_x].get_edge_GPU(), _Djikstra_Matrix_GPU[id_x].get_cost_GPU());
-		//__syncthreads();
 		id_x += blockDim.x * gridDim.x;
 	}
 }
@@ -585,9 +582,6 @@ __host__ void _Djikstra_Element::Copy_Values_From_CPU_To_GPU()
 	cudaMalloc((void**)&Verticle_GPU, sizeof(int));
 	cudaMalloc((void**)&Edge_GPU, sizeof(int));
 	cudaMalloc((void**)&Cost_GPU, sizeof(size_t));
-	cudaMemset(&Verticle_GPU, 0, sizeof(int));
-	cudaMemset(&Edge_GPU, 0, sizeof(int));
-	cudaMemset(&Cost_GPU, 0, sizeof(int));
 
 	//CudaMemoryCopy from CPU to GPU
 	cudaMemcpy(this->Connections_GPU, this->Connections, this->_Connections_size * sizeof(int), HostToDevice);
@@ -599,8 +593,6 @@ __host__ void _Djikstra_Element::Copy_Values_From_CPU_To_GPU()
 
 __host__ void _Djikstra_Element::Copy_Values_From_GPU_To_CPU()
 {
-	cudaMemcpy(this->Connections, this->Connections_GPU, this->_Connections_size * sizeof(int), DeviceToHost);
-	cudaMemcpy(&this->_Connections_size, this->_Connections_size_GPU, sizeof(size_t), DeviceToHost);
 	cudaMemcpy(&Verticle, this->Verticle_GPU, sizeof(int), DeviceToHost);
 	cudaMemcpy(&Edge, this->Edge_GPU, sizeof(int), DeviceToHost);
 	cudaMemcpy(&Cost, this->Cost_GPU, sizeof(int), DeviceToHost);
