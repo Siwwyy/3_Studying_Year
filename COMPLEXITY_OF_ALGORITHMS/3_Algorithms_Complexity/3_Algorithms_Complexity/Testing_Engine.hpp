@@ -160,7 +160,7 @@ namespace Testing
 		{
 			START_STOPWATCH
 			_STD cout << "|================================================|" << '\n';
-			_STD cout << "		NAME OF TEST: " << test_names[position] << '\n';
+			_STD cout << "	    NAME OF TEST: " << test_names[position] << '\n';
 			_STD cout << "|================================================|" << '\n';
 			_STD cout << '\n';
 			_Ty _Ptr = Pointer_To_Functions[position];

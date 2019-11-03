@@ -270,21 +270,21 @@ void _Djikstra::find_way(const int from, const int to, const int way_lenght)
 		destination_verticle = from_;
 		current_verticle = to_;
 		minimal_spanning_tree_creator(from_);	//create Djikstra for this case
-		//_STD cout << "Road through: ";
+		_STD cout << "Road through: ";
 		for (int i = _Djikstra_Matrix_lenght - 1; i >= 0; --i)
 		{
 			if (Djikstra_Matrix[i].get_verticle() == destination_verticle)
 			{
-				//_STD cout << Djikstra_Matrix[i].get_verticle();
+				_STD cout << Djikstra_Matrix[i].get_verticle();
 				break;
 			}
 			else if (Djikstra_Matrix[i].get_verticle() == current_verticle)
 			{
 				current_verticle = Djikstra_Matrix[i].get_edge();
-				//_STD cout << Djikstra_Matrix[i].get_verticle() << " -> ";
+				_STD cout << Djikstra_Matrix[i].get_verticle() << " -> ";
 			}
 		}
-		//_STD cout << '\n';
+		_STD cout << '\n';
 	}
 }
 

@@ -370,8 +370,10 @@ void _Kruskal::find_way(const int from, const int to, const int way_lenght)
 		}
 		destination_verticle = from_;
 		current_verticle = to_;
+		Print_Graph();
 		minimal_spanning_tree_creator(from_);	//create Djikstra for this case
-
+		Print_MST();
+		_STD cout << NEW_LINE;
 		_STD cout << "Road through: ";
 		_STD cout << current_verticle << " -> ";
 		for (int i = MST.size() - 1; i >= 0; --i)

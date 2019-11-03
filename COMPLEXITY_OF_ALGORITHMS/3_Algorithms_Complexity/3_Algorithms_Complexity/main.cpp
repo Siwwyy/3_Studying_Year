@@ -6,7 +6,10 @@
 int main(int argc, char* argv[])
 {
 	//Testing::Testing_Engine<void(*)(const _STD vector<__int32> & file_content)> My_Test("file.in");
-	Testing::Testing_Engine<void(*)(const _STD vector<__int32> & file_content)> My_Test("wejscie.txt");
+	//Testing::Testing_Engine<void(*)(const _STD vector<__int32> & file_content)> My_Test("wejscie.txt");
+	//Testing::Testing_Engine<void(*)(const _STD vector<__int32> & file_content)> My_Test("file_example1.in");
+	//Testing::Testing_Engine<void(*)(const _STD vector<__int32> & file_content)> My_Test("d_tomaszczyk.in");
+	Testing::Testing_Engine<void(*)(const _STD vector<__int32> & file_content)> My_Test("testowy1.in");
 	My_Test.Push_Function(inserter_PRIMS);
 	My_Test.Push_Function(inserter_KRUSKAL);
 	My_Test.Push_Function(inserter_DJIKSTRA);

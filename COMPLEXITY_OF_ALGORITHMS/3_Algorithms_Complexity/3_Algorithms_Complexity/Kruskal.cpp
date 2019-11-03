@@ -234,22 +234,22 @@ void _Kruskal::find_way(const int from, const int to, const int way_lenght)
 		current_verticle = to_;
 		minimal_spanning_tree_creator(from_);	//create Djikstra for this case
 
-		//_STD cout << "Road through: ";
-		//_STD cout << current_verticle << " -> ";
+		_STD cout << "Road through: ";
+		_STD cout << current_verticle << " -> ";
 		for (int i = MST.size() - 1; i >= 0; --i)
 		{
 			if (MST[i].get_verticle() == destination_verticle)
 			{
-				//_STD cout << MST[i].get_verticle();
+				_STD cout << MST[i].get_verticle();
 				break;
 			}
 			else if (MST[i].get_edge() == current_verticle)
 			{
 				current_verticle = MST[i].get_verticle();
-				//_STD cout << MST[i].get_verticle() << " -> ";
+				_STD cout << MST[i].get_verticle() << " -> ";
 			}
 		}
-		//_STD cout << '\n';
+		_STD cout << '\n';
 		//system("pause");
 	}
 }

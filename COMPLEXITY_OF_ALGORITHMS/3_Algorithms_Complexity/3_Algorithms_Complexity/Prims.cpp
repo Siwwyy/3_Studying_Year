@@ -385,21 +385,21 @@ void _MST::find_way(const int from, const int to, const int way_lenght)
 		current_verticle = to_;
 		minimal_spanning_tree_creator(from_);	//create Prims for this case
 
-		//_STD cout << "Road through: ";
+		_STD cout << "Road through: ";
 		for (int i = _Prims_Matrix_lenght - 1; i >= 0; --i)
 		{
 			if (Prims_Matrix[i].get_verticle() == destination_verticle)
 			{
-				//_STD cout << Prims_Matrix[i].get_verticle();
+				_STD cout << Prims_Matrix[i].get_verticle();
 				break;
 			}
 			else if (Prims_Matrix[i].get_verticle() == current_verticle)
 			{
 				current_verticle = Prims_Matrix[i].get_edge();
-				//_STD cout << Prims_Matrix[i].get_verticle() << " -> ";
+				_STD cout << Prims_Matrix[i].get_verticle() << " -> ";
 			}
 		}
-		//_STD cout << '\n';
+		_STD cout << '\n';
 		//system("pause");
 	}
 }
