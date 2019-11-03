@@ -1,157 +1,4 @@
-/*
- *			   Copyright (c) by Damian Andrysiak. All rights reserved.
- *					I hope that alghoritm will make right work
- *							Greetings for everyone!
-*/
-
-#include <iostream>
-#include <vector>
-#include <math.h>
-
-#define NEW_LINE '\n'
-
-//CLASS OF _MST_ELEMENT, for inserting values
-
-class _MST_Element
-{
-private:
-	//////////////////////////////////////////////////////////////////////////////
-	/*
-		ZMIENNE PRIVATE
-	*/
-	int Verticle;
-	int Cost;
-	int Edge;
-	//////////////////////////////////
-	int * Connections;
-	size_t _Connections_size;
-	//////////////////////////////////////////////////////////////////////////////
-public:
-	//////////////////////////////////////////////////////////////////////////////
-	/*
-		KONSTRUKTORY PUBLIC
-	*/
-	_MST_Element();
-	_MST_Element(const int Verticle, const int Cost, const int Edge);
-	_MST_Element(const _MST_Element & Object);
-	//////////////////////////////////////////////////////////////////////////////
-	/*
-		FUNKCJE PUBLIC
-	*/
-
-	//////////////////////////////////////////////////////////////////////////////
-	/*
-		SETTERY PUBLIC
-	*/
-	void set_connections_size(const size_t _Connections_size);
-	void set_connection(const int value, const size_t counter);
-	void set_way(const int destination, const int way_lenght);
-	void set_verticle(const int verticle);
-	void set_cost(const int cost);
-	void set_edge(const int edge);
-	//////////////////////////////////////////////////////////////////////////////
-	/*
-		OPERATORY PUBLIC
-	*/
-	//JEDNOARGUMENTOWE
-	_MST_Element & operator=(const _MST_Element & Object);
-	//DWUARGUMENTOWE
-	//////////////////////////////////////////////////////////////////////////////
-	/*
-		GETTERY PUBLIC
-	*/
-	int get_verticle() const;
-	int get_cost() const;
-	int get_edge() const;
-	size_t get_connections_size() const;
-	int & get_connections_array(const size_t counter) const;
-	//////////////////////////////////////////////////////////////////////////////
-	/*
-		DESTRUKTOR
-	*/
-	virtual ~_MST_Element();
-};
-
-//CLASS OF _MST
-
-class _MST
-{
-private:
-	//////////////////////////////////////////////////////////////////////////////
-	/*
-		ZMIENNE PRIVATE
-	*/
-	/////////////////////////////////////////////////////////////////////////
-	_MST_Element * Graph;
-	size_t _Graph_lenght;
-	/////////////////////////////////////////////////////////////////////////
-	_MST_Element * Prims_Matrix;
-	size_t _Prims_Matrix_lenght;
-	/////////////////////////////////////////////////////////////////////////
-	int * Q;
-	size_t _Q_lenght;
-	int _Q_counter;
-	/////////////////////////////////////////////////////////////////////////
-	std::vector<_MST_Element> F;
-	//////////////////////////////////////////////////////////////////////////////
-	std::vector<std::pair<std::pair<int, int>, int>> Destinations;
-	//////////////////////////////////////////////////////////////////////////////
-	/*
-		FUNKCJE PRIVATE
-	*/
-	void find_way(const int from, const int to, const int way_lenght);
-	//////////////////////////////////////////////////////////////////////////////
-public:
-	//////////////////////////////////////////////////////////////////////////////
-	/*
-		KONSTRUKTORY PUBLIC
-	*/
-	_MST();
-	_MST(const size_t _Graph_lenght);
-	_MST(const _MST & Object);
-	//////////////////////////////////////////////////////////////////////////////
-	/*
-		FUNKCJE PUBLIC
-	*/
-	void push(const int value, const int destination, const int way_lenght);
-	void push_directions(const int from, const int to, const int way_lenght);
-	void minimal_spanning_tree_creator(const int the_beginning);
-	void get_results();
-	//////////////////////////////////////////////////////////////////////////////
-	/*
-		SETTERY PUBLIC
-	*/
-
-	//////////////////////////////////////////////////////////////////////////////
-	/*
-		GETTERY PUBLIC
-	*/
-	//////////////////////////////////////////////////////////////////////////////
-
-	/*
-		OPERATORY PUBLIC
-	*/
-	//JEDNOARGUMENTOWE
-	_MST & operator=(const _MST & Object);
-	//DWUARGUMENTOWE
-	//////////////////////////////////////////////////////////////////////////////
-	/*
-		DESTRUKTOR
-	*/
-	virtual ~_MST();
-};
-
-//////////////////////////////////////////////////////////////////////////////
-
-//FUNCTION FOR INSERTING VALUES FROM file_in
-void inserter();
-//////////////////////////////////////////////////////////////////////////////
-
-int main(int argc, char* argv[])
-{
-	inserter();
-	return EXIT_SUCCESS;
-}
+#include "Prims.hpp"
 
 //////////////////////////////////////////////////////
 /*
@@ -159,7 +6,7 @@ int main(int argc, char* argv[])
 */
 //////////////////////////////////////////////////////
 
-void inserter()
+void inserter_PRIMS(const _STD vector<__int32>& file_content)
 {
 	int m = 0;			//amount of cities
 	int d = 0;			//amount of ways
@@ -169,19 +16,27 @@ void inserter()
 	int s = 0;			//the beginning of way
 	int e = 0;			//the end of way
 	int t = 0;			//amount of max passengers to move by bus
+	size_t counter{};
 	while (true)
 	{
-		std::cin >> m;
-		std::cin >> d;
-		_MST * MST_Object = new _MST(m);
+		/*std::cin >> m;
+		std::cin >> d;*/
+		m = file_content[counter];
+		++counter;
+		d = file_content[counter];
+		++counter;
+		_MST* MST_Object = new _MST(m);
 		while (d > 0)
 		{
-			std::cin >> c1;
-			std::cin >> c2;
-			std::cin >> p;
+			c1 = file_content[counter];
+			++counter;;
+			c2 = file_content[counter];
+			++counter;
+			p = file_content[counter];
+			++counter;
 			//both times cause each road is in both ways
-			MST_Object->push(c1, c2, (-1)*p);
-			MST_Object->push(c2, c1, (-1)*p);
+			MST_Object->push(c1, c2, (-1) * p);
+			MST_Object->push(c2, c1, (-1) * p);
 			--d;
 			c1 = 0;
 			c2 = 0;
@@ -189,11 +44,14 @@ void inserter()
 		}
 		while (true)
 		{
-			std::cin >> s;
-			std::cin >> e;
+			s = file_content[counter];
+			++counter;
+			e = file_content[counter];
+			++counter;
 			if (s != 0 && e != 0)
 			{
-				std::cin >> t;
+				t = file_content[counter];
+				++counter;
 				MST_Object->push_directions(s, e, t);
 			}
 			else
@@ -203,7 +61,8 @@ void inserter()
 				MST_Object->get_results();
 				///////////////////////////////////////////////
 				delete MST_Object;
-				exit(0);
+				//exit(0);
+				break;
 			}
 			s = 0;
 			e = 0;
@@ -211,6 +70,7 @@ void inserter()
 		}
 		d = 0;
 		m = 0;
+		break;
 	}
 }
 
@@ -249,7 +109,7 @@ _MST_Element::_MST_Element(const int Verticle, const int Cost, const int Edge) :
 	}
 }
 
-_MST_Element::_MST_Element(const _MST_Element & Object) :
+_MST_Element::_MST_Element(const _MST_Element& Object) :
 	_Connections_size(Object._Connections_size),
 	Verticle(Object.Verticle),
 	Cost(Object.Cost),
@@ -301,7 +161,7 @@ void _MST_Element::set_edge(const int edge)
 	this->Edge = edge;
 }
 
-_MST_Element & _MST_Element::operator=(const _MST_Element & Object)
+_MST_Element& _MST_Element::operator=(const _MST_Element& Object)
 {
 	if (this != &Object)
 	{
@@ -339,7 +199,7 @@ size_t _MST_Element::get_connections_size() const
 	return this->_Connections_size;
 }
 
-int & _MST_Element::get_connections_array(const size_t counter) const
+int& _MST_Element::get_connections_array(const size_t counter) const
 {
 	return this->Connections[counter];
 }
@@ -393,7 +253,7 @@ _MST::_MST(const size_t _Graph_lenght) :
 	}
 }
 
-_MST::_MST(const _MST & Object) :
+_MST::_MST(const _MST& Object) :
 	_Graph_lenght(Object._Graph_lenght),
 	_Prims_Matrix_lenght(Object._Prims_Matrix_lenght),
 	_Q_lenght(Object._Q_lenght),
@@ -525,26 +385,26 @@ void _MST::find_way(const int from, const int to, const int way_lenght)
 		current_verticle = to_;
 		minimal_spanning_tree_creator(from_);	//create Prims for this case
 
-		_STD cout << "Road through: ";
+		//_STD cout << "Road through: ";
 		for (int i = _Prims_Matrix_lenght - 1; i >= 0; --i)
 		{
 			if (Prims_Matrix[i].get_verticle() == destination_verticle)
 			{
-				_STD cout << Prims_Matrix[i].get_verticle();
+				//_STD cout << Prims_Matrix[i].get_verticle();
 				break;
 			}
 			else if (Prims_Matrix[i].get_verticle() == current_verticle)
 			{
 				current_verticle = Prims_Matrix[i].get_edge();
-				_STD cout << Prims_Matrix[i].get_verticle() << " -> ";
+				//_STD cout << Prims_Matrix[i].get_verticle() << " -> ";
 			}
 		}
-		_STD cout << NEW_LINE;
+		//_STD cout << '\n';
 		//system("pause");
 	}
 }
 
-_MST & _MST::operator=(const _MST & Object)
+_MST& _MST::operator=(const _MST& Object)
 {
 	if (this != &Object)
 	{

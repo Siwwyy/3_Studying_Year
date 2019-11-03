@@ -123,10 +123,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Djikstra.cpp" />
+    <ClCompile Include="Kruskal.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Prims.cpp" />
+    <ClCompile Include="StopWatch.cpp" />
     <ClCompile Include="Testing_Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Djikstra.hpp" />
+    <ClInclude Include="Kruskal.hpp" />
+    <ClInclude Include="Prims.hpp" />
+    <ClInclude Include="StopWatch.h" />
     <ClInclude Include="Testing_Engine.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

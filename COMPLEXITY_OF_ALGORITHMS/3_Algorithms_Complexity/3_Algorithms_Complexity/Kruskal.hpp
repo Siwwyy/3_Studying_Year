@@ -1,0 +1,151 @@
+#ifndef _KRUSKAL_HPP_
+#define _KRUSKAL_HPP_
+#pragma once
+
+
+/*
+ *			   Copyright (c) by Damian Andrysiak. All rights reserved.
+ *					I hope that alghoritm will make right work
+ *							Greetings for everyone!
+*/
+
+#include <iostream>
+#include <vector>
+#include <set>
+#include <math.h>
+
+//#define NEW_LINE '\n'
+
+//CLASS OF _Kruskal_Element, for inserting values
+
+class _Kruskal_Element
+{
+private:
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		ZMIENNE PRIVATE
+	*/
+	int Verticle;
+	int Edge;
+	int Cost;
+	//////////////////////////////////////////////////////////////////////////////
+public:
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		KONSTRUKTORY PUBLIC
+	*/
+	_Kruskal_Element();
+	_Kruskal_Element(const int Verticle, const int Cost, const int Edge);
+	_Kruskal_Element(_STD initializer_list<int> _Initializer);
+	_Kruskal_Element(const _Kruskal_Element& Object);
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		FUNKCJE PUBLIC
+	*/
+
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		SETTERY PUBLIC
+	*/
+	void set_verticle(const int verticle);
+	void set_cost(const int cost);
+	void set_edge(const int edge);
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		OPERATORY PUBLIC
+	*/
+	//JEDNOARGUMENTOWE
+	_Kruskal_Element& operator=(const _Kruskal_Element& Object);
+	const bool operator==(const _Kruskal_Element& Object) const;
+	const bool operator<(const _Kruskal_Element& Object) const;
+	friend _STD ostream& operator<<(_STD ostream& _Lhs, const _Kruskal_Element& _Rhs);
+	//DWUARGUMENTOWE
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		GETTERY PUBLIC
+	*/
+	int get_verticle() const;
+	int get_cost() const;
+	int get_edge() const;
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		DESTRUKTOR
+	*/
+	virtual ~_Kruskal_Element();
+};
+
+//CLASS OF _MST
+
+class _Kruskal
+{
+private:
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		ZMIENNE PRIVATE
+	*/
+	/////////////////////////////////////////////////////////////////////////
+	_STD multiset<_Kruskal_Element> Graph;
+	//////////////////////////////////////////////////////////////////////////////
+	_STD vector<_Kruskal_Element> MST;
+	//////////////////////////////////////////////////////////////////////////////
+	_STD vector<_STD set<__int32>> Set;
+	//////////////////////////////////////////////////////////////////////////////
+	std::vector<std::pair<std::pair<int, int>, int>> Destinations;
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		FUNKCJE PRIVATE
+	*/
+	void find_way(const int from, const int to, const int way_lenght);
+	const bool Is_in_Same_Set(const int& _Left, const int& _Right);
+	const bool Merge(const size_t& _Left, const size_t& _Right);
+	const size_t Find_Element(const int& _Elem);
+	//////////////////////////////////////////////////////////////////////////////
+public:
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		KONSTRUKTORY PUBLIC
+	*/
+	_Kruskal();
+	_Kruskal(const size_t _Graph_lenght);
+	_Kruskal(const _Kruskal& Object);
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		FUNKCJE PUBLIC
+	*/
+	void push(const int value, const int destination, const int way_lenght);
+	void push_directions(const int from, const int to, const int way_lenght);
+	void minimal_spanning_tree_creator(const int the_beginning);
+	void get_results();
+	void Print_Graph() const;
+	void Print_MST() const;
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		SETTERY PUBLIC
+	*/
+
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		GETTERY PUBLIC
+	*/
+	//////////////////////////////////////////////////////////////////////////////
+
+	/*
+		OPERATORY PUBLIC
+	*/
+	//JEDNOARGUMENTOWE
+	_Kruskal& operator=(const _Kruskal& Object);
+	//DWUARGUMENTOWE
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		DESTRUKTOR
+	*/
+	virtual ~_Kruskal();
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+//FUNCTION FOR INSERTING VALUES FROM file_in
+void inserter_KRUSKAL(const _STD vector<__int32>& file_content);
+//////////////////////////////////////////////////////////////////////////////
+
+#endif /* _KRUSKAL_HPP_ */
