@@ -21,12 +21,12 @@ int main(int argc, char* argv[])
 	using _STD endl;
 
 	///////////////////////////////////////
-	__int32 value = 126;
+	__int32 value = 69;
 	_STD bitset<sizeof(__int32) * 8> bits = value;
 	bool array_start_status[SIZE]{};
 	bool array_final_status[SIZE]{};
 	bool array_final_status_temp[SIZE]{};
-	size_t iterations{39};
+	size_t iterations{100};
 	///////////////////////////////////////
 
 	Fill_Array(array_start_status, bits);
@@ -35,7 +35,28 @@ int main(int argc, char* argv[])
 	Wolfram_Rule(array_start_status, bits, array_final_status);
 
 	//Print(array_start_status);
+	__int32 magnet_i{};
+	__int32 magnet_i1{};
 
+	//lambda case
+	auto magnetization = [](const __int32 & value) -> __int32 { return ((value == 1) ? 1 : (-1)); };
+	auto average = [](const bool * array) -> float 
+	{	
+		__int32 sum{};
+		for (size_t i = 0; i < SIZE; ++i)
+		{
+			sum += array[i];
+		}
+		return (static_cast<float>(sum) / static_cast<float>(SIZE));
+	};
+
+
+	////////////////////////////////////////
+	std::fstream file_out;
+	file_out.open("magnetization.csv", std::ios_base::out);
+	float temp{};
+	float mg{};
+	float mg1{};
 	for (size_t i = 0; i < iterations; ++i)
 	{
 		Print(array_final_status);
@@ -44,9 +65,26 @@ int main(int argc, char* argv[])
 			array_final_status_temp[j] = array_final_status[j];
 		}
 		Wolfram_Rule(array_final_status_temp, bits, array_final_status);
+		//magnet_i += magnetization(array_final_status[i]);
+		//magnet_i1 += magnetization(array_final_status[i+1]);
+		//_STD cout << "Iteration: " << i << ' ' << array_final_status[14] << ' ' << array_final_status[15] << " | "<< array_final_status[24] << ' ' << array_final_status[25] << NEW_LINE;
+		//_STD cout << "Iteration: " << i << ' ' << magnet_i << ' ' << magnet_i1 << NEW_LINE;
+		//file_out << magnet_i << ',' << magnet_i1 << NEW_LINE;
+		if (i > 0 && i%2 == 0)
+		{
+			mg1 = average(array_final_status);
+			file_out << mg << ',' << mg1 << NEW_LINE;
+			mg = mg1;
+		}
+		else
+		{
+			mg = average(array_final_status_temp);
+		}
 
 	}
+	//_STD cout << "Magnetization i: " << magnet_i << " | Magnetization i+1: " << magnet_i1 << NEW_LINE;
 
+	file_out.close();
 
 	system("pause");
 	return 0;
@@ -54,20 +92,6 @@ int main(int argc, char* argv[])
 
 void Fill_Array(bool array[], _STD bitset<sizeof(__int32) * 8>& bits)
 {
-	//array[0] = true;
-	//array[1] = false;
-	//array[2] = true;
-	//array[3] = true;
-	//array[4] = false;
-	//array[5] = false;
-	//array[6] = false;
-	//array[7] = true;
-	//array[8] = false;
-	//array[9] = true;
-	//array[10] = true;
-	//array[11] = true;
-	//array[12] = false;
-	///
 	for (size_t i = 0; i < SIZE; ++i)
 	{
 		array[i] = false;
@@ -90,7 +114,6 @@ void Wolfram_Rule(bool array_start[], _STD bitset<sizeof(__int32) * 8>& bits, bo
 	unsigned __int32 temp_value{};
 	for (size_t i = 0; i < SIZE; ++i)
 	{
-		//_STD cout << array[i] << " | ";
 		if (i == 0)
 		{
 			temp_bits[0] = array_start[i + 1];
@@ -99,10 +122,7 @@ void Wolfram_Rule(bool array_start[], _STD bitset<sizeof(__int32) * 8>& bits, bo
 
 			temp_value = temp_bits.to_ulong();
 
-			//_STD cout << temp_bits[0] << temp_bits[1] << temp_bits[2] << NEW_LINE;
-			//_STD cout << temp_value << ' ' << bits[temp_value] << NEW_LINE;
 			array_end[i] = bits[temp_value];
-			//_STD cin.get();
 		}
 		else if (i > 0 && i < (SIZE - 1))
 		{
@@ -112,10 +132,7 @@ void Wolfram_Rule(bool array_start[], _STD bitset<sizeof(__int32) * 8>& bits, bo
 
 			temp_value = temp_bits.to_ulong();
 
-			//_STD cout << temp_bits[0] << temp_bits[1] << temp_bits[2] << NEW_LINE;
-			//_STD cout << temp_value << ' ' << bits[temp_value] << NEW_LINE;
 			array_end[i] = bits[temp_value];
-			//_STD cin.get();		//	array_end[i] = bits[temp_value];
 		}
 		else
 		{
@@ -125,10 +142,7 @@ void Wolfram_Rule(bool array_start[], _STD bitset<sizeof(__int32) * 8>& bits, bo
 
 			temp_value = temp_bits.to_ulong();
 
-			//_STD cout << temp_bits[0] << temp_bits[1] << temp_bits[2] << NEW_LINE;
-			//_STD cout << temp_value << ' ' << bits[temp_value] << NEW_LINE;
 			array_end[i] = bits[temp_value];
-			//_STD cin.get();
 		}
 	}
 }
