@@ -7,6 +7,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "First_Class", "First_Class\
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Data_Loader", "Data_Loader\Data_Loader.pyproj", "{CCDBD07C-BE42-429B-9F95-A38CE442F9EE}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Photo_Loader", "Photo_Loader\Photo_Loader.pyproj", "{0C4449CD-FEB4-45CD-8DCF-2B007C7862EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,8 @@ Global
 		{37E60186-447D-411B-BCF0-8EAA13DE1DD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCDBD07C-BE42-429B-9F95-A38CE442F9EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CCDBD07C-BE42-429B-9F95-A38CE442F9EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C4449CD-FEB4-45CD-8DCF-2B007C7862EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C4449CD-FEB4-45CD-8DCF-2B007C7862EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
