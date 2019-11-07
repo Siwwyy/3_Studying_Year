@@ -115,7 +115,6 @@ int main(int argc, char* argv[])
 				}
 			}
 
-			file_out << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
 			if (i > 90000 && i < 91001)
 			{
 				average_magnetization += magnetization;
@@ -130,11 +129,11 @@ int main(int argc, char* argv[])
 			MATH CASE
 		*/
 		float* N = new float[freq.size()];
-		float _x_2{};//done
-		float _x2_{};//done
-		float _x_{};//done
-		float _y_{};//done
-		float _xy_{};//done
+		float _x_2{}; //done
+		float _x2_{}; //done
+		float _x_{}; //done
+		float _y_{}; //done
+		float _xy_{}; //done
 		for (typename _STD map<int, int>::iterator map_iterator = freq.begin(); map_iterator != freq.end(); ++map_iterator)
 		{
 			N[std::distance(freq.begin(), map_iterator)] = log((*map_iterator).second);
@@ -155,10 +154,6 @@ int main(int argc, char* argv[])
 		demon_energy = NULL;
 		temperatura = NULL;
 	}
-	//for (auto& x : freq)
-	//{
-	//	_STD cout << "occurency: " << x.first << ',' << x.second << NEW_LINE;
-	//}
 	
 	//memory free
 	for (size_t i = 0; i < static_cast<size_t>(width); ++i)
