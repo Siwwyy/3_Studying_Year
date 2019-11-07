@@ -126,6 +126,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="demon_energy.in" />
     <None Include="file.in" />
   </ItemGroup>
   <ItemGroup>

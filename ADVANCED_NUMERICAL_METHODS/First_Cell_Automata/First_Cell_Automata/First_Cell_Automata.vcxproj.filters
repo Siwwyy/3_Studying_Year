@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="file.in" />
+    <None Include="demon_energy.in" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FreqCounter.h">

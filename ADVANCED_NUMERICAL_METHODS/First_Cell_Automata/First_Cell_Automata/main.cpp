@@ -1,6 +1,7 @@
 #include <iostream>
 #include <windows.h>
 #include <string>
+#include <math.h>
 #include <fstream>
 #include <random>
 #include <map>
@@ -29,11 +30,12 @@ int main(int argc, char* argv[])
 	size_t x{};
 	size_t y{};
 	__int32 temp_energy{};
-	size_t iterations{ 10000 };
-	__int32 demon_energy{ 20000 };
+	size_t iterations{ 100000 };
+	__int32 demon_energy{ 0 };
 	__int32 magnetization{ 0 };
+	__int32 average_magnetization{ 0 };
 	__int32 spin_value{ 0 };
-	double test{};
+	float temperatura{};
 	_STD map<int, int> freq{};
 	///////////////////////////////////////
 
@@ -61,97 +63,102 @@ int main(int argc, char* argv[])
 	//lambda case
 	auto energy_sum = [](const __int32& J, const __int32& energy) -> __int32 { return (-1) * J * energy; };
 
-	//energy = (-2) *width*height;//= Count_Energy(area, width, height);
 	energy = Count_Energy(area, width, height);
 	energy_total = energy_sum(J,energy);
 
-
 	//OUTPUT FILE
+	std::fstream file_in;
 	std::fstream file_out;
-	file_out.open("file_to_csv_temperature20000.csv", std::ios_base::out);
+	file_in.open("demon_energy.in", std::ios_base::in);
+	file_out.open("test.csv", std::ios_base::out);
 	file_out << "For iterations: " << iterations << " Initial energy of demon: " << demon_energy << NEW_LINE;
 
-	//nx = ny = 100
-	//liczba spinow = 10000
-	//Energia minimalna = -2*10^4
-	//Energia maksymalna = 2*10^4
-
-	for (size_t i = 0; i < iterations; i++)
+	while (file_in.eof() == false)
 	{
-		temp_energy = energy_total;
-		x = dis_x(generator);
-		y = dis_y(generator);
-		//TIME TO SPIN !
-		area[x][y] *= (-1);
-
-		energy = Count_Energy(area, width, height);
-		energy_total = energy_sum(J, energy);
-		//popraw energie
-		if (energy_total > temp_energy)	//here may be a problem with positive values !
+		file_in >> demon_energy;
+		for (size_t i = 0; i < iterations; i++)
 		{
-			spin_value = ((temp_energy)-(energy_total));
-			if (demon_energy >= ((-1) * spin_value))
+			temp_energy = energy_total;
+			x = dis_x(generator);
+			y = dis_y(generator);
+			//TIME TO SPIN !
+			//if (demon_energy > 0)
+			//{
+				area[x][y] *= (-1);
+			//}
+
+			energy = Count_Energy(area, width, height);
+			energy_total = energy_sum(J, energy);
+			if (energy_total > temp_energy)	//here may be a problem with positive values !
 			{
-				demon_energy += spin_value;
-				//energy_total = temp_energy;
+				spin_value = ((temp_energy)-(energy_total));
+				if (demon_energy >= ((-1) * spin_value))
+				{
+					demon_energy += spin_value;
+				}
+				else
+				{
+					area[x][y] *= (-1);
+					energy_total = temp_energy;
+				}
 			}
 			else
 			{
-				area[x][y] *= (-1);
-				energy_total = temp_energy;
+				spin_value = ((energy_total)-(temp_energy)) * (-1);
+				demon_energy += spin_value;
 			}
-		}
-		else 
-		{
-			spin_value = ((energy_total)-(temp_energy)) * (-1);
-			demon_energy += spin_value;
-		}
-		
-		for (size_t j = 0; j < width; ++j)
-		{
-			for (size_t k = 0; k < height; ++k)
+			for (size_t j = 0; j < width; ++j)
 			{
-				magnetization += area[j][k];
+				for (size_t k = 0; k < height; ++k)
+				{
+					magnetization += area[j][k];
+				}
 			}
-		}
-		//Object.Push_Data(iterations,magnetization);
-		//_STD cout << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
-		//file_out << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
-		//file_out << i << "," << magnetization << NEW_LINE;
-		file_out << i << ',' << demon_energy << NEW_LINE;
-		
-		//if (i > 1399)
-		//{
-		//	/*test += demon_energy;
-		//	freq[demon_energy]++;
-		//}
-		/*if (i > 1399)
-		{
-			test += magnetization;
-		}*/
-		x = NULL;
-		y = NULL;
-		magnetization = NULL;
-		spin_value = NULL;
-	}
-	/*for (auto& x : freq)
-	{
-		file_out << x.first << ',' << x.second << NEW_LINE;
-	}*/
-	//Object.Create_Chart();
-	//SPIN FLIP BY DEMON MA ENERGI NA TO BY TO WYKONAC
-	/*
-		Przyjmijmy: energia to -32 a po spinie to -24, spadla o 8, a demon ma 12 energi wiec spin sie wykona.
-		Lecz, gdyby mial 4 energi to musimy pominac spin flipa i poczekac na takiego ktorego moze zrobic
-		Jak energia to -32 a po spinie np. -34 to demonowi dodajemy 2 energie do gory ! jesli mial 20 to ma 22	
-		Jak energia to -32 a po spinie np. -30 to demonowi odejmujemy 2 energie do dolu ! jesli mial 20 to ma 18
 
-		Jak mamy same 1 to na samym poczatku policz energie !! -2 * width * height
-	*/
-	/*
-		NA ZA TYDZIEN POCZYTAJ O AUTOMACIE WOLFRAMA, 256 regul, topologia, stany. Zwroc uwage na
-		oznaczanie regul ! Regula jest konkretna liczba z zakresu 0-255
-	*/
+			file_out << "Iteration nr:" << i << " Demon energy: " << demon_energy << " Magnetization: " << magnetization << " Total energy: " << energy_total << NEW_LINE;
+			if (i > 90000 && i < 91001)
+			{
+				average_magnetization += magnetization;
+				freq[demon_energy]++;
+			}
+			x = NULL;
+			y = NULL;
+			magnetization = NULL;
+			spin_value = NULL;
+		}
+		/*
+			MATH CASE
+		*/
+		float* N = new float[freq.size()];
+		float _x_2{};//done
+		float _x2_{};//done
+		float _x_{};//done
+		float _y_{};//done
+		float _xy_{};//done
+		for (typename _STD map<int, int>::iterator map_iterator = freq.begin(); map_iterator != freq.end(); ++map_iterator)
+		{
+			N[std::distance(freq.begin(), map_iterator)] = log((*map_iterator).second);
+			//_STD cout << (*map_iterator).first << " " << N[std::distance(freq.begin(), map_iterator)] << " |\n";
+			_x2_ += pow((*map_iterator).first,2);
+			_x_ += (*map_iterator).first;
+			_y_ += N[std::distance(freq.begin(), map_iterator)];
+			_xy_ += ((*map_iterator).first * N[std::distance(freq.begin(), map_iterator)]);
+		}
+		_x_ = static_cast<float>(_x_ / static_cast<float>(freq.size()));
+		_x2_ = static_cast<float>(_x2_ / static_cast<float>(freq.size()));
+		_xy_ = static_cast<float>(_xy_ / static_cast<float>(freq.size()));
+		_x_2 = pow(_x_, 2);
+		temperatura = static_cast<float>(-1.f) * static_cast<float>((_x_2 - _x2_) / ((_x_*_y_) - _xy_));
+		_STD cout << "Average Magnetization: " << static_cast<float>(static_cast<float>(average_magnetization) / 1000.f) << " Temperature: " << temperatura << NEW_LINE;
+		delete[] N;
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		demon_energy = NULL;
+		temperatura = NULL;
+	}
+	//for (auto& x : freq)
+	//{
+	//	_STD cout << "occurency: " << x.first << ',' << x.second << NEW_LINE;
+	//}
 	
 	//memory free
 	for (size_t i = 0; i < static_cast<size_t>(width); ++i)
@@ -160,8 +167,7 @@ int main(int argc, char* argv[])
 	}
 	delete[] area;
 
-	file_out << "Average: " << double(test / (1000));
-
+	file_in.close();
 	file_out.close();
 
 	system("pause");
