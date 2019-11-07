@@ -43,10 +43,14 @@ void inserter();
 /*
 	CPU FUNCTIONS
 */
-void Print_Graph(const __int32* const* const Graph, size_t size);
+void Print_Graph(const __int32* const* const Graph, const size_t size);
 /////////////////////////////////////////////////////////////////////////
 
-
+/*
+	GPU FUNCTIONS
+*/
+__global__ void Print_Graph_GPU(const __int32* const* const Graph, const size_t * const size);
+/////////////////////////////////////////////////////////////////////////
 
 
 /*
@@ -56,7 +60,8 @@ void Print_Graph(const __int32* const* const Graph, size_t size);
 __int32** Graph;	//all connections
 size_t Graph_size;
 /////////////////////////////////////////////////////////////////////////
-
+__int32** Matrix_GPU_A;
+size_t* Graph_size_GPU;
 /////////////////////////////////////////////////////////////////////////
 
 
@@ -69,6 +74,7 @@ int main(int argc, char* argv[])
 		delete[] Graph[i];
 	}
 	delete[] Graph;
+	cudaFree(Matrix_GPU_A);
 	system("pause");
 	return 0;
 }
@@ -91,6 +97,8 @@ void inserter()
 		Graph_size = m;
 		//Construct(m);
 		Graph = new __int32* [m];
+		cudaMalloc((void**)&Matrix_GPU_A, (m * m) * sizeof(__int32));	//GPU interprets 2D array as a flat array !
+		cudaMalloc((void**)&Graph_size_GPU, sizeof(__int32));	//GPU interprets 2D array as a flat array !
 		for (size_t i = 0; i < Graph_size; ++i)
 		{
 			Graph[i] = new __int32[m];
@@ -114,7 +122,7 @@ void inserter()
 			c2 = 0;
 			p = 0;
 		}
-		Print_Graph(Graph, Graph_size);
+
 		//system("pause");
 		//exit(0);
 		while (true)
@@ -130,9 +138,17 @@ void inserter()
 			{
 				//here call all needed functions for solve the problem cause if s and e will be equal to 0 problem will be stopped immediately
 				///////////////////////////////////////////////
-				
+				for (size_t i = 0; i < Graph_size; ++i)
+				{
+					cudaMemcpy(Matrix_GPU_A + i * Graph_size, *(Graph + i), sizeof(__int32) * Graph_size, HostToDevice);
+
+				}
+				cudaMemcpy(Graph_size_GPU, &Graph_size, sizeof(__int32), HostToDevice);
+				Print_Graph(Graph, Graph_size);
+				dim3 threads(Graph_size, Graph_size);
+				Print_Graph_GPU<<<1, threads >>>(Matrix_GPU_A, Graph_size_GPU);
+				cudaDeviceSynchronize();
 				//Get_Results();
-				
 				///////////////////////////////////////////////
 				//system("pause");
 				//exit(0);
@@ -157,7 +173,7 @@ void inserter()
 ////////////////////////////////////////////////////
 
 
-void Print_Graph(const __int32* const* const Graph, size_t size)
+void Print_Graph(const __int32* const* const Graph, const size_t size)
 {
 	for (size_t i = 0; i < size; ++i)
 	{
@@ -166,6 +182,22 @@ void Print_Graph(const __int32* const* const Graph, size_t size)
 			_STD cout << Graph[i][j] << ' ';
 		}
 		_STD cout << NEW_LINE;
+	}
+}
+
+__global__ void Print_Graph_GPU(const __int32* const* const Graph, const size_t* const size)
+{
+	int id_x = threadIdx.x + blockIdx.x * blockDim.x;
+	int id_y = threadIdx.y + blockIdx.y * blockDim.y;
+	while (id_x < *(size) && id_y < *(size))
+	{
+		printf("%d |", Graph[id_y * (*(size)) + id_x]);
+/*		if (id_x % *(size) == 0 || id_y % *(size) == 0)
+		{
+			printf("\n");
+		}*/
+		id_x += blockDim.x * gridDim.x;
+		id_y += blockDim.y * gridDim.y;
 	}
 }
 
@@ -184,6 +216,9 @@ __host__ _Djikstra_Element::_Djikstra_Element()
 	cudaMalloc((void**)&Verticle, sizeof(__int32));
 	cudaMalloc((void**)&Edge, sizeof(__int32));
 	cudaMalloc((void**)&Cost, sizeof(__int32));
+	cudaMemset(Verticle, NULL, sizeof(__int32));
+	cudaMemset(Edge, NULL, sizeof(__int32));
+	cudaMemset(Cost, NULL, sizeof(__int32));
 }
 
 __host__ _Djikstra_Element::_Djikstra_Element(_STD initializer_list<__int32> _Initializer)
