@@ -13,7 +13,7 @@
 void Read_File(const _STD string& file_path, __int32& width, __int32& height);
 void Print_Area(const short* const* const area, const __int32& width,const __int32& height);
 void Initialize_Area(short* const* const area, const __int32& width,const __int32& height);
-const __int32 Count_Energy(short* const* const area, const __int32& width,const __int32& height);
+const unsigned __int32 Count_Energy(short* const* const area, const __int32& width,const __int32& height);
 
 int main(int argc, char* argv[])
 {
@@ -134,7 +134,6 @@ int main(int argc, char* argv[])
 		for (typename _STD map<int, int>::iterator map_iterator = freq.begin(); map_iterator != freq.end(); ++map_iterator)
 		{
 			N[std::distance(freq.begin(), map_iterator)] = log((*map_iterator).second);
-			//_STD cout << (*map_iterator).first << " " << N[std::distance(freq.begin(), map_iterator)] << " |\n";
 			_x2_ += pow((*map_iterator).first,2);
 			_x_ += (*map_iterator).first;
 			_y_ += N[std::distance(freq.begin(), map_iterator)];
@@ -211,9 +210,9 @@ void Initialize_Area(short* const* const area, const __int32& width, const __int
 	}
 }
 
-const __int32 Count_Energy(short* const* const area, const __int32& width, const __int32& height)
+const unsigned __int32 Count_Energy(short* const* const area, const __int32& width, const __int32& height)
 {
-	unsigned energy{};
+	unsigned __int32 energy{};
 	for (size_t i = 0; i < static_cast<size_t>(width); ++i)
 	{
 		for (size_t j = 0; j < static_cast<size_t>(height); ++j)
