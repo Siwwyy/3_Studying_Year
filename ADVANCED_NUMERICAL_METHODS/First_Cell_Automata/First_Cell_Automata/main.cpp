@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
 	std::fstream file_out;
 	file_in.open("demon_energy.in", std::ios_base::in);
 	file_out.open("test.csv", std::ios_base::out);
-	file_out << "For iterations: " << iterations << " Initial energy of demon: " << demon_energy << NEW_LINE;
+	//file_out << "For iterations: " << iterations << " Initial energy of demon: " << demon_energy << NEW_LINE;
 
 	while (file_in.eof() == false)
 	{
@@ -82,10 +82,7 @@ int main(int argc, char* argv[])
 			x = dis_x(generator);
 			y = dis_y(generator);
 			//TIME TO SPIN !
-			//if (demon_energy > 0)
-			//{
-				area[x][y] *= (-1);
-			//}
+			area[x][y] *= (-1);
 
 			energy = Count_Energy(area, width, height);
 			energy_total = energy_sum(J, energy);
@@ -107,19 +104,19 @@ int main(int argc, char* argv[])
 				spin_value = ((energy_total)-(temp_energy)) * (-1);
 				demon_energy += spin_value;
 			}
-			for (size_t j = 0; j < width; ++j)
-			{
-				for (size_t k = 0; k < height; ++k)
-				{
-					magnetization += area[j][k];
-				}
-			}
-
 			if (i > 90000 && i < 91001)
 			{
+				for (size_t j = 0; j < width; ++j)
+				{
+					for (size_t k = 0; k < height; ++k)
+					{
+						magnetization += area[j][k];
+					}
+				}
 				average_magnetization += magnetization;
 				freq[demon_energy]++;
 			}
+			//file_out << "Iteration " << i << " Magnetization: " << magnetization << " Ed: " << demon_energy << NEW_LINE;
 			x = NULL;
 			y = NULL;
 			magnetization = NULL;
@@ -148,11 +145,12 @@ int main(int argc, char* argv[])
 		_xy_ = static_cast<float>(_xy_ / static_cast<float>(freq.size()));
 		_x_2 = pow(_x_, 2);
 		temperatura = static_cast<float>(-1.f) * static_cast<float>((_x_2 - _x2_) / ((_x_*_y_) - _xy_));
-		_STD cout << "Average Magnetization: " << static_cast<float>(static_cast<float>(average_magnetization) / 1000.f) << " Temperature: " << temperatura << NEW_LINE;
+		file_out << static_cast<float>(static_cast<float>(average_magnetization) / 1000.f) << ',' << temperatura << NEW_LINE;
 		delete[] N;
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		demon_energy = NULL;
 		temperatura = NULL;
+		average_magnetization = NULL;
 	}
 	
 	//memory free
