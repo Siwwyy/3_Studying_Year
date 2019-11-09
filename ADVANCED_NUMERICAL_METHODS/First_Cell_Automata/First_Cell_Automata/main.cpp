@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	using _STD endl;
 
 	///////////////////////////////////////
-	__int32 width{}, height{};
+	__int32 width{100}, height{100};
 	__int32 J{ 1 };
 	__int32 energy{};
 	__int32 energy_total{};
@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 	///////////////////////////////////////
 
 
-	Read_File("file.in", width, height);	//file reader
+	//Read_File("file.in", width, height);	//file reader
 
 	area = new short* [width];
 
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
 		*(area + i) = new short[height];
 	}
 
-	Initialize_Area(area, width, height);
+
 	//Print_Area(area, width, height);	//uncomment if you want to display 2D matrix
 
 	//FreqCounter<__int32> Object;
@@ -63,8 +63,7 @@ int main(int argc, char* argv[])
 	//lambda case
 	auto energy_sum = [](const __int32& J, const __int32& energy) -> __int32 { return (-1) * J * energy; };
 
-	energy = Count_Energy(area, width, height);
-	energy_total = energy_sum(J,energy);
+	
 
 	//OUTPUT FILE
 	std::fstream file_in;
@@ -76,6 +75,9 @@ int main(int argc, char* argv[])
 	while (file_in.eof() == false)
 	{
 		file_in >> demon_energy;
+		Initialize_Area(area, width, height);
+		energy = Count_Energy(area, width, height);
+		energy_total = energy_sum(J, energy);
 		for (size_t i = 0; i < iterations; i++)
 		{
 			temp_energy = energy_total;
