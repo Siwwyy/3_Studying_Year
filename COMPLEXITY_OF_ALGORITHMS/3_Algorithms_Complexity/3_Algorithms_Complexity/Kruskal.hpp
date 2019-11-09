@@ -74,7 +74,7 @@ public:
 	virtual ~_Kruskal_Element();
 };
 
-//CLASS OF _MST
+//CLASS OF _Kruskal
 
 class _Kruskal
 {
@@ -97,8 +97,8 @@ private:
 	*/
 	void find_way(const int from, const int to, const int way_lenght);
 	const bool Is_in_Same_Set(const int& _Left, const int& _Right);
-	const bool Merge(const size_t& _Left, const size_t& _Right);
-	const size_t Find_Element(const int& _Elem);
+	const bool Merge(const __int32& _Left, const __int32& _Right);
+	const __int32 Find_Element(const int& _Elem) const;
 	//////////////////////////////////////////////////////////////////////////////
 public:
 	//////////////////////////////////////////////////////////////////////////////

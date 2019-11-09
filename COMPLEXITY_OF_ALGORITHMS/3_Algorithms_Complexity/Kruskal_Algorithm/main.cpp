@@ -69,7 +69,7 @@ public:
 	virtual ~_Kruskal_Element();
 };
 
-//CLASS OF _MST
+//CLASS OF _Kruskal
 
 class _Kruskal
 {
@@ -92,8 +92,8 @@ private:
 	*/
 	void find_way(const int from, const int to, const int way_lenght);
 	const bool Is_in_Same_Set(const int& _Left, const int& _Right);
-	const bool Merge(const size_t& _Left, const size_t& _Right);
-	const size_t Find_Element(const int& _Elem);
+	const bool Merge(const __int32& _Left, const __int32& _Right);
+	const __int32 Find_Element(const int& _Elem) const;
 	//////////////////////////////////////////////////////////////////////////////
 public:
 	//////////////////////////////////////////////////////////////////////////////
@@ -372,7 +372,7 @@ void _Kruskal::find_way(const int from, const int to, const int way_lenght)
 		current_verticle = to_;
 		Print_Graph();
 		minimal_spanning_tree_creator(from_);	//create Djikstra for this case
-		Print_MST();
+		//Print_MST();
 		_STD cout << NEW_LINE;
 		_STD cout << "Road through: ";
 		_STD cout << current_verticle << " -> ";
@@ -429,22 +429,14 @@ const bool _Kruskal::Is_in_Same_Set(const int& _Left, const int& _Right)
 	}
 	else if (left_is == false && right_is == true)
 	{
-		if (Merge(Find_Element(_Left), Find_Element(_Right)) == true)
-		{
-			//NOTHING HERE
-		}
-		else
+		if (Merge(Find_Element(_Left), Find_Element(_Right)) == false)
 		{
 			Set[where].insert(_Left);
 		}
 	}
 	else if (left_is == true && right_is == false)
 	{
-		if (Merge(Find_Element(_Left), Find_Element(_Right)) == true)
-		{
-			//NOTHING HERE
-		}
-		else
+		if (Merge(Find_Element(_Left), Find_Element(_Right)) == false)
 		{
 			Set[where].insert(_Right);
 		}
@@ -452,13 +444,13 @@ const bool _Kruskal::Is_in_Same_Set(const int& _Left, const int& _Right)
 	return false;
 }
 
-const bool _Kruskal::Merge(const size_t& _Left, const size_t& _Right)
+const bool _Kruskal::Merge(const __int32& _Left, const __int32& _Right)
 {
-	if (_Right != _Left)
+	if (_Left > 0 && _Right > 0)
 	{
-		if (Set[_Left].size() > 0)
+		if (Set[_Left].size() > 0 && Set[_Right].size() > 0)
 		{
-			if ((Set[_Left].size() >= Set[_Right].size()) && (Set[_Right].size() > 0))
+			if ((Set[_Left].size() >= Set[_Right].size()))
 			{
 				for (typename _STD set<__int32>::const_iterator set_iterator = Set[_Right].begin(); set_iterator != Set[_Right].end(); ++set_iterator)
 				{
@@ -467,10 +459,7 @@ const bool _Kruskal::Merge(const size_t& _Left, const size_t& _Right)
 				Set[_Right].clear();
 				return true;
 			}
-		}
-		else if (Set[_Right].size() > 0)
-		{
-			if ((Set[_Right].size() >= Set[_Left].size()) && (Set[_Left].size() > 0))
+			else
 			{
 				for (typename _STD set<__int32>::const_iterator set_iterator = Set[_Left].begin(); set_iterator != Set[_Left].end(); ++set_iterator)
 				{
@@ -481,13 +470,12 @@ const bool _Kruskal::Merge(const size_t& _Left, const size_t& _Right)
 			}
 		}
 	}
-
 	return false;
 }
 
-const size_t _Kruskal::Find_Element(const int& _Elem)
+const __int32 _Kruskal::Find_Element(const int& _Elem) const
 {
-	size_t where{};
+	__int32 where{-1};
 	for (size_t i = 0; i < Set.size(); ++i)
 	{
 		for (typename _STD set<__int32>::const_iterator set_iterator = Set[i].begin(); set_iterator != Set[i].end(); ++set_iterator)
