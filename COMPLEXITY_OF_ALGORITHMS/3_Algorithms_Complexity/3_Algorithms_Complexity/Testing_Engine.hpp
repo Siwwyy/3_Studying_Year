@@ -206,7 +206,7 @@ namespace Testing
 			for (size_t i = 0; i < file_paths.size(); ++i)
 			{
 				START_STOPWATCH
-				_STD cout << "	             From file: " << file_paths[i] << '\n';
+				_STD cout << "	       From file: " << file_paths[i] << '\n';
 				_Ty _Ptr = Pointer_To_Functions[position];
 				_Ptr(content_from_file[i]);
 				STOP_STOPWATCH

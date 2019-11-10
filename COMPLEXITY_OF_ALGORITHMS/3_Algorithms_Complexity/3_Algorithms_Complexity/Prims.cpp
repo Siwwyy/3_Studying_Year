@@ -29,7 +29,7 @@ void inserter_PRIMS(const _STD vector<__int32>& file_content)
 		while (d > 0)
 		{
 			c1 = file_content[counter];
-			++counter;;
+			++counter;
 			c2 = file_content[counter];
 			++counter;
 			p = file_content[counter];
@@ -400,7 +400,6 @@ void _MST::find_way(const int from, const int to, const int way_lenght)
 			}
 		}
 		_STD cout << '\n';
-		//system("pause");
 	}
 }
 
