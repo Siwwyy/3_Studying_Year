@@ -324,7 +324,7 @@ void Find_Way(const int from, const int to, const int way_lenght)
 
 		//HERE PASTE ALL OF FUN BETWEEN CPU AND GPU !
 		dim3 blocks(_Graph_lenght);
-		dim3 threads(_Djikstra_Matrix_lenght, _Djikstra_Matrix_lenght);
+		dim3 threads(_Djikstra_Matrix_lenght);
 		Minimal_Spanning_Tree_Creator <<<1, threads >>> (from_GPU, Graph_GPU, _Graph_lenght_GPU, Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght_GPU, Visited_Nodes_GPU, _Visited_Nodes_lenght_GPU);	//create Djikstra for this case
 		cudaDeviceSynchronize();
 
@@ -424,6 +424,7 @@ __global__  void Print_Visited_Nodes_GPU(const int* const Visited_Nodes_GPU, con
 __global__ void Minimal_Spanning_Tree_Creator(const int* the_beginning, _Djikstra_Element* Graph_GPU, const size_t* const _Graph_lenght_GPU, _Djikstra_Element* _Djikstra_Matrix_GPU, const size_t* const _Djikstra_Matrix_lenght_GPU, int* Visited_Nodes_GPU, const size_t* const _Visited_Nodes_lenght_GPU)
 {
 	int id_x = threadIdx.x + blockIdx.x * blockDim.x;
+	__shared__ __int32 array[100];
 	if (id_x < (*_Djikstra_Matrix_lenght_GPU))
 	{
 		_Djikstra_Matrix_GPU[id_x].set_cost_GPU(-1);	//means its a infinity
@@ -439,6 +440,7 @@ __global__ void Minimal_Spanning_Tree_Creator(const int* the_beginning, _Djikstr
 	_Djikstra_Matrix_GPU[current_verticle].set_edge_GPU((current_verticle + 1));
 
 	for (size_t i = 0; i < (*_Graph_lenght_GPU); ++i)
+	//while (id_x < (*_Graph_lenght_GPU))
 	{
 		Visited_Nodes_GPU[current_verticle] = (current_verticle + 1);
 
