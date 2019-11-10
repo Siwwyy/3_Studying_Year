@@ -19,7 +19,7 @@ void StopWatch::STOP()
 	using namespace std;
 	using namespace chrono;
 	m_stop = high_resolution_clock::now();
-	cout << "It took me equal: " << duration_cast<nanoseconds>(m_stop - m_start).count() << " nanoseconds" << endl;
+	cout << "It took me equal: " << duration_cast<microseconds>(m_stop - m_start).count() << " nanoseconds" << endl;
 }
 
 void StopWatch::STOP(enum StopWatch::TIME_UNIT CHOICE)
