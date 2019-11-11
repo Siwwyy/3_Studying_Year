@@ -11,7 +11,8 @@
 #include <windows.h>
 #include <iostream>
 #include <vector>
-#include <functional>
+#define STOPWATCH_ON
+#include "StopWatch.h"
 
 ////////////////////////////////////////////////////
 //GPU
@@ -21,61 +22,135 @@
 #define OK cudaSuccess
 #define NEW_LINE '\n'
 
+#define SIZE 5
+
+
+//CLASS OF _Djikstra_Element, for inserting values
 
 class _Djikstra_Element
 {
 private:
-	__int32* Verticle;
-	__int32* Edge;
-	__int32* Cost;
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		ZMIENNE PRIVATE
+	*/
+	int Verticle;
+	int Cost;
+	int Edge;
+	//////////////////////////////////
+	int* Connections;
+	size_t _Connections_size;
+	//////////////////////////////////
+	//GPU CASE
+	int* Verticle_GPU;
+	int* Cost_GPU;
+	int* Edge_GPU;
+	int* Connections_GPU;
+	size_t* _Connections_size_GPU;
+	//////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
 public:
-	__host__ _Djikstra_Element();
-	__host__ _Djikstra_Element(_STD initializer_list<__int32> _Initializer);
-	__host__ _Djikstra_Element(const _Djikstra_Element & Object);
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		KONSTRUKTORY PUBLIC
+	*/
+	__host__ __device__  _Djikstra_Element();
+	__host__ __device__  _Djikstra_Element(const int Verticle, const int Cost, const int Edge);
+	__host__ __device__  _Djikstra_Element(const _Djikstra_Element& Object);
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		FUNKCJE PUBLIC
+	*/
 
-
-	__host__ ~_Djikstra_Element();
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		SETTERY PUBLIC
+	*/
+	__host__ __device__  void set_connections_size(const size_t _Connections_size);
+	__host__ __device__  void set_connection(const int value, const size_t counter);
+	__host__ __device__  void set_way(const int destination, const int way_lenght);
+	__host__ __device__  void set_verticle(const int verticle);
+	__host__ __device__  void set_cost(const int cost);
+	__host__ __device__  void set_edge(const int edge);
+	__host__ __device__  void set_visited_or_not(const bool visited_or_not);
+	__device__  void set_verticle_GPU(const int verticle);
+	__device__  void set_edge_GPU(const int edge);
+	__device__  void set_cost_GPU(const int cost);
+	__device__  void print_connections_GPU() const;
+	__host__  void print_connections() const;
+	__host__ void Copy_Values_From_CPU_To_GPU();
+	__host__ void Copy_Values_From_GPU_To_CPU();
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		OPERATORY PUBLIC
+	*/
+	//JEDNOARGUMENTOWE
+	__host__ __device__  _Djikstra_Element& operator=(const _Djikstra_Element& Object);
+	//DWUARGUMENTOWE
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		GETTERY PUBLIC
+	*/
+	__host__ __device__  int get_verticle() const;
+	__host__ __device__  int get_cost() const;
+	__host__ __device__  int get_edge() const;
+	__host__ __device__  bool get_visited_or_not() const;
+	__host__ __device__  int& get_connections_array(const size_t counter) const;
+	__host__ __device__  size_t get_connections_size() const;
+	__device__  size_t get_connections_size_GPU() const;
+	__device__  int& get_connections_array_GPU(const size_t counter) const;
+	__device__  int get_verticle_GPU() const;
+	__device__  int get_cost_GPU() const;
+	__device__  int get_edge_GPU() const;
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		DESTRUKTOR
+	*/
+	__host__ __device__  virtual ~_Djikstra_Element();
 };
 
 //MAIN LANUCH FUNCTION
 void inserter();
 
 /*
-	CPU FUNCTIONS
-*/
-void Print_Graph(const __int32* const* const Graph, const size_t size);
-/////////////////////////////////////////////////////////////////////////
-
-/*
-	GPU FUNCTIONS
-*/
-__global__ void Print_Graph_GPU(const __int32* const* const Graph, const size_t * const size);
-/////////////////////////////////////////////////////////////////////////
-
-
-/*
 	GLOBAL VALUES ON CPU
 */
 /////////////////////////////////////////////////////////////////////////
-__int32** Graph;	//all connections
-size_t Graph_size;
+_Djikstra_Element* Graph;
+size_t _Graph_lenght;
 /////////////////////////////////////////////////////////////////////////
-__int32** Graph_GPU;
-size_t* Graph_size_GPU;
-/////////////////////////////////////////////////////////////////////////
+_Djikstra_Element* Djikstra_Matrix;
+size_t _Djikstra_Matrix_lenght;
+//////////////////////////////////////////////////////////////////////////////
+int* Visited_Nodes;
+size_t _Visited_Nodes_lenght;
+//////////////////////////////////////////////////////////////////////////////
+std::vector<std::pair<std::pair<int, int>, int>> Destinations;
+//////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////
+//SELF FUNCTIONS
+void Construct(const size_t _Graph_lenght);
+void Push(const int value, const int destination, const int way_lenght);
+void Push_Directions(const int from, const int to, const int way_lenght);
+void Get_Results();
+void Find_Way(const int from, const int to, const int way_lenght);
+void Copy_Values_From_CPU_To_GPU_In_Class();
+void Copy_Values_From_GPU_To_CPU_In_Class();
+void Print_Djikstra_Matrix();
+//GPU FUNCTION
+__global__ void Print_Graph_GPU(const _Djikstra_Element* const Graph_GPU, const size_t* const _Graph_lenght_GPU);
+__global__ void Print_Djikstra_Matrix_GPU(const _Djikstra_Element* const _Djikstra_Matrix_GPU, const size_t* const _Djikstra_Matrix_lenght_GPU);
+__global__ void Print_Visited_Nodes_GPU(const int* const Visited_Nodes_GPU, const size_t* const _Visited_Nodes_lenght_GPU);
+//__global__ void Minimal_Spanning_Tree_Creator(const int * the_beginning, _Djikstra_Element* Graph_GPU, const size_t* const _Graph_lenght_GPU, _Djikstra_Element* _Djikstra_Matrix_GPU, const size_t* const _Djikstra_Matrix_lenght_GPU, int* Visited_Nodes_GPU, const size_t* const _Visited_Nodes_lenght_GPU);
+__global__ void Minimal_Spanning_Tree_Creator(_Djikstra_Element* Graph_GPU, const size_t* const _Graph_lenght_GPU, _Djikstra_Element* _Djikstra_Matrix_GPU, const size_t* const _Djikstra_Matrix_lenght_GPU);
+//////////////////////////////////////////////////////////////////////////////
 
 
 int main(int argc, char* argv[])
 {
 	inserter();
-
-	for (size_t i = 0; i < Graph_size; ++i)
-	{
-		delete[] Graph[i];
-	}
-	delete[] Graph;
-	cudaFree(Graph_GPU);
-	system("pause");
 	return 0;
 }
 
@@ -94,36 +169,21 @@ void inserter()
 	{
 		std::cin >> m;
 		std::cin >> d;
-		Graph_size = m;
-		Graph = new __int32*[m];
-		cudaMalloc((void**)&Graph_GPU, (m * m) * sizeof(__int32));	//GPU interprets 2D array as a flat array !
-		cudaMalloc((void**)&Graph_size_GPU, sizeof(__int32));	//GPU interprets 2D array as a flat array !
-		for (size_t i = 0; i < Graph_size; ++i)
-		{
-			Graph[i] = new __int32[m];
-			for (size_t j = 0; j < Graph_size; ++j)
-			{
-				Graph[i][j] = NULL;
-			}
-		}
+		Construct(m);
 		while (d > 0)
 		{
 			std::cin >> c1;
 			std::cin >> c2;
 			std::cin >> p;
 			//both times cause each road is in both ways
-			//Push(c1, c2, p);
-			//Push(c2, c1, p);
-			Graph[(c1 - 1)][(c2 - 1)] = p;
-			Graph[(c2 - 1)][(c1 - 1)] = p;
+			Push(c1, c2, p);
+			Push(c2, c1, p);
 			--d;
 			c1 = 0;
 			c2 = 0;
 			p = 0;
 		}
-
-		//system("pause");
-		//exit(0);
+		Copy_Values_From_CPU_To_GPU_In_Class();	//copy values in Djikstra Graph from CPU to GPU
 		while (true)
 		{
 			std::cin >> s;
@@ -131,27 +191,18 @@ void inserter()
 			if (s != 0 && e != 0)
 			{
 				std::cin >> t;
-				//Push_Directions(s, e, t);
+				Push_Directions(s, e, t);
 			}
 			else
 			{
 				//here call all needed functions for solve the problem cause if s and e will be equal to 0 problem will be stopped immediately
 				///////////////////////////////////////////////
-				for (size_t i = 0; i < Graph_size; ++i)
-				{
-					cudaMemcpy(Graph_GPU + i * Graph_size, *(Graph + i), sizeof(__int32) * Graph_size, HostToDevice);
-					//_STD cout << **(Graph + i) << NEW_LINE;
-				}
-				cudaMemcpy(Graph_size_GPU, &Graph_size, sizeof(__int32), HostToDevice);
-				Print_Graph(Graph, Graph_size);
-				dim3 threads(Graph_size, Graph_size);
-				Print_Graph_GPU<<<1, 1>>>(Graph_GPU, Graph_size_GPU);
-				cudaDeviceSynchronize();
-				//Get_Results();
+				START_STOPWATCH
+				Get_Results();
+				STOP_STOPWATCH
 				///////////////////////////////////////////////
-				//system("pause");
-				//exit(0);
-				break;
+				system("pause");
+				exit(0);
 			}
 			s = 0;
 			e = 0;
@@ -159,87 +210,522 @@ void inserter()
 		}
 		d = 0;
 		m = 0;
-		break;
 	}
 }
+
 
 ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////
 /*
-	CPU FUNCTIONS
+	SELF FUNCTIONS
 */
 ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////
 
 
-void Print_Graph(const __int32* const* const Graph, const size_t size)
+void Construct(const size_t _Graph_lenght)
 {
-	for (size_t i = 0; i < size; ++i)
+	//Initialize basically those values and arrays at the beginning
+	::_Graph_lenght = _Graph_lenght;	//:: means I am invoking a global variable
+	::_Djikstra_Matrix_lenght = _Graph_lenght;	//:: means I am invoking a global variable
+	::_Visited_Nodes_lenght = _Graph_lenght;	//:: means I am invoking a global variable
+	Graph = new _Djikstra_Element[::_Graph_lenght];
+	Djikstra_Matrix = new _Djikstra_Element[_Djikstra_Matrix_lenght];
+	Visited_Nodes = new int[_Visited_Nodes_lenght];
+	for (size_t i = 0; i < _Graph_lenght; ++i)
 	{
-		for (size_t j = 0; j < size; ++j)
+		Graph[i].set_connections_size(_Graph_lenght);
+		Djikstra_Matrix[i].set_verticle(static_cast<int>((i + 1)));
+		Visited_Nodes[i] = (-1);
+	}
+}
+
+void Push(const int value, const int destination, const int way_lenght)
+{
+	Graph[(value - 1)].set_way(destination, way_lenght);
+}
+
+void Push_Directions(const int from, const int to, const int way_lenght)
+{
+	Destinations.emplace_back(_STD make_pair(std::make_pair(from, to), way_lenght));
+}
+
+void Get_Results()
+{
+	for (typename std::vector<std::pair<std::pair<int, int>, int>>::const_iterator vec_iterator = Destinations.begin(); vec_iterator != Destinations.end(); ++vec_iterator)
+	{
+		Find_Way(vec_iterator->first.first, vec_iterator->first.second, vec_iterator->second);
+	}
+}
+
+void Find_Way(const int from, const int to, const int way_lenght)
+{
+	if (from == to)
+	{
+		std::cout << '0' << '\n';
+	}
+	else
+	{
+		int current_verticle = 0;
+		int destination_verticle = 0;
+		int from_ = 0;
+		int to_ = 0;
+
+		if (from < to)
 		{
-			_STD cout << Graph[i][j] << ' ';
+			from_ = from;
+			to_ = to;
+		}
+		else
+		{
+			from_ = to;
+			to_ = from;
+		}
+		destination_verticle = from_;
+		current_verticle = to_;
+
+
+		//GPU FUNCTIONS
+		/////////////////////////////////////////////////////////////////////////
+		_Djikstra_Element* Graph_GPU;
+		size_t* _Graph_lenght_GPU;
+		cudaMalloc((void**)&Graph_GPU, _Graph_lenght * sizeof(_Djikstra_Element));
+		cudaMalloc((void**)&_Graph_lenght_GPU, sizeof(size_t));
+		/////////////////////////////////////////////////////////////////////////
+		_Djikstra_Element* Djikstra_Matrix_GPU;
+		size_t* _Djikstra_Matrix_lenght_GPU;
+		cudaMalloc((void**)&Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght * sizeof(_Djikstra_Element));
+		cudaMalloc((void**)&_Djikstra_Matrix_lenght_GPU, sizeof(size_t));
+		//////////////////////////////////////////////////////////////////////////////
+		//int* Visited_Nodes_GPU;
+		//size_t * _Visited_Nodes_lenght_GPU;
+		//cudaMalloc((void**)&Visited_Nodes_GPU, _Visited_Nodes_lenght * sizeof(int));
+		//cudaMalloc((void**)&_Visited_Nodes_lenght_GPU, sizeof(size_t));
+		//////////////////////////////////////////////////////////////////////////////
+		/*int * from_GPU{};
+		cudaMalloc((void**)&from_GPU, sizeof(int));
+		cudaMemset(&from_GPU, 1, sizeof(int));
+		cudaMemcpy(from_GPU, &from_, sizeof(int), HostToDevice);*/
+		//////////////////////////////////////////////////////////////////////////////
+
+
+		//COPYING FROM CPU TO GPU
+		//COPY GRAPH 
+		cudaMemcpy(Graph_GPU, Graph, _Graph_lenght * sizeof(_Djikstra_Element), HostToDevice);
+		cudaMemcpy(_Graph_lenght_GPU, &_Graph_lenght, sizeof(size_t), HostToDevice);
+		//////////////////////////////////////////////////////////////////////////////
+		//COPY Djikstra Matrix 
+		cudaMemcpy(Djikstra_Matrix_GPU, Djikstra_Matrix, _Djikstra_Matrix_lenght * sizeof(_Djikstra_Element), HostToDevice);
+		cudaMemcpy(_Djikstra_Matrix_lenght_GPU, &_Djikstra_Matrix_lenght, sizeof(size_t), HostToDevice);
+		//////////////////////////////////////////////////////////////////////////////
+		//COPY Visited Nodes 
+	/*	cudaMemcpy(Visited_Nodes_GPU, Visited_Nodes, _Visited_Nodes_lenght * sizeof(_Djikstra_Element), HostToDevice);
+		cudaMemcpy(_Visited_Nodes_lenght_GPU, &_Visited_Nodes_lenght, sizeof(size_t), HostToDevice);*/
+		//////////////////////////////////////////////////////////////////////////////
+
+		//HERE PASTE ALL OF FUN BETWEEN CPU AND GPU !
+		dim3 blocks(_Djikstra_Matrix_lenght);
+		dim3 threads(_Djikstra_Matrix_lenght);
+		//Print_Graph_GPU<<<1,1>>>(Graph_GPU, _Graph_lenght_GPU);
+		//cudaDeviceSynchronize();
+		/*Print_Djikstra_Matrix_GPU<<<1,1>>>(Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght_GPU);
+		cudaDeviceSynchronize();*/
+		//Minimal_Spanning_Tree_Creator <<<blocks, threads >>> (from_GPU, Graph_GPU, _Graph_lenght_GPU, Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght_GPU, Visited_Nodes_GPU, _Visited_Nodes_lenght_GPU);	//create Djikstra for this case
+		Minimal_Spanning_Tree_Creator <<< blocks, threads >> > (Graph_GPU, _Graph_lenght_GPU, Djikstra_Matrix_GPU, _Djikstra_Matrix_lenght_GPU);	//create Djikstra for this case
+		//cudaDeviceSynchronize();
+
+		Copy_Values_From_GPU_To_CPU_In_Class();
+
+		_STD cout << "Road through: ";
+		for (int i = ::_Djikstra_Matrix_lenght - 1; i >= 0; --i)
+		{
+			if (Djikstra_Matrix[i].get_verticle() == destination_verticle)
+			{
+				_STD cout << Djikstra_Matrix[i].get_verticle();
+				break;
+			}
+			else if (Djikstra_Matrix[i].get_verticle() == current_verticle)
+			{
+				current_verticle = Djikstra_Matrix[i].get_edge();
+				_STD cout << Djikstra_Matrix[i].get_verticle() << " -> ";
+			}
 		}
 		_STD cout << NEW_LINE;
+		//Print_Djikstra_Matrix();
+		/*
+			MEMORY FREE
+		*/
+		cudaFree(Graph_GPU);
+		cudaFree(_Graph_lenght_GPU);
+
+		cudaFree(Djikstra_Matrix_GPU);
+		cudaFree(_Djikstra_Matrix_lenght_GPU);
+
+		/*cudaFree(Visited_Nodes_GPU);
+		cudaFree(_Visited_Nodes_lenght_GPU);*/
+
+		//cudaFree(from_GPU);
 	}
 }
 
-__global__ void Print_Graph_GPU(const __int32* const* const Graph, const size_t* const size)
+void Copy_Values_From_CPU_To_GPU_In_Class()
+{
+	for (size_t i = 0; i < _Graph_lenght; ++i)
+	{
+		Graph[i].Copy_Values_From_CPU_To_GPU();
+		Djikstra_Matrix[i].Copy_Values_From_CPU_To_GPU();
+	}
+}
+
+void Copy_Values_From_GPU_To_CPU_In_Class()
+{
+	for (size_t i = 0; i < _Graph_lenght; ++i)
+	{
+		Djikstra_Matrix[i].Copy_Values_From_GPU_To_CPU();
+	}
+}
+
+void Print_Djikstra_Matrix()
+{
+	for (size_t i = 0; i < ::_Djikstra_Matrix_lenght; ++i)
+	{
+		_STD cout << "V: " << Djikstra_Matrix[i].get_verticle() << " E:" << Djikstra_Matrix[i].get_edge() << " C:" << Djikstra_Matrix[i].get_cost();
+		_STD cout << NEW_LINE;
+	}
+	_STD cout << NEW_LINE;
+}
+
+__global__ void Print_Graph_GPU(const _Djikstra_Element* const Graph_GPU, const size_t* const _Graph_lenght_GPU)
 {
 	int id_x = threadIdx.x + blockIdx.x * blockDim.x;
-	int id_y = threadIdx.y + blockIdx.y * blockDim.y;
-//	while (id_x < *(size) && id_y < *(size))
-//	{
-//		printf("%d |", Graph[id_y * (*(size)) + id_x]);
-///*		if (id_x % *(size) == 0 || id_y % *(size) == 0)
-//		{
-//			printf("\n");
-//		}*/
-//		id_x += blockDim.x * gridDim.x;
-//		id_y += blockDim.y * gridDim.y;
-//	}
-	for (size_t i = 0; i < ((*size)* (*size)); ++i)
+	while (id_x < *(_Graph_lenght_GPU))
 	{
-		printf("%d |", Graph[i]);
+		Graph_GPU[id_x].print_connections_GPU();
+		id_x += blockDim.x * gridDim.x;
 	}
 }
 
+__global__ void Print_Djikstra_Matrix_GPU(const _Djikstra_Element* const _Djikstra_Matrix_GPU, const size_t* const _Djikstra_Matrix_lenght_GPU)
+{
+	int id_x = threadIdx.x + blockIdx.x * blockDim.x;
+	while (id_x < *(_Djikstra_Matrix_lenght_GPU))
+	{
+		printf("V: %d E: %d C: %d\n", _Djikstra_Matrix_GPU[id_x].get_verticle_GPU(), _Djikstra_Matrix_GPU[id_x].get_edge_GPU(), _Djikstra_Matrix_GPU[id_x].get_cost_GPU());
+		id_x += blockDim.x * gridDim.x;
+	}
+}
+
+__global__  void Print_Visited_Nodes_GPU(const int* const Visited_Nodes_GPU, const size_t* const _Visited_Nodes_lenght_GPU)
+{
+	int id_x = threadIdx.x + blockIdx.x * blockDim.x;
+	while (id_x < *(_Visited_Nodes_lenght_GPU))
+	{
+		printf(" Visited: %d ", Visited_Nodes_GPU[id_x]);
+		id_x += blockDim.x * gridDim.x;
+	}
+}
+
+
+//GPU FUNCTION
+//__global__ void Minimal_Spanning_Tree_Creator(const int* the_beginning, _Djikstra_Element* Graph_GPU, const size_t* const _Graph_lenght_GPU, _Djikstra_Element* _Djikstra_Matrix_GPU, const size_t* const _Djikstra_Matrix_lenght_GPU, int* Visited_Nodes_GPU, const size_t* const _Visited_Nodes_lenght_GPU)
+__global__ void Minimal_Spanning_Tree_Creator(_Djikstra_Element* Graph_GPU, const size_t* const _Graph_lenght_GPU, _Djikstra_Element* _Djikstra_Matrix_GPU, const size_t* const _Djikstra_Matrix_lenght_GPU)
+{
+	//int id_x = threadIdx.x + blockIdx.x * blockDim.x;
+	//int begin = blockIdx.x;
+	////__shared__ __int32 * array = new __int32[(*_Djikstra_Matrix_lenght_GPU)];
+	//if (id_x < (*_Djikstra_Matrix_lenght_GPU))
+	//{
+	//	_Djikstra_Matrix_GPU[id_x].set_cost_GPU(-1);	//means its a infinity
+	//	_Djikstra_Matrix_GPU[id_x].set_edge_GPU(0);
+	//	Visited_Nodes_GPU[id_x] = (-1);
+	//}
+
+	//int current_verticle = ((*the_beginning) - 1);	//choose the beginning (by position in array (nr index))
+	////int current_verticle = begin;	//choose the beginning (by position in array (nr index))
+	//int the_smallest_cost = 999999999;
+	//int the_smallest_cost_position = 0;
+
+	//_Djikstra_Matrix_GPU[current_verticle].set_cost_GPU(0);
+	//_Djikstra_Matrix_GPU[current_verticle].set_edge_GPU((current_verticle + 1));
+
+	//for (size_t i = 0; i < (*_Graph_lenght_GPU); ++i)
+	////while (id_x < (*_Graph_lenght_GPU))
+	//{
+	//	Visited_Nodes_GPU[current_verticle] = (current_verticle + 1);
+
+	//	if (Graph_GPU[current_verticle].get_connections_array_GPU(id_x) != 0 && Visited_Nodes_GPU[id_x] != (id_x + 1))
+	//	{
+	//		if ((_Djikstra_Matrix_GPU[id_x].get_cost_GPU() == -1) || ((_Djikstra_Matrix_GPU[current_verticle].get_cost_GPU() + Graph_GPU[current_verticle].get_connections_array_GPU(id_x)) <= _Djikstra_Matrix_GPU[id_x].get_cost_GPU()))
+	//		{
+	//			_Djikstra_Matrix_GPU[id_x].set_cost_GPU(_Djikstra_Matrix_GPU[current_verticle].get_cost_GPU() + Graph_GPU[current_verticle].get_connections_array_GPU(id_x));
+	//			_Djikstra_Matrix_GPU[id_x].set_edge_GPU((current_verticle + 1));
+	//		}
+	//	}
+	//	//Seeking for the smallest element in Djikstra's Matrix
+	//	for (size_t j = 0; j < (*_Djikstra_Matrix_lenght_GPU); ++j)
+	//	{
+	//		if ((_Djikstra_Matrix_GPU[j].get_cost_GPU() <= the_smallest_cost && _Djikstra_Matrix_GPU[j].get_cost_GPU() != (-1)) && Visited_Nodes_GPU[j] != (j + 1))
+	//		{
+	//			the_smallest_cost = _Djikstra_Matrix_GPU[j].get_cost_GPU();
+	//			current_verticle = static_cast<int>(j);
+	//		}
+	//	}
+	//	the_smallest_cost = 999999999;
+	//}
+	//__syncthreads();
+	//delete[] array;
+
+	//Seek for the smallest edge (connection)
+	int verticle = blockIdx.x;
+	//printf("%d ", verticle);
+	int id_x = threadIdx.x;
+	/*printf("%d ", id_x);
+	printf("\n");*/
+	//_Djikstra_Matrix_GPU[verticle].set_cost_GPU(999999999);
+	//_Djikstra_Matrix_GPU[verticle].set_edge_GPU((verticle + 1));
+
+	//if (Graph_GPU[verticle].get_connections_array_GPU(id_x) > 0)
+	//{
+	//	if (id_x < (*_Graph_lenght_GPU))
+	//	{
+	//	/*	if (_Djikstra_Matrix_GPU[verticle].get_cost_GPU() > Graph_GPU[verticle].get_connections_array_GPU(id_x))
+	//		{
+	//			_Djikstra_Matrix_GPU[verticle].set_cost_GPU(Graph_GPU[verticle].get_connections_array_GPU(id_x));
+	//			_Djikstra_Matrix_GPU[verticle].set_edge_GPU((id_x + 1));
+	//		}*/
+	//			
+	//		//id_x += blockDim.x * gridDim.x;
+	//	}
+	//}
+	printf("%d \n", Graph_GPU[verticle].get_connections_array_GPU(id_x));
+	//id_x += blockDim.x * gridDim.x;
+	//__syncthreads();
+}
 
 ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////
 /*
-	_Djikstra_Element METHODS
+	_Djikstra_Element CLASS METHOD'S BODIES
 */
 ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////
 
 
-__host__ _Djikstra_Element::_Djikstra_Element()
+__host__ __device__ _Djikstra_Element::_Djikstra_Element() :
+	_Connections_size(0),
+	Verticle(0),
+	Cost(0),
+	Edge(0)
 {
-	cudaMalloc((void**)&Verticle, sizeof(__int32));
-	cudaMalloc((void**)&Edge, sizeof(__int32));
-	cudaMalloc((void**)&Cost, sizeof(__int32));
-	cudaMemset(Verticle, NULL, sizeof(__int32));
-	cudaMemset(Edge, NULL, sizeof(__int32));
-	cudaMemset(Cost, NULL, sizeof(__int32));
-}
-
-__host__ _Djikstra_Element::_Djikstra_Element(_STD initializer_list<__int32> _Initializer)
-{
-	if (_Initializer.size() == 3)
+	this->Connections = new int[this->_Connections_size];
+	for (size_t i = 0; i < this->_Connections_size; ++i)
 	{
-		cudaMalloc((void**)&Verticle, sizeof(__int32));
-		cudaMalloc((void**)&Edge, sizeof(__int32));
-		cudaMalloc((void**)&Cost, sizeof(__int32));
-		cudaMemset(Verticle, (*_Initializer.begin()), sizeof(__int32));
-		cudaMemset(Edge, (*(_Initializer.begin() + 1)), sizeof(__int32));
-		cudaMemset(Cost, (*(_Initializer.begin() + 2)), sizeof(__int32));
+		Connections[i] = 0;
 	}
 }
 
-__host__ _Djikstra_Element::~_Djikstra_Element()
+__host__ __device__ _Djikstra_Element::_Djikstra_Element(const int Verticle, const int Cost, const int Edge) :
+	_Connections_size(0),
+	Verticle(Verticle),
+	Cost(Cost),
+	Edge(Edge)
 {
-	cudaFree(Verticle);
-	cudaFree(Edge);
-	cudaFree(Cost);
+	this->Connections = new int[this->_Connections_size];
+	for (size_t i = 0; i < this->_Connections_size; ++i)
+	{
+		Connections[i] = 0;
+	}
+}
+
+__host__ __device__ _Djikstra_Element::_Djikstra_Element(const _Djikstra_Element& Object) :
+	_Connections_size(Object._Connections_size),
+	Verticle(Object.Verticle),
+	Cost(Object.Cost),
+	Edge(Object.Edge)
+{
+	this->Connections = new int[this->_Connections_size];
+	for (size_t i = 0; i < this->_Connections_size; ++i)
+	{
+		Connections[i] = 0;
+	}
+}
+
+__host__ __device__ void _Djikstra_Element::set_connections_size(const size_t _Connections_size)
+{
+	if (this->_Connections_size != 0)
+	{
+		delete[] this->Connections;
+	}
+	this->_Connections_size = _Connections_size;
+	this->Connections = new int[this->_Connections_size];
+	for (size_t i = 0; i < this->_Connections_size; ++i)
+	{
+		Connections[i] = 0;
+	}
+}
+
+__host__ __device__ void _Djikstra_Element::set_connection(const int value, const size_t counter)
+{
+	this->Connections[counter] = value;
+}
+
+__host__ __device__ void _Djikstra_Element::set_way(const int destination, const int way_lenght)
+{
+	this->Connections[(destination - 1)] = way_lenght;
+}
+
+__host__ __device__ void _Djikstra_Element::set_verticle(const int verticle)
+{
+	this->Verticle = verticle;
+}
+
+__host__ __device__ void _Djikstra_Element::set_cost(const int cost)
+{
+	this->Cost = cost;
+}
+
+__host__ __device__ void _Djikstra_Element::set_edge(const int edge)
+{
+	this->Edge = edge;
+}
+
+__device__ void _Djikstra_Element::set_verticle_GPU(const int verticle)
+{
+	*(this->Verticle_GPU) = verticle;
+}
+
+__device__ void _Djikstra_Element::set_cost_GPU(const int cost)
+{
+	*(this->Cost_GPU) = cost;
+}
+
+__device__ void _Djikstra_Element::set_edge_GPU(const int edge)
+{
+	*(this->Edge_GPU) = edge;
+}
+
+__host__ void _Djikstra_Element::print_connections() const
+{
+	for (size_t i = 0; i < this->_Connections_size; ++i)
+	{
+		printf("%d ", Connections[i]);
+	}
+	printf("\n");
+}
+
+__host__ void _Djikstra_Element::Copy_Values_From_CPU_To_GPU()
+{
+	//CudaMalloc
+	cudaMalloc((void**)&this->Connections_GPU, this->_Connections_size * sizeof(int));
+	cudaMalloc((void**)&_Connections_size_GPU, sizeof(size_t));
+	cudaMalloc((void**)&Verticle_GPU, sizeof(int));
+	cudaMalloc((void**)&Edge_GPU, sizeof(int));
+	cudaMalloc((void**)&Cost_GPU, sizeof(size_t));
+
+	//CudaMemoryCopy from CPU to GPU
+	cudaMemcpy(this->Connections_GPU, this->Connections, this->_Connections_size * sizeof(int), HostToDevice);
+	cudaMemcpy(this->_Connections_size_GPU, &this->_Connections_size, sizeof(size_t), HostToDevice);
+	cudaMemcpy(Verticle_GPU, &this->Verticle, sizeof(int), HostToDevice);
+	cudaMemcpy(Edge_GPU, &this->Edge, sizeof(int), HostToDevice);
+	cudaMemcpy(Cost_GPU, &this->Cost, sizeof(int), HostToDevice);
+}
+
+__host__ void _Djikstra_Element::Copy_Values_From_GPU_To_CPU()
+{
+	cudaMemcpy(&Verticle, this->Verticle_GPU, sizeof(int), DeviceToHost);
+	cudaMemcpy(&Edge, this->Edge_GPU, sizeof(int), DeviceToHost);
+	cudaMemcpy(&Cost, this->Cost_GPU, sizeof(int), DeviceToHost);
+}
+
+__device__ void _Djikstra_Element::print_connections_GPU() const
+{
+	for (size_t i = 0; i < *(this->_Connections_size_GPU); ++i)
+	{
+		printf("%d ", Connections_GPU[i]);
+	}
+	printf("\n");
+}
+
+__host__ __device__ _Djikstra_Element& _Djikstra_Element::operator=(const _Djikstra_Element& Object)
+{
+	if (this != &Object)
+	{
+		this->Verticle = Object.Verticle;
+		this->Cost = Object.Cost;
+		this->Edge = Object.Edge;
+		this->_Connections_size = Object._Connections_size;
+		delete[] this->Connections;
+		this->Connections = new int[this->_Connections_size];
+		for (size_t i = 0; i < this->_Connections_size; ++i)
+		{
+			this->Connections[i] = 0;
+		}
+	}
+	return *this;
+}
+
+__host__ __device__ int _Djikstra_Element::get_verticle() const
+{
+	return this->Verticle;
+}
+
+__host__ __device__ int _Djikstra_Element::get_cost() const
+{
+	return this->Cost;
+}
+
+__host__ __device__ int _Djikstra_Element::get_edge() const
+{
+	return this->Edge;
+}
+
+__device__ int _Djikstra_Element::get_verticle_GPU() const
+{
+	return *(this->Verticle_GPU);
+}
+
+__device__ int _Djikstra_Element::get_cost_GPU() const
+{
+	return *(this->Cost_GPU);
+}
+
+__device__ int _Djikstra_Element::get_edge_GPU() const
+{
+	return *(this->Edge_GPU);
+}
+
+__host__ __device__ size_t _Djikstra_Element::get_connections_size() const
+{
+	return this->_Connections_size;
+}
+
+__device__ size_t _Djikstra_Element::get_connections_size_GPU() const
+{
+	return *(this->_Connections_size_GPU);
+}
+
+__device__ int& _Djikstra_Element::get_connections_array_GPU(const size_t counter) const
+{
+	return this->Connections_GPU[counter];
+}
+
+__host__ __device__ int& _Djikstra_Element::get_connections_array(const size_t counter) const
+{
+	return this->Connections[counter];
+}
+
+__host__ __device__ _Djikstra_Element::~_Djikstra_Element()
+{
+	delete[] this->Connections;
+	_Connections_size = 0;
+	Edge = 0;
+	Cost = 0;
+	Verticle = 0;
+
+	//UNINITIALIZE GPU MEMORY
+	/*extern "C"
+	{
+		cudaFree(this->Connections_GPU);
+		cudaFree(this->_Connections_size_GPU);
+	}*/
 }
