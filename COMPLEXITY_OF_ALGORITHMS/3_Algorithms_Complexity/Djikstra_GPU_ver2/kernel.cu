@@ -323,6 +323,7 @@ void Find_Way(const int from, const int to, const int way_lenght)
 			}
 		}
 		_STD cout << NEW_LINE;
+		_STD cout << NEW_LINE;
 		/*
 			MEMORY FREE
 		*/
@@ -590,14 +591,9 @@ __host__ _Djikstra_Element::~_Djikstra_Element()
 	Edge = 0;
 	Cost = 0;
 	Verticle = 0;
+	//UNINITIALIZE GPU MEMORY
 	cudaFree(Connections_GPU);
 	cudaFree(Verticle_GPU);
 	cudaFree(Edge_GPU);
 	cudaFree(Cost_GPU);
-	//UNINITIALIZE GPU MEMORY
-	/*extern "C"
-	{
-		cudaFree(this->Connections_GPU);
-		cudaFree(this->_Connections_size_GPU);
-	}*/
 }
