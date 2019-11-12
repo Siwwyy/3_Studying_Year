@@ -1,51 +1,79 @@
+'''
+    Copyright 2017 by Satya Mallick ( Big Vision LLC )
+    http://www.learnopencv.com
+'''
 
-import Functions
-
-img = Functions.photo.imread("Lena.ppm")
-#photo.imshow("download.png",img);
-#photo.waitKey(0);
-#lower =(0, 0, 0) # lower bound for each channel
-#upper = (80, 80,80) # upper bound for each channel
-
-## create the mask and use it to change the colors
-#mask = photo.inRange(img, lower, upper)
-#img[mask != 0] = [255,0,255]
+import cv2
+import numpy as np
 
 
+def fillHoles(mask):
+    '''
+        This hole filling algorithm is decribed in this post
+        https://www.learnopencv.com/filling-holes-in-an-image-using-opencv-python-c/
+    '''
+    maskFloodfill = mask.copy()
+    h, w = maskFloodfill.shape[:2]
+    maskTemp = np.zeros((h+2, w+2), np.uint8)
+    cv2.floodFill(maskFloodfill, maskTemp, (0, 0), 255)
+    mask2 = cv2.bitwise_not(maskFloodfill)
+    return mask2 | mask
 
-cap = Functions.photo.VideoCapture('ball.mov')
- 
-# Check if camera opened successfully
-if (cap.isOpened()== False): 
-  print("Error opening video stream or file")
- 
-# Read until video is completed
-while(cap.isOpened()):
-  # Capture frame-by-frame
-  ret, frame = cap.read()
-  if ret == True:
- 
-    # Display the resulting frame
-    Functions.photo.imshow('Frame',frame)
- 
-    # Press Q on keyboard to  exit
-    if Functions.photo.waitKey(25) & 0xFF == ord('q'):
-      break
- 
-  # Break the loop
-  else: 
-    break
- 
-# When everything done, release the video capture object
-cap.release()
- 
-# Closes all the frames
-Functions.photo.destroyAllWindows()
-#Functions.Write_Circle(img)
+if __name__ == '__main__' :
 
-## display it
-#Functions.photo.imshow("My Fucking Photo", img)
-#Functions.photo.waitKey(0)
+    # Read image
+    img = cv2.imread("red_eyes.jpg", cv2.IMREAD_COLOR)
+    
+    # Output image
+    imgOut = img.copy()
+    
+    # Load HAAR cascade
+    eyesCascade = cv2.CascadeClassifier("haarcascade_eye.xml")
+    
+    # Detect eyes
+    eyes = eyesCascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(100, 100))
+    
+    # For every detected eye
+    for (x, y, w, h) in eyes:
 
-#Functions.Fourier_Transform()
-#Functions.Make_Edge()
+        # Extract eye from the image
+        eye = img[y:y+h, x:x+w]
+
+        # Split eye image into 3 channels
+        b = eye[:, :, 0]
+        g = eye[:, :, 1]
+        r = eye[:, :, 2]
+        
+        # Add the green and blue channels.
+        bg = cv2.add(b, g)
+
+        # Simple red eye detector.
+        mask = (r > 150) &  (r > bg)
+        
+        # Convert the mask to uint8 format.
+        mask = mask.astype(np.uint8)*255
+
+        # Clean mask -- 1) File holes 2) Dilate (expand) mask.
+        mask = fillHoles(mask)
+        mask = cv2.dilate(mask, None, anchor=(-1, -1), iterations=3, borderType=1, borderValue=1)
+
+        # Calculate the mean channel by averaging
+        # the green and blue channels
+        mean = bg / 2
+        mask = mask.astype(np.bool)[:, :, np.newaxis]
+        mean = mean[:, :, np.newaxis]
+
+        # Copy the eye from the original image.
+        eyeOut = eye.copy()
+
+        # Copy the mean image to the output image.
+        #np.copyto(eyeOut, mean, where=mask)
+        eyeOut = np.where(mask, mean, eyeOut)
+
+        # Copy the fixed eye to the output image.
+        imgOut[y:y+h, x:x+w, :] = eyeOut
+
+    # Display Result
+    cv2.imshow('Red Eyes', img)
+    cv2.imshow('Red Eyes Removed', imgOut)
+    cv2.waitKey(0)
