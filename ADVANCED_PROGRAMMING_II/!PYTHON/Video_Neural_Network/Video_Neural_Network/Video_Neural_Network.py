@@ -7,7 +7,8 @@ import numpy as np
 import imutils
 
 #cap = cv2.VideoCapture('steel_balls.mp4')
-cap = cv2.VideoCapture('people_moving.mp4')
+#cap = cv2.VideoCapture('people_moving.mp4')
+cap = cv2.VideoCapture('cars_highway.mp4')
 
 #cap.set(cv2.CAP_PROP_FRAME_WIDTH, 300)
 #cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 300)
@@ -28,18 +29,26 @@ while cap.isOpened():
     dilated = cv2.dilate(thresh,None,iterations=3)
     contours, _ = cv2.findContours(dilated,cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-    cv2.drawContours(frame1,contours, -1, (0,255,0), 2)
-    cv2.imshow("feed",frame1)
+    for contour in contours:
+        (x,y,w,h) = cv2.boundingRect(contour)
+        if cv2.contourArea(contour) < 2000 : #if area of the countour, dont draw anything
+            continue
+        cv2.rectangle(frame1,(x,y), (x+w,y+h),(0,255,0), 2)
+        cv2.putText(frame1, "Status: {}".format("Movement"), (10,20), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,255),3)
+    #cv2.drawContours(frame1,contours, -1, (0,255,0), 2)
+    cv2.imshow("Cars",frame1)
 
     frame1 = frame2
-
     ret, frame2 = cap.read()
 
 
     #cv2.imshow("Inter",frame)
-    frame1 = imutils.resize(frame1, width=800, height = 600)
-    frame2 = imutils.resize(frame2, width=800, height = 600)
-    if cv2.waitKey(40) == 27:
+
+
+    frame1 = imutils.resize(frame1, width=1920, height = 1080)
+    frame2 = imutils.resize(frame2, width=1920, height = 1080)
+
+    if cv2.waitKey(40) == 27:   #press ESC
         break
 
 cv2.destroyAllWindows()
