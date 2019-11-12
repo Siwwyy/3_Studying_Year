@@ -1,79 +1,46 @@
 '''
-    Copyright 2017 by Satya Mallick ( Big Vision LLC )
-    http://www.learnopencv.com
+    Copyright 2019 by Damian Andrysiak
 '''
 
 import cv2
 import numpy as np
+import imutils
 
+#cap = cv2.VideoCapture('steel_balls.mp4')
+cap = cv2.VideoCapture('people_moving.mp4')
 
-def fillHoles(mask):
-    '''
-        This hole filling algorithm is decribed in this post
-        https://www.learnopencv.com/filling-holes-in-an-image-using-opencv-python-c/
-    '''
-    maskFloodfill = mask.copy()
-    h, w = maskFloodfill.shape[:2]
-    maskTemp = np.zeros((h+2, w+2), np.uint8)
-    cv2.floodFill(maskFloodfill, maskTemp, (0, 0), 255)
-    mask2 = cv2.bitwise_not(maskFloodfill)
-    return mask2 | mask
+#cap.set(cv2.CAP_PROP_FRAME_WIDTH, 300)
+#cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 300)
 
-if __name__ == '__main__' :
+#print(cap.get(cv2.CAP_PROP_FPS))
+#print(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 
-    # Read image
-    img = cv2.imread("red_eyes.jpg", cv2.IMREAD_COLOR)
-    
-    # Output image
-    imgOut = img.copy()
-    
-    # Load HAAR cascade
-    eyesCascade = cv2.CascadeClassifier("haarcascade_eye.xml")
-    
-    # Detect eyes
-    eyes = eyesCascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(100, 100))
-    
-    # For every detected eye
-    for (x, y, w, h) in eyes:
+ret, frame1 = cap.read()
+ret, frame2 = cap.read()
 
-        # Extract eye from the image
-        eye = img[y:y+h, x:x+w]
-
-        # Split eye image into 3 channels
-        b = eye[:, :, 0]
-        g = eye[:, :, 1]
-        r = eye[:, :, 2]
+while cap.isOpened():
+    #ret, frame = cap.read()
         
-        # Add the green and blue channels.
-        bg = cv2.add(b, g)
+    diff = cv2.absdiff(frame1,frame2)   #looking for difference between first and second frame 
+    gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
+    blur = cv2.GaussianBlur(gray,(5,5), 0)
+    _, thresh = cv2.threshold(blur,20,255,cv2.THRESH_BINARY)
+    dilated = cv2.dilate(thresh,None,iterations=3)
+    contours, _ = cv2.findContours(dilated,cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-        # Simple red eye detector.
-        mask = (r > 150) &  (r > bg)
-        
-        # Convert the mask to uint8 format.
-        mask = mask.astype(np.uint8)*255
+    cv2.drawContours(frame1,contours, -1, (0,255,0), 2)
+    cv2.imshow("feed",frame1)
 
-        # Clean mask -- 1) File holes 2) Dilate (expand) mask.
-        mask = fillHoles(mask)
-        mask = cv2.dilate(mask, None, anchor=(-1, -1), iterations=3, borderType=1, borderValue=1)
+    frame1 = frame2
 
-        # Calculate the mean channel by averaging
-        # the green and blue channels
-        mean = bg / 2
-        mask = mask.astype(np.bool)[:, :, np.newaxis]
-        mean = mean[:, :, np.newaxis]
+    ret, frame2 = cap.read()
 
-        # Copy the eye from the original image.
-        eyeOut = eye.copy()
 
-        # Copy the mean image to the output image.
-        #np.copyto(eyeOut, mean, where=mask)
-        eyeOut = np.where(mask, mean, eyeOut)
+    #cv2.imshow("Inter",frame)
+    frame1 = imutils.resize(frame1, width=1920, height = 1080)
+    frame2 = imutils.resize(frame2, width=1920, height = 1080)
+    if cv2.waitKey(40) == 27:
+        break
 
-        # Copy the fixed eye to the output image.
-        imgOut[y:y+h, x:x+w, :] = eyeOut
-
-    # Display Result
-    cv2.imshow('Red Eyes', img)
-    cv2.imshow('Red Eyes Removed', imgOut)
-    cv2.waitKey(0)
+cv2.destroyAllWindows()
+cap.release()
