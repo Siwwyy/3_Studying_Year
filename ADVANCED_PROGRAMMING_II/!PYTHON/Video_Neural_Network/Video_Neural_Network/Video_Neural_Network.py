@@ -37,8 +37,8 @@ while cap.isOpened():
 
 
     #cv2.imshow("Inter",frame)
-    frame1 = imutils.resize(frame1, width=1920, height = 1080)
-    frame2 = imutils.resize(frame2, width=1920, height = 1080)
+    frame1 = imutils.resize(frame1, width=800, height = 600)
+    frame2 = imutils.resize(frame2, width=800, height = 600)
     if cv2.waitKey(40) == 27:
         break
 
