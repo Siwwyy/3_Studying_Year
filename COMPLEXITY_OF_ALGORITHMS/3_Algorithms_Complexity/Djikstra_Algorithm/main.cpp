@@ -205,9 +205,9 @@ void inserter()
 			{
 				//here call all needed functions for solve the problem cause if s and e will be equal to 0 problem will be stopped immediately
 				///////////////////////////////////////////////
-				//START_STOPWATCH
+				START_STOPWATCH
 				Djikstra_Object->get_results();
-				//STOP_STOPWATCH
+				STOP_STOPWATCH
 				system("pause");
 				///////////////////////////////////////////////
 				delete Djikstra_Object;
@@ -419,9 +419,9 @@ void _Djikstra::find_way(const int from, const int to, const int way_lenght)
 		}
 		destination_verticle = from_;
 		current_verticle = to_;
-		START_STOPWATCH
+		//START_STOPWATCH
 		minimal_spanning_tree_creator(from_);	//create Djikstra for this case
-		STOP_STOPWATCH
+		//STOP_STOPWATCH
 		_STD cout << "Road through: ";
 		for (int i = _Djikstra_Matrix_lenght - 1; i >= 0; --i)
 		{

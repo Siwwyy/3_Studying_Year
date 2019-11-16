@@ -142,7 +142,24 @@ __global__ void Minimal_Spanning_Tree_Creator(_Djikstra_Element* Graph_GPU, cons
 
 int main(int argc, char* argv[])
 {
-	inserter();
+	//inserter();
+	cudaDeviceProp prop;
+	int count;
+	cudaGetDeviceCount(&count);
+	for (int i = 0; i < count; i++) 
+	{
+		cudaGetDeviceProperties(&prop, i);
+		printf(" Informacje na temat wieloprocesorow urzadzenia %d \n",  i);
+		printf("Liczba wieloprocesorow: %d\n", prop.multiProcessorCount);
+		printf("Pamiec wspolna na wieloprocesorach: %ld\n", prop.sharedMemPerBlock);
+		printf("Rejestry na wieloprocesor: %d\n", prop.regsPerBlock);
+		printf("Liczba w¹tków w osnowie: %d\n", prop.warpSize);
+		printf("Maks. liczba watkow na blok: %d\n", prop.maxThreadsPerBlock);
+		printf("Maks. liczba wymiarow watkow: (%d, %d, %d)\n", prop.maxThreadsDim[0], prop.maxThreadsDim[i], prop.maxThreadsDim[2]);
+		printf("Maks. liczba wymiarow siatki: (%d, %d, %d)\n", prop.maxGridSize[0], prop.maxGridSize[i], prop.maxGridSize[2]);
+		printf("\n");
+	}
+	_STD cin.get();
 	return 0;
 }
 

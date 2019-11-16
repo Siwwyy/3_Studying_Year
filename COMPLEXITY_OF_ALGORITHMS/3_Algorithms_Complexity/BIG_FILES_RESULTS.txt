@@ -1,0 +1,27 @@
+CPU
+
+example.out -> 279 ms
+
+example2.out -> 367 ms
+
+example3.out -> 589 ms
+
+example4.out -> 559 ms
+
+example5.out -> 5400 ms
+
+///////////////////////////////////////////////////////////////
+
+GPU
+
+example.out -> 200 ms
+
+example2.out -> 61 ms
+
+example3.out -> 24 ms
+
+example4.out -> 18 ms
+
+example5.out -> 21 ms
+
+///////////////////////////////////////////////////////////////
