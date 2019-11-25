@@ -85,12 +85,16 @@ int main()
 
 	scalar velocity = 175.0;
 	scalar sightness = 0.051;
-	speed->setValue(velocity);
-	sight->setValue(sightness);
-	engine->process();
-	FL_LOG("velocity.input = " << Op::str(velocity)
-		<< " ," << "sight.input = " << Op::str(sightness)
-		<< " propability.output = " << Op::str(engine->getOutputValue("propability")));
+	for (size_t i = 0; i < 10; ++i)
+	{
+		speed->setValue(10*i+100);
+		sight->setValue(i);
+		engine->process();
+		FL_LOG("velocity.input = " << Op::str(i*10+200)
+			<< " ," << "sight.input = " << Op::str(i)
+			<< " propability.output = " << Op::str(engine->getOutputValue("propability")));
+	}
+
 
 	system("pause");
 	return 0;
