@@ -10,6 +10,7 @@ int main()
 	using _STD endl;
 	using _STD cin;
 	using _STD cout;
+	//using _STD cout;
 
 
 	using namespace fl;
