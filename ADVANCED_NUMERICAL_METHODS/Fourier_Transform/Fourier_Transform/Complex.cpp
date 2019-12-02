@@ -21,6 +21,11 @@ Complex::Complex::Complex(const Complex& Object):
 
 }
 
+void Complex::Complex::Print() const
+{
+	_STD cout << "Im: " << this->Im << " Re: " << this->Re << '\n';
+}
+
 void Complex::Complex::Set_Im(const float Im)
 {
 	this->Im = Im;
@@ -39,6 +44,16 @@ Complex::Complex& Complex::Complex::operator=(const Complex& Object)
 		this->Re = Object.Re;
 	}
 	return *this;
+}
+
+float Complex::Complex::Get_Im() const
+{
+	return this->Im;
+}
+
+float Complex::Complex::Get_Re() const
+{
+	return this->Re;
 }
 
 Complex::Complex::~Complex()

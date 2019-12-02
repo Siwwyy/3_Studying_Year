@@ -35,7 +35,7 @@ namespace Complex
 		/*
 			FUNKCJE PUBLIC
 		*/
-
+		void Print() const;
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			SETTERY PUBLIC
@@ -53,7 +53,8 @@ namespace Complex
 		/*
 			GETTERY PUBLIC
 		*/
-	
+		float Get_Im() const;
+		float Get_Re() const;
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			DESTRUKTOR
