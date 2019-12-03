@@ -8,15 +8,17 @@ using System.Web;
 using System.Web.Mvc;
 using _MY_PAGE.Models;
 
+
 namespace _MY_PAGE.Controllers
 {
     public class Model_PojazduController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
+        private ViewDataDictionary ViewData = new ViewDataDictionary();
         // GET: Model_Pojazdu
         public ActionResult Index()
         {
+            Marka_Pojazdu a = new Marka_Pojazdu();
             return View(db.Model.ToList());
         }
 
@@ -37,7 +39,6 @@ namespace _MY_PAGE.Controllers
             return my_list;
         }
 
-
         // GET: Model_Pojazdu/Details/5
         public ActionResult Details(int? id)
         {
@@ -56,6 +57,10 @@ namespace _MY_PAGE.Controllers
         // GET: Model_Pojazdu/Create
         public ActionResult Create()
         {
+            IList<Marka_Pojazdu> marki = new List<Marka_Pojazdu>();
+            marki = db.Mark.ToList();
+
+            ViewData["marki"] = marki;
             return View();
         }
 

@@ -51,9 +51,38 @@
             @Html.LabelFor(model => model.Nazwa_Model, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @*@Html.EditorFor(model => model.Nazwa_Model, new { htmlAttributes = new { @class = "form-control" } })*@
+                @*@{
+            List<SelectListItem> listItems = new List<SelectListItem>();
+            listItems.Add(new SelectListItem
+            {
+                Text = "AtlantaPort",
+                Value = "AtlantaPort"
+            });
+            listItems.Add(new SelectListItem
+            {
+                Text = "NewJersyTerminal",
+                Value = "NewJersyTerminal",
+                Selected = true
+            });
+            listItems.Add(new SelectListItem
+            {
+                Text = "AWS",
+                Value = "AWS"
+            });
+        }*@
                 @using (Html.BeginForm())
+
                 {
-                    @*@Html.ListBoxFor(model => model.Nazwa_Model, Model.Nazwa_Model)*@
+                    //@Html.ListBoxFor(model => model.Nazwa_Model,)
+                    //@Html.DropDownList("yourDropName", listItems, new { @class = "form-control" })
+                    <ul>
+                        @foreach (var std in ViewData["marki"] as IList<_MY_PAGE.Models.Marka_Pojazdu>)
+                        {
+                            <li>
+                                @std.Nazwa_Marka
+                            </li>
+                        }
+                    </ul>
                     <br />
                     <input type="submit" value="Submit" />
                 }
