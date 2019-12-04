@@ -13,17 +13,19 @@ using namespace std;
  Float_t x1[n],x2[n],x3[n],x4[n],x5[n],x6[n], y1;
 
   ifstream d;
-  ifstream d2;
+ // ifstream d2;
 
   // d.open("density");
    // pod windows
-      d.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\4_rodzaje_losowan\\4_rodzaje_losowan\\file.out");
-      d2.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\4_rodzaje_losowan\\4_rodzaje_losowan\\file_2.out");
+      d.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\Generating\\Generating\\file.out");
+      //d.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\4_rodzaje_losowan\\4_rodzaje_losowan\\file.out");
+      //d2.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\4_rodzaje_losowan\\4_rodzaje_losowan\\file_2.out");
+      //d2.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\4_rodzaje_losowan\\4_rodzaje_losowan\\file_2.out");
 
    for(i=0;i<n;i=i+1)
      {
        d>>x1[i];
-       d2>>x2[i];
+       //d2>>x2[i];
 
 // operacje na danych
 
@@ -35,7 +37,7 @@ using namespace std;
 
    // deklarowanie histogramu "jednowymiarowego"  .... liczba klas, przedział
 
-   TH1F *im1 = new TH1F("im1"," First ", 100,-20.,30.);
+   TH1F *im1 = new TH1F("im1"," First ", 30,-0.5,20.5);
    TH1F *im2 = new TH1F("im2"," Second ",100,-1.,1.);
 
 
@@ -44,7 +46,7 @@ using namespace std;
       for(i=0;i<n;i=i+1)
         { 
 	  im1->Fill(x1[i]);
-	  im2->Fill(x2[i]);
+	  //im2->Fill(x2[i]);
 	}
    // for(j=0;j<n;j=j+1)
    //   {
@@ -53,9 +55,10 @@ using namespace std;
          
     //skalowanie histogramu
 
-    /*      float scale_const=0.25;
-           im2->Scale(scale_const);
-    */
+          //float scale_const=0.001;
+           //im1->Scale(scale_const);
+    
+	
     ///stworzenie canwy do rysunku
 TCanvas *test = new TCanvas("test","test");
 test->SetFillColor(0);
