@@ -14,7 +14,7 @@ namespace _MY_PAGE.Controllers
     public class Model_PojazduController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private ViewDataDictionary ViewData = new ViewDataDictionary();
+      //  public ViewDataDictionary ViewData = new ViewDataDictionary();
         // GET: Model_Pojazdu
         public ActionResult Index()
         {
@@ -57,10 +57,9 @@ namespace _MY_PAGE.Controllers
         // GET: Model_Pojazdu/Create
         public ActionResult Create()
         {
-            IList<Marka_Pojazdu> marki = new List<Marka_Pojazdu>();
-            marki = db.Mark.ToList();
+            IList<Marka_Pojazdu> marki = new List<Marka_Pojazdu>(db.Mark.ToList());
 
-            ViewData["marki"] = marki;
+            ViewData["Mark"] = marki;
             return View();
         }
 
