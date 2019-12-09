@@ -42,10 +42,10 @@ int main(int argc, char* argv[])
 		temp = 0.0f;
 	}
 
-	for (size_t i = 0; i < N; ++i)
-	{
-		data[i].Print();
-	}
+	//for (size_t i = 0; i < N; ++i)
+	//{
+	//	data[i].Print();
+	//}
 
 	//N w naszym przypadku to 8 -> ilosc przypadkow
 	//n liczba na ktorej aktualnie jest
@@ -59,14 +59,18 @@ int main(int argc, char* argv[])
 			//value = *(I._Val);
 			//temp += static_cast<float>(pow(E, (data[i].Get_Re() * (value * (2*Pi*i)))/N));
 			temp_Re += data[j].Get_Re() * cos((2 * M_PI * i * j) / N);
-			temp_Im += data[j].Get_Im() * sin((2 * M_PI * i * j) / N);
+			temp_Im += data[j].Get_Re() * sin((2 * M_PI * i * j) / N);
 		}
 		//Cn[i] = temp;
-		if (temp_Re < 0.0001f)
+		if (temp_Re < 0.01f && temp_Re > -0.01f)
 		{
 			temp_Re = 0.0f;
 		}
-		_STD cout << i << " " << temp_Re << " " << temp_Im << NEW_LINE;
+		if (temp_Im < 0.01f && temp_Im > -0.01f)
+		{
+			temp_Im = 0.0f;
+		}
+		_STD cout << "i: " << i << " Real: " << temp_Re << " Imaginary: " << temp_Im << NEW_LINE;
 	}
 
 	/*for (size_t i = 0; i < N; ++i)
