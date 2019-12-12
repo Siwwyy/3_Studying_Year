@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "First_Tensor_Flow", "First_Tensor_Flow\First_Tensor_Flow.pyproj", "{BFEEE83E-12DD-4294-81FD-4A098694C96B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BFEEE83E-12DD-4294-81FD-4A098694C96B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFEEE83E-12DD-4294-81FD-4A098694C96B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {050D340F-6DB5-48E0-9D24-B27D66E60C8C}
+	EndGlobalSection
+EndGlobal
