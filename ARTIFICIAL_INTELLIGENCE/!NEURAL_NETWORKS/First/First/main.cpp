@@ -15,6 +15,7 @@ constexpr _STD size_t Array_Size(const _Variable_Type(&_array)[N]) noexcept;
 void Fill_Matrix(bool Matrix[2][7][5]);
 void Print_Matrix(bool Matrix[2][7][5]);
 void Save_Weights(const float * const Weights, const size_t & size);
+void Predict_Result(const bool const Matrix[2][7][5], const size_t choice);
 const float f(const float value);
 const float df(const float value);
 
@@ -37,115 +38,77 @@ int main(int argc, char* argv[])
 	size_t counter{};
 	float weights[N]{};
 	float neurons[N]{};
+	size_t choice = { 1 };
+
 
 	//RANDOM GENERATOR
 	std::random_device random;  //Will be used to obtain a seed for the random number engine
 	std::mt19937 generator(random()); //Standard mersenne_twister_engine seeded with rd()
 	std::uniform_real_distribution<> dis(-1.0f, 1.0f);
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	///CASE ALREADY LEARNED !!!
 	//set weights
-	for (size_t j = 0; j < N; ++j)
-	{
-		weights[j] = dis(generator);
-	}
+	//for (size_t j = 0; j < N; ++j)
+	//{
+	//	weights[j] = dis(generator);
+	//}
 
 
 	Fill_Matrix(Matrix);
-	Print_Matrix(Matrix);
+	//Print_Matrix(Matrix);
+	//for (size_t j = 0; j < 7; ++j)
+	//{
+	//	for (size_t k = 0; k < 5; ++k)
+	//	{
+	//		neurons[counter] = Matrix[choice][j][k];
+	//		++counter;
+	//	}
+	//}
 
-	/*for (size_t i = 0; i < 2; ++i)
-	{
-		for (size_t j = 0; j < 7; ++j)
-		{
+	//weights[0] = 1;
+	//counter = {};
 
-			for (size_t k = 0; k < 5; ++k)
-			{
-				neurons[counter] = Matrix[i][j][k];
-				++counter;
-			}
+	//while (c < C_max)
+	//{
+	//	float sum{};
+	//	counter = {};
+	//	sum += weights[0]; //adding bias
+	//	for (size_t k = 1; k < N; ++k)
+	//	{
+	//		sum += (neurons[k] * weights[k]);
+	//	}
 
-		}
-		counter = 0;
-		while (E_max < E)
-		{
-			if (c >= C_max)
-			{
-				break;
-			}
-			float sum{};
-			
-			for (size_t k = 0; k < N; ++k)
-			{
-				sum += (neurons[k] * weights[i][k]);
-			}
+	//	y = f(sum);
+	//	
+	//	E += static_cast<float>((0.5f) * pow((T[choice] - y), 2));
+	//	
+	//	if (E > E_max)
+	//	{
+	//		float mod{};
+	//		for (size_t i = 0; i < 7; i++) 
+	//		{
+	//			for (size_t j = 0; j < 5; j++) 
+	//			{
+	//				mod = -((T[choice] - y) * (1 - y) * y * Matrix[choice][i][j]);
+	//				weights[counter] = weights[counter] - learning_cofficient * mod;
+	//				counter++;
+	//			}
+	//		}
+	//		learning_cofficient *= 0.95;
+	//	}
+	//	c++;
+	//}
 
-			y = f(sum);
-
-			for (size_t k = 0; k < (N - 1); ++k)
-			{
-				weights[i][k + 1] = weights[i][k] + (learning_cofficient * (T[i] - y) * (1 - y) * neurons[k] * y);
-			}
-			_STD cout << "For image nr: " << (i + 1) << " E: " << E << " Y: " << y << " Sum: " << sum << NEW_LINE;
-			E = E + static_cast<float>((0.5f) * pow((T[i] - y),2));
-			_STD cin.get();
-			c++;
-		}
-	}*/
-	for (size_t j = 0; j < 7; ++j)
-	{
-
-		for (size_t k = 0; k < 5; ++k)
-		{
-			neurons[counter] = Matrix[0][j][k];
-			++counter;
-		}
-
-	}
-	weights[0] = 1;
-	counter = {};
-	while (c < C_max)
-	{
-		float sum{};
-		sum += weights[0]; //adding bias
-		for (size_t k = 1; k < N; ++k)
-		{
-			sum += (neurons[k] * weights[k]);
-		}
-
-		y = f(sum);
-		//_STD cout << "For image nr: " << (1) << " E: " << E << " Y: " << y << " Sum: " << sum << NEW_LINE;
-		//_STD cin.get();
-		//for (size_t k = 0; k < (N - 1); ++k)
-		//{
-		//	//_STD cout << weights[k] + (learning_cofficient * (T[0] - y) * (1 - y) * neurons[k] * y) << NEW_LINE;
-		//	_STD cout << weights[k + 1] << NEW_LINE;
-		//	weights[k + 1] = weights[k] + (learning_cofficient * (T[0] - y) * (1 - y) * neurons[k] * y);
-		//	//_STD cin.get();
-		//}
-		//E = E + static_cast<float>((0.5f) * pow((T[0] - y), 2));
-		//E = (-0.5) * pow(static_cast<float>((T[0] - y)),2);	//counting error
-		
-		E += static_cast<float>((0.5f) * pow((T[0] - y), 2));
-		
-		if (E > E_max)
-		{
-			float mod{};
-			for (size_t i = 0; i < 7; i++) 
-			{
-				for (size_t j = 0; j < 5; j++) 
-				{
-					mod = -((T[0] - y) * (1 - y) * y * Matrix[0][i][j]);
-					weights[counter] = weights[counter] - learning_cofficient * mod;
-					counter++;
-				}
-			}
-			learning_cofficient *= 0.95;
-		}
-		c++;
-	}
-
-	Save_Weights(weights,N);
-	_STD cout << "Learned" << NEW_LINE;
+	//Save_Weights(weights,N);	//already learned
+	//_STD cout << "Learned" << NEW_LINE;
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	Predict_Result(Matrix, 0);
+	Predict_Result(Matrix, 1);
 
 	system("pause");
 	return 0;
@@ -204,7 +167,7 @@ void Print_Matrix(bool Matrix[2][7][5])
 void Save_Weights(const float* const Weights, const size_t & size)
 {
 	_STD fstream file_out;
-	file_out.open("weights_A.out", std::ios_base::out);
+	file_out.open("weights_C.out", std::ios_base::out);
 
 	if (file_out.good() == false)
 	{
@@ -221,16 +184,77 @@ void Save_Weights(const float* const Weights, const size_t & size)
 	file_out.close();
 }
 
+void Predict_Result(const bool const Matrix[2][7][5], const size_t choice)
+{
+	float result{ 0.0f };
+	float X{ 0.0f };
+	_STD fstream file_in;
+	
+	if (choice == 0)
+	{
+		file_in.open("weights_A.out", std::ios_base::in);
+
+		if (file_in.good() == false)
+		{
+			_STD cerr << "[WARRNING:0001] Invalid file_path\n";
+		}
+		else
+		{
+			float value{};
+			for (size_t i = 0; i < 7; i++)
+			{
+				for (size_t j = 0; j < 5; j++)
+				{
+					file_in >> value;
+					X += (value * Matrix[choice][i][j]);
+				}
+			}
+		}
+	}
+	else
+	{
+		file_in.open("weights_C.out", std::ios_base::in);
+
+		if (file_in.good() == false)
+		{
+			_STD cerr << "[WARRNING:0001] Invalid file_path\n";
+		}
+		else
+		{
+			float value{};
+			for (size_t i = 0; i < 7; i++)
+			{
+				for (size_t j = 0; j < 5; j++)
+				{
+					file_in >> value;
+					X += (value * Matrix[choice][i][j]);
+				}
+			}
+		}
+	}
+
+	result = f(X);
+
+	_STD cout << "Result: " << result;
+	if (result < 0.5)
+	{
+		_STD cout << " Letter:" << " A" << NEW_LINE;
+	}
+	else
+	{
+		_STD cout << " Letter:" << " C" << NEW_LINE;
+	}
+	file_in.close();
+}
+
 const float f(const float value)
 {
 	return static_cast<float>(1.0f /(1.0f + static_cast<float>(pow((1.0f/e),value))));
-	//return static_cast<float>(1.0f/(1.0f + pow(e, (-1)*value)));
 }
 
 const float df(const float value)
 {
 	return static_cast<float>(value * (1 - value));
-	//return static_cast<float>(1.0f/(1.0f + pow(e, (-1)*value)));
 }
 
 template<typename _Variable_Type, ::std::size_t N>
