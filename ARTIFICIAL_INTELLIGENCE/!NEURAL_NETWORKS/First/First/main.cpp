@@ -277,11 +277,11 @@ void Predict_Result(const bool const Matrix[7][5])
 	result = f(X);
 
 	_STD cout << "Result: " << result;
-	if (result < 0.5)
+	if (result < 0.5f && result > 0.003f)
 	{
 		_STD cout << " Letter:" << " A" << NEW_LINE;
 	}
-	else
+	else if(result >= 0.5f && result < 1.0f)
 	{
 		_STD cout << " Letter:" << " C" << NEW_LINE;
 	}
