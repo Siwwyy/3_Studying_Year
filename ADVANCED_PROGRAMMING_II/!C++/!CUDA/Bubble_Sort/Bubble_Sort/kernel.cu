@@ -20,7 +20,7 @@
 #define OK cudaSuccess
 #define NEW_LINE '\n'
 
-#define SIZE 5
+#define SIZE 10
 
 __global__ void Bubble_Sort_GPU(__int32 * array_GPU, const size_t * const size);
 
@@ -28,7 +28,7 @@ __global__ void Bubble_Sort_GPU(__int32 * array_GPU, const size_t * const size);
 int main(int argc, char* argv[])
 {
 	//CPU VARIABLES
-	constexpr size_t size = 10;
+	constexpr size_t size = 100;
 	__int32* array_to_sort = new __int32[size];
 
 	//GPU VARIABLES
@@ -46,30 +46,34 @@ int main(int argc, char* argv[])
 	//FILL CPU ARRAY AND THEN COPY INTO GPU ARRAY
 	for (size_t i = 0; i < size; ++i)
 	{
-		array_to_sort[i] = dis(generator);
+		//array_to_sort[i] = dis(generator);
+		array_to_sort[i] = (size - i);
 	}
 	//DISPLAY FILLED UP ARRAY
+	_STD cout << "Before sorting: ";
 	for (size_t i = 0; i < size; ++i)
 	{
 		_STD cout << array_to_sort[i] << " ";
 	}
 	_STD cout << NEW_LINE;
 
-	cudaMemcpy(array_to_sort_GPU, array_to_sort, (size)*sizeof(__int32), HostToDevice);
+	cudaMemcpy(array_to_sort_GPU, array_to_sort, (size) * sizeof(__int32), HostToDevice);
 
 
-	Bubble_Sort_GPU << <1, size>> > (array_to_sort_GPU, 10);
+	dim3 threads(size);
+	Bubble_Sort_GPU <<<1, threads>>> (array_to_sort_GPU, size_GPU);
 
-	
 	//COPY SORTED ARRAY BACK TO THE CPU
 	cudaMemcpy(array_to_sort, array_to_sort_GPU, (size) * sizeof(__int32), DeviceToHost);
 
 	//DISPLAY SORTED ARRAY
+	
+	_STD cout << "After sorting: ";
 	for (size_t i = 0; i < size; ++i)
 	{
 		_STD cout << array_to_sort[i] << " ";
 	}
-
+	_STD cout << NEW_LINE;
 
 	//DEALLOCATE CPU MEMORY
 	delete[] array_to_sort;
@@ -84,16 +88,40 @@ int main(int argc, char* argv[])
 
 __global__ void Bubble_Sort_GPU(__int32* array_GPU, const size_t* const size)
 {
-	size_t id_x = threadIdx.x + blockIdx.x * blockDim.x;
-
-	while (id_x < ((*size) - 1))
+	//int id_x = threadIdx.x + blockIdx.x * blockDim.x;
+	//int id_y = threadIdx.y + blockIdx.y * blockDim.y;
+	int id_x = threadIdx.x;
+	//int id_y = threadIdx.y;
+	//printf("%d \n", *size);
+	//printf("id_x: %d\n", id_x);
+	//for(size_t i = 0; i < (*size); ++i)
+	//{
+	//	if (id_x < ((*size) - 1))
+	//	{
+	//		if (array_GPU[id_x] > array_GPU[id_x + 1])
+	//		{
+	//			__int32 temp{};
+	//			temp = array_GPU[id_x];
+	//			array_GPU[id_x] = array_GPU[id_x + 1];
+	//			array_GPU[id_x + 1] = temp;
+	//			//array_GPU[id_x + 1] = 1;
+	//		}
+	//	}
+	//	__syncthreads();
+	//}
+	for (size_t i = id_x; i < (*size); ++i)
 	{
-		if (array_GPU[id_x] > array_GPU[id_x + 1])
+		for (size_t j = 0; j < ((*size) - 1) - i; ++j)
 		{
-			__int32 temp{};
-			temp = array_GPU[id_x];
-			array_GPU[id_x] = array_GPU[id_x + 1];
-			array_GPU[id_x + 1] = temp;
+			if (array_GPU[j] > array_GPU[j + 1])
+			{
+				__int32 temp{};
+				temp = array_GPU[j];
+				array_GPU[j] = array_GPU[j + 1];
+				array_GPU[j + 1] = temp;
+				//array_GPU[id_x + 1] = 1;
+			}
 		}
+		__syncthreads();
 	}
 }
