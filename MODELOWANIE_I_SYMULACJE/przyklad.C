@@ -13,19 +13,19 @@ using namespace std;
  Float_t x1[n],x2[n],x3[n],x4[n],x5[n],x6[n], y1;
 
   ifstream d;
- // ifstream d2;
+  ifstream d2;
 
   // d.open("density");
    // pod windows
-      d.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\Generating\\Generating\\file.out");
+      d.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\Rozklad_Poissona\\Rozklad_Poissona\\out1.out");
       //d.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\4_rodzaje_losowan\\4_rodzaje_losowan\\file.out");
-      //d2.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\4_rodzaje_losowan\\4_rodzaje_losowan\\file_2.out");
+      d2.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\Rozklad_Poissona\\Rozklad_Poissona\\out2.out");
       //d2.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\4_rodzaje_losowan\\4_rodzaje_losowan\\file_2.out");
 
    for(i=0;i<n;i=i+1)
      {
        d>>x1[i];
-       //d2>>x2[i];
+       d2>>x2[i];
 
 // operacje na danych
 
@@ -34,19 +34,20 @@ using namespace std;
 
       }
    d.close();
-
+   d2.close();
+i = 0;
    // deklarowanie histogramu "jednowymiarowego"  .... liczba klas, przedział
 
-   TH1F *im1 = new TH1F("im1"," First ", 30,-0.5,20.5);
-   TH1F *im2 = new TH1F("im2"," Second ",100,-1.,1.);
+   TH1F *im1 = new TH1F("im1"," First ", 11,-0.5,10.5);
+   TH1F *im2 = new TH1F("im2"," Second ",10,-0.5,10.5);
 
 
    TH2F *imd2 = new TH2F("imd2","jestem histogramem-2wym ",0.0,0.,2.0,0.0,0.,2.0);
 
       for(i=0;i<n;i=i+1)
         { 
-	  im1->Fill(x1[i]);
-	  //im2->Fill(x2[i]);
+		im1->Fill(x1[i]+x2[i]);
+		im2->Fill(x2[i]);
 	}
    // for(j=0;j<n;j=j+1)
    //   {
@@ -77,7 +78,7 @@ test->Divide(2,1);
  test->cd(2);
          im1->Draw();
 	 // narysowanie dwoch histogramowna jednym rysunku
-	 im2->Draw("same");
+	// im2->Draw("same");
 
 
 	 // nowa canwa do rysowania
