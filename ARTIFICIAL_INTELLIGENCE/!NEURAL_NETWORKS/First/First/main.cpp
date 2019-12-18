@@ -3,6 +3,7 @@
 #include <fstream>
 #include <istream>
 #include <iterator>
+#include <time.h>
 #include <random>
 #include <math.h>
 #include <windows.h>
@@ -25,16 +26,17 @@ int main(int argc, char* argv[])
 	using _STD cout;
 	using _STD endl;
 	using _STD cin;
+	srand(time(NULL));
 
 
 	bool Matrix[2][7][5]{};	//collection P
 	bool T[]{ 0,1 };	//collection T
-	constexpr size_t N = 7 * 5;
-	float learning_cofficient = 0.2f;
+	constexpr size_t N = (7 * 5) + 1;
+	float learning_cofficient = 0.5f;
 	constexpr float E_max = 0.03;
 	float E = 1.f;
-	constexpr size_t C_max = 100;
-	size_t c{1};
+	constexpr size_t C_max = 200;
+	size_t c{0};
 	float y{};
 	size_t counter{};
 	float weights[N]{};
@@ -45,73 +47,175 @@ int main(int argc, char* argv[])
 	//RANDOM GENERATOR
 	std::random_device random;  //Will be used to obtain a seed for the random number engine
 	std::mt19937 generator(random()); //Standard mersenne_twister_engine seeded with rd()
-	std::uniform_real_distribution<> dis(-1.0f, 1.0f);
+	std::uniform_real_distribution<float> dis(-1.0f, 1.0f);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////
-	///CASE ALREADY LEARNED !!!
-	//set weights
-	/*for (size_t j = 0; j < N; ++j)
-	{
-		weights[j] = dis(generator);
-	}*/
-
-
 	Fill_Matrix(Matrix);
-	//Print_Matrix(Matrix);
-	//for (size_t j = 0; j < 7; ++j)
-	//{
-	//	for (size_t k = 0; k < 5; ++k)
-	//	{
-	//		neurons[counter] = Matrix[choice][j][k];
-	//		++counter;
-	//	}
-	//}
+	weights[0] = 1; //SET BIAS
+	for (size_t i = 1; i < N; ++i)
+	{
+		weights[i] = dis(generator);
+	}
 
-	//counter = {};
+	bool if_break = false;
+	while (c < C_max && if_break == false) 
+	{
+		float sum{};
+		__int16 choice = rand() % 2;
+		if (choice == 0)
+		{
+			for (size_t i = 0; i < 7; ++i)
+			{
+				for (size_t j = 0; j < 5; ++j)
+				{
+					neurons[counter] = Matrix[choice][i][j];
+					++counter;
+				}
+			}		
 
-	//while (c < C_max)
-	//{
-	//	float sum{};
-	//	counter = {};
-	//	for (size_t k = 0; k < N; ++k)
-	//	{
-	//		sum += (neurons[k] * weights[k]);
-	//	}
+			for (size_t i = 0; i < N; ++i)
+			{
+				sum += neurons[i] * weights[i];
+			}
 
-	//	y = f(sum);
-	//	
-	//	E += static_cast<float>((0.5f) * pow((T[choice] - y), 2));
-	//	
-	//	if (E > E_max)
-	//	{
-	//		float mod{};
-	//		for (size_t i = 0; i < 7; i++) 
-	//		{
-	//			for (size_t j = 0; j < 5; j++) 
-	//			{
-	//				mod = (-1) * ((T[choice] - y) * (1 - y) * y * Matrix[choice][i][j]);
-	//				weights[counter] = weights[counter] - learning_cofficient * mod;
-	//				counter++;
-	//			}
-	//		}
-	//		learning_cofficient *= 0.95;
-	//	}
-	//	c++;
-	//}
+			y = f(sum);
 
-	//Save_Weights(weights,N);	//already learned
-	//_STD cout << "Learned" << NEW_LINE;
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	Predict_Result(Matrix[0]);
-	Predict_Result(Matrix[0]);
-	Predict_Result(Matrix[1]);
-	Predict_Result(Matrix[1]);
-	Predict_Result(Matrix[0]);
-	Predict_Result(Matrix[1]);
+			E += static_cast<float>((0.5f) * pow((T[choice] - y), 2));
+				
+			if (E > E_max)
+			{
+				for (size_t i = 0; i < N; ++i)
+				{
+					weights[i] = weights[i] + learning_cofficient * ((-1)*((T[choice] - y))* y*(1-y)*neurons[i]);
+				}
+				learning_cofficient *= 0.95;
+			}
+			else
+			{
+				if_break = true;
+			}
+
+
+			//////////////////////////////////////////////////////
+			choice++;
+			sum = 0.0f;
+			counter = NULL;
+
+				
+			for (size_t i = 0; i < 7; ++i)
+			{
+				for (size_t j = 0; j < 5; ++j)
+				{
+					neurons[counter] = Matrix[choice][i][j];
+					++counter;
+				}
+			}
+
+			for (size_t i = 0; i < N; ++i)
+			{
+				sum += neurons[i] * weights[i];
+			}
+
+			y = f(sum);
+
+			E += static_cast<float>((0.5f) * pow((T[choice] - y), 2));
+
+			if (E > E_max)
+			{
+				for (size_t i = 0; i < N; ++i)
+				{
+					weights[i] = weights[i] + learning_cofficient * ((-1) * ((T[choice] - y)) * y * (1 - y) * neurons[i]);
+				}
+				learning_cofficient *= 0.95;
+			}
+			else
+			{
+				if_break = true;
+			}
+
+			counter = NULL;
+		}
+		else
+		{
+
+			for (size_t i = 0; i < 7; ++i)
+			{
+				for (size_t j = 0; j < 5; ++j)
+				{
+					neurons[counter] = Matrix[choice][i][j];
+					++counter;
+				}
+			}
+
+			for (size_t i = 0; i < N; ++i)
+			{
+				sum += neurons[i] * weights[i];
+			}
+
+			y = f(sum);
+
+			E += static_cast<float>((0.5f) * pow((T[choice] - y), 2));
+
+			if (E > E_max)
+			{
+				for (size_t i = 0; i < N; ++i)
+				{
+					weights[i] = weights[i] + learning_cofficient * ((-1) * ((T[choice] - y)) * y * (1 - y) * neurons[i]);
+				}
+				learning_cofficient *= 0.95;
+			}
+			else
+			{
+				if_break = true;
+			}
+
+			//////////////////////////////////////////////////////
+			choice--;
+			sum = 0.0f;
+			counter = NULL;
+
+
+			for (size_t i = 0; i < 7; ++i)
+			{
+				for (size_t j = 0; j < 5; ++j)
+				{
+					neurons[counter] = Matrix[choice][i][j];
+					++counter;
+				}
+			}
+
+			for (size_t i = 0; i < N; ++i)
+			{
+				sum += neurons[i] * weights[i];
+			}
+
+			y = f(sum);
+
+			E += static_cast<float>((0.5f) * pow((T[choice] - y), 2));
+
+			if (E > E_max)
+			{
+				for (size_t i = 0; i < N; ++i)
+				{
+					weights[i] = weights[i] + learning_cofficient * ((-1) * ((T[choice] - y)) * y * (1 - y) * neurons[i]);
+				}
+				learning_cofficient *= 0.95;
+			}
+			else
+			{
+				if_break = true;
+			}
+
+			counter = NULL;
+
+		}
+		++c;
+	}
+
+
+	Save_Weights(weights, N);
 
 	system("pause");
 	return 0;
@@ -303,3 +407,68 @@ constexpr _STD size_t Array_Size(const _Variable_Type(&_array)[N]) noexcept
 {
 	return N;
 }
+
+
+/*
+	///CASE ALREADY LEARNED !!!
+	//set weights
+	/*for (size_t j = 0; j < N; ++j)
+	{
+		weights[j] = dis(generator);
+	}*/
+
+
+//Fill_Matrix(Matrix);
+//Print_Matrix(Matrix);
+//for (size_t j = 0; j < 7; ++j)
+//{
+//	for (size_t k = 0; k < 5; ++k)
+//	{
+//		neurons[counter] = Matrix[choice][j][k];
+//		++counter;
+//	}
+//}
+
+//counter = {};
+
+//while (c < C_max)
+//{
+//	float sum{};
+//	counter = {};
+//	for (size_t k = 0; k < N; ++k)
+//	{
+//		sum += (neurons[k] * weights[k]);
+//	}
+
+//	y = f(sum);
+//	
+//	E += static_cast<float>((0.5f) * pow((T[choice] - y), 2));
+//	
+//	if (E > E_max)
+//	{
+//		float mod{};
+//		for (size_t i = 0; i < 7; i++) 
+//		{
+//			for (size_t j = 0; j < 5; j++) 
+//			{
+//				mod = (-1) * ((T[choice] - y) * (1 - y) * y * Matrix[choice][i][j]);
+//				weights[counter] = weights[counter] - learning_cofficient * mod;
+//				counter++;
+//			}
+//		}
+//		learning_cofficient *= 0.95;
+//	}
+//	c++;
+//}
+
+//Save_Weights(weights,N);	//already learned
+//_STD cout << "Learned" << NEW_LINE;
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//Predict_Result(Matrix[0]);
+//Predict_Result(Matrix[0]);
+//Predict_Result(Matrix[1]);
+//Predict_Result(Matrix[1]);
+//Predict_Result(Matrix[0]);
+//Predict_Result(Matrix[1]);
