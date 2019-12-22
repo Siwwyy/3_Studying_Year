@@ -88,27 +88,7 @@ int main(int argc, char* argv[])
 
 __global__ void Bubble_Sort_GPU(__int32* array_GPU, const size_t* const size)
 {
-	//int id_x = threadIdx.x + blockIdx.x * blockDim.x;
-	//int id_y = threadIdx.y + blockIdx.y * blockDim.y;
 	int id_x = threadIdx.x;
-	//int id_y = threadIdx.y;
-	//printf("%d \n", *size);
-	//printf("id_x: %d\n", id_x);
-	//for(size_t i = 0; i < (*size); ++i)
-	//{
-	//	if (id_x < ((*size) - 1))
-	//	{
-	//		if (array_GPU[id_x] > array_GPU[id_x + 1])
-	//		{
-	//			__int32 temp{};
-	//			temp = array_GPU[id_x];
-	//			array_GPU[id_x] = array_GPU[id_x + 1];
-	//			array_GPU[id_x + 1] = temp;
-	//			//array_GPU[id_x + 1] = 1;
-	//		}
-	//	}
-	//	__syncthreads();
-	//}
 	for (size_t i = id_x; i < (*size); ++i)
 	{
 		for (size_t j = 0; j < ((*size) - 1) - i; ++j)

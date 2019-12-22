@@ -53,169 +53,175 @@ int main(int argc, char* argv[])
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	Fill_Matrix(Matrix);
-	weights[0] = 1; //SET BIAS
-	for (size_t i = 1; i < N; ++i)
-	{
-		weights[i] = dis(generator);
-	}
+	//weights[0] = 1; //SET BIAS
+	//for (size_t i = 1; i < N; ++i)
+	//{
+	//	weights[i] = dis(generator);
+	//}
 
-	bool if_break = false;
-	while (c < C_max && if_break == false) 
-	{
-		float sum{};
-		__int16 choice = rand() % 2;
-		if (choice == 0)
-		{
-			for (size_t i = 0; i < 7; ++i)
-			{
-				for (size_t j = 0; j < 5; ++j)
-				{
-					neurons[counter] = Matrix[choice][i][j];
-					++counter;
-				}
-			}		
+	//bool if_break = false;
+	//while (c < C_max && if_break == false) 
+	//{
+	//	float sum{};
+	//	__int16 choice = rand() % 2;
+	//	if (choice == 0)
+	//	{
+	//		for (size_t i = 0; i < 7; ++i)
+	//		{
+	//			for (size_t j = 0; j < 5; ++j)
+	//			{
+	//				neurons[counter] = Matrix[choice][i][j];
+	//				++counter;
+	//			}
+	//		}		
 
-			for (size_t i = 0; i < N; ++i)
-			{
-				sum += neurons[i] * weights[i];
-			}
+	//		for (size_t i = 0; i < N; ++i)
+	//		{
+	//			sum += neurons[i] * weights[i];
+	//		}
 
-			y = f(sum);
+	//		y = f(sum);
 
-			E += static_cast<float>((0.5f) * pow((T[choice] - y), 2));
-				
-			if (E > E_max)
-			{
-				for (size_t i = 0; i < N; ++i)
-				{
-					weights[i] = weights[i] + learning_cofficient * ((-1)*((T[choice] - y))* y*(1-y)*neurons[i]);
-				}
-				learning_cofficient *= 0.95;
-			}
-			else
-			{
-				if_break = true;
-			}
-
-
-			//////////////////////////////////////////////////////
-			choice++;
-			sum = 0.0f;
-			counter = NULL;
-
-				
-			for (size_t i = 0; i < 7; ++i)
-			{
-				for (size_t j = 0; j < 5; ++j)
-				{
-					neurons[counter] = Matrix[choice][i][j];
-					++counter;
-				}
-			}
-
-			for (size_t i = 0; i < N; ++i)
-			{
-				sum += neurons[i] * weights[i];
-			}
-
-			y = f(sum);
-
-			E += static_cast<float>((0.5f) * pow((T[choice] - y), 2));
-
-			if (E > E_max)
-			{
-				for (size_t i = 0; i < N; ++i)
-				{
-					weights[i] = weights[i] + learning_cofficient * ((-1) * ((T[choice] - y)) * y * (1 - y) * neurons[i]);
-				}
-				learning_cofficient *= 0.95;
-			}
-			else
-			{
-				if_break = true;
-			}
-
-			counter = NULL;
-		}
-		else
-		{
-
-			for (size_t i = 0; i < 7; ++i)
-			{
-				for (size_t j = 0; j < 5; ++j)
-				{
-					neurons[counter] = Matrix[choice][i][j];
-					++counter;
-				}
-			}
-
-			for (size_t i = 0; i < N; ++i)
-			{
-				sum += neurons[i] * weights[i];
-			}
-
-			y = f(sum);
-
-			E += static_cast<float>((0.5f) * pow((T[choice] - y), 2));
-
-			if (E > E_max)
-			{
-				for (size_t i = 0; i < N; ++i)
-				{
-					weights[i] = weights[i] + learning_cofficient * ((-1) * ((T[choice] - y)) * y * (1 - y) * neurons[i]);
-				}
-				learning_cofficient *= 0.95;
-			}
-			else
-			{
-				if_break = true;
-			}
-
-			//////////////////////////////////////////////////////
-			choice--;
-			sum = 0.0f;
-			counter = NULL;
+	//		E += static_cast<float>((0.5f) * pow((T[choice] - y), 2));
+	//			
+	//		if (E > E_max)
+	//		{
+	//			for (size_t i = 1; i < N; ++i)
+	//			{
+	//				weights[i] = weights[i] + learning_cofficient * ((-1)*((T[choice] - y))* y*(1-y)*neurons[i]);
+	//			}
+	//			learning_cofficient *= 0.95;
+	//		}
+	//		else
+	//		{
+	//			if_break = true;
+	//		}
 
 
-			for (size_t i = 0; i < 7; ++i)
-			{
-				for (size_t j = 0; j < 5; ++j)
-				{
-					neurons[counter] = Matrix[choice][i][j];
-					++counter;
-				}
-			}
+	//		//////////////////////////////////////////////////////
+	//		choice++;
+	//		sum = 0.0f;
+	//		counter = NULL;
 
-			for (size_t i = 0; i < N; ++i)
-			{
-				sum += neurons[i] * weights[i];
-			}
+	//			
+	//		for (size_t i = 0; i < 7; ++i)
+	//		{
+	//			for (size_t j = 0; j < 5; ++j)
+	//			{
+	//				neurons[counter] = Matrix[choice][i][j];
+	//				++counter;
+	//			}
+	//		}
 
-			y = f(sum);
+	//		for (size_t i = 0; i < N; ++i)
+	//		{
+	//			sum += neurons[i] * weights[i];
+	//		}
 
-			E += static_cast<float>((0.5f) * pow((T[choice] - y), 2));
+	//		y = f(sum);
 
-			if (E > E_max)
-			{
-				for (size_t i = 0; i < N; ++i)
-				{
-					weights[i] = weights[i] + learning_cofficient * ((-1) * ((T[choice] - y)) * y * (1 - y) * neurons[i]);
-				}
-				learning_cofficient *= 0.95;
-			}
-			else
-			{
-				if_break = true;
-			}
+	//		E += static_cast<float>((0.5f) * pow((T[choice] - y), 2));
 
-			counter = NULL;
+	//		if (E > E_max)
+	//		{
+	//			for (size_t i = 1; i < N; ++i)
+	//			{
+	//				weights[i] = weights[i] + learning_cofficient * ((-1) * ((T[choice] - y)) * y * (1 - y) * neurons[i]);
+	//			}
+	//			learning_cofficient *= 0.95;
+	//		}
+	//		else
+	//		{
+	//			if_break = true;
+	//		}
 
-		}
-		++c;
-	}
+	//		counter = NULL;
+	//	}
+	//	else
+	//	{
+
+	//		for (size_t i = 0; i < 7; ++i)
+	//		{
+	//			for (size_t j = 0; j < 5; ++j)
+	//			{
+	//				neurons[counter] = Matrix[choice][i][j];
+	//				++counter;
+	//			}
+	//		}
+
+	//		for (size_t i = 0; i < N; ++i)
+	//		{
+	//			sum += neurons[i] * weights[i];
+	//		}
+
+	//		y = f(sum);
+
+	//		E += static_cast<float>((0.5f) * pow((T[choice] - y), 2));
+
+	//		if (E > E_max)
+	//		{
+	//			for (size_t i = 1; i < N; ++i)
+	//			{
+	//				weights[i] = weights[i] + learning_cofficient * ((-1) * ((T[choice] - y)) * y * (1 - y) * neurons[i]);
+	//			}
+	//			learning_cofficient *= 0.95;
+	//		}
+	//		else
+	//		{
+	//			if_break = true;
+	//		}
+
+	//		//////////////////////////////////////////////////////
+	//		choice--;
+	//		sum = 0.0f;
+	//		counter = NULL;
 
 
-	Save_Weights(weights, N);
+	//		for (size_t i = 0; i < 7; ++i)
+	//		{
+	//			for (size_t j = 0; j < 5; ++j)
+	//			{
+	//				neurons[counter] = Matrix[choice][i][j];
+	//				++counter;
+	//			}
+	//		}
+
+	//		for (size_t i = 0; i < N; ++i)
+	//		{
+	//			sum += neurons[i] * weights[i];
+	//		}
+
+	//		y = f(sum);
+
+	//		E += static_cast<float>((0.5f) * pow((T[choice] - y), 2));
+
+	//		if (E > E_max)
+	//		{
+	//			for (size_t i = 1; i < N; ++i)
+	//			{
+	//				weights[i] = weights[i] + learning_cofficient * ((-1) * ((T[choice] - y)) * y * (1 - y) * neurons[i]);
+	//			}
+	//			learning_cofficient *= 0.95;
+	//		}
+	//		else
+	//		{
+	//			if_break = true;
+	//		}
+
+	//		counter = NULL;
+
+	//	}
+	//	++c;
+	//}
+
+
+	//Save_Weights(weights, N);
+	//ALREADY LEARNED
+	Predict_Result(Matrix[0]);
+	Predict_Result(Matrix[1]);
+	Predict_Result(Matrix[0]);
+	Predict_Result(Matrix[0]);
+	Predict_Result(Matrix[1]);
 
 	system("pause");
 	return 0;
