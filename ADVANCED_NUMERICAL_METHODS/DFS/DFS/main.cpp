@@ -108,8 +108,12 @@
 
 #include <iostream>
 #include <vector>
+#include <stack>
+#include <iterator>
+#include <unordered_set>
 #include <math.h>
 
+#define NEW_LINE '\n'
 //CLASS OF _MST_ELEMENT, for inserting values
 
 class _DFS_Element
@@ -119,10 +123,6 @@ private:
 	/*
 		ZMIENNE PRIVATE
 	*/
-	int Verticle;
-	int Cost;
-	int Edge;
-	//////////////////////////////////
 	int* Connections;
 	size_t _Connections_size;
 	//////////////////////////////////////////////////////////////////////////////
@@ -138,7 +138,7 @@ public:
 	/*
 		FUNKCJE PUBLIC
 	*/
-
+	void Print_Connections() const;
 	//////////////////////////////////////////////////////////////////////////////
 	/*
 		SETTERY PUBLIC
@@ -146,9 +146,6 @@ public:
 	void set_connections_size(const size_t _Connections_size);
 	void set_connection(const int value, const size_t counter);
 	void set_way(const int destination, const int way_lenght);
-	void set_verticle(const int verticle);
-	void set_cost(const int cost);
-	void set_edge(const int edge);
 	//////////////////////////////////////////////////////////////////////////////
 	/*
 		OPERATORY PUBLIC
@@ -160,9 +157,6 @@ public:
 	/*
 		GETTERY PUBLIC
 	*/
-	int get_verticle() const;
-	int get_cost() const;
-	int get_edge() const;
 	size_t get_connections_size() const;
 	int& get_connections_array(const size_t counter) const;
 	//////////////////////////////////////////////////////////////////////////////
@@ -185,6 +179,12 @@ private:
 	_DFS_Element* Graph;
 	size_t _Graph_lenght;
 	std::vector<std::pair<std::pair<int, int>, int>> Destinations;
+	std::unordered_set<__int32> DFS_Queue;
+	//////////////////////////////////////////////////////////////////////////////
+	/*
+		FUNKCJE PRIVATE
+	*/
+	void DFS(const __int32 the_beginning);
 	//////////////////////////////////////////////////////////////////////////////
 public:
 	//////////////////////////////////////////////////////////////////////////////
@@ -200,6 +200,7 @@ public:
 	*/
 	void push(const int value, const int destination, const int way_lenght);
 	void push_directions(const int from, const int to, const int way_lenght);
+	void Print_Graph() const;
 	void get_results();
 	//////////////////////////////////////////////////////////////////////////////
 	/*
@@ -264,8 +265,8 @@ void inserter()
 			std::cin >> c2;
 			std::cin >> p;
 			//both times cause each road is in both ways
-			DFS_Object->push(c1, c2, (-1) * p);
-			DFS_Object->push(c2, c1, (-1) * p);
+			DFS_Object->push(c1, c2, p);
+			DFS_Object->push(c2, c1, p);
 			--d;
 			c1 = 0;
 			c2 = 0;
@@ -284,6 +285,8 @@ void inserter()
 			{
 				//here call all needed functions for solve the problem cause if s and e will be equal to 0 problem will be stopped immediately
 				///////////////////////////////////////////////
+				DFS_Object->Print_Graph();
+				_STD cin.get();
 				DFS_Object->get_results();
 				///////////////////////////////////////////////
 				delete DFS_Object;
@@ -308,10 +311,7 @@ void inserter()
 
 
 _DFS_Element::_DFS_Element() :
-	_Connections_size(0),
-	Verticle(0),
-	Cost(0),
-	Edge(0)
+	_Connections_size(0)
 {
 	this->Connections = new int[this->_Connections_size];
 	for (size_t i = 0; i < this->_Connections_size; ++i)
@@ -321,10 +321,7 @@ _DFS_Element::_DFS_Element() :
 }
 
 _DFS_Element::_DFS_Element(const int Verticle, const int Cost, const int Edge) :
-	_Connections_size(0),
-	Verticle(Verticle),
-	Cost(Cost),
-	Edge(Edge)
+	_Connections_size(0)
 {
 	this->Connections = new int[this->_Connections_size];
 	for (size_t i = 0; i < this->_Connections_size; ++i)
@@ -334,16 +331,22 @@ _DFS_Element::_DFS_Element(const int Verticle, const int Cost, const int Edge) :
 }
 
 _DFS_Element::_DFS_Element(const _DFS_Element& Object) :
-	_Connections_size(Object._Connections_size),
-	Verticle(Object.Verticle),
-	Cost(Object.Cost),
-	Edge(Object.Edge)
+	_Connections_size(Object._Connections_size)
 {
 	this->Connections = new int[this->_Connections_size];
 	for (size_t i = 0; i < this->_Connections_size; ++i)
 	{
 		Connections[i] = 0;
 	}
+}
+
+void _DFS_Element::Print_Connections() const
+{
+	for (size_t i = 0; i < this->_Connections_size; ++i)
+	{
+		_STD cout << Connections[i] << ' ';
+	}
+	_STD cout << NEW_LINE;
 }
 
 void _DFS_Element::set_connections_size(const size_t _Connections_size)
@@ -370,28 +373,10 @@ void _DFS_Element::set_way(const int destination, const int way_lenght)
 	this->Connections[(destination - 1)] = way_lenght;
 }
 
-void _DFS_Element::set_verticle(const int verticle)
-{
-	this->Verticle = verticle;
-}
-
-void _DFS_Element::set_cost(const int cost)
-{
-	this->Cost = cost;
-}
-
-void _DFS_Element::set_edge(const int edge)
-{
-	this->Edge = edge;
-}
-
 _DFS_Element& _DFS_Element::operator=(const _DFS_Element& Object)
 {
 	if (this != &Object)
 	{
-		this->Verticle = Object.Verticle;
-		this->Cost = Object.Cost;
-		this->Edge = Object.Edge;
 		this->_Connections_size = Object._Connections_size;
 		delete[] this->Connections;
 		this->Connections = new int[this->_Connections_size];
@@ -401,21 +386,6 @@ _DFS_Element& _DFS_Element::operator=(const _DFS_Element& Object)
 		}
 	}
 	return *this;
-}
-
-int _DFS_Element::get_verticle() const
-{
-	return this->Verticle;
-}
-
-int _DFS_Element::get_cost() const
-{
-	return this->Cost;
-}
-
-int _DFS_Element::get_edge() const
-{
-	return this->Edge;
 }
 
 size_t _DFS_Element::get_connections_size() const
@@ -432,9 +402,6 @@ _DFS_Element::~_DFS_Element()
 {
 	delete[] this->Connections;
 	_Connections_size = 0;
-	Edge = 0;
-	Cost = 0;
-	Verticle = 0;
 }
 
 
@@ -447,6 +414,58 @@ _DFS_Element::~_DFS_Element()
 ////////////////////////////////////////////////////
 
 
+void _DFS::DFS(const __int32 the_beginning)
+{
+	_STD stack<__int32> Temp_Stack{};
+	DFS_Queue.insert(the_beginning);
+
+	size_t connections_counter{};
+	__int32 current_verticle{ (the_beginning - 1) };
+	bool if_break = false;
+
+	while(DFS_Queue.size() < _Graph_lenght)
+	{
+		if_break = false;
+		for (size_t i = 0; i < this->Graph[current_verticle].get_connections_size(); ++i)
+		{
+			if (Graph[current_verticle].get_connections_array(i) != 0 && i != current_verticle)
+			{
+				Graph[current_verticle].get_connections_array(i) = 0;
+				Graph[i].get_connections_array(current_verticle) = 0;
+				Temp_Stack.push(current_verticle);
+				current_verticle = i;
+				DFS_Queue.insert((current_verticle+1));
+				if_break = true;
+				break;
+			}
+		}		
+		//_STD cout << "----------------------------------------------" << NEW_LINE;		
+		//for (typename _STD unordered_set<__int32>::const_iterator it = DFS_Queue.begin(); it != DFS_Queue.end(); ++it)
+		//{
+		//	_STD cout << (*it) << ' ';
+		//}
+		//_STD cout << NEW_LINE;
+		//Print_Graph();
+		//_STD cout << NEW_LINE;
+		//_STD cout << "----------------------------------------------" << NEW_LINE;
+		//_STD cin.get();
+		if (if_break == false)
+		{
+			current_verticle = (Temp_Stack.top());
+			Temp_Stack.pop();
+		}
+	}
+	for (typename _STD unordered_set<__int32>::const_iterator it = DFS_Queue.begin(); it != DFS_Queue.end(); ++it)
+	{
+		_STD cout << (*it) << ' ';
+	}
+	_STD cout << NEW_LINE;
+	//for (size_t i = 0; i < DFS_Queue.size(); ++i)
+	//{
+	//	_STD cout << DFS_Queue[i] << ' ';
+	//}
+	//_STD cout << NEW_LINE;
+}
 
 _DFS::_DFS() :
 	_Graph_lenght(0)
@@ -482,12 +501,26 @@ void _DFS::push(const int value, const int destination, const int way_lenght)
 void _DFS::push_directions(const int from, const int to, const int way_lenght)
 {
 	Destinations.emplace_back(std::make_pair(std::make_pair(from, to), way_lenght));
+}
 
+void _DFS::Print_Graph() const
+{
+	for (size_t i = 0; i < _Graph_lenght; ++i)
+	{
+		//((*Graph) + (sizeof(_DFS_Element) * i))->Print_Connections();
+		(*(Graph + i)).Print_Connections();
+		//(Graph + (sizeof(_DFS_Element)) * i)->Print_Connections();
+		//(Graph + (sizeof(_DFS_Element)) * i)->Print_Connections();
+		//_STD cout << Graph << NEW_LINE;
+	}
 }
 
 void _DFS::get_results()
 {
-
+	for (typename std::vector<std::pair<std::pair<int, int>, int>>::const_iterator vec_iterator = Destinations.begin(); vec_iterator != Destinations.end(); ++vec_iterator)
+	{
+		DFS(vec_iterator->first.first);
+	}
 }
 
 _DFS& _DFS::operator=(const _DFS& Object)
@@ -498,7 +531,9 @@ _DFS& _DFS::operator=(const _DFS& Object)
 		delete[] this->Graph;
 		this->Graph = new _DFS_Element[this->_Graph_lenght];
 		Destinations.clear();
+		DFS_Queue.clear();
 		Destinations = Object.Destinations;
+		DFS_Queue = Object.DFS_Queue;
 		for (size_t i = 0; i < this->_Graph_lenght; ++i)
 		{
 			this->Graph[i].set_connections_size(this->_Graph_lenght);
@@ -512,4 +547,5 @@ _DFS::~_DFS()
 	delete[] Graph;
 	_Graph_lenght = 0;
 	Destinations.clear();
+	DFS_Queue.clear();
 }
