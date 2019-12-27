@@ -15,8 +15,8 @@
 const float f1(const float value);
 const float f2(const float value);
 const float f3(const float value);
+const float normalized_point(const float value, const __int16 min, const __int16 max, const __int16 new_min, const __int16 new_max);
 void initial_weights(float * weights, const size_t size);
-const float first_neural();
 
 int main(int argc, char* argv[])
 {
@@ -33,21 +33,49 @@ int main(int argc, char* argv[])
 	}
 	//////////////////////////////////////////////////////////////////
 	__int16 choice{};
+	//double x = normalized_point(304,0,500,0,5);
 
-
+	//double x = normalized_point(500, 0, 500, (-5), 5);
+	//_STD cout << x << NEW_LINE;
 	_STD cin >> choice;
 	if (choice == 0)	//without bias
 	{
 		float weights[2]{};
 		float y{};
 		initial_weights(weights,2);
+		choice = {};
 		_STD cin >> choice;
 		switch (choice)
 		{
 			//first neural
 			case 1:
 			{
-				
+				for (size_t i = 0; i < 500; ++i)
+				{
+					for (size_t j = 0; j < 500; ++j)
+					{
+						float sum{};
+						sum += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+						sum += normalized_point(j, 0, 500, (-5), 5) * weights[1];
+						y = f1(sum);
+						COORD c;
+						/*c.X = normalized_point(i, 0, 500, (-5), 5);
+						c.Y = normalized_point(j, 0, 500, (-5), 5);*/
+						c.X = i;
+						c.Y = j;
+						if (y == 1)
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'o';
+						}
+						else
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'x';
+						}
+					}
+				}
+
 			}
 			break;
 			case 2:
@@ -154,6 +182,11 @@ const float f2(const float value)
 const float f3(const float value)
 {
 	return static_cast<float>(1.0f / (1.0f + static_cast<float>(pow((1.0f / e), value))));
+}
+
+const float normalized_point(const float value, const __int16 min, const __int16 max, const __int16 new_min, const __int16 new_max)
+{
+	return ((value - (min)) / (max - min)) * (new_max - new_min) + (new_min);
 }
 
 void initial_weights(float* weights, const size_t size)
