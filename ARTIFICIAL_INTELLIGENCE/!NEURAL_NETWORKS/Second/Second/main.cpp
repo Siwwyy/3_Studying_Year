@@ -33,16 +33,13 @@ int main(int argc, char* argv[])
 	}
 	//////////////////////////////////////////////////////////////////
 	__int16 choice{};
-	//double x = normalized_point(304,0,500,0,5);
 
-	//double x = normalized_point(500, 0, 500, (-5), 5);
-	//_STD cout << x << NEW_LINE;
 	_STD cin >> choice;
 	if (choice == 0)	//without bias
 	{
-		float weights[2]{};
+		float weights[4]{};
 		float y{};
-		initial_weights(weights,2);
+		initial_weights(weights,4);
 		choice = {};
 		_STD cin >> choice;
 		switch (choice)
@@ -59,8 +56,6 @@ int main(int argc, char* argv[])
 						sum += normalized_point(j, 0, 500, (-5), 5) * weights[1];
 						y = f1(sum);
 						COORD c;
-						/*c.X = normalized_point(i, 0, 500, (-5), 5);
-						c.Y = normalized_point(j, 0, 500, (-5), 5);*/
 						c.X = i;
 						c.Y = j;
 						if (y == 1)
@@ -75,33 +70,184 @@ int main(int argc, char* argv[])
 						}
 					}
 				}
-
 			}
 			break;
 			case 2:
 			{
-
+				for (size_t i = 0; i < 500; ++i)
+				{
+					for (size_t j = 0; j < 500; ++j)
+					{
+						float sum{};
+						sum += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+						sum += normalized_point(j, 0, 500, (-5), 5) * weights[1];
+						y = f2(sum);
+						COORD c;
+						c.X = i;
+						c.Y = j;
+						if (y <= 1 && y > 0.5)
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'o';
+						}
+						else
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'x';
+						}
+					}
+				}
 			}
 			break;
 			case 3:
 			{
-
+				for (size_t i = 0; i < 500; ++i)
+				{
+					for (size_t j = 0; j < 500; ++j)
+					{
+						float sum{};
+						sum += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+						sum += normalized_point(j, 0, 500, (-5), 5) * weights[1];
+						y = f3(sum);
+						COORD c;
+						c.X = i;
+						c.Y = j;
+						if (y <= 1 && y > 0.5)
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'o';
+						}
+						else
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'x';
+						}
+					}
+				}
 			}
 			break;
 			//second neural
 			case 4:
 			{
+				for (size_t i = 0; i < 500; ++i)
+				{
+					for (size_t j = 0; j < 500; ++j)
+					{
+						float sum1{};
+						float sum2{};
+						float sum3{};
+						
+						//sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+						//sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
+						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
 
+						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
+						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
+
+						initial_weights(weights, 2);
+
+						sum3 += sum1 * weights[0];
+						sum3 += sum2 * weights[1];
+
+						y = f1(sum3);
+						COORD c;
+						c.X = i;
+						c.Y = j;
+						if (y == 1)
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'o';
+						}
+						else
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'x';
+						}
+					}
+				}
 			}
 			break;
 			case 5:
 			{
+				for (size_t i = 0; i < 500; ++i)
+				{
+					for (size_t j = 0; j < 500; ++j)
+					{
+						float sum1{};
+						float sum2{};
+						float sum3{};
 
+						//sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+						//sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
+						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
+
+						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
+						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
+
+						initial_weights(weights, 2);
+
+						sum3 += sum1 * weights[0];
+						sum3 += sum2 * weights[1];
+
+						y = f2(sum3);
+						COORD c;
+						c.X = i;
+						c.Y = j;
+						if (y <= 1 && y > 0.5)
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'o';
+						}
+						else
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'x';
+						}
+					}
+				}
 			}
 			break;
 			case 6:
 			{
+				for (size_t i = 0; i < 500; ++i)
+				{
+					for (size_t j = 0; j < 500; ++j)
+					{
+						float sum1{};
+						float sum2{};
+						float sum3{};
 
+						//sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+						//sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
+						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
+
+						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
+						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
+
+						initial_weights(weights, 2);
+
+						sum3 += sum1 * weights[0];
+						sum3 += sum2 * weights[1];
+
+						y = f3(sum3);
+						COORD c;
+						c.X = i;
+						c.Y = j;
+						if (y <= 1 && y > 0.5)
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'o';
+						}
+						else
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'x';
+						}
+					}
+				}
 			}
 			break;
 
@@ -111,43 +257,232 @@ int main(int argc, char* argv[])
 	}
 	else  //with bias
 	{
-		float weights[3]{};
+		float weights[5]{};
 		float y{};
-		initial_weights(weights, 2);
-		weights[0] = 1;
+		initial_weights(weights, 5);
+		//weights[0] = 1;
 		_STD cin >> choice;
 		switch (choice)
 		{
 			//first neural
 			case 1:
 			{
-
+				for (size_t i = 0; i < 500; ++i)
+				{
+					for (size_t j = 0; j < 500; ++j)
+					{
+						float sum{};
+						sum += weights[0];
+						sum += normalized_point(i, 0, 500, (-5), 5) * weights[1];
+						sum += normalized_point(j, 0, 500, (-5), 5) * weights[2];
+						y = f3(sum);
+						COORD c;
+						c.X = i;
+						c.Y = j;
+						if (y == 1)
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'o';
+						}
+						else
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'x';
+						}
+					}
+				}
 			}
 			break;
 			case 2:
 			{
-
+				for (size_t i = 0; i < 500; ++i)
+				{
+					for (size_t j = 0; j < 500; ++j)
+					{
+						float sum{};
+						sum += weights[0];
+						sum += normalized_point(i, 0, 500, (-5), 5) * weights[1];
+						sum += normalized_point(j, 0, 500, (-5), 5) * weights[2];
+						y = f3(sum);
+						COORD c;
+						c.X = i;
+						c.Y = j;
+						if (y <= 1 && y > 0.5)
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'o';
+						}
+						else
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'x';
+						}
+					}
+				}
 			}
 			break;
 			case 3:
 			{
-
+				for (size_t i = 0; i < 500; ++i)
+				{
+					for (size_t j = 0; j < 500; ++j)
+					{
+						float sum{};
+						sum += weights[0];
+						sum += normalized_point(i, 0, 500, (-5), 5) * weights[1];
+						sum += normalized_point(j, 0, 500, (-5), 5) * weights[2];
+						y = f3(sum);
+						COORD c;
+						c.X = i;
+						c.Y = j;
+						if (y <= 1 && y > 0.5)
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'o';
+						}
+						else
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'x';
+						}
+					}
+				}
 			}
 			break;
 			//second neural
 			case 4:
 			{
+				for (size_t i = 0; i < 500; ++i)
+				{
+					for (size_t j = 0; j < 500; ++j)
+					{
+						float sum1{};
+						float sum2{};
+						float sum3{};
 
+						//sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+						//sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
+						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
+
+						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
+						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
+
+						initial_weights(weights, 2);
+
+						sum1 += 1;
+						sum2 += 1;
+
+						sum3 += sum1 * weights[0];
+						sum3 += sum2 * weights[1];
+						sum3 += 1;
+
+						y = f3(sum3);
+						COORD c;
+						c.X = i;
+						c.Y = j;
+						if (y == 1)
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'o';
+						}
+						else
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'x';
+						}
+					}
+				}
 			}
 			break;
 			case 5:
 			{
+				for (size_t i = 0; i < 500; ++i)
+				{
+					for (size_t j = 0; j < 500; ++j)
+					{
+						float sum1{};
+						float sum2{};
+						float sum3{};
 
+						//sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+						//sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
+						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
+
+						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
+						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
+
+						initial_weights(weights, 2);
+
+						sum1 += 1;
+						sum2 += 1;
+
+						sum3 += sum1 * weights[0];
+						sum3 += sum2 * weights[1];
+						sum3 += 1;
+
+						y = f2(sum3);
+						COORD c;
+						c.X = i;
+						c.Y = j;
+						if (y <= 1 && y > 0.5)
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'o';
+						}
+						else
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'x';
+						}
+					}
+				}
 			}
 			break;
 			case 6:
 			{
+				for (size_t i = 0; i < 500; ++i)
+				{
+					for (size_t j = 0; j < 500; ++j)
+					{
+						float sum1{};
+						float sum2{};
+						float sum3{};
 
+						//sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+						//sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
+						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
+
+						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
+						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
+
+						initial_weights(weights, 2);
+
+						sum1 += 1;
+						sum2 += 1;
+
+						sum3 += sum1 * weights[0];
+						sum3 += sum2 * weights[1];
+						sum3 += 1;
+
+						y = f3(sum3);
+						COORD c;
+						c.X = i;
+						c.Y = j;
+						if (y <= 1 && y > 0.5)
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'o';
+						}
+						else
+						{
+							SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+							_STD cout << 'x';
+						}
+					}
+				}
 			}
 			break;
 
