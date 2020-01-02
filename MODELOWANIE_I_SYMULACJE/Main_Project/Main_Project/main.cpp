@@ -114,8 +114,8 @@ void _Project::Etap_1()
 	else if (number == 2)
 	{
 		time += 10;
-		//3 mozliwosci objazdu
-		_STD discrete_distribution<> x2({ 30.0f, 30.0f, 40.0f });
+		//5 mozliwosci objazdu
+		_STD discrete_distribution<> x2({ 40.0f, 20.0f, 10.0f, 20.0f, 10.0f });
 
 		__int32 number_2 = static_cast<__int32>(x2(generator));
 
@@ -130,6 +130,18 @@ void _Project::Etap_1()
 		else if (number_2 == 2)
 		{
 			time += 8;
+		}
+		else if (number_2 == 3)
+		{
+			time += 12;
+		}
+		else if (number_2 == 4)
+		{
+			time += 4;
+		}
+		else if (number_2 == 5)
+		{
+			time += 15;
 		}
 	}
 }
