@@ -9,6 +9,8 @@
 #define NEW_LINE '\n'
 
 void Initialize_Area(short* const* const area, const __int32& width,const __int32& height);
+template <typename _Variable_Type, _STD size_t N>
+constexpr _STD size_t Array_Size(const _Variable_Type(&_array)[N]) noexcept;
 const unsigned __int32 Count_Energy(short* const* const area, const __int32& width,const __int32& height);
 
 int main(int argc, char* argv[])
@@ -18,7 +20,7 @@ int main(int argc, char* argv[])
 	using _STD endl;
 
 	///////////////////////////////////////
-	__int32 width{ 100 }, height{ 100 };
+	__int32 width{ 100 }, height{ 100 };	// wysokosc i szerokosc tablicy 
 	__int32 J{ 1 };
 	__int32 energy{};
 	__int32 energy_total{};
@@ -28,12 +30,20 @@ int main(int argc, char* argv[])
 	__int32 temp_energy{};
 	size_t iterations{ 150000 };
 	__int32 demon_energy{ 0 };
+	__int32 demons_energy[]{10000,15000,20000,25000,30000,35000,40000,50000,60000,70000,80000,100000,130000,170000,220000,300000,450000,600000,700000,800000,900000,1000000,2000000,3000000,4000000,5000000};
 	__int32 magnetization{ 0 };
 	__int32 average_magnetization{ 0 };
 	__int32 spin_value{ 0 };
 	float temperatura{};
 	_STD map<int, int> freq{};
 	///////////////////////////////////////
+
+	////SET UP THE WIDTH AND HEIGHT OF THE MATRIX
+	//_STD cout << "Width: ";
+	//_STD cin >> width;
+	//_STD cout << "Height: ";
+	//_STD cin >> height;
+	//_STD cout << NEW_LINE;
 
 	area = new short* [width];
 
@@ -50,15 +60,9 @@ int main(int argc, char* argv[])
 	//lambda case
 	auto energy_sum = [](const __int32& J, const __int32& energy) -> __int32 { return (-1) * J * energy; };
 
-	//OUTPUT FILE
-	std::fstream file_in;
-	std::fstream file_out;
-	file_in.open("ZMOI_AndrysiakD_Ising.in", std::ios_base::in);
-	file_out.open("ZMOI_AndrysiakD_Ising.csv", std::ios_base::out);
-
-	while (file_in.eof() == false)
+	for(size_t h = 0; h < Array_Size(demons_energy); ++h)
 	{
-		file_in >> demon_energy;
+		demon_energy = demons_energy[h];
 		Initialize_Area(area, width, height);
 		energy = Count_Energy(area, width, height);
 		energy_total = energy_sum(J, energy);
@@ -116,8 +120,11 @@ int main(int argc, char* argv[])
 		float _x_{}; //done
 		float _y_{}; //done
 		float _xy_{}; //done
-		for (typename _STD map<int, int>::iterator map_iterator = freq.begin(); map_iterator != freq.end(); ++map_iterator)
+		/*_STD cout << "=====================================================" << NEW_LINE;
+		_STD cout << "		  Case nr: " << (h+1) << NEW_LINE;
+		*/for (typename _STD map<int, int>::iterator map_iterator = freq.begin(); map_iterator != freq.end(); ++map_iterator)
 		{
+			//_STD cout << "   Magnetization: " << (*map_iterator).first << " Occurenced: " << (*map_iterator).second << NEW_LINE;
 			_x2_ += pow((*map_iterator).first, 2);
 			_x_ += (*map_iterator).first;
 			_y_ += log((*map_iterator).second);
@@ -128,7 +135,9 @@ int main(int argc, char* argv[])
 		_xy_ = static_cast<float>(_xy_ / static_cast<float>(freq.size()));
 		_x_2 = pow(_x_, 2);
 		temperatura = static_cast<float>(-1.f)* static_cast<float>((_x_2 - _x2_) / ((_x_ * _y_) - _xy_));
-		file_out << static_cast<float>(static_cast<float>(average_magnetization) / 1000.f) << ',' << temperatura << NEW_LINE;
+		//file_out << static_cast<float>(static_cast<float>(average_magnetization) / 1000.f) << ',' << temperatura << NEW_LINE;
+		_STD cout << "Demon's energy: " << demons_energy[h] <<" Avg magnet: " << static_cast<float>(static_cast<float>(average_magnetization) / 1000.f) << " | Temperature: " << temperatura << NEW_LINE;
+		//_STD cout << "====================================================="  << NEW_LINE;
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		demon_energy = NULL;
 		temperatura = NULL;
@@ -142,10 +151,7 @@ int main(int argc, char* argv[])
 	}
 	delete[] area;
 
-	file_in.close();
-	file_out.close();
-
-	system("pause");
+	//system("pause");
 	return 0;
 }
 
@@ -187,4 +193,10 @@ const unsigned __int32 Count_Energy(short* const* const area, const __int32& wid
 		}
 	}
 	return energy;
+}
+
+template<typename _Variable_Type, ::std::size_t N>
+constexpr _STD size_t Array_Size(const _Variable_Type(&_array)[N]) noexcept
+{
+	return N;
 }

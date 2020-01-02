@@ -1,14 +1,15 @@
-#include <Riostream.h>
+#include <iostream>
 #include <fstream>
-#include <math.h>
+#include <cmath>
 
-void projekt()
+void moj_przyklad()
 {
+	using namespace std;
   Int_t n=99,i,j ;
   Float_t x1[3000];
   std::ifstream file;
 
-   file.open("");
+   file.open("E:\\!!Projects VS\\!!!3_Studying_Year\\3_Studying_Year\\MODELOWANIE_I_SYMULACJE\\Main_Project\\Main_Project\\file.out");
    for(i=0;i<3000;i=i+1)
      {
 	  file>>x1[i];

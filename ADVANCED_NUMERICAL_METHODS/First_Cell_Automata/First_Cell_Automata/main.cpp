@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 	using _STD endl;
 
 	///////////////////////////////////////
-	__int32 width{ 0 }, height{ 0 };
+	__int32 width{ 100 }, height{ 100 };	// wysokosc i szerokosc tablicy 
 	__int32 J{ 1 };
 	__int32 energy{};
 	__int32 energy_total{};
@@ -38,12 +38,12 @@ int main(int argc, char* argv[])
 	_STD map<int, int> freq{};
 	///////////////////////////////////////
 
-	//SET UP THE WIDTH AND HEIGHT OF THE MATRIX
-	_STD cout << "Width: ";
-	_STD cin >> width;
-	_STD cout << "Height: ";
-	_STD cin >> height;
-	_STD cout << NEW_LINE;
+	////SET UP THE WIDTH AND HEIGHT OF THE MATRIX
+	//_STD cout << "Width: ";
+	//_STD cin >> width;
+	//_STD cout << "Height: ";
+	//_STD cin >> height;
+	//_STD cout << NEW_LINE;
 
 	area = new short* [width];
 
@@ -120,11 +120,11 @@ int main(int argc, char* argv[])
 		float _x_{}; //done
 		float _y_{}; //done
 		float _xy_{}; //done
-		_STD cout << "=====================================================" << NEW_LINE;
+		/*_STD cout << "=====================================================" << NEW_LINE;
 		_STD cout << "		  Case nr: " << (h+1) << NEW_LINE;
-		for (typename _STD map<int, int>::iterator map_iterator = freq.begin(); map_iterator != freq.end(); ++map_iterator)
+		*/for (typename _STD map<int, int>::iterator map_iterator = freq.begin(); map_iterator != freq.end(); ++map_iterator)
 		{
-			_STD cout << "   Magnetization: " << (*map_iterator).first << " Occurenced: " << (*map_iterator).second << NEW_LINE;
+			//_STD cout << "   Magnetization: " << (*map_iterator).first << " Occurenced: " << (*map_iterator).second << NEW_LINE;
 			_x2_ += pow((*map_iterator).first, 2);
 			_x_ += (*map_iterator).first;
 			_y_ += log((*map_iterator).second);
@@ -136,8 +136,8 @@ int main(int argc, char* argv[])
 		_x_2 = pow(_x_, 2);
 		temperatura = static_cast<float>(-1.f)* static_cast<float>((_x_2 - _x2_) / ((_x_ * _y_) - _xy_));
 		//file_out << static_cast<float>(static_cast<float>(average_magnetization) / 1000.f) << ',' << temperatura << NEW_LINE;
-		_STD cout <<"  Avg magnet: " << static_cast<float>(static_cast<float>(average_magnetization) / 1000.f) << " | Temperature: " << temperatura << NEW_LINE;
-		_STD cout << "====================================================="  << NEW_LINE;
+		_STD cout << "Demon's energy: " << demons_energy[h] <<" Avg magnet: " << static_cast<float>(static_cast<float>(average_magnetization) / 1000.f) << " | Temperature: " << temperatura << NEW_LINE;
+		//_STD cout << "====================================================="  << NEW_LINE;
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		demon_energy = NULL;
 		temperatura = NULL;
@@ -151,7 +151,7 @@ int main(int argc, char* argv[])
 	}
 	delete[] area;
 
-	system("pause");
+	//system("pause");
 	return 0;
 }
 
