@@ -17,7 +17,7 @@ void moj_przyklad()
   file.close();
 
    TH1F *im1 = new TH1F("dane","sredni czas przejazdu trasa WZ",60, 0, 60);
-    for(i=0;i<5000;i=i+1)
+    for(i=0;i<3000;i=i+1)
 	{ 
 		im1->Fill(x1[i]);
 	}
