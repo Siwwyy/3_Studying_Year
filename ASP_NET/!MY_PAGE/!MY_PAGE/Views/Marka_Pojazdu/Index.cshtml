@@ -1,21 +1,15 @@
 ﻿@model IEnumerable<_MY_PAGE.Models.Marka_Pojazdu>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Modele pojazdow";
 }
 
-<h2>Index</h2>
+    <h2>@ViewBag.Title</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Nazwa_Marka)
-        </th>
-        <th></th>
-    </tr>
 
 @foreach (var item in Model) {
     <tr>
