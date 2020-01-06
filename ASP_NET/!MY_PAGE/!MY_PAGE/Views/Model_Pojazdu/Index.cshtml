@@ -11,7 +11,7 @@
 </p>
 <table class="table">
     <tr>
-        <th>
+        @*<th>
             @Html.DisplayNameFor(model => model.Kraj_Pochodzenia_ID)
         </th>
         <th>
@@ -19,7 +19,7 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Rodzaj_Paliwa_ID)
-        </th>
+        </th>*@
         <th>
             @Html.DisplayNameFor(model => model.Marka)
 
@@ -27,11 +27,14 @@
         <th>
             @Html.DisplayNameFor(model => model.Nazwa_Model)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Fuel_Type)
+        </th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
-        <td>
+        @*<td>
             @Html.DisplayFor(modelItem => item.Marka_ID)
         </td>
         <td>
@@ -42,9 +45,15 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Rodzaj_Paliwa_ID)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.Marka)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Nazwa_Model)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Fuel_Type)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |

@@ -1,0 +1,58 @@
+﻿@model _MY_PAGE.Models.Informacje_w_ogloszeniu
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Informacje_w_ogloszeniu</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Model_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Model_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cena)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cena)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Przebieg_od)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Przebieg_od)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Przebieg_do)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Przebieg_do)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Moc_Silnika)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Moc_Silnika)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

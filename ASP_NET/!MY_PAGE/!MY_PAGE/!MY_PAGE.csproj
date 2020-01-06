@@ -169,9 +169,13 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Informacje_w_ogloszeniuController.cs" />
+    <Compile Include="Controllers\Kraj_PochodzeniaController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Marka_PojazduController.cs" />
     <Compile Include="Controllers\Model_PojazduController.cs" />
+    <Compile Include="Controllers\Rodzaj_PaliwaController.cs" />
+    <Compile Include="Controllers\SprzedawcasController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -254,6 +258,26 @@
     <Content Include="Views\Model_Pojazdu\Details.cshtml" />
     <Content Include="Views\Model_Pojazdu\Edit.cshtml" />
     <Content Include="Views\Model_Pojazdu\Index.cshtml" />
+    <Content Include="Views\Kraj_Pochodzenia\Create.cshtml" />
+    <Content Include="Views\Kraj_Pochodzenia\Delete.cshtml" />
+    <Content Include="Views\Kraj_Pochodzenia\Details.cshtml" />
+    <Content Include="Views\Kraj_Pochodzenia\Edit.cshtml" />
+    <Content Include="Views\Kraj_Pochodzenia\Index.cshtml" />
+    <Content Include="Views\Sprzedawcas\Create.cshtml" />
+    <Content Include="Views\Sprzedawcas\Delete.cshtml" />
+    <Content Include="Views\Sprzedawcas\Details.cshtml" />
+    <Content Include="Views\Sprzedawcas\Edit.cshtml" />
+    <Content Include="Views\Sprzedawcas\Index.cshtml" />
+    <Content Include="Views\Informacje_w_ogloszeniu\Create.cshtml" />
+    <Content Include="Views\Informacje_w_ogloszeniu\Delete.cshtml" />
+    <Content Include="Views\Informacje_w_ogloszeniu\Details.cshtml" />
+    <Content Include="Views\Informacje_w_ogloszeniu\Edit.cshtml" />
+    <Content Include="Views\Informacje_w_ogloszeniu\Index.cshtml" />
+    <Content Include="Views\Rodzaj_Paliwa\Create.cshtml" />
+    <Content Include="Views\Rodzaj_Paliwa\Delete.cshtml" />
+    <Content Include="Views\Rodzaj_Paliwa\Details.cshtml" />
+    <Content Include="Views\Rodzaj_Paliwa\Edit.cshtml" />
+    <Content Include="Views\Rodzaj_Paliwa\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
