@@ -33,5 +33,12 @@ namespace _MY_PAGE.Controllers
 
             return View();
         }
+
+        public ActionResult Wyszukaj_Ogloszenie()
+        {
+            ViewBag.Message = "Find your car";
+
+            return View();
+        }
     }
 }
