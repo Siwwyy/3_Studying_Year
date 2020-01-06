@@ -26,5 +26,12 @@ namespace _MY_PAGE.Controllers
 
             return View();
         }
+
+        public ActionResult Dodaj_Ogloszenie()
+        {
+            ViewBag.Message = "Add your advertisement.";
+
+            return View();
+        }
     }
 }

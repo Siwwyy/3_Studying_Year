@@ -278,6 +278,7 @@
     <Content Include="Views\Rodzaj_Paliwa\Details.cshtml" />
     <Content Include="Views\Rodzaj_Paliwa\Edit.cshtml" />
     <Content Include="Views\Rodzaj_Paliwa\Index.cshtml" />
+    <Content Include="Views\Home\Dodaj_Ogloszenie.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
