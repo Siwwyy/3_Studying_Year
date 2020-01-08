@@ -9,6 +9,7 @@
 #include <vector>
 
 #define NEW_LINE '\n'
+
 const double PI = acos(-1);
 
 void fft(int *x_in,  std::complex<double> *x_out, int N);
@@ -17,8 +18,10 @@ void fft_rec(std::complex<double> *x, int N);
 void fft2(std::vector<std::complex<double>>& a, bool invert)
 { 	
 	int n = a.size(); 
-	if (n == 1) 	
-		return; 	
+	if (n == 1)
+	{
+		return;
+	}
 
 	std::vector<std::complex<double>> a0(n / 2), a1(n / 2);
 
@@ -38,7 +41,7 @@ void fft2(std::vector<std::complex<double>>& a, bool invert)
 	{ 		
 		a[i] = a0[i] + w * a1[i]; 
 		a[i + n / 2] = a0[i] - w * a1[i]; 	
-		if (invert) 
+		if (invert == true) 
 		{ 			
 			a[i] /= 2; 		
 			a[i + n / 2] /= 2; 		
@@ -66,8 +69,6 @@ int main(int argc, char* argv[])
 
 	_STD vector<std::complex<double>> data(N);
 	_STD vector<std::complex<double>> data2(N);
-	//_STD vector<double> Cn(N);
-	std::complex<double>* Cn = new std::complex<double>[N];
 
 	for (size_t i = 0; i < N; ++i)
 	{
@@ -76,8 +77,6 @@ int main(int argc, char* argv[])
 		file_in >> temp;
 		data[i].imag(temp);
 		temp = 0.0f;
-		Cn[i]._Val[0] = 0.0;
-		Cn[i]._Val[1] = 0.0;
 	}
 
 	data2 = data;
@@ -90,6 +89,10 @@ int main(int argc, char* argv[])
 	//	temp = data[i]._Val[1];
 	//	fft(&temp, Cn, N);
 	//}
+
+	for (auto& x : data2)
+		printf("( %4.4f , %4.4f )\n", x.real() > 0.0001 ? x.real() : 0., x.imag() > 0.0001 ? x.imag() : 0.);
+	printf("\n\n\n");
 
 	fft2(data2, false);
 
