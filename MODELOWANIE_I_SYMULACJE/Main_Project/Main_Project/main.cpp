@@ -102,9 +102,10 @@ void _Project::Etap_1()
 	_STD discrete_distribution<> x({ 40.0f, 40.0f, 20.0f });
 
 	__int32 number = static_cast<__int32>(x(generator));
-
+	//rozklad quassona zeby zmienic czestotliwosc wypadkow
 	if (number == 0)
 	{
+		//losowanie czasu przejazdu z rozkladu normalnego
 		time += 5;
 	}
 	else if (number == 1)
@@ -173,7 +174,7 @@ void _Project::Etap_3()
 	bool temp = probability(generator);
 	if (!temp)
 	{
-		_STD normal_distribution<> waiting_time(2,1);
+		_STD normal_distribution<> waiting_time(2,1);//ujemny czas, popraw
 		time += waiting_time(generator);
 	}
 }
