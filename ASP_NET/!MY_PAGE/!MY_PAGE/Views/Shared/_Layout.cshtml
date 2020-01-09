@@ -24,13 +24,17 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    @if((User.IsInRole("admin") || (User.IsInRole("user"))))
+                    @if ((User.IsInRole("admin") || (User.IsInRole("user"))))
                     {
                         @*<li>@Html.ActionLink("Dodaj Ogloszenie", "Index", "Home")</li>*@
-                        <li>@Html.ActionLink("Wyszukaj Ogloszenie", "Wyszukaj_Ogloszenie","Home")</li>
-                        <li>@Html.ActionLink("Dodaj Ogloszenie", "Dodaj_Ogloszenie","Home")</li>
+                        <li>@Html.ActionLink("Wyszukaj Ogloszenie", "Wyszukaj_Ogloszenie", "Home")</li>
+                        <li>@Html.ActionLink("Dodaj Ogloszenie", "Dodaj_Ogloszenie", "Home")</li>
                     }
-                    </ul>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <li>@Html.ActionLink("Panel Administratora", "Manage_Accounts_Admin", "Home")</li>
+                    }
+                </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>

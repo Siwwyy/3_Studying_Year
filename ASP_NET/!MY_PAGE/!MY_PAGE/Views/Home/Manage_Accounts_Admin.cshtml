@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Dodaj_Ogloszenie";
+}
+
+<!DOCTYPE html>
+
+@using (Html.BeginForm())
+{
+   
+    foreach (var user in Model)
+    {
+        <tr>
+            <div class="form-group">
+                <td>
+                <td><b>User Id: </b> @user.Id</td>
+                <td><b>Username: </b> @user.Email</td>
+                @using (Html.BeginForm("Delete_User", "Home", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Delete_User" class="btn btn-default" />
+                    </div>
+                }
+                    </td>
+                </div>
+            <br />
+        </tr>
+    }
+    <br />
+
+}
+<br>
