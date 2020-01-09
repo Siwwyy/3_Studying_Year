@@ -1,32 +1,39 @@
-﻿@{
+﻿@*@model System.Collections.Generic.IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityUser>*@
+
+@{
     ViewBag.Title = "Dodaj_Ogloszenie";
 }
 
 <!DOCTYPE html>
 
-@using (Html.BeginForm())
-{
-   
-    foreach (var user in Model)
+@*@using (Html.BeginForm())
     {
-        <tr>
-            <div class="form-group">
-                <td>
-                <td><b>User Id: </b> @user.Id</td>
-                <td><b>Username: </b> @user.Email</td>
-                @using (Html.BeginForm("Delete_User", "Home", FormMethod.Post))
-                {
-                    @Html.AntiForgeryToken()
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Delete_User" class="btn btn-default" />
-                    </div>
-                }
-                    </td>
-                </div>
-            <br />
-        </tr>
-    }
-    <br />
 
+
+
+    }*@
+@foreach (var user in Model)
+{
+    <tr>
+        <div class="form-group">
+            <td>
+            <td><b>User Id: </b> @user.Id</td>
+            <td><b>Username: </b> @user.Email</td>
+            @using (Html.BeginForm("Delete_User", "Home", new { id = @user.Id }))
+            {
+
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-primary" value="Usun Uzytkownika" />
+                </div>
+            }
+            @*<td>@Html.ActionLink("Delete_User", "Home", new { id = user.Id }, null)</td>
+            <td>
+                <button data-producent-id="@user.Id" data-producent-name="@user.Email" class="js-delete">Usuń</button>
+            </td>
+            </td>*@
+        </div>
+        <br />
+    </tr>
 }
+<br />
 <br>

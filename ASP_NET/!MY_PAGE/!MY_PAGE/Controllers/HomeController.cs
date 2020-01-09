@@ -1,8 +1,20 @@
-﻿using System;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Web;
+//using System.Web.Mvc;
+//using _MY_PAGE.Models;
+
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using _MY_PAGE.Models;
 
 namespace _MY_PAGE.Controllers
@@ -45,22 +57,21 @@ namespace _MY_PAGE.Controllers
             return View();
         }
 
-        //Display Users
-        [HttpGet]
+        ////Display Users
+        //[HttpGet]
         public ActionResult Manage_Accounts_Admin()
         {
             ViewBag.Message = "Admin Panel";
             return View(db.Users.ToList());
         }
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete_User(int id)
+        [HttpPost]
+        public ActionResult Delete_User(string id)
         {
             var User = db.Users.Find(id);
             db.Users.Remove(User);
             db.SaveChanges();
-            return View();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
