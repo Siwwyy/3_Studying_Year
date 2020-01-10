@@ -18,7 +18,6 @@ namespace _MY_PAGE.Controllers
         // GET: Model_Pojazdu
         public ActionResult Index()
         {
-            Marka_Pojazdu a = new Marka_Pojazdu();
             return View(db.Model.ToList());
         }
 
@@ -27,15 +26,15 @@ namespace _MY_PAGE.Controllers
         public List<string> Index(Marka_Pojazdu model)
         {
             List<string> my_list = null;
-            if (model.Nazwa_Marka != null)
-            {
-                foreach (var marka in model.Nazwa_Marka)
-                {
-                    my_list.Add(marka.ToString());
-                    //marka.Selected = true;
-                    //ViewBag.Message += marka.Text + " | ";
-                }
-            }
+            //if (model.Nazwa_Marka != null)
+            //{
+            //    foreach (var marka in model.Nazwa_Marka)
+            //    {
+            //        my_list.Add(marka.ToString());
+            //        //marka.Selected = true;
+            //        //ViewBag.Message += marka.Text + " | ";
+            //    }
+            //}
             return my_list;
         }
 

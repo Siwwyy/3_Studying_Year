@@ -76,9 +76,11 @@ int main(int argc, char* argv[])
 	using _STD cin;
 	using _STD cerr;
 
-	_Project Obj;
+	//_Project Obj;
 
-	Obj.Symulacja_Monte_Carlo();
+	//Obj.Symulacja_Monte_Carlo();
+
+	_STD cout << (5 << 1) << endl;
 
 	return EXIT_SUCCESS;
 }

@@ -280,6 +280,7 @@
     <Content Include="Views\Rodzaj_Paliwa\Index.cshtml" />
     <Content Include="Views\Home\Dodaj_Ogloszenie.cshtml" />
     <Content Include="Views\Home\Wyszukaj_Ogloszenie.cshtml" />
+    <Content Include="Views\Home\Manage_Accounts_Admin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
