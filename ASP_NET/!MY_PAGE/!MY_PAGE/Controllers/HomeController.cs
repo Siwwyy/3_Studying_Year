@@ -53,7 +53,11 @@ namespace _MY_PAGE.Controllers
         public ActionResult Wyszukaj_Ogloszenie()
         {
             ViewBag.Message = "Find your car";
+            IList<Marka_Pojazdu> marki = new List<Marka_Pojazdu>(db.Mark.ToList());
+            IList<Model_Pojazdu> modele = new List<Model_Pojazdu>(db.Model.ToList());
 
+            ViewData["Mark"] = marki;
+            ViewData["Model"] = modele;
             return View();
         }
 

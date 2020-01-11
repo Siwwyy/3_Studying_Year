@@ -23,15 +23,7 @@ int main(int argc, char* argv[])
 	using _STD cout;
 	using _STD endl;
 	using _STD cin;
-	srand(time(NULL));
 
-	//////////////////////////////////////////////////////////////////
-	_STD vector<_STD vector<char>> Matrix(500);
-	for (typename _STD vector<_STD vector<char>>::iterator vec_iterator = Matrix.begin(); vec_iterator != Matrix.end(); ++vec_iterator)
-	{
-		vec_iterator->resize(500);
-	}
-	//////////////////////////////////////////////////////////////////
 	__int16 choice{};
 
 	_STD cin >> choice;

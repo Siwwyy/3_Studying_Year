@@ -55,6 +55,8 @@ class _Project
 private:
 	double time;
 	const double start_time;
+
+	const double Simulate_Ride_Time(const double time_from, const double time_to);
 public:
 	_Project();
 
@@ -76,12 +78,11 @@ int main(int argc, char* argv[])
 	using _STD cin;
 	using _STD cerr;
 
-	//_Project Obj;
+	_Project Obj;
 
-	//Obj.Symulacja_Monte_Carlo();
+	Obj.Symulacja_Monte_Carlo();
 
-	_STD cout << (5 << 1) << endl;
-
+	system("pause");
 	return EXIT_SUCCESS;
 }
 
@@ -90,6 +91,12 @@ int main(int argc, char* argv[])
 				BODY OF FUNCTIONS
 */
 //////////////////////////////////////////////////////
+
+const double _Project::Simulate_Ride_Time(const double time_from, const double time_to)
+{
+	_STD normal_distribution<> waiting_time(time_from, time_to);
+	return waiting_time(generator);
+}
 
 _Project::_Project():
 	start_time(0),
@@ -108,15 +115,15 @@ void _Project::Etap_1()
 	if (number == 0)
 	{
 		//losowanie czasu przejazdu z rozkladu normalnego
-		time += 5;
+		time += Simulate_Ride_Time(3,1);
 	}
 	else if (number == 1)
 	{
-		time += 6;
+		time += Simulate_Ride_Time(5, 1);
 	}
 	else if (number == 2)
 	{
-		time += 10;
+		time += Simulate_Ride_Time(10, 3);
 		//5 mozliwosci objazdu
 		_STD discrete_distribution<> x2({ 40.0f, 20.0f, 10.0f, 20.0f, 10.0f });
 
@@ -124,27 +131,27 @@ void _Project::Etap_1()
 
 		if (number_2 == 0)
 		{
-			time += 4;
+			time += Simulate_Ride_Time(5, 2);
 		}
 		else if (number_2 == 1)
 		{
-			time += 5;
+			time += Simulate_Ride_Time(5, 1);
 		}
 		else if (number_2 == 2)
 		{
-			time += 8;
+			time += Simulate_Ride_Time(8, 3);
 		}
 		else if (number_2 == 3)
 		{
-			time += 12;
+			time += Simulate_Ride_Time(12, 5);
 		}
 		else if (number_2 == 4)
 		{
-			time += 4;
+			time += Simulate_Ride_Time(4, 1);
 		}
 		else if (number_2 == 5)
 		{
-			time += 15;
+			time += Simulate_Ride_Time(15, 6);
 		}
 	}
 }
@@ -158,15 +165,15 @@ void _Project::Etap_2()
 
 	if (number == 0)
 	{
-		time += 5;
+		time += Simulate_Ride_Time(5, 1);
 	}
 	else if (number == 1)
 	{
-		time += 6;
+		time += Simulate_Ride_Time(6, 2);
 	}
 	else if (number == 2)
 	{
-		time += 2;
+		time += Simulate_Ride_Time(3, 1);
 	}
 }
 
@@ -176,7 +183,7 @@ void _Project::Etap_3()
 	bool temp = probability(generator);
 	if (!temp)
 	{
-		_STD normal_distribution<> waiting_time(2,1);//ujemny czas, popraw
+		_STD normal_distribution<> waiting_time(4,1);//ujemny czas, popraw
 		time += waiting_time(generator);
 	}
 }
@@ -190,15 +197,15 @@ void _Project::Etap_4()
 
 	if (number == 0)
 	{
-		time += 10;
+		time += Simulate_Ride_Time(10, 4);
 	}
 	else if (number == 1)
 	{
-		time += 12;
+		time += Simulate_Ride_Time(5, 1);
 	}
 	else if (number == 2)
 	{
-		time += 14;
+		time += Simulate_Ride_Time(7, 3);
 	}
 }
 
@@ -211,15 +218,15 @@ void _Project::Etap_5()
 
 	if (number == 0)
 	{
-		time += 3;
+		time += Simulate_Ride_Time(3, 1);
 	}
 	else if (number == 1)
 	{
-		time += 4;
+		time += Simulate_Ride_Time(5, 2);
 	}
 	else if (number == 2)
 	{
-		time += 15;
+		time += Simulate_Ride_Time(15, 4);
 		//3 mozliwosci objazdu
 		_STD discrete_distribution<> x2({ 30.0f, 30.0f, 40.0f });
 
@@ -227,15 +234,15 @@ void _Project::Etap_5()
 
 		if (number_2 == 0)
 		{
-			time += 2;
+			time += Simulate_Ride_Time(6, 2);
 		}
 		else if (number_2 == 1)
 		{
-			time += 3;
+			time += Simulate_Ride_Time(3, 1);
 		}
 		else if (number_2 == 2)
 		{
-			time += 5;
+			time += Simulate_Ride_Time(5, 1);
 		}
 	}
 }
