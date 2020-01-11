@@ -33,5 +33,8 @@ canvas->Divide(1,1);
  im1->SetFillStyle(3002);
  im1->Draw();
 
+
+TF1 *ff = new TF1("ff","[0]+[1]*x-[2]*pow(x,2)",40.,80.);
+  im1->Fit(ff);
  
 }
