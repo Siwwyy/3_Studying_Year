@@ -129,15 +129,11 @@ int main(int argc, char* argv[])
 						float sum2{};
 						float sum3{};
 						
-						//sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
-						//sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
 						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
 						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
 
 						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
 						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
-
-						initial_weights(weights, 2);
 
 						sum3 += sum1 * weights[0];
 						sum3 += sum2 * weights[1];
@@ -170,15 +166,11 @@ int main(int argc, char* argv[])
 						float sum2{};
 						float sum3{};
 
-						//sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
-						//sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
 						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
 						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
 
 						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
 						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
-
-						initial_weights(weights, 2);
 
 						sum3 += sum1 * weights[0];
 						sum3 += sum2 * weights[1];
@@ -211,15 +203,11 @@ int main(int argc, char* argv[])
 						float sum2{};
 						float sum3{};
 
-						//sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
-						//sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
 						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
 						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
 
 						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
 						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
-
-						initial_weights(weights, 2);
 
 						sum3 += sum1 * weights[0];
 						sum3 += sum2 * weights[1];
@@ -352,15 +340,13 @@ int main(int argc, char* argv[])
 						float sum2{};
 						float sum3{};
 
-						//sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
-						//sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
 						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
 						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
 
 						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
 						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
 
-						initial_weights(weights, 2);
+						//initial_weights(weights, 2);
 
 						sum1 += 1;
 						sum2 += 1;
@@ -397,15 +383,12 @@ int main(int argc, char* argv[])
 						float sum2{};
 						float sum3{};
 
-						//sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
-						//sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
 						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
 						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
 
 						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
 						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
 
-						initial_weights(weights, 2);
 
 						sum1 += 1;
 						sum2 += 1;
@@ -442,15 +425,12 @@ int main(int argc, char* argv[])
 						float sum2{};
 						float sum3{};
 
-						//sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
-						//sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[0];
 						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
 						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
 
 						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
 						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
 
-						initial_weights(weights, 2);
 
 						sum1 += 1;
 						sum2 += 1;

@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 	//while (c < C_max && if_break == false) 
 	//{
 	//	float sum{};
-	//	__int16 choice = rand() % 2;
+	//	__int16 choice = static_cast<__int16>(rand() % 2);
 	//	if (choice == 0)
 	//	{
 	//		for (size_t i = 0; i < 7; ++i)
@@ -258,25 +258,6 @@ void Fill_Matrix(bool Matrix[2][7][5])
 	file_in.close();
 }
 
-void Print_Matrix(bool Matrix[2][7][5])
-{
-	for (size_t i = 0; i < 2; ++i)
-	{
-		for (size_t j = 0; j < 7; ++j)
-		{
-			for (size_t k = 0; k < 5; ++k)
-			{
-				_STD cout << Matrix[i][j][k];
-			}
-			_STD cout << " ";
-		}
-		_STD cout << NEW_LINE;
-	}
-	//_STD cout << __FILE__ << NEW_LINE;
-	//_STD cout << __LINE__ << NEW_LINE;
-	//Array_Size(*Matrix);
-}
-
 void Save_Weights(const float* const Weights, const size_t & size)
 {
 	_STD fstream file_out;
@@ -297,68 +278,7 @@ void Save_Weights(const float* const Weights, const size_t & size)
 	file_out.close();
 }
 
-void Predict_Result(const bool const Matrix[2][7][5], const size_t choice)
-{
-	float result{ 0.0f };
-	float X{ 0.0f };
-	_STD fstream file_in;
-	
-	if (choice == 0)
-	{
-		file_in.open("weights_A.out", std::ios_base::in);
 
-		if (file_in.good() == false)
-		{
-			_STD cerr << "[WARRNING:0001] Invalid file_path\n";
-		}
-		else
-		{
-			float value{};
-			for (size_t i = 0; i < 7; i++)
-			{
-				for (size_t j = 0; j < 5; j++)
-				{
-					file_in >> value;
-					X += (value * Matrix[choice][i][j]);
-				}
-			}
-		}
-	}
-	else
-	{
-		file_in.open("weights_C.out", std::ios_base::in);
-
-		if (file_in.good() == false)
-		{
-			_STD cerr << "[WARRNING:0001] Invalid file_path\n";
-		}
-		else
-		{
-			float value{};
-			for (size_t i = 0; i < 7; i++)
-			{
-				for (size_t j = 0; j < 5; j++)
-				{
-					file_in >> value;
-					X += (value * Matrix[choice][i][j]);
-				}
-			}
-		}
-	}
-
-	result = f(X);
-
-	_STD cout << "Result: " << result;
-	if (result < 0.5)
-	{
-		_STD cout << " Letter:" << " A" << NEW_LINE;
-	}
-	else
-	{
-		_STD cout << " Letter:" << " C" << NEW_LINE;
-	}
-	file_in.close();
-}
 
 void Predict_Result(const bool const Matrix[7][5])
 {
@@ -389,11 +309,11 @@ void Predict_Result(const bool const Matrix[7][5])
 	_STD cout << "Result: " << result;
 	if (result < 0.5f && result > 0.003f)
 	{
-		_STD cout << " Letter:" << " A" << NEW_LINE;
+		_STD cout << " Letter:" << " C" << NEW_LINE;
 	}
 	else if(result >= 0.5f && result < 1.0f)
 	{
-		_STD cout << " Letter:" << " C" << NEW_LINE;
+		_STD cout << " Letter:" << " A" << NEW_LINE;
 	}
 	file_in.close();
 }
@@ -401,15 +321,4 @@ void Predict_Result(const bool const Matrix[7][5])
 const float f(const float value)
 {
 	return static_cast<float>(1.0f /(1.0f + static_cast<float>(pow((1.0f/e),value))));
-}
-
-const float df(const float value)
-{
-	return static_cast<float>(value * (1 - value));
-}
-
-template<typename _Variable_Type, ::std::size_t N>
-constexpr _STD size_t Array_Size(const _Variable_Type(&_array)[N]) noexcept
-{
-	return N;
 }
