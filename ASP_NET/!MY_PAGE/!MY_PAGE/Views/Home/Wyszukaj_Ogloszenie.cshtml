@@ -40,12 +40,12 @@
                 <td><b>Kraj pochodzenia: </b>@std.Country_Of_Origin.Nazwa_Kraj_Pochodzenia</td>
 
 
-                <td><b>Imie sprzedawcy: </b>@std.Seller.Imie</td>
-                <td><b>Nazwisko sprzedawcy: </b>@std.Seller.Nazwiska</td>
+                @*<td><b>Imie sprzedawcy: </b>@std.Seller.Imie</td>
+                <td><b>Nazwisko sprzedawcy: </b>@std.Seller.Nazwiska</td>*@
                 </font>
 </div>
     </div>
-    @if (@std.Nazwa_Model == "Talisman")
+    @if (@std.Nazwa_Model == "Talisman" ||@std.Marka.Nazwa_Marka == "Renault" )
     {
         <div class="panel-body-index"><img src="~/Content/IMAGES/talisman.jpg" style="width:100%;height:100%;" alt="Image"></div>
     }
