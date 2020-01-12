@@ -1,5 +1,5 @@
 ﻿@*@model _MY_PAGE.Models.Model_Pojazdu
-@model _MY_PAGE.Models.Marka_Pojazdu*@
+    @model _MY_PAGE.Models.Marka_Pojazdu*@
 
 @{
     ViewBag.Title = "Wyszukaj_Ogloszenie";
@@ -7,20 +7,54 @@
 
 <!DOCTYPE html>
 
-@foreach (var std in ViewData["Mark"] as IList<_MY_PAGE.Models.Marka_Pojazdu>)
-{
-    <div class="form-group">
-        <td><b>Nazwa samochodu </b>@std.Nazwa_Marka</td>
-    </div>
-    <br />
-}
+@*@foreach (var std in ViewData["Mark"] as IList<_MY_PAGE.Models.Marka_Pojazdu>)
+    {
+        <div class="form-group">
+            <td><b>Nazwa samochodu </b>@std.Nazwa_Marka</td>
+        </div>
+        <br />
+    }
 
-@foreach (var std in ViewData["Model"] as IList<_MY_PAGE.Models.Model_Pojazdu>)
+    @foreach (var std in ViewData["Model"] as IList<_MY_PAGE.Models.Model_Pojazdu>)
+    {
+        <div class="form-group">
+            <td><b>Nazwa samochodu </b>@std.Nazwa_Model</td>
+        </div>
+        <br />
+    }*@
+
+@foreach (var std in ViewData["Advertisements"] as IList<_MY_PAGE.Models.Model_Pojazdu>)
 {
+<div class="row">
     <div class="form-group">
-        <td><b>Nazwa samochodu </b>@std.Nazwa_Model</td>
+        <div class="panel-footer">
+            <font color="black">
+                <td><b>Nazwa marki: </b>@std.Marka.Nazwa_Marka</td>
+                <td><b>Nazwa samochodu: </b>@std.Nazwa_Model</td>
+
+                <td><b>Cena: </b>@std.Informations.Cena</td>
+                <td><b>Przebieg: </b>@std.Informations.Przebieg_do</td>
+                <td><b>Moc silnika: </b>@std.Informations.Moc_Silnika</td>
+                <td><b>Rodzaj paliwa: </b>@std.Fuel_Type.Nazwa_Rodzaj</td>
+
+                <td><b>Kraj pochodzenia: </b>@std.Country_Of_Origin.Nazwa_Kraj_Pochodzenia</td>
+
+
+                <td><b>Imie sprzedawcy: </b>@std.Seller.Imie</td>
+                <td><b>Nazwisko sprzedawcy: </b>@std.Seller.Nazwiska</td>
+                </font>
+</div>
     </div>
-    <br />
+    @if (@std.Nazwa_Model == "Talisman")
+    {
+        <div class="panel-body-index"><img src="~/Content/IMAGES/talisman.jpg" style="width:100%;height:100%;" alt="Image"></div>
+    }
+    else
+    {
+        <div class="panel-body-index"><img src="~/Content/IMAGES/a6.jpg" style="width:100%;height:100%;" alt="Image"></div>
+    }
+</div>
+        <br />
 }
 
 <br>
