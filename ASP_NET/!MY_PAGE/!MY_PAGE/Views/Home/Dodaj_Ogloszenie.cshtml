@@ -9,59 +9,80 @@
 
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>Model_Pojazdu</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.Label("Nazwa Producenta", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBox("nazwa_auta", null, new { @class = "form-control" })
-            </div>
+<div class="form-horizontal">
+    <h4>Model_Pojazdu</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.Label("Nazwa Producenta", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBox("nazwa_auta", null, new { @class = "form-control" })
         </div>
-
-        <div class="form-group">
-            @Html.Label("Nazwa modelu", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBox("model_auta", null, new { @class = "form-control" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Pochodzenie", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBox("pochodzenie", null, new { @class = "form-control" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Przebieg", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBox("przebieg", null, new { @class = "form-control" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Moc silnika", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBox("silnik", null, new { @class = "form-control" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Cena", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBox("cena", null, new { @class = "form-control" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Add advertisement" class="btn btn-default" />
-            </div>
-        </div>
-
     </div>
+
+    <div class="form-group">
+        @Html.Label("Nazwa modelu", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBox("model_auta", null, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Pochodzenie", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBox("pochodzenie", null, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Przebieg", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBox("przebieg", null, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Moc silnika", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBox("silnik", null, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Cena", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBox("cena", null, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Diesel/Benzyna", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBox("fuel", null, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Imie sprzedawcy", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBox("imie", null, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Nazwisko sprzedawcy", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBox("nazwisko", null, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Add advertisement" class="btn btn-default" />
+        </div>
+    </div>
+
+</div>
 }
 
 <br>
