@@ -8,28 +8,21 @@
 
 #define NEW_LINE '\n'
 
-_STD vector<_STD string> vec{};
 
-BOOL CALLBACK speichereFenster(HWND hwnd, LPARAM substring) 
+BOOL CALLBACK Get_Window(HWND hwnd, LPARAM substring) 
 {
 	const DWORD TITLE_SIZE = 1024;
 	WCHAR windowTitle[TITLE_SIZE];
-
 	GetWindowTextW(hwnd, windowTitle, TITLE_SIZE);
 
 	int length = ::GetWindowTextLength(hwnd);
 	_STD wstring title(&windowTitle[0]);
-	if (!IsWindowVisible(hwnd) || length == 0 || title == L"Program Manager")
+
+	// List visible windows with a non-empty title
+	if (IsWindowVisible(hwnd) && title != L"")
 	{
-		return TRUE;
+		std::wcout << hwnd << ":  " << windowTitle << NEW_LINE;
 	}
-
-	// Retrieve the pointer passed into this callback, and re-'type' it.
-	// The only way for a C API to pass arbitrary data is by means of a void*.
-
-	std::vector<std::wstring>& titles = *reinterpret_cast<std::vector<std::wstring>*>(substring);
-	titles.push_back(title);
-
 	return TRUE;
 }
 
@@ -41,16 +34,28 @@ int main(int argc, char* argv[])
 	using _STD cerr;
 
 	LPCSTR app_name = "";
-
+	//f5 to refresh monitor , if user type a name for instance
+	/*
+		Notepad -> Seek in vector of wstring for title which will match it
+		OPENED APPS MONITOR
+	*/
 	std::vector<std::wstring> titles;
-	EnumWindows(speichereFenster, reinterpret_cast<LPARAM>(&titles));
-	// At this point, titles if fully populated and could be displayed, e.g.:
-	for (const auto& title : titles)
+	EnumWindows(Get_Window, reinterpret_cast<LPARAM>(&titles));
+
+	HWND Find = FindWindow(0, L"Calculator");
+	if (Find)
 	{
-		std::wcout << L"Title: " << title << std::endl;
+		cout << "znaleziono";
+		Sleep(500);
+		SendMessage(Find, WM_CLOSE, 0, NULL);
 	}
 
+	else 
+	{
+		cout << "Nie znaleziono";
+	}
 
+	_STD cout << NEW_LINE;
 	system("pause");
 	return 0;
 }
