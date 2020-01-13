@@ -1,0 +1,143 @@
+// 1. Zaimplementować metodę BA tworzenia grafu
+// 2. liczenie CC (clustering coefficient) grafu
+// 3. liczenie promienia i średnicy grafu
+// metoda, rozmiar, p -> wyniki
+#include <iostream> 
+#include <algorithm>
+#include <vector>
+#include <cstdio>
+#include <ctime>
+#include <map>
+
+using namespace std; 
+
+typedef vector<vector<bool>> Graph;
+
+void addGraphEdge(Graph &g, int i, int j) {
+    g[i][j] = true;
+    g[j][i] = true;
+}
+
+void graphBFS(const Graph &g, int v, vector<bool>& visited) 
+{ 
+    visited[v] = true; 
+    cout << v << " "; 
+
+    for (int i=0; i<g[v].size(); ++i) {
+
+        if (g[v][i] && !visited[i]) {
+            graphBFS(g, i, visited);
+        }
+    }
+} 
+
+int main() {
+    srand(time(NULL));
+
+    // PARAMETRY
+    int N = 100;
+    double p = 0.3;
+
+    Graph graph(N);
+    for(int i=0; i<N; ++i) {
+        graph[i] = vector<bool>(N);
+    }
+
+    // TWORZENIE GRAFU
+
+    // metoda losowa
+    // for (int i=0; i<N; ++i) {
+    //     for (int j=i+1; j<N; ++j) {
+    //         if ((double)rand()/RAND_MAX <= p) {
+    //             addGraphEdge(graph, i, j);
+    //         }
+    //     }
+    // }
+
+    // moetoda BA
+    addGraphEdge(graph, 0, 1);
+    for (int i=2; i<N; ++i) { // i -> ten, który dodaję
+
+        int kc = 0;
+        for (int i=0; i<N; ++i) {
+            for (int j=i+1; j<N; ++j) {
+                if (graph[i][j]) {
+                    ++kc;
+                }
+            }   
+        }
+
+        vector<int> ki(N);
+        for (int i=0; i<N; ++i) {
+            for (int j=0; j<N; ++j) {
+                if (graph[i][j]) {
+                    ++ki[i];
+                }
+            }
+        }
+
+        bool dodano = false;
+        for (int j=0; j<i; ++j) { // j -> ten, do którego dodaję
+            double rand01 = (double)rand() / RAND_MAX;
+            if (rand01 <=(double)ki[j]/kc) {
+                addGraphEdge(graph, i, j);
+                dodano = true;
+            }
+        }
+
+        if (!dodano) {
+            addGraphEdge(graph, i, 0);
+        }
+    }
+
+    // LICZENIE CC
+    int kc = 0;
+    for (int i=0; i<N; ++i) {
+        for (int j=i+1; j<N; ++j) {
+            if (graph[i][j]) {
+                ++kc;
+            }
+        }   
+    }
+    int kmax = N * (N-1) / 2;
+    double CC = (double)kc / kmax;
+    cout<<"CC: "<<CC<<endl;
+
+
+    // PROMIEŃ, ŚREDNICA
+    
+    // bfs
+    cout<<"BFS\n";
+    vector<bool> visited(N);
+    graphBFS(graph, 0, visited);
+
+
+    // HISTOGRAM
+    int sum = 0;
+    map<int, int> counts;
+    for (int i=0; i<N; ++i) {
+        int count = 0;
+        for (int j=0; j<N; ++j) {
+            if (graph[i][j]) {
+                count++;
+            }
+        }   
+        sum += count;
+        counts[count]++;
+    }
+
+    // for (auto c : counts) {
+    //     cout<<c.first<<", "<<c.second<<endl;
+    // }
+
+    double avg = (double)sum / N;
+    cout<<"Średni stioień: "<<avg<<endl;
+
+    // DFS
+    // vector<bool> visited(graph.size());
+    // graphDFS(graph, 0, visited);
+    // cout<<'\n';
+
+
+    return 0;
+}
