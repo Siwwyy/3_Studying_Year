@@ -17,16 +17,25 @@
 
 namespace Window
 {
+	struct Deleter
+	{
+		void operator()(Window& ls)
+		{
+			ls.~Window();
+		}
+	};
 
 	class Detect_Window
 	{
 	private:
+
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			ZMIENNE PRIVATE
 		*/
+		Window* win;
 		HWND Handle;
-		_STD vector<_STD unique_ptr<Window>> vec_Windows;
+		static _STD vector<_STD unique_ptr<int>> vec_Windows;
 		//////////////////////////////////////////////////////////////////////////////		//////////////////////////////////////////////////////////////////////////////
 		/*
 			FUNKCJE PRIVATE
@@ -60,7 +69,7 @@ namespace Window
 		/*
 			GETTERY PUBLIC
 		*/
-
+		static _STD vector<_STD unique_ptr<int>>& Get_vec_Windows();
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			DESTRUKTOR

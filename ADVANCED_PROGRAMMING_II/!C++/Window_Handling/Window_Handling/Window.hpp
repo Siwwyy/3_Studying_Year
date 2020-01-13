@@ -32,11 +32,13 @@ namespace Window
 		*/
 		Window();
 		Window(const WCHAR * window_title, const DWORD title_size);
+		Window(const Window& Object);
+		Window(const Window* Object);
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			FUNKCJE PUBLIC
 		*/
-
+		static void Deleter(Window * To_Delete);
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			SETTERY PUBLIC
@@ -53,7 +55,8 @@ namespace Window
 		/*
 			GETTERY PUBLIC
 		*/
-
+		const DWORD Get_title_size() const;
+		const WCHAR* Get_window_title() const;
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			DESTRUKTOR
