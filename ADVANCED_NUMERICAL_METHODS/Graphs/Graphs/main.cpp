@@ -2,6 +2,8 @@
 #include <windows.h>
 #include <string>
 #include <random>
+#include <map>
+#include <fstream>
 
 #define NEW_LINE '\n'
 
@@ -20,7 +22,9 @@ int main(int argc, char* argv[])
 	Set_Connections(Graph);
 	//Print_Graph(Graph);
 
-
+	_STD fstream file_out{};
+	file_out.open("out.csv", _STD ios_base::out);
+	_STD map<int, int> histo{};
 	size_t sum{};
 	for (size_t i = 0; i < 100; ++i)
 	{
@@ -38,11 +42,23 @@ int main(int argc, char* argv[])
 				_STD cout << "+";
 			}*/
 		}
-		_STD cout << NEW_LINE;
 		sum += counter;
+		histo[counter]++;
+		_STD cout << " " << counter;
+		//file_out << counter << NEW_LINE;
+		_STD cout << NEW_LINE;
 	}
 
+	for (typename _STD map<int, int>::iterator map_iterator = histo.begin(); map_iterator != histo.end(); ++map_iterator)
+	{
+		file_out << map_iterator->first << ',' << map_iterator->second << NEW_LINE;
+	}
+
+
 	_STD cout << "Average: " << static_cast<float>(sum/100.f) << NEW_LINE;
+	file_out << "Average: ," << static_cast<float>(sum/100.f) << NEW_LINE;
+
+	file_out.close();
 
 	system("pause");
 	return 0;

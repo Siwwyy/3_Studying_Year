@@ -28,9 +28,9 @@ int main(int argc, char* argv[])
 	size_t x{};
 	size_t y{};
 	__int32 temp_energy{};
-	size_t iterations{ 150000 };
+	size_t iterations{ 10000 };
 	__int32 demon_energy{ 0 };
-	__int32 demons_energy[]{10000,15000,20000,25000,30000,35000,40000,50000,60000,70000,80000,100000,130000,170000,220000,300000,450000,600000,700000,800000,900000,1000000,2000000,3000000,4000000,5000000};
+	__int32 demons_energy[]{ 4000,5000,6000,7000,8000,9000,10000,11000,12000,13000 };
 	__int32 magnetization{ 0 };
 	__int32 average_magnetization{ 0 };
 	__int32 spin_value{ 0 };
@@ -56,7 +56,8 @@ int main(int argc, char* argv[])
 	std::default_random_engine generator;
 	std::uniform_int_distribution<> dis_x(0, width - 1);			//zakres naszego losowania
 	std::uniform_int_distribution<> dis_y(0, height - 1);			//zakres naszego losowania
-
+	_STD fstream file_out;
+	file_out.open("ZMO_AndrysiakD_CAI.txt", _STD ios_base::out);
 	//lambda case
 	auto energy_sum = [](const __int32& J, const __int32& energy) -> __int32 { return (-1) * J * energy; };
 
@@ -94,7 +95,7 @@ int main(int argc, char* argv[])
 				spin_value = ((energy_total)-(temp_energy)) * (-1);
 				demon_energy += spin_value;
 			}
-			if (i >= 90000 && i <= 91000)
+			if (i >= 9000 && i <= 10000)
 			{
 				for (size_t j = 0; j < width; ++j)
 				{
@@ -103,7 +104,7 @@ int main(int argc, char* argv[])
 						magnetization += area[j][k];
 					}
 				}
-				average_magnetization += magnetization;
+				average_magnetization += (magnetization/1000);
 				freq[demon_energy]++;
 			}
 			x = NULL;
@@ -135,8 +136,8 @@ int main(int argc, char* argv[])
 		_xy_ = static_cast<float>(_xy_ / static_cast<float>(freq.size()));
 		_x_2 = pow(_x_, 2);
 		temperatura = static_cast<float>(-1.f)* static_cast<float>((_x_2 - _x2_) / ((_x_ * _y_) - _xy_));
-		//file_out << static_cast<float>(static_cast<float>(average_magnetization) / 1000.f) << ',' << temperatura << NEW_LINE;
-		_STD cout << "Demon's energy: " << demons_energy[h] <<" Avg magnet: " << static_cast<float>(static_cast<float>(average_magnetization) / 1000.f) << " | Temperature: " << temperatura << NEW_LINE;
+		file_out << demons_energy[h] << " " << static_cast<float>(static_cast<float>(average_magnetization) / (width*height)) << " " << temperatura << NEW_LINE;
+		//_STD cout << "Demon's energy: " << demons_energy[h] <<" Avg magnet: " << static_cast<float>(static_cast<float>(average_magnetization) / 1000.f) << " | Temperature: " << temperatura << NEW_LINE;
 		//_STD cout << "====================================================="  << NEW_LINE;
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		demon_energy = NULL;
@@ -151,6 +152,7 @@ int main(int argc, char* argv[])
 	}
 	delete[] area;
 
+	file_out.close();
 	//system("pause");
 	return 0;
 }
