@@ -18,6 +18,7 @@ const float f3(const float value);	//sigmoidalna
 const float normalized_point(const float value, const __int16 min, const __int16 max, const __int16 new_min, const __int16 new_max);
 void initial_weights(float * weights, const size_t size);
 
+
 class Pixel
 {
 	__int16 R;
@@ -75,6 +76,8 @@ public:
 };
 
 void Save_To_PPM(const _STD vector<_STD vector<Pixel>>& vec, const char * file_name);
+void initial_vector(_STD vector<_STD vector<Pixel>>& vec);
+void erase_vector(_STD vector<_STD vector<Pixel>>& vec);
 
 
 int main(int argc, char* argv[])
@@ -83,596 +86,565 @@ int main(int argc, char* argv[])
 	using _STD endl;
 	using _STD cin;
 
-	__int16 choice{};
-
 	_STD vector<_STD vector<Pixel>> Matrix(500);
 
-	for (typename _STD vector<_STD vector<Pixel>>::iterator vec_iterator = Matrix.begin(); vec_iterator != Matrix.end(); ++vec_iterator)
-	{
-		vec_iterator->resize(500);
-	}
+	initial_vector(Matrix);
 
-	_STD cin >> choice;
-	if (choice == 0)	//without bias
+	size_t my_counter{};
+	size_t my_counter2{};
+	while (my_counter <= 1)
 	{
-		float weights[4]{};
-		float y{};
-		initial_weights(weights,4);
-		choice = {};
-		_STD cin >> choice;
-		switch (choice)
+		my_counter2 = 1;
+		erase_vector(Matrix);
+		if (my_counter == 0)	//without bias
 		{
-			//first neural
-			case 1:
+			while (my_counter2 <= 6)
 			{
-				for (size_t i = 0; i < 500; ++i)
+				erase_vector(Matrix);
+				float weights[4]{};
+				float y{};
+				initial_weights(weights, 4);
+				switch (my_counter2)
 				{
-					for (size_t j = 0; j < 500; ++j)
+					//first neural
+				case 1:
+				{
+					/*for (size_t i = 0; i < 500; ++i)
 					{
-						float sum{};
-						sum += normalized_point(i, 0, 500, (-5), 5) * weights[0];
-						sum += normalized_point(j, 0, 500, (-5), 5) * weights[1];
-						y = f1(sum);
-						COORD c;
-						c.X = i;
-						c.Y = j;
+						for (size_t j = 0; j < 500; ++j)
+						{
+							float sum{};
+							sum += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+							sum += normalized_point(j, 0, 500, (-5), 5) * weights[1];
+							y = f1(sum);
 
-						if (y == 1)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(0);
-						}
-						else
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(255);
+							if (y == 1)
+							{
+								Matrix[i][j].Set_R(255);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(0);
+							}
+							else
+							{
+								Matrix[i][j].Set_R(0);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(255);
+							}
 						}
 					}
+					Save_To_PPM(Matrix, "progowaI_bezbiasu.ppm");*/
 				}
-				Save_To_PPM(Matrix, "progowaI_bezbiasu.ppm");
-			}
-			break;
-			case 2:
-			{
-				for (size_t i = 0; i < 500; ++i)
-				{
-					for (size_t j = 0; j < 500; ++j)
-					{
-						float sum{};
-						sum += normalized_point(i, 0, 500, (-5), 5) * weights[0];
-						sum += normalized_point(j, 0, 500, (-5), 5) * weights[1];
-						y = f2(sum);
-						COORD c;
-						c.X = i;
-						c.Y = j;
-
-						if (y < -2)
-						{
-							Matrix[i][j].Set_R(8);
-							Matrix[i][j].Set_G(37);
-							Matrix[i][j].Set_B(103);
-						}
-						else if(y >= -2 && y < 0)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(255);
-						}
-						else if (y >= 0 && y <= 2)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(255);
-							Matrix[i][j].Set_B(0);
-						}
-						else if (y >= -2 && y <= 0)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(0);
-						}
-					}
-				}
-				Save_To_PPM(Matrix, "liniowaI_bezbiasu.ppm");
-			}
-			break;
-			case 3:
-			{
-				for (size_t i = 0; i < 500; ++i)
-				{
-					for (size_t j = 0; j < 500; ++j)
-					{
-						float sum{};
-						sum += normalized_point(i, 0, 500, (-5), 5) * weights[0];
-						sum += normalized_point(j, 0, 500, (-5), 5) * weights[1];
-						y = f3(sum);
-						COORD c;
-						c.X = i;
-						c.Y = j;
-
-						if (y >= 0 && y < 0.25)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(255);
-							Matrix[i][j].Set_B(0);
-						}
-						else if (y >= 0.25 && y < 0.5)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(255);
-						}
-						else if (y >= 0.5 && y < 0.75)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(255);
-							Matrix[i][j].Set_B(0);
-						}
-						else if (y >= 0.75 && y <= 1)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(0);
-						}
-					}
-				}
-				Save_To_PPM(Matrix, "sigmoidalnaI_bezbiasu.ppm");
-			}
-			break;
-			//second neural
-			case 4:
-			{
-				for (size_t i = 0; i < 500; ++i)
-				{
-					for (size_t j = 0; j < 500; ++j)
-					{
-						float sum1{};
-						float sum2{};
-						float sum3{};
-						
-						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
-						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
-
-						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
-						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
-
-						sum3 += sum1 * weights[0];
-						sum3 += sum2 * weights[1];
-
-						y = f1(sum3);
-						COORD c;
-						c.X = i;
-						c.Y = j;
-
-						if (y == 1)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(0);
-						}
-						else
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(255);
-						}
-					}
-				}
-				Save_To_PPM(Matrix, "progowaII_bezbiasu.ppm");
-			}
-			break;
-			case 5:
-			{
-				for (size_t i = 0; i < 500; ++i)
-				{
-					for (size_t j = 0; j < 500; ++j)
-					{
-						float sum1{};
-						float sum2{};
-						float sum3{};
-
-						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
-						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
-
-						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
-						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
-
-						sum3 += sum1 * weights[0];
-						sum3 += sum2 * weights[1];
-
-						y = f2(sum3);
-						COORD c;
-						c.X = i;
-						c.Y = j;
-
-						if (y < -2)
-						{
-							Matrix[i][j].Set_R(8);
-							Matrix[i][j].Set_G(37);
-							Matrix[i][j].Set_B(103);
-						}
-						else if (y >= -2 && y < 0)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(255);
-						}
-						else if (y >= 0 && y <= 2)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(255);
-							Matrix[i][j].Set_B(0);
-						}
-						else if (y >= -2 && y <= 0)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(0);
-						}
-					}
-				}
-				Save_To_PPM(Matrix, "liniowaII_bezbiasu.ppm");
-			}
-			break;
-			case 6:
-			{
-				for (size_t i = 0; i < 500; ++i)
-				{
-					for (size_t j = 0; j < 500; ++j)
-					{
-						float sum1{};
-						float sum2{};
-						float sum3{};
-
-						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
-						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
-
-						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
-						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
-
-						sum3 += sum1 * weights[0];
-						sum3 += sum2 * weights[1];
-
-						y = f3(sum3);
-						COORD c;
-						c.X = i;
-						c.Y = j;
-
-						if (y >= 0 && y < 0.25)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(255);
-							Matrix[i][j].Set_B(0);
-						}
-						else if (y >= 0.25 && y < 0.5)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(255);
-						}
-						else if (y >= 0.5 && y < 0.75)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(255);
-							Matrix[i][j].Set_B(0);
-						}
-						else if (y >= 0.75 && y <= 1)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(0);
-						}
-					}
-				}
-				Save_To_PPM(Matrix, "sigmoidalnaI_bezbiasu.ppm");
-			}
-			break;
-
-			default:	_STD cout << "An error occured with choice" << NEW_LINE;
 				break;
+				case 2:
+				{
+					/*for (size_t i = 0; i < 500; ++i)
+					{
+						for (size_t j = 0; j < 500; ++j)
+						{
+							float sum{};
+							sum += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+							sum += normalized_point(j, 0, 500, (-5), 5) * weights[1];
+							y = f2(sum);
+
+							if (y < -2)
+							{
+								Matrix[i][j].Set_R(8);
+								Matrix[i][j].Set_G(37);
+								Matrix[i][j].Set_B(103);
+							}
+							else if (y >= -2 && y < 0)
+							{
+								Matrix[i][j].Set_R(0);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(255);
+							}
+							else if (y >= 0 && y <= 2)
+							{
+								Matrix[i][j].Set_R(0);
+								Matrix[i][j].Set_G(255);
+								Matrix[i][j].Set_B(0);
+							}
+							else if (y >= -2 && y <= 0)
+							{
+								Matrix[i][j].Set_R(255);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(0);
+							}
+						}
+					}
+					Save_To_PPM(Matrix, "liniowaI_bezbiasu.ppm");*/
+				}
+				break;
+				case 3:
+				{
+					for (size_t i = 0; i < 500; ++i)
+					{
+						for (size_t j = 0; j < 500; ++j)
+						{
+							float sum{};
+							sum += normalized_point(i, 0, 500, (-5), 5) * weights[0];
+							sum += normalized_point(j, 0, 500, (-5), 5) * weights[1];
+							y = f3(sum);
+
+							if (y >= 0 && y < 0.25)
+							{
+								Matrix[i][j].Set_R(255);
+								Matrix[i][j].Set_G(255);
+								Matrix[i][j].Set_B(0);
+							}
+							else if (y >= 0.25 && y < 0.5)
+							{
+								Matrix[i][j].Set_R(0);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(255);
+							}
+							else if (y >= 0.5 && y < 0.75)
+							{
+								Matrix[i][j].Set_R(0);
+								Matrix[i][j].Set_G(255);
+								Matrix[i][j].Set_B(0);
+							}
+							else if (y >= 0.75 && y <= 1)
+							{
+								Matrix[i][j].Set_R(255);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(0);
+							}
+						}
+					}
+					Save_To_PPM(Matrix, "sigmoidalnaI_bezbiasu.ppm");
+				}
+				break;
+				//second neural
+				case 4:
+				{
+					//for (size_t i = 0; i < 500; ++i)
+					//{
+					//	for (size_t j = 0; j < 500; ++j)
+					//	{
+					//		float sum1{};
+					//		float sum2{};
+					//		float sum3{};
+
+					//		sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
+					//		sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
+
+					//		sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
+					//		sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
+
+					//		sum3 += f1(sum1) * weights[0];
+					//		sum3 += f1(sum2) * weights[1];
+
+					//		y = f1(sum3);
+
+					//		if (y == 1)
+					//		{
+					//			Matrix[i][j].Set_R(255);
+					//			Matrix[i][j].Set_G(0);
+					//			Matrix[i][j].Set_B(0);
+					//		}
+					//		else
+					//		{
+					//			Matrix[i][j].Set_R(0);
+					//			Matrix[i][j].Set_G(0);
+					//			Matrix[i][j].Set_B(255);
+					//		}
+					//	}
+					//}
+					//Save_To_PPM(Matrix, "progowaII_bezbiasu.ppm");
+				}
+				break;
+				case 5:
+				{
+					//for (size_t i = 0; i < 500; ++i)
+					//{
+					//	for (size_t j = 0; j < 500; ++j)
+					//	{
+					//		float sum1{};
+					//		float sum2{};
+					//		float sum3{};
+
+					//		sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
+					//		sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
+
+					//		sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
+					//		sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
+
+					//		sum3 += f2(sum1) * weights[0];
+					//		sum3 += f2(sum2) * weights[1];
+
+					//		y = f2(sum3);
+					//		if (y < -2)
+					//		{
+					//			Matrix[i][j].Set_R(8);
+					//			Matrix[i][j].Set_G(37);
+					//			Matrix[i][j].Set_B(103);
+					//		}
+					//		else if (y >= -2 && y < 0)
+					//		{
+					//			Matrix[i][j].Set_R(0);
+					//			Matrix[i][j].Set_G(0);
+					//			Matrix[i][j].Set_B(255);
+					//		}
+					//		else if (y >= 0 && y <= 2)
+					//		{
+					//			Matrix[i][j].Set_R(0);
+					//			Matrix[i][j].Set_G(255);
+					//			Matrix[i][j].Set_B(0);
+					//		}
+					//		else if (y >= -2 && y <= 0)
+					//		{
+					//			Matrix[i][j].Set_R(255);
+					//			Matrix[i][j].Set_G(0);
+					//			Matrix[i][j].Set_B(0);
+					//		}
+					//	}
+					//}
+					//Save_To_PPM(Matrix, "liniowaII_bezbiasu.ppm");
+				}
+				break;
+				case 6:
+				{
+					for (size_t i = 0; i < 500; ++i)
+					{
+						for (size_t j = 0; j < 500; ++j)
+						{
+							float sum1{};
+							float sum2{};
+							float sum3{};
+
+							sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
+							sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
+
+							sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
+							sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
+
+							sum3 += f3(sum1) * weights[0];
+							sum3 += f3(sum2) * weights[1];
+
+							y = f3(sum3);
+
+							if (y >= 0 && y < 0.25)
+							{
+								Matrix[i][j].Set_R(255);
+								Matrix[i][j].Set_G(255);
+								Matrix[i][j].Set_B(0);
+							}
+							else if (y >= 0.25 && y < 0.5)
+							{
+								Matrix[i][j].Set_R(0);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(255);
+							}
+							else if (y >= 0.5 && y < 0.75)
+							{
+								Matrix[i][j].Set_R(0);
+								Matrix[i][j].Set_G(255);
+								Matrix[i][j].Set_B(0);
+							}
+							else if (y >= 0.75 && y <= 1)
+							{
+								Matrix[i][j].Set_R(255);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(0);
+							}
+						}
+					}
+					Save_To_PPM(Matrix, "sigmoidalnaII_bezbiasu.ppm");
+				}
+				break;
+
+				default:	_STD cout << "An error occured with choice" << NEW_LINE;
+					break;
+				}
+
+				++my_counter2;
+			}
+
 		}
-	}
-	else  //with bias
-	{
-		float weights[5]{};
-		float y{};
-		initial_weights(weights, 5);
-		//weights[0] = 1;
-		_STD cin >> choice;
-		switch (choice)
+		else  //with bias
 		{
-			//first neural
-			case 1:
+			while (my_counter2 <= 6)
 			{
-				for (size_t i = 0; i < 500; ++i)
+				erase_vector(Matrix);
+				float weights[5]{};
+				float y{};
+				initial_weights(weights, 5);
+				switch (my_counter2)
 				{
-					for (size_t j = 0; j < 500; ++j)
+					//first neural
+				case 1:
+				{
+					/*for (size_t i = 0; i < 500; ++i)
 					{
-						float sum{};
-						sum += weights[0];
-						sum += normalized_point(i, 0, 500, (-5), 5) * weights[1];
-						sum += normalized_point(j, 0, 500, (-5), 5) * weights[2];
-						y = f3(sum);
-						COORD c;
-						c.X = i;
-						c.Y = j;
+						for (size_t j = 0; j < 500; ++j)
+						{
+							float sum{};
+							sum += 1;
+							sum += normalized_point(i, 0, 500, (-5), 5) * weights[1];
+							sum += normalized_point(j, 0, 500, (-5), 5) * weights[2];
+							y = f1(sum);
 
-						if (y == 1)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(0);
-						}
-						else
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(255);
+							if (y == 1)
+							{
+								Matrix[i][j].Set_R(255);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(0);
+							}
+							else
+							{
+								Matrix[i][j].Set_R(0);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(255);
+							}
 						}
 					}
+					Save_To_PPM(Matrix, "progowaI_zbiasem.ppm");*/
 				}
-				Save_To_PPM(Matrix, "progowaI_zbiasem.ppm");
-			}
-			break;
-			case 2:
-			{
-				for (size_t i = 0; i < 500; ++i)
-				{
-					for (size_t j = 0; j < 500; ++j)
-					{
-						float sum{};
-						sum += weights[0];
-						sum += normalized_point(i, 0, 500, (-5), 5) * weights[1];
-						sum += normalized_point(j, 0, 500, (-5), 5) * weights[2];
-						y = f3(sum);
-						COORD c;
-						c.X = i;
-						c.Y = j;
-
-						if (y < -2)
-						{
-							Matrix[i][j].Set_R(8);
-							Matrix[i][j].Set_G(37);
-							Matrix[i][j].Set_B(103);
-						}
-						else if (y >= -2 && y < 0)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(255);
-						}
-						else if (y >= 0 && y <= 2)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(255);
-							Matrix[i][j].Set_B(0);
-						}
-						else if (y >= -2 && y <= 0)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(0);
-						}
-					}
-				}
-				Save_To_PPM(Matrix, "liniowaI_zbiasem.ppm");
-			}
-			break;
-			case 3:
-			{
-				for (size_t i = 0; i < 500; ++i)
-				{
-					for (size_t j = 0; j < 500; ++j)
-					{
-						float sum{};
-						sum += weights[0];
-						sum += normalized_point(i, 0, 500, (-5), 5) * weights[1];
-						sum += normalized_point(j, 0, 500, (-5), 5) * weights[2];
-						y = f3(sum);
-						COORD c;
-						c.X = i;
-						c.Y = j;
-
-						if (y >= 0 && y < 0.25)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(255);
-							Matrix[i][j].Set_B(0);
-						}
-						else if (y >= 0.25 && y < 0.5)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(255);
-						}
-						else if (y >= 0.5 && y < 0.75)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(255);
-							Matrix[i][j].Set_B(0);
-						}
-						else if (y >= 0.75 && y <= 1)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(0);
-						}
-					}
-				}
-				Save_To_PPM(Matrix, "sigmoidalnaI_zbiasem.ppm");
-			}
-			break;
-			//second neural
-			case 4:
-			{
-				for (size_t i = 0; i < 500; ++i)
-				{
-					for (size_t j = 0; j < 500; ++j)
-					{
-						float sum1{};
-						float sum2{};
-						float sum3{};
-
-						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
-						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
-
-						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
-						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
-
-						//initial_weights(weights, 2);
-
-						sum1 += 1;
-						sum2 += 1;
-
-						sum3 += sum1 * weights[0];
-						sum3 += sum2 * weights[1];
-						sum3 += 1;
-
-						y = f3(sum3);
-						COORD c;
-						c.X = i;
-						c.Y = j;
-
-						if (y == 1)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(0);
-						}
-						else
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(255);
-						}
-					}
-				}
-				Save_To_PPM(Matrix, "progowaII_zbiasem.ppm");
-			}
-			break;
-			case 5:
-			{
-				for (size_t i = 0; i < 500; ++i)
-				{
-					for (size_t j = 0; j < 500; ++j)
-					{
-						float sum1{};
-						float sum2{};
-						float sum3{};
-
-						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
-						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
-
-						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
-						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
-
-
-						sum1 += 1;
-						sum2 += 1;
-
-						sum3 += sum1 * weights[0];
-						sum3 += sum2 * weights[1];
-						sum3 += 1;
-
-						y = f2(sum3);
-						COORD c;
-						c.X = i;
-						c.Y = j;
-
-						if (y < -2)
-						{
-							Matrix[i][j].Set_R(8);
-							Matrix[i][j].Set_G(37);
-							Matrix[i][j].Set_B(103);
-						}
-						else if (y >= -2 && y < 0)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(255);
-						}
-						else if (y >= 0 && y <= 2)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(255);
-							Matrix[i][j].Set_B(0);
-						}
-						else if (y >= -2 && y <= 0)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(0);
-						}
-					}
-				}
-				Save_To_PPM(Matrix, "liniowaII_zbiasem.ppm");
-			}
-			break;
-			case 6:
-			{
-				for (size_t i = 0; i < 500; ++i)
-				{
-					for (size_t j = 0; j < 500; ++j)
-					{
-						float sum1{};
-						float sum2{};
-						float sum3{};
-
-						sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
-						sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
-
-						sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
-						sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
-
-
-						sum1 += 1;
-						sum2 += 1;
-
-						sum3 += sum1 * weights[0];
-						sum3 += sum2 * weights[1];
-						sum3 += 1;
-
-						y = f3(sum3);
-						COORD c;
-						c.X = i;
-						c.Y = j;
-
-						if (y >= 0 && y < 0.25)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(255);
-							Matrix[i][j].Set_B(0);
-						}
-						else if (y >= 0.25 && y < 0.5)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(255);
-						}
-						else if (y >= 0.5 && y < 0.75)
-						{
-							Matrix[i][j].Set_R(0);
-							Matrix[i][j].Set_G(255);
-							Matrix[i][j].Set_B(0);
-						}
-						else if (y >= 0.75 && y <= 1)
-						{
-							Matrix[i][j].Set_R(255);
-							Matrix[i][j].Set_G(0);
-							Matrix[i][j].Set_B(0);
-						}
-					}
-				}
-				Save_To_PPM(Matrix, "sigmoidalnaII_zbiasem.ppm");
-			}
-			break;
-
-			default:	_STD cout << "An error occured with choice" << NEW_LINE;
 				break;
-		}
-	}
+				case 2:
+				{
+					/*for (size_t i = 0; i < 500; ++i)
+					{
+						for (size_t j = 0; j < 500; ++j)
+						{
+							float sum{};
+							sum += 1;
+							sum += normalized_point(i, 0, 500, (-5), 5) * weights[1];
+							sum += normalized_point(j, 0, 500, (-5), 5) * weights[2];
+							y = f2(sum);
 
+							if (y < -2)
+							{
+								Matrix[i][j].Set_R(8);
+								Matrix[i][j].Set_G(37);
+								Matrix[i][j].Set_B(103);
+							}
+							else if (y >= -2 && y < 0)
+							{
+								Matrix[i][j].Set_R(0);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(255);
+							}
+							else if (y >= 0 && y <= 2)
+							{
+								Matrix[i][j].Set_R(0);
+								Matrix[i][j].Set_G(255);
+								Matrix[i][j].Set_B(0);
+							}
+							else if (y >= -2 && y <= 0)
+							{
+								Matrix[i][j].Set_R(255);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(0);
+							}
+						}
+					}
+					Save_To_PPM(Matrix, "liniowaI_zbiasem.ppm");*/
+				}
+				break;
+				case 3:
+				{
+					for (size_t i = 0; i < 500; ++i)
+					{
+						for (size_t j = 0; j < 500; ++j)
+						{
+							float sum{};
+							sum += 1;
+							sum += normalized_point(i, 0, 500, (-5), 5) * weights[1];
+							sum += normalized_point(j, 0, 500, (-5), 5) * weights[2];
+							y = f3(sum);
+
+							if (y >= 0 && y < 0.25)
+							{
+								Matrix[i][j].Set_R(255);
+								Matrix[i][j].Set_G(255);
+								Matrix[i][j].Set_B(0);
+							}
+							else if (y >= 0.25 && y < 0.5)
+							{
+								Matrix[i][j].Set_R(0);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(255);
+							}
+							else if (y >= 0.5 && y < 0.75)
+							{
+								Matrix[i][j].Set_R(0);
+								Matrix[i][j].Set_G(255);
+								Matrix[i][j].Set_B(0);
+							}
+							else if (y >= 0.75 && y <= 1)
+							{
+								Matrix[i][j].Set_R(255);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(0);
+							}
+						}
+					}
+					Save_To_PPM(Matrix, "sigmoidalnaI_zbiasem.ppm");
+				}
+				break;
+				//second neural
+				case 4:
+				{
+					//for (size_t i = 0; i < 500; ++i)
+					//{
+					//	for (size_t j = 0; j < 500; ++j)
+					//	{
+					//		float sum1{};
+					//		float sum2{};
+					//		float sum3{};
+
+					//		sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
+					//		sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
+
+					//		sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
+					//		sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
+
+					//		sum1 += 1;
+					//		sum2 += 1;
+
+					//		sum3 += f1(sum1) * weights[0];
+					//		sum3 += f1(sum2) * weights[1];
+					//		sum3 += 1;
+
+					//		y = f1(sum3);
+
+					//		if (y == 1)
+					//		{
+					//			Matrix[i][j].Set_R(255);
+					//			Matrix[i][j].Set_G(0);
+					//			Matrix[i][j].Set_B(0);
+					//		}
+					//		else
+					//		{
+					//			Matrix[i][j].Set_R(0);
+					//			Matrix[i][j].Set_G(0);
+					//			Matrix[i][j].Set_B(255);
+					//		}
+					//	}
+					//}
+					//Save_To_PPM(Matrix, "progowaII_zbiasem.ppm");
+				}
+				break;
+				case 5:
+				{
+					//for (size_t i = 0; i < 500; ++i)
+					//{
+					//	for (size_t j = 0; j < 500; ++j)
+					//	{
+					//		float sum1{};
+					//		float sum2{};
+					//		float sum3{};
+
+					//		sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
+					//		sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
+
+					//		sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
+					//		sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
+
+					//		sum1 += 1;
+					//		sum2 += 1;
+
+					//		sum3 += f2(sum1) * weights[0];
+					//		sum3 += f2(sum2) * weights[1];
+					//		sum3 += 1;
+
+					//		y = f2(sum3);
+
+					//		if (y < -2)
+					//		{
+					//			Matrix[i][j].Set_R(8);
+					//			Matrix[i][j].Set_G(37);
+					//			Matrix[i][j].Set_B(103);
+					//		}
+					//		else if (y >= -2 && y < 0)
+					//		{
+					//			Matrix[i][j].Set_R(0);
+					//			Matrix[i][j].Set_G(0);
+					//			Matrix[i][j].Set_B(255);
+					//		}
+					//		else if (y >= 0 && y <= 2)
+					//		{
+					//			Matrix[i][j].Set_R(0);
+					//			Matrix[i][j].Set_G(255);
+					//			Matrix[i][j].Set_B(0);
+					//		}
+					//		else if (y >= -2 && y <= 0)
+					//		{
+					//			Matrix[i][j].Set_R(255);
+					//			Matrix[i][j].Set_G(0);
+					//			Matrix[i][j].Set_B(0);
+					//		}
+					//	}
+					//}
+					//Save_To_PPM(Matrix, "liniowaII_zbiasem.ppm");
+				}
+				break;
+				case 6:
+				{
+					for (size_t i = 0; i < 500; ++i)
+					{
+						for (size_t j = 0; j < 500; ++j)
+						{
+							float sum1{};
+							float sum2{};
+							float sum3{};
+
+							sum1 += normalized_point(i, 0, 500, (-5), 5) * weights[0];	//w 1 1 1
+							sum2 += normalized_point(i, 0, 500, (-5), 5) * weights[2];	//w 1 2 1
+
+							sum1 += normalized_point(j, 0, 500, (-5), 5) * weights[1];	//w 1 1 2
+							sum2 += normalized_point(j, 0, 500, (-5), 5) * weights[3];	//w 1 2 2 
+
+							sum1 += 1;
+							sum2 += 1;
+
+							sum3 += f3(sum1) * weights[0];
+							sum3 += f3(sum2) * weights[1];
+							sum3 += 1;
+
+							y = f3(sum3);
+
+							if (y >= 0 && y < 0.25)
+							{
+								Matrix[i][j].Set_R(255);
+								Matrix[i][j].Set_G(255);
+								Matrix[i][j].Set_B(0);
+							}
+							else if (y >= 0.25 && y < 0.5)
+							{
+								Matrix[i][j].Set_R(0);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(255);
+							}
+							else if (y >= 0.5 && y < 0.75)
+							{
+								Matrix[i][j].Set_R(0);
+								Matrix[i][j].Set_G(255);
+								Matrix[i][j].Set_B(0);
+							}
+							else if (y >= 0.75 && y <= 1)
+							{
+								Matrix[i][j].Set_R(255);
+								Matrix[i][j].Set_G(0);
+								Matrix[i][j].Set_B(0);
+							}
+						}
+					}
+					Save_To_PPM(Matrix, "sigmoidalnaII_zbiasem.ppm");
+				}
+				break;
+
+				default:	_STD cout << "An error occured with choice" << NEW_LINE;
+					break;
+				}
+				++my_counter2;
+			}
+		}
+
+		++my_counter;
+	}
 
 	system("pause");
 	return 0;
@@ -719,6 +691,27 @@ void initial_weights(float* weights, const size_t size)
 	for (size_t i = 0; i < size; ++i)
 	{
 		weights[i] = dis(generator);
+	}
+}
+
+void initial_vector(::std::vector<::std::vector<Pixel>>& vec)
+{
+	for (typename _STD vector<_STD vector<Pixel>>::iterator vec_iterator = vec.begin(); vec_iterator != vec.end(); ++vec_iterator)
+	{
+		vec_iterator->resize(500);
+	}
+}
+
+void erase_vector(::std::vector<::std::vector<Pixel>>& vec)
+{
+	for (auto iter = vec.begin(); iter != vec.end(); ++iter)
+	{
+		for (auto iter_second = iter->begin(); iter_second != iter->end(); ++iter_second)
+		{
+			iter_second->Set_R(NULL);
+			iter_second->Set_G(NULL);
+			iter_second->Set_B(NULL);
+		}
 	}
 }
 
