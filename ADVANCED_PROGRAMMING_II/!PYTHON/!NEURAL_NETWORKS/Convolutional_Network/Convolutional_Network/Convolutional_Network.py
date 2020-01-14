@@ -65,13 +65,13 @@ def Convolutional_Transform(Input, Kernel,Output):
     print()
 
 
-#Fill_Input_Batch(Input_Batch)
-#Display_Input_Batch(Input_Batch)
-#print()
-#Display_Kernel(Kernel)
-#Convolutional_Transform(Input_Batch,Kernel,Output)
-#print()
-#Display_Output(Output)
+Fill_Input_Batch(Input_Batch)
+Display_Input_Batch(Input_Batch)
+print()
+Display_Kernel(Kernel)
+Convolutional_Transform(Input_Batch,Kernel,Output)
+print()
+Display_Output(Output)
 
 # Load an color image in grayscale
 img = cv.imread("red_eyes.jpg",1)

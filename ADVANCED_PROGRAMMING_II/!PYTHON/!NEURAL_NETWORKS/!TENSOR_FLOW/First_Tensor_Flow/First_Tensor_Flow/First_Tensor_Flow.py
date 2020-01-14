@@ -187,6 +187,7 @@ model_a = keras.Sequential(
     ]
 )
 
+
 model = keras.Sequential(
     [ #LENET 5
         #keras.layers.Flatten(input_shape=(28, 28)), #making array from 2 dimensional to one dimensional (flat, 28*28)
