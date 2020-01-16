@@ -66,6 +66,7 @@ int main(int argc, char* argv[])
 		//SECOND LAYER
 		float neuron_II1{};
 		///////////////////////////
+		float sum{};
 		const size_t choice = static_cast<size_t>(rand() % 4); //works
 
 		neuron_I1 += inputs[choice][0] * weights[0];	//w 1 1 1	//first layer, to which neuron, from which input
@@ -147,7 +148,7 @@ const float f(const float value)
 
 const float df(const float value)
 {
-	return static_cast<float>(value * (1 - value));
+	return static_cast<float>((1 * exp(-1 * value)) / pow(1 + exp(-1 * value), 2));
 }
 
 void Initialize_Inputs(__int16 inputs[4][3])
