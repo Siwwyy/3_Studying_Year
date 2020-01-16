@@ -35,7 +35,7 @@ namespace Window
 		*/
 		Window* win;
 		HWND Handle;
-		static _STD vector<_STD unique_ptr<int>> vec_Windows;
+		//static _STD vector<_STD unique_ptr<int>> vec_Windows;
 		//////////////////////////////////////////////////////////////////////////////		//////////////////////////////////////////////////////////////////////////////
 		/*
 			FUNKCJE PRIVATE
@@ -69,7 +69,7 @@ namespace Window
 		/*
 			GETTERY PUBLIC
 		*/
-		static _STD vector<_STD unique_ptr<int>>& Get_vec_Windows();
+		//static _STD vector<_STD unique_ptr<int>>& Get_vec_Windows();
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			DESTRUKTOR

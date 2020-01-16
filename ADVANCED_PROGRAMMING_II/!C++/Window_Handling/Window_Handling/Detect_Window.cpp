@@ -23,15 +23,15 @@ BOOL Window::Detect_Window::Get_Window(HWND hwnd, LPARAM substring)
 	{
 		//Window A(windowTitle, TITLE_SIZE);
 		//vec_Windows.emplace_back(_STD move(_STD make_unique<Window>((new Window(windowTitle, TITLE_SIZE)))));
-		//std::wcout << hwnd << ":  " << windowTitle << NEW_LINE;
+		std::wcout << hwnd << ":  " << windowTitle << NEW_LINE;
 	}
 	return TRUE;
 }
 
-::std::vector<::std::unique_ptr<int>>& Window::Detect_Window::Get_vec_Windows()
-{
-	return vec_Windows;
-}
+//::std::vector<::std::unique_ptr<int>>& Window::Detect_Window::Get_vec_Windows()
+//{
+//	return vec_Windows;
+//}
 
 Window::Detect_Window::~Detect_Window()
 {
