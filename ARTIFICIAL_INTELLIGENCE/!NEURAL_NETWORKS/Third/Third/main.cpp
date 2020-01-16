@@ -18,6 +18,7 @@ void Initialize_Inputs(__int16 inputs[4][3]);
 void Print_Inputs(const __int16 inputs[4][3]);
 void Print_Weights(const float weights[9]);
 void Save_Weights(const float weights[9]);
+void Predict_Value(const float weights[9]);
 
 
 int main(int argc, char* argv[])
@@ -28,7 +29,7 @@ int main(int argc, char* argv[])
 
 	float learning_cofficient = 0.5f;
 	constexpr float E_max = 0.003f;
-	float E = 1.f;
+	float E = 0.f;
 	size_t c{ 0 };
 	constexpr size_t C_max = 200;	//amount of iterations
 	float weights[9]{};
@@ -56,80 +57,86 @@ int main(int argc, char* argv[])
 	}
 	//Print_Weights(weights);
 
-	bool if_break = false;
-	while (c < C_max && if_break == false)
+	bool if_break = true;
+	while (if_break)
 	{
-		///////////////////////////
-		//FIRST LAYER
-		float neuron_I1{};
-		float neuron_I2{};
-		//SECOND LAYER
-		float neuron_II1{};
-		///////////////////////////
-		float sum{};
-		const size_t choice = static_cast<size_t>(rand() % 4); //works
+		for (size_t choice = 0; choice < 4; ++choice)
+		{
+			///////////////////////////
+			//FIRST LAYER
+			float neuron_I1{};
+			float neuron_I2{};
+			//SECOND LAYER
+			float neuron_II1{};
+			///////////////////////////
+			float sum{};
+			//const size_t choice = static_cast<size_t>(rand() % 4); //works
 
-		neuron_I1 += inputs[choice][0] * weights[0];	//w 1 1 1	//first layer, to which neuron, from which input
-		neuron_I1 += inputs[choice][1] * weights[1];	//w 1 1 2
-		neuron_I1 += 1 * weights[4];	//w 1 1 3	//bias
-
-
-		neuron_I2 += inputs[choice][1] * weights[2];	//w 1 2 1
-		neuron_I2 += inputs[choice][0] * weights[3];	//w 1 2 2
-		neuron_I2 += 1 * weights[5];	//w 1 2 3	//bias
+			neuron_I1 += inputs[choice][0] * weights[0];	//w 1 1 1	//first layer, to which neuron, from which input
+			neuron_I1 += inputs[choice][1] * weights[1];	//w 1 1 2
+			neuron_I1 += 1 * weights[4];	//w 1 1 3	//bias
 
 
-		float temp_neuron_I1{ neuron_I1 };
-		float temp_neuron_I2{ neuron_I2 };
-
-		neuron_I1 = f(neuron_I1);
-		neuron_I2 = f(neuron_I2);
+			neuron_I2 += inputs[choice][1] * weights[2];	//w 1 2 1
+			neuron_I2 += inputs[choice][0] * weights[3];	//w 1 2 2
+			neuron_I2 += 1 * weights[5];	//w 1 2 3	//bias
 
 
-		neuron_II1 += neuron_I1 * weights[6];	//w 2 1 1
-		neuron_II1 += neuron_I2 * weights[7];	//w 2 1 2
-		neuron_II1 += inputs[choice][2] * weights[8];	//w 2 1 3 //bias
+			float temp_neuron_I1{ neuron_I1 };
+			float temp_neuron_I2{ neuron_I2 };
+
+			neuron_I1 = f(neuron_I1);
+			neuron_I2 = f(neuron_I2);
 
 
-		float temp_neuron_II1 {neuron_II1};
-
-		neuron_II1 = f(neuron_II1);
-
-		//Counting error 
-		float sigma21{};
-
-		float simga11{};
-		float sigma12{};
-
-		sigma21 = (T[choice] - neuron_II1) * df(temp_neuron_II1);
-
-		simga11 = sigma21 * weights[6] * df(temp_neuron_I1);
-		sigma12 = sigma21 * weights[7] * df(temp_neuron_I2);
-
-		//Update weights
-		weights[0] += learning_cofficient * simga11 * inputs[choice][0];	//w 1 1 1 
-		weights[1] += learning_cofficient * simga11 * inputs[choice][1];
-		weights[4] += learning_cofficient * simga11 * 1;
+			neuron_II1 += neuron_I1 * weights[6];	//w 2 1 1
+			neuron_II1 += neuron_I2 * weights[7];	//w 2 1 2
+			neuron_II1 += inputs[choice][2] * weights[8];	//w 2 1 3 //bias
 
 
-		weights[2] += learning_cofficient * sigma12 * inputs[choice][1];
-		weights[3] += learning_cofficient * sigma12 * inputs[choice][0];
-		weights[5] += learning_cofficient * sigma12 * 1;
+			float temp_neuron_II1{ neuron_II1 };
 
-		
-		weights[6] += learning_cofficient * sigma21 * temp_neuron_I1;
-		weights[7] += learning_cofficient * sigma21 * temp_neuron_I2;
-		weights[8] += learning_cofficient * sigma21 * 1;
+			neuron_II1 = f(neuron_II1);
+
+			//Counting error 
+			float sigma21{};
+
+			float simga11{};
+			float sigma12{};
+
+			sigma21 = (T[choice] - neuron_II1) * df(temp_neuron_II1);
+
+			simga11 = sigma21 * weights[6] * df(temp_neuron_I1);
+			sigma12 = sigma21 * weights[7] * df(temp_neuron_I2);
+
+			//Update weights
+			weights[0] += learning_cofficient * simga11 * inputs[choice][0];	//w 1 1 1 
+			weights[1] += learning_cofficient * simga11 * inputs[choice][1];
+			weights[4] += learning_cofficient * simga11 * 1;
 
 
-		//Counting E
-		E += static_cast<float>((0.5f) * pow((T[choice] - neuron_II1), 2));
-		_STD cout << E << NEW_LINE;
+			weights[2] += learning_cofficient * sigma12 * inputs[choice][1];
+			weights[3] += learning_cofficient * sigma12 * inputs[choice][0];
+			weights[5] += learning_cofficient * sigma12 * 1;
+
+
+			weights[6] += learning_cofficient * sigma21 * temp_neuron_I1;
+			weights[7] += learning_cofficient * sigma21 * temp_neuron_I2;
+			weights[8] += learning_cofficient * sigma21 * 1;
+
+
+			//Counting E
+			E += static_cast<float>((0.5f) * pow((T[choice] - neuron_II1), 2));
+			//_STD cout << E << NEW_LINE;
+		}
 		if (!(E > E_max))
 		{
-			if_break = true;
+			if_break = false;
 		}
-
+		else
+		{
+			E = 0;
+		}
 		//Print_Weights(weights);
 		//system("pause");
 		++c;
@@ -206,6 +213,14 @@ void Save_Weights(const float weights[9])
 	}
 
 	file_out.close();
+}
+
+void Predict_Value(const float weights[9])
+{
+	for (size_t i = 0; i < 9; ++i)
+	{
+
+	}
 }
 
 void Print_Weights(const float weights[9])
