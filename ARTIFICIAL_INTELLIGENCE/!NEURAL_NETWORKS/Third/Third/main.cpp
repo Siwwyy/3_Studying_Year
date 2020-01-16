@@ -5,6 +5,7 @@
 #include <iterator>
 #include <time.h>
 #include <random>
+#include <iomanip>
 #include <math.h>
 #include <windows.h>
 
@@ -15,7 +16,8 @@ const float f(const float value);
 const float df(const float value);
 void Initialize_Inputs(__int16 inputs[4][3]);
 void Print_Inputs(const __int16 inputs[4][3]);
-void Print_Weights(const float weights[6]);
+void Print_Weights(const float weights[9]);
+void Save_Weights(const float weights[9]);
 
 
 int main(int argc, char* argv[])
@@ -30,7 +32,6 @@ int main(int argc, char* argv[])
 	size_t c{ 0 };
 	constexpr size_t C_max = 200;	//amount of iterations
 	float weights[9]{};
-
 	__int16 inputs[4][3]{};
 	bool T[]{0,1,1,0};
 
@@ -46,14 +47,14 @@ int main(int argc, char* argv[])
 	
 	//inputs initialization
 	Initialize_Inputs(inputs);
-	Print_Inputs(inputs);
+	//Print_Inputs(inputs);
 
 	//weight's initialization
 	for (size_t i = 0; i < 9; ++i)
 	{
 		weights[i] = dis(generator);
 	}
-	Print_Weights(weights);
+	//Print_Weights(weights);
 
 	bool if_break = false;
 	while (c < C_max && if_break == false)
@@ -69,80 +70,71 @@ int main(int argc, char* argv[])
 
 		neuron_I1 += inputs[choice][0] * weights[0];	//w 1 1 1	//first layer, to which neuron, from which input
 		neuron_I1 += inputs[choice][1] * weights[1];	//w 1 1 2
-		neuron_I1 += inputs[choice][2] * weights[4];	//w 1 1 3	//bias
-
+		neuron_I1 += 1 * weights[4];	//w 1 1 3	//bias
 
 
 		neuron_I2 += inputs[choice][1] * weights[2];	//w 1 2 1
 		neuron_I2 += inputs[choice][0] * weights[3];	//w 1 2 2
-		neuron_I2 += inputs[choice][2] * weights[5];	//w 1 2 3	//bias
+		neuron_I2 += 1 * weights[5];	//w 1 2 3	//bias
+
+
+		float temp_neuron_I1{ neuron_I1 };
+		float temp_neuron_I2{ neuron_I2 };
 
 		neuron_I1 = f(neuron_I1);
 		neuron_I2 = f(neuron_I2);
 
 
-		neuron_II1 += neuron_I1 * weights[6];
-		neuron_II1 += neuron_I2 * weights[7];
-		neuron_II1 += inputs[choice][2] * weights[8];	//bias
+		neuron_II1 += neuron_I1 * weights[6];	//w 2 1 1
+		neuron_II1 += neuron_I2 * weights[7];	//w 2 1 2
+		neuron_II1 += inputs[choice][2] * weights[8];	//w 2 1 3 //bias
 
+
+		float temp_neuron_II1 {neuron_II1};
 
 		neuron_II1 = f(neuron_II1);
 
 		//Counting error 
+		float sigma21{};
+
+		float simga11{};
+		float sigma12{};
+
+		sigma21 = (T[choice] - neuron_II1) * df(temp_neuron_II1);
+
+		simga11 = sigma21 * weights[6] * df(temp_neuron_I1);
+		sigma12 = sigma21 * weights[7] * df(temp_neuron_I2);
+
+		//Update weights
+		weights[0] += learning_cofficient * simga11 * inputs[choice][0];	//w 1 1 1 
+		weights[1] += learning_cofficient * simga11 * inputs[choice][1];
+		weights[4] += learning_cofficient * simga11 * 1;
 
 
+		weights[2] += learning_cofficient * sigma12 * inputs[choice][1];
+		weights[3] += learning_cofficient * sigma12 * inputs[choice][0];
+		weights[5] += learning_cofficient * sigma12 * 1;
 
-		////choice
-		//size_t choice_{ choice(generator) };
-		////I LAYER
-		//float y11{};	//1
-		//float y12{};	//2
-
-		//y11 += 1;	//adding bias
-		//y12 += 1;	//adding bias
-
-		//y11 += static_cast<float>(inputs[choice_][0] * weights[0]);	//w 1 1 1
-		//y11 += static_cast<float>(inputs[choice_][1] * weights[2]);	//w 1 1 2
-
-		//y12 += static_cast<float>(inputs[choice_][0] * weights[1]);	//w 1 2 1
-		//y12 += static_cast<float>(inputs[choice_][1] * weights[3]);	//w 1 2 2 
-
-		////Update the values by sigmoid function
-		//y11 = f(y11);
-		//y12 = f(y12);
+		
+		weights[6] += learning_cofficient * sigma21 * temp_neuron_I1;
+		weights[7] += learning_cofficient * sigma21 * temp_neuron_I2;
+		weights[8] += learning_cofficient * sigma21 * 1;
 
 
+		//Counting E
+		E += static_cast<float>((0.5f) * pow((T[choice] - neuron_II1), 2));
+		_STD cout << E << NEW_LINE;
+		if (!(E > E_max))
+		{
+			if_break = true;
+		}
 
-
-		////II LAYER
-		//float y21{};
-		//
-		//y21 += 1;	//adding bias
-
-		//y21 += static_cast<float>(inputs[choice_][0] * weights[4]);	//w 2 1 1
-		//y21 += static_cast<float>(inputs[choice_][1] * weights[5]);	//w 2 1 2
-
-		//y21 = f(y21);
-
-		////Update measurement error
-		//E += static_cast<float>((0.5f) * pow((inputs[choice_][2] - y21), 2));
-
-		//if (E > E_max)
-		//{
-		//	//remember about counting the deltas!
-		//	
-		//}
-		//else
-		//{
-		//	if_break = true;
-		//}
-
-		//++c;
-
-
+		//Print_Weights(weights);
+		//system("pause");
 		++c;
 	}
 
+	Save_Weights(weights);
 
 	system("pause");
 	return 0;
@@ -193,9 +185,31 @@ void Print_Inputs(const __int16 inputs[4][3])
 	}
 }
 
-void Print_Weights(const float weights[6])
+void Save_Weights(const float weights[9])
 {
-	for (size_t i = 0; i < 6; ++i)
+	_STD fstream file_out;
+	file_out.open("learned.out", std::ios_base::out);
+
+	if (file_out.good() == false)
+	{
+		_STD cerr << "[WARRNING:0001] Invalid file_path\n";
+	}
+	else
+	{
+		for (size_t i = 0; i < 9; ++i)
+		{
+			//_STD cout << _STD setprecision(10) << weights[i] << NEW_LINE;
+			//printf("%0.12f\n", weights[i]);
+			file_out << weights[i] << '\n';
+		}
+	}
+
+	file_out.close();
+}
+
+void Print_Weights(const float weights[9])
+{
+	for (size_t i = 0; i < 9; ++i)
 	{
 		_STD cout << weights[i] << ' ';
 	}
