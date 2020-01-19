@@ -13,19 +13,9 @@
 
 void Set_Connections(bool Graph[100][100]);
 void Print_Graph(bool Graph[100][100]);
-void Set_Connections_BA_Method();
+void Set_Connections_BA_Method(_STD vector<_STD list<__int32>>& people);
 const __int32 vertex_connections(bool Graph[100]);
-//void Display_Graph(const _STD vector<_STD pair<_STD vector<__int32>, __int32>>& people);
 void Display_Graph(const _STD vector<_STD list<__int32>>& people);
-
-//class Vertex
-//{
-//private:
-//
-//public:
-//	Vertex();
-//	~Vertex();
-//};
 
 int main(int argc, char* argv[])
 {
@@ -34,7 +24,7 @@ int main(int argc, char* argv[])
 
 	bool Graph[100][100]{ false };
 
-	Set_Connections_BA_Method();
+	
 
 
 	////Print_Graph(Graph);
@@ -79,6 +69,11 @@ int main(int argc, char* argv[])
 
 	//file_out.close();
 
+	_STD vector<_STD list<__int32>> my_list;
+	Set_Connections_BA_Method(my_list);
+	Display_Graph(my_list);
+
+
 	system("pause");
 	return 0;
 }
@@ -110,17 +105,17 @@ void Print_Graph(bool Graph[100][100])
 	}
 }
 
-void Set_Connections_BA_Method()
+void Set_Connections_BA_Method(_STD vector<_STD list<__int32>>& people)
 {
-	using namespace std::chrono_literals;
+	//using namespace std::chrono_literals;
 	_STD mt19937 generator(time(nullptr));
 	////Initialize basic graph with 2 connections
 	////ki -> amout of connections at each vertex
 	////kc -> amout of all connections
 
 	const size_t N{20};
-	_STD vector<_STD list<__int32>> people(2);
 	//basic initialization
+	people.resize(2);
 	people[0].push_back(1);
 	people[1].push_back(0);
 	//////////////////////////////////////////
@@ -149,7 +144,6 @@ void Set_Connections_BA_Method()
 			probability = static_cast<float>(people[i].size() / kc);
 			_STD bernoulli_distribution prob(probability);
 			bool temp = prob(generator);
-			//_STD cout << probability << ' ';
 			if (temp)
 			{
 				people[people.size() - 1].push_front(i);
@@ -157,99 +151,11 @@ void Set_Connections_BA_Method()
 				added = true;
 			}
 		}
-		//_STD cout <<  NEW_LINE;
 		if (added == false)
 		{
 			people[people.size() - 1].push_front(0);
 		}
-
-
-		system("cls");
-		Display_Graph(people);
-		std::this_thread::sleep_for(1s);
 	}
-	system("pause");
-
-
-	//for (size_t i = 0; i < people.size(); ++i)
-	//	{
-	//		size_t cos = people[i].size();
-	//		probability = static_cast<float>(cos / kc);
-	//		//_STD cout << probability << NEW_LINE;
-	//		_STD bernoulli_distribution prob(probability);
-	//		bool temp = prob(generator);
-	//		if (temp)
-	//		{
-	//			size_t temp{ people.size() };
-	//			people.emplace_back(people.size());
-	//			people[temp].push_back(i);
-	//			++number_of_edges;
-	//		}
-	//	}
-
-
-
-
-
-	//_STD vector<_STD pair<_STD vector<__int32>, __int32>> people(2);
-	////basic initialization
-	//people[0].first.emplace_back(1);
-	//people[0].second = 1;
-	//people[1].first.emplace_back(0);
-	//people[1].second = 1;
-	///////////////////////////////////
-
-
-	//float kc{ };
-	//int32_t sum{};
-	//float probability{ };
-	//while (people.size() < N)
-	//{
-	//	////count ki of each vertex
-	//	//for (size_t i = 0; i < people.size(); ++i)
-	//	//{
-	//	//	people[i].second = people[i].first.size();
-	//	//}
-	//	//////////////////////////////////////////////////////////////////
-
-	//	//count total kc
-	//	for (size_t i = 0; i < people.size(); ++i)
-	//	{
-	//		sum += people[i].second;
-	//	}
-	//	kc = static_cast<float>(0.5f * sum);
-	//	//////////////////////////////////////////////////////////////////
-	//	//for (size_t i = 0; i < people.size(); ++i)
-	//	//{
-	//	//	probability = static_cast<float>(people[i].second / kc);
-	//	//	_STD cout << probability << NEW_LINE;
-	//	//}
-
-	//	//Adding new vertex with kind of probability
-	//	for (size_t i = 0; i < people.size(); ++i)
-	//	{
-	//		//count ki of each vertex
-	//		for (size_t j = 0; j < people.size(); ++j)
-	//		{
-	//			people[j].second = people[j].first.size();
-	//		}
-	//		//probability = static_cast<float>(people[i].second / kc);
-	//		////_STD cout << probability << NEW_LINE;
-	//		//_STD bernoulli_distribution prob(probability);
-	//		//bool temp = prob(generator);
-	//		//if (temp)
-	//		//{
-	//		//	people.emplace_back(_STD make_pair(i,0));
-	//		//	/*people[i].first.emplace_back(people.size());*/
-	//		//}
-	//	}
-
-	//	Display_Graph(people);
-	//	_STD cin.get();
-	//	sum = 0;
-	//}
-
-
 }
 
 const __int32 vertex_connections(bool Graph[100])
@@ -266,7 +172,6 @@ const __int32 vertex_connections(bool Graph[100])
 	return connections;
 }
 
-//void Display_Graph(const::std::vector<::std::pair<::std::vector<__int32>, __int32>>& people)
 void Display_Graph(const _STD vector<_STD list<__int32>>& people)
 {
 	for (size_t i = 0; i < people.size(); ++i)
@@ -279,11 +184,3 @@ void Display_Graph(const _STD vector<_STD list<__int32>>& people)
 		_STD cout << NEW_LINE;
 	}
 }
-
-//Vertex::Vertex()
-//{
-//}
-//
-//Vertex::~Vertex()
-//{
-//}
