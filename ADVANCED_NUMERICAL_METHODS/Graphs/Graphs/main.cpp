@@ -99,11 +99,11 @@ const _STD vector<_STD list<__int32>> Set_Connections_BA_Method()
 		{
 			people[people.size() - 1].push_front(0);
 		}
-		system("cls");
-		Display_Graph(people);
-		std::this_thread::sleep_for(1s);
+		//system("cls");
+		//Display_Graph(people);
+		//std::this_thread::sleep_for(1s);
 	}
-	system("cls");
+	//system("cls");
 	return people;
 }
 
