@@ -29,9 +29,9 @@ int main(int argc, char* argv[])
 	size_t width{};
 	size_t height{};
 	Matrix = Read_Inputs("file.in", width, height);
-	Display_Matrix(Matrix, width, height);
+	//Display_Matrix(Matrix, width, height);
 
-	//Hopfield(Matrix, width);	//A letter
+	Hopfield(Matrix, width);
 
 
 
@@ -163,71 +163,81 @@ const void Hopfield(__int16** Matrix, const size_t& width)
 	std::mt19937 generator(random()); //Standard mersenne_twister_engine seeded with rd()
 	std::uniform_real_distribution<float> dis(-1.0f, 1.0f);
 
-	float* weights{};
-	//float * neurons{};
-	weights = new float[width];
-	//neurons = new float[width];
-	//for (size_t i = 0; i < width; ++i)
-	//{
-	//	weights[i] = dis(generator);
-	//}
-
-	auto delta = [](const size_t& i, const size_t& j) -> const __int16 { if (i == j) { return 1; } else { return 0; }; };
-	int_fast16_t sum{};
-
-	bool if_break = true;
-	while (if_break)
+	float ** weights{};
+	int16_t * creature{};
+	weights = new float*[width];
+	creature = new int16_t[width];
+	for (size_t i = 0; i < width; ++i)
 	{
-		//Display_Single_Matrix(Matrix, width);
-		//for (size_t i = 0; i < 7; ++i)
-		//{
-		//	for (size_t j = 0; j < 5; ++j)
-		//	{
-		//		sum += (Matrix[((i * 5) + i)] * Matrix[((i * 5) + j)]);
-		//	}
-		//}
-		//for (size_t i = 0; i < 7; ++i)
-		//{
-		//	for (size_t j = 0; j < 5; ++j)
-		//	{
-		//		weights[static_cast<size_t>((i * 5) + j)] = (1 - delta(i, j)) * sum;
-		//	}
-
-		//}
-
-
-
-
-		////for (size_t i = 0; i < width; ++i)
-		////{
-		////	if (weights[i] > 0)
-		////	{
-		////		Matrix[i] = 1;
-		////	}
-		////	else if (weights[i] < 0)
-		////	{
-		////		Matrix[i] = -1;
-		////	}
-		////}
-
-		//for (size_t k = 0; k < width; ++k)
-		//{
-		//	for (size_t i = 0; i < 7; ++i)
-		//	{
-		//		for (size_t j = 0; j < 5; ++j)
-		//		{
-		//			if (k != (i * 5) + j)
-		//			{
-		//				Matrix[k] = weights[static_cast<size_t>((i * 5) + j)] * Matrix[static_cast<size_t>((i * 5) + j)];
-		//			}
-		//		}
-		//	}
-		//}
-		//system("pause");
-		//system("cls");
-
-
+		weights[i] = new float[width];
 	}
 
+	auto delta = [](const size_t& i, const size_t& j) -> const __int16 { if (i == j) { return 1; } else { return 0; }; };
+	int16_t suma{};
+
+	bool if_break = true;
+
+	
+	for (size_t i = 0; i < width; ++i)
+	{
+		for (size_t j = 0; j < width; ++j)
+		{
+			for (size_t k = 0; k < 4; ++k)
+			{
+				suma += static_cast<int16_t>(Matrix[k][i] * Matrix[k][j]);
+			}
+			weights[i][j] = static_cast<float>((1 - delta(i, j)) * suma);
+			suma = NULL;
+		}
+
+	}
+	suma = NULL;
+
+	for (size_t i = 0; i < width; ++i)
+	{
+		creature[i] = Matrix[0][i];	//A
+		//creature[i] = Matrix[2][i];	//I
+		//creature[i] = Matrix[3][i];	//X
+	}
+	//creature[0] = -1;
+	//creature[34] = -1;
+	//creature[4] = -1;
+	//creature[12] = -1;
+	//creature[1] = -1;
+
+	while (if_break)
+	{
+		Display_Single_Matrix(creature, width);
+		
+		float sum{};
+		for (size_t i = 0; i < width; ++i)
+		{
+			for (size_t j = 0; j < width; ++j)
+			{
+				sum += creature[j] * weights[i][j];
+			}
+			if (sum > 0)
+			{
+				creature[i] = 1;
+			}
+			else if (sum < 0)
+			{
+				creature[i] = -1;
+			}
+			sum = NULL;
+		}
+		
+		
+
+	
+		system("pause");
+		system("cls");
+	}
+
+	for (size_t i = 0; i < width; ++i)
+	{
+		delete[] weights[i];
+	}
 	delete[] weights;
+	delete[] creature;
 }
