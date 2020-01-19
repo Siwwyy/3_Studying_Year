@@ -136,29 +136,43 @@ void Set_Connections_BA_Method()
 		}
 		kc = static_cast<float>(0.5f * sum);
 
-		for (size_t i = 0; i < people.size(); ++i)
+		bool added = false;
+		//add new vertex
+		people.emplace_back();
+		//connect with kind of probability to other vertices
+		for (size_t i = 0; i < people.size() - 1; ++i)
 		{
-			probability = static_cast<float>(people[i].size() / number_of_edges);
-			//_STD cout << probability << NEW_LINE;
-			_STD bernoulli_distribution prob(probability);
-			bool temp = prob(generator);
-			if (temp)
-			{
-				size_t temp{ people.size() };
-				people.emplace_back(people.size());
-				people[temp].push_back(i);
-				++number_of_edges;
-			}
+
 		}
 
-		Display_Graph(people);
-		_STD cin.get();
+
+		//
+		//if (added == false)
+		//{
+		//	people[people.size() - 1].push_front(0);
+		//}
+		//Display_Graph(people);
+		//_STD cin.get();
 	}
 
 
 
 
-
+	//for (size_t i = 0; i < people.size(); ++i)
+	//	{
+	//		size_t cos = people[i].size();
+	//		probability = static_cast<float>(cos / kc);
+	//		//_STD cout << probability << NEW_LINE;
+	//		_STD bernoulli_distribution prob(probability);
+	//		bool temp = prob(generator);
+	//		if (temp)
+	//		{
+	//			size_t temp{ people.size() };
+	//			people.emplace_back(people.size());
+	//			people[temp].push_back(i);
+	//			++number_of_edges;
+	//		}
+	//	}
 
 
 
