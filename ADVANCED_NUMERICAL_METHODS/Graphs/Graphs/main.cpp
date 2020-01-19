@@ -14,6 +14,11 @@
 
 #define NEW_LINE '\n'
 
+static int32_t promien{};
+static int32_t srednica{};
+
+
+
 void Set_Connections(bool Graph[100][100]);
 void Print_Graph(bool Graph[100][100]);
 //void Set_Connections_BA_Method(_STD vector<_STD list<__int32>>& people);
@@ -25,6 +30,7 @@ const float Get_CC_Coefficient(const _STD vector<_STD list<__int32>>& people);
 
 void graphBFS(const _STD vector<_STD list<__int32>> & people , int v, _STD vector<bool>& visited)
 {
+	promien = 0;
 	visited[v] = true;
 	_STD cout << v << " ";
 
@@ -32,8 +38,14 @@ void graphBFS(const _STD vector<_STD list<__int32>> & people , int v, _STD vecto
 	{
 		if (i && !visited[i]) 
 		{
+			++promien;
 			graphBFS(people, i, visited);
+
 		}
+	}
+	if (srednica <= promien)
+	{
+		srednica = promien;
 	}
 }
 
@@ -51,6 +63,8 @@ int main(int argc, char* argv[])
 	visited.resize(my_list.size());
 	_STD cout << "Visited: ";
 	graphBFS(my_list, 0, visited);
+	_STD cout << NEW_LINE;
+	_STD cout << "Srednica: " << srednica << NEW_LINE;
 	_STD cout << NEW_LINE;
 
 	system("pause");
