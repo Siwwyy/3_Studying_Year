@@ -146,21 +146,22 @@ void Set_Connections_BA_Method()
 			probability = static_cast<float>(people[i].size() / kc);
 			_STD bernoulli_distribution prob(probability);
 			bool temp = prob(generator);
-			_STD cout << probability << ' ';
+			//_STD cout << probability << ' ';
 			if (temp)
 			{
 				people[people.size() - 1].push_front(i);
 				added = true;
 			}
 		}
-		_STD cout <<  NEW_LINE;
+		//_STD cout <<  NEW_LINE;
 		if (added == false)
 		{
 			people[people.size() - 1].push_front(0);
 		}
 
 
-		//Display_Graph(people);
+		system("cls");
+		Display_Graph(people);
 		system("pause");
 	}
 
