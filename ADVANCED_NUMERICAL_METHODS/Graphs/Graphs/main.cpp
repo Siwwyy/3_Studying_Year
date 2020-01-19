@@ -7,6 +7,8 @@
 #include <chrono>
 #include <cstdint>
 #include <thread>
+#include <unordered_set>
+#include <stack>
 #include <fstream>
 #include <time.h>
 
@@ -21,62 +23,35 @@ const __int32 vertex_connections(bool Graph[100]);
 void Display_Graph(const _STD vector<_STD list<__int32>>& people);
 const float Get_CC_Coefficient(const _STD vector<_STD list<__int32>>& people);
 
+void graphBFS(const _STD vector<_STD list<__int32>> & people , int v, _STD vector<bool>& visited)
+{
+	visited[v] = true;
+	_STD cout << v << " ";
+
+	for (auto & i : people[v])
+	{
+		if (i && !visited[i]) 
+		{
+			graphBFS(people, i, visited);
+		}
+	}
+}
+
 int main(int argc, char* argv[])
 {
 	using _STD cout;
 	using _STD endl;
 
-	bool Graph[100][100]{ false };
-
-	
-
-
-	////Print_Graph(Graph);
-	//Set_Connections(Graph);
-	////Print_Graph(Graph);
-
-	//_STD fstream file_out{};
-	//file_out.open("out.csv", _STD ios_base::out);
-	//_STD map<int, int> histo{};
-	//size_t sum{};
-	//for (size_t i = 0; i < 100; ++i)
-	//{
-	//	size_t counter{};
-	//	_STD cout << (i + 1) << ' ';
-	//	for (size_t j = 0; j < 100; ++j)
-	//	{
-	//		if (Graph[i][j] == true)
-	//		{
-	//			_STD cout << "=";
-	//			counter++;
-	//		}
-	///*		else
-	//		{
-	//			_STD cout << "+";
-	//		}*/
-	//	}
-	//	sum += counter;
-	//	histo[counter]++;
-	//	_STD cout << " " << counter;
-	//	//file_out << counter << NEW_LINE;
-	//	_STD cout << NEW_LINE;
-	//}
-
-	//for (typename _STD map<int, int>::iterator map_iterator = histo.begin(); map_iterator != histo.end(); ++map_iterator)
-	//{
-	//	file_out << map_iterator->first << ',' << map_iterator->second << NEW_LINE;
-	//}
-
-
-	//_STD cout << "Average: " << static_cast<float>(sum/100.f) << NEW_LINE;
-	//file_out << "Average: ," << static_cast<float>(sum/100.f) << NEW_LINE;
-
-	//file_out.close();
 
 	_STD vector<_STD list<__int32>> my_list = Set_Connections_BA_Method();
 	Display_Graph(my_list);
-	_STD cout << Get_CC_Coefficient(my_list) << NEW_LINE;
+	_STD cout << "CC Coefficient " << Get_CC_Coefficient(my_list) << NEW_LINE;
 
+	_STD vector<bool> visited(false);
+	visited.resize(my_list.size());
+	_STD cout << "Visited: ";
+	graphBFS(my_list, 0, visited);
+	_STD cout << NEW_LINE;
 
 	system("pause");
 	return 0;
@@ -134,7 +109,6 @@ const _STD vector<_STD list<__int32>> Set_Connections_BA_Method()
 
 	__int32 number_of_edges{ 1 };
 	float kc{ };
-	int tempsad{ };
 	float probability{ };
 	while (people.size() < N)
 	{
@@ -209,10 +183,10 @@ const float Get_CC_Coefficient(const _STD vector<_STD list<__int32>>& people)
 	{
 		amount_of_edges += people[i].size();
 	}
-	kc = static_cast<float>(0.5f * amount_of_edges);
+	//kc = static_cast<float>(0.5f * amount_of_edges);
 	temp = static_cast<float>(((people.size() * (people.size() - 1)) / 2));
 
-	CC_Coefficient = static_cast<float>(kc/temp);
+	CC_Coefficient = static_cast<float>(amount_of_edges /temp);
 
 	return float(CC_Coefficient);
 }
