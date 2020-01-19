@@ -50,6 +50,7 @@ int main(int argc, char* argv[])
 
 const _STD vector<_STD list<__int32>> Set_Connections_BA_Method()
 {
+	using namespace std::chrono_literals;
 	_STD mt19937 generator(time(nullptr));
 	////Initialize basic graph with 2 connections
 	////ki -> amout of connections at each vertex
@@ -98,8 +99,11 @@ const _STD vector<_STD list<__int32>> Set_Connections_BA_Method()
 		{
 			people[people.size() - 1].push_front(0);
 		}
+		system("cls");
+		Display_Graph(people);
+		std::this_thread::sleep_for(1s);
 	}
-
+	system("cls");
 	return people;
 }
 
