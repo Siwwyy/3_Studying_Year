@@ -125,6 +125,7 @@ void Set_Connections_BA_Method()
 
 	__int32 number_of_edges{ 1 };
 	float kc{ };
+	int tempsad{ };
 	float probability{ };
 	while (people.size() < N)
 	{
@@ -142,19 +143,26 @@ void Set_Connections_BA_Method()
 		//connect with kind of probability to other vertices
 		for (size_t i = 0; i < people.size() - 1; ++i)
 		{
-
+			probability = static_cast<float>(people[i].size() / kc);
+			_STD bernoulli_distribution prob(probability);
+			bool temp = prob(generator);
+			_STD cout << probability << ' ';
+			if (temp)
+			{
+				people[people.size() - 1].push_front(i);
+				added = true;
+			}
+		}
+		_STD cout <<  NEW_LINE;
+		if (added == false)
+		{
+			people[people.size() - 1].push_front(0);
 		}
 
 
-		//
-		//if (added == false)
-		//{
-		//	people[people.size() - 1].push_front(0);
-		//}
 		//Display_Graph(people);
-		//_STD cin.get();
+		system("pause");
 	}
-
 
 
 
@@ -256,11 +264,10 @@ const __int32 vertex_connections(bool Graph[100])
 //void Display_Graph(const::std::vector<::std::pair<::std::vector<__int32>, __int32>>& people)
 void Display_Graph(const _STD vector<_STD list<__int32>>& people)
 {
-	std::list<__int32>::const_iterator it;
 	for (size_t i = 0; i < people.size(); ++i)
 	{
 		_STD cout << "Vertex: " << i << " Connections: ";
-		for (it = people[i].begin(); it != people[i].end(); ++it)
+		for (std::list<__int32>::const_iterator it = people[i].begin(); it != people[i].end(); ++it)
 		{
 			_STD cout << *it << ' ';
 		}
