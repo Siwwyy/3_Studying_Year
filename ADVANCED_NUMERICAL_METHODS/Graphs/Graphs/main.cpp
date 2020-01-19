@@ -3,7 +3,9 @@
 #include <string>
 #include <random>
 #include <map>
+#include <list>
 #include <fstream>
+#include <time.h>
 
 #define NEW_LINE '\n'
 
@@ -11,7 +13,17 @@ void Set_Connections(bool Graph[100][100]);
 void Print_Graph(bool Graph[100][100]);
 void Set_Connections_BA_Method();
 const __int32 vertex_connections(bool Graph[100]);
+//void Display_Graph(const _STD vector<_STD pair<_STD vector<__int32>, __int32>>& people);
+void Display_Graph(const _STD vector<_STD list<__int32>>& people);
 
+//class Vertex
+//{
+//private:
+//
+//public:
+//	Vertex();
+//	~Vertex();
+//};
 
 int main(int argc, char* argv[])
 {
@@ -98,45 +110,117 @@ void Print_Graph(bool Graph[100][100])
 
 void Set_Connections_BA_Method()
 {
+	_STD mt19937 generator(time(nullptr));
 	////Initialize basic graph with 2 connections
-	//Graph[0][1] = true;
-	//Graph[1][0] = true;
 	////ki -> amout of connections at each vertex
 	////kc -> amout of all connections
-	//float ki{ };
-	//float kc{ };
-	//float probability{ };
-
-	//for (size_t i = 2; i < 100; ++i)
-	//{
-	//	for (size_t j = 0; j < 100; ++j)
-	//	{
-	//		ki += vertex_connections(Graph[j]);
-	//	}
-	//	kc = static_cast<float>(0.5f * ki);
-	//	probability = static_cast<float>(ki / kc);
-	//	
-	//	_STD cout << probability << NEW_LINE;
-
-	//}
 
 	const size_t N{20};
-	_STD vector<_STD vector<__int32>> people(2);
-	people[0].emplace_back(1);
-	people[1].emplace_back(0);
+	_STD vector<_STD list<__int32>> people(2);
+	//basic initialization
+	people[0].push_back(1);
+	people[1].push_back(0);
+	//////////////////////////////////////////
 
+
+	__int32 number_of_edges{ 1 };
+	float kc{ };
+	float probability{ };
 	while (people.size() < N)
 	{
-		//count kc
+		__int32 sum{};
 
-
-		//count ki
-		float ki{};
 		for (size_t i = 0; i < people.size(); ++i)
 		{
-
+			sum += people[i].size();
 		}
+		kc = static_cast<float>(0.5f * sum);
+
+		for (size_t i = 0; i < people.size(); ++i)
+		{
+			probability = static_cast<float>(people[i].size() / number_of_edges);
+			//_STD cout << probability << NEW_LINE;
+			_STD bernoulli_distribution prob(probability);
+			bool temp = prob(generator);
+			if (temp)
+			{
+				size_t temp{ people.size() };
+				people.emplace_back(people.size());
+				people[temp].push_back(i);
+				++number_of_edges;
+			}
+		}
+
+		Display_Graph(people);
+		_STD cin.get();
 	}
+
+
+
+
+
+
+
+
+
+
+	//_STD vector<_STD pair<_STD vector<__int32>, __int32>> people(2);
+	////basic initialization
+	//people[0].first.emplace_back(1);
+	//people[0].second = 1;
+	//people[1].first.emplace_back(0);
+	//people[1].second = 1;
+	///////////////////////////////////
+
+
+	//float kc{ };
+	//int32_t sum{};
+	//float probability{ };
+	//while (people.size() < N)
+	//{
+	//	////count ki of each vertex
+	//	//for (size_t i = 0; i < people.size(); ++i)
+	//	//{
+	//	//	people[i].second = people[i].first.size();
+	//	//}
+	//	//////////////////////////////////////////////////////////////////
+
+	//	//count total kc
+	//	for (size_t i = 0; i < people.size(); ++i)
+	//	{
+	//		sum += people[i].second;
+	//	}
+	//	kc = static_cast<float>(0.5f * sum);
+	//	//////////////////////////////////////////////////////////////////
+	//	//for (size_t i = 0; i < people.size(); ++i)
+	//	//{
+	//	//	probability = static_cast<float>(people[i].second / kc);
+	//	//	_STD cout << probability << NEW_LINE;
+	//	//}
+
+	//	//Adding new vertex with kind of probability
+	//	for (size_t i = 0; i < people.size(); ++i)
+	//	{
+	//		//count ki of each vertex
+	//		for (size_t j = 0; j < people.size(); ++j)
+	//		{
+	//			people[j].second = people[j].first.size();
+	//		}
+	//		//probability = static_cast<float>(people[i].second / kc);
+	//		////_STD cout << probability << NEW_LINE;
+	//		//_STD bernoulli_distribution prob(probability);
+	//		//bool temp = prob(generator);
+	//		//if (temp)
+	//		//{
+	//		//	people.emplace_back(_STD make_pair(i,0));
+	//		//	/*people[i].first.emplace_back(people.size());*/
+	//		//}
+	//	}
+
+	//	Display_Graph(people);
+	//	_STD cin.get();
+	//	sum = 0;
+	//}
 
 
 }
@@ -154,3 +238,26 @@ const __int32 vertex_connections(bool Graph[100])
 	}
 	return connections;
 }
+
+//void Display_Graph(const::std::vector<::std::pair<::std::vector<__int32>, __int32>>& people)
+void Display_Graph(const _STD vector<_STD list<__int32>>& people)
+{
+	std::list<__int32>::const_iterator it;
+	for (size_t i = 0; i < people.size(); ++i)
+	{
+		_STD cout << "Vertex: " << i << " Connections: ";
+		for (it = people[i].begin(); it != people[i].end(); ++it)
+		{
+			_STD cout << *it << ' ';
+		}
+		_STD cout << NEW_LINE;
+	}
+}
+
+//Vertex::Vertex()
+//{
+//}
+//
+//Vertex::~Vertex()
+//{
+//}
