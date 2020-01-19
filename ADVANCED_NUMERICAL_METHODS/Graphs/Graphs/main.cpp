@@ -4,6 +4,8 @@
 #include <random>
 #include <map>
 #include <list>
+#include <chrono>
+#include <thread>
 #include <fstream>
 #include <time.h>
 
@@ -110,6 +112,7 @@ void Print_Graph(bool Graph[100][100])
 
 void Set_Connections_BA_Method()
 {
+	using namespace std::chrono_literals;
 	_STD mt19937 generator(time(nullptr));
 	////Initialize basic graph with 2 connections
 	////ki -> amout of connections at each vertex
@@ -150,6 +153,7 @@ void Set_Connections_BA_Method()
 			if (temp)
 			{
 				people[people.size() - 1].push_front(i);
+				people[i].push_front(people.size() - 1);
 				added = true;
 			}
 		}
@@ -162,9 +166,9 @@ void Set_Connections_BA_Method()
 
 		system("cls");
 		Display_Graph(people);
-		system("pause");
+		std::this_thread::sleep_for(1s);
 	}
-
+	system("pause");
 
 
 	//for (size_t i = 0; i < people.size(); ++i)
