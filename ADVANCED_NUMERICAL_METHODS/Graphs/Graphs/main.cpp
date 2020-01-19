@@ -5,6 +5,7 @@
 #include <map>
 #include <list>
 #include <chrono>
+#include <cstdint>
 #include <thread>
 #include <fstream>
 #include <time.h>
@@ -14,9 +15,11 @@
 void Set_Connections(bool Graph[100][100]);
 void Print_Graph(bool Graph[100][100]);
 //void Set_Connections_BA_Method(_STD vector<_STD list<__int32>>& people);
-const _STD vector<_STD list<__int32>>& Set_Connections_BA_Method();
+//const _STD vector<_STD list<__int32>>& Set_Connections_BA_Method();
+const _STD vector<_STD list<__int32>> Set_Connections_BA_Method();
 const __int32 vertex_connections(bool Graph[100]);
 void Display_Graph(const _STD vector<_STD list<__int32>>& people);
+const float Get_CC_Coefficient(const _STD vector<_STD list<__int32>>& people);
 
 int main(int argc, char* argv[])
 {
@@ -71,8 +74,8 @@ int main(int argc, char* argv[])
 	//file_out.close();
 
 	_STD vector<_STD list<__int32>> my_list = Set_Connections_BA_Method();
-	//Set_Connections_BA_Method(my_list);
 	Display_Graph(my_list);
+	_STD cout << Get_CC_Coefficient(my_list) << NEW_LINE;
 
 
 	system("pause");
@@ -107,7 +110,8 @@ void Print_Graph(bool Graph[100][100])
 }
 
 //void Set_Connections_BA_Method(_STD vector<_STD list<__int32>>& people)
-const _STD vector<_STD list<__int32>>& Set_Connections_BA_Method()
+//const _STD vector<_STD list<__int32>>& Set_Connections_BA_Method()
+const _STD vector<_STD list<__int32>> Set_Connections_BA_Method()
 {
 	//using namespace std::chrono_literals;
 	_STD mt19937 generator(time(nullptr));
@@ -164,7 +168,7 @@ const _STD vector<_STD list<__int32>>& Set_Connections_BA_Method()
 		}
 	}
 
-	return _STD move(people);
+	return people;
 }
 
 const __int32 vertex_connections(bool Graph[100])
@@ -192,4 +196,23 @@ void Display_Graph(const _STD vector<_STD list<__int32>>& people)
 		}
 		_STD cout << NEW_LINE;
 	}
+}
+
+const float Get_CC_Coefficient(const _STD vector<_STD list<__int32>>& people)
+{
+	float CC_Coefficient{};
+	uint32_t amount_of_edges{};
+	float kc{};
+	float temp{};
+
+	for (size_t i = 0; i < people.size(); ++i)
+	{
+		amount_of_edges += people[i].size();
+	}
+	kc = static_cast<float>(0.5f * amount_of_edges);
+	temp = static_cast<float>(((people.size() * (people.size() - 1)) / 2));
+
+	CC_Coefficient = static_cast<float>(kc/temp);
+
+	return float(CC_Coefficient);
 }
