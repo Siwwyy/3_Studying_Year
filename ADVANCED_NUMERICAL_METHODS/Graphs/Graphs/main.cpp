@@ -13,7 +13,8 @@
 
 void Set_Connections(bool Graph[100][100]);
 void Print_Graph(bool Graph[100][100]);
-void Set_Connections_BA_Method(_STD vector<_STD list<__int32>>& people);
+//void Set_Connections_BA_Method(_STD vector<_STD list<__int32>>& people);
+const _STD vector<_STD list<__int32>>& Set_Connections_BA_Method();
 const __int32 vertex_connections(bool Graph[100]);
 void Display_Graph(const _STD vector<_STD list<__int32>>& people);
 
@@ -69,8 +70,8 @@ int main(int argc, char* argv[])
 
 	//file_out.close();
 
-	_STD vector<_STD list<__int32>> my_list;
-	Set_Connections_BA_Method(my_list);
+	_STD vector<_STD list<__int32>> my_list = Set_Connections_BA_Method();
+	//Set_Connections_BA_Method(my_list);
 	Display_Graph(my_list);
 
 
@@ -105,7 +106,8 @@ void Print_Graph(bool Graph[100][100])
 	}
 }
 
-void Set_Connections_BA_Method(_STD vector<_STD list<__int32>>& people)
+//void Set_Connections_BA_Method(_STD vector<_STD list<__int32>>& people)
+const _STD vector<_STD list<__int32>>& Set_Connections_BA_Method()
 {
 	//using namespace std::chrono_literals;
 	_STD mt19937 generator(time(nullptr));
@@ -114,6 +116,11 @@ void Set_Connections_BA_Method(_STD vector<_STD list<__int32>>& people)
 	////kc -> amout of all connections
 
 	const size_t N{20};
+	//basic initialization
+	//people.resize(2);
+	//people[0].push_back(1);
+	//people[1].push_back(0);
+	_STD vector<_STD list<__int32>> people(2);
 	//basic initialization
 	people.resize(2);
 	people[0].push_back(1);
@@ -156,6 +163,8 @@ void Set_Connections_BA_Method(_STD vector<_STD list<__int32>>& people)
 			people[people.size() - 1].push_front(0);
 		}
 	}
+
+	return _STD move(people);
 }
 
 const __int32 vertex_connections(bool Graph[100])
