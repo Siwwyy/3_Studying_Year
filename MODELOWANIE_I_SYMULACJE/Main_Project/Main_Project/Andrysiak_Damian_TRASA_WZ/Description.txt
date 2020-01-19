@@ -1,0 +1,38 @@
+/*
+	Czas przejazdu przez trase WZ
+
+	Etapy:
+	1) Skrzyzowanie przy Atlas Arenie
+		- mam zielone swiatlo
+		- mam czerwone swiatlo
+		- wypadek (jade objazdem)
+	Prawdopodobienstwo 0.4,0.4,0.2; rozklad dyskretny
+
+	2) Skrzyzowanie przy Dworcu Kaliskim
+		- mam zielone swiatlo
+		- mam czerwone swiatlo
+		- zepsuta sygnalizacja swietlna
+	Prawdopodobienstwo 0.4,0.4,0.2; rozklad dyskretny
+
+	3) Skrzyzowanie przy Galerii Lodzkiej
+		- mam zielone swiatlo
+		- mam czerwone swiatlo
+	Prawdopodobienstwo 0.5, rozklad normalny
+
+	4) Skrzyzowanie Marszalkow
+		- mam zielone swiatlo
+		- mam czerwone swiatlo
+		- mam zielone swiatlo, albo jedzie pojazd uprzywilejowany
+	Prawdopodobienstwo 0.4,0.4,0.2; rozklad dyskretny
+
+	5) Rondo Inwalidow
+		- mam zielone swiatlo
+		- mam czerwone swiatlo
+		- wypadek
+	Prawdopodobienstwo 0.4,0.4,0.2; rozklad dyskretny
+
+
+	Liczba symulacji Monte Carlo: 3000
+	Nazwa pliku wyjsciowego "file.out"
+
+*/

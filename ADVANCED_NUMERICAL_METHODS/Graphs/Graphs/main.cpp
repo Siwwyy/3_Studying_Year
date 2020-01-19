@@ -19,7 +19,7 @@
 const _STD vector<_STD list<__int32>> Set_Connections_BA_Method();
 void Display_Graph(const _STD vector<_STD list<__int32>>& people);
 const float Get_CC_Coefficient(const _STD vector<_STD list<__int32>>& people);
-void graphBFS(const _STD vector<_STD list<__int32>>& people, int v, _STD vector<bool>& visited, _STD vector<int32_t>& way_length);
+void BFS(const _STD vector<_STD list<__int32>>& people, int v, _STD vector<bool>& visited, _STD vector<int32_t>& way_length);
 
 int main(int argc, char* argv[])
 {
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 	visited.resize(my_list.size());
 	way_length.resize(my_list.size());
 	_STD cout << "Visited: ";
-	graphBFS(my_list, 0, visited, way_length);
+	BFS(my_list, 0, visited, way_length);
 	_STD cout << NEW_LINE;
 
 	_STD cout << "Diameter: " << *std::max_element(way_length.begin(), way_length.end());
@@ -137,7 +137,7 @@ const float Get_CC_Coefficient(const _STD vector<_STD list<__int32>>& people)
 	return float(CC_Coefficient);
 }
 
-void graphBFS(const::std::vector<::std::list<__int32>>& people, int v, ::std::vector<bool>& visited, ::std::vector<int32_t>& way_length)
+void BFS(const::std::vector<::std::list<__int32>>& people, int v, ::std::vector<bool>& visited, ::std::vector<int32_t>& way_length)
 {
 	visited[v] = true;
 	_STD cout << v << " ";
@@ -147,8 +147,7 @@ void graphBFS(const::std::vector<::std::list<__int32>>& people, int v, ::std::ve
 		if (i && visited[i] == false)
 		{
 			way_length[v]++;
-			graphBFS(people, i, visited, way_length);
-
+			BFS(people, i, visited, way_length);
 		}
 	}
 }
