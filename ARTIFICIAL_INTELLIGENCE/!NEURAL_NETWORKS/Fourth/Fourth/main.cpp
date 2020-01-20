@@ -195,10 +195,35 @@ const void Hopfield(__int16** Matrix, const size_t& width)
 
 	for (size_t i = 0; i < width; ++i)
 	{
-		creature[i] = Matrix[0][i];	//A
-		//creature[i] = Matrix[2][i];	//I
+		//creature[i] = Matrix[0][i];	//A
+		//creature[i] = -1 * Matrix[1][i];	//C
+		creature[i] = -1 *Matrix[2][i];	//I
 		//creature[i] = Matrix[3][i];	//X
 	}
+	/*creature[0] = 1;
+	creature[1] = 1;
+	creature[2] = 1;
+	creature[3] = 1;
+	creature[4] = 1;*/
+	/*creature[0]
+	creature[4] = 1;
+	creature[7] = 1;
+	creature[9] = 1;
+	creature[6] = 1;
+	creature[10] = 1;
+	creature[15] = 1;
+	creature[20] = 1;*/
+	//creature[14] = 1;
+	/*creature[19] = 1;
+	creature[24] = 1;*/
+	//creature[29] = 1;
+	//for (size_t i = 0; i < width; ++i)
+	//{
+	//	//creature[i] = Matrix[0][i];	//A
+	//	creature[i] = 1;	//C
+	//	//creature[i] = Matrix[2][i];	//I
+	//	//creature[i] = Matrix[3][i];	//X
+	//}
 	//creature[0] = -1;
 	//creature[34] = -1;
 	//creature[4] = -1;
