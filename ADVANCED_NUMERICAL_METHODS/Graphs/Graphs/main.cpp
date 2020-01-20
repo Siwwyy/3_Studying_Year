@@ -16,7 +16,7 @@
 #define NEW_LINE '\n'
 
 
-const _STD vector<_STD list<__int32>> Set_Connections_BA_Method();
+const _STD vector<_STD list<__int32>> Set_Connections_BA_Method(const size_t size);
 void Display_Graph(const _STD vector<_STD list<__int32>>& people);
 const float Get_CC_Coefficient(const _STD vector<_STD list<__int32>>& people);
 void BFS(const _STD vector<_STD list<__int32>>& people, int v, _STD vector<bool>& visited, _STD vector<int32_t>& way_length);
@@ -26,29 +26,39 @@ int main(int argc, char* argv[])
 	using _STD cout;
 	using _STD endl;
 
+	size_t amount_of_cases{};
+	_STD cin >> amount_of_cases;
 
-	_STD vector<_STD list<__int32>> my_list = Set_Connections_BA_Method();
-	Display_Graph(my_list);
-	_STD cout << "CC Coefficient " << Get_CC_Coefficient(my_list) << NEW_LINE;
+	size_t* array_sizes = new size_t[amount_of_cases];
+	for (size_t i = 0; i < amount_of_cases; ++i)
+	{
+		_STD cin >> array_sizes[i];
+	}
 
-	_STD vector<bool> visited(false);
-	_STD vector<int32_t> way_length(false);
-	visited.resize(my_list.size());
-	way_length.resize(my_list.size());
-	_STD cout << "Visited: ";
-	BFS(my_list, 0, visited, way_length);
-	_STD cout << NEW_LINE;
+	for (size_t i = 0; i < amount_of_cases; ++i)
+	{
+		_STD vector<_STD list<__int32>> my_list = Set_Connections_BA_Method(array_sizes[i]);
+		//Display_Graph(my_list);
+		_STD cout << "Clustering Coefficient " << Get_CC_Coefficient(my_list) << NEW_LINE;
 
-	_STD cout << "Diameter: " << *std::max_element(way_length.begin(), way_length.end());
-	_STD cout << NEW_LINE;
-	_STD cout << "Radius: " << *std::max_element(way_length.begin(), std::max_element(way_length.begin(), way_length.end()));
-	_STD cout << NEW_LINE;
+		_STD vector<bool> visited(false);
+		_STD vector<int32_t> way_length(false);
+		visited.resize(my_list.size());
+		way_length.resize(my_list.size());
+		_STD cout << "Visited: ";
+		BFS(my_list, 0, visited, way_length);
+		_STD cout << NEW_LINE;
 
-	system("pause");
+		_STD cout << "Diameter: " << *std::max_element(way_length.begin(), way_length.end());
+		_STD cout << NEW_LINE;
+		_STD cout << "Radius: " << *std::max_element(way_length.begin(), std::max_element(way_length.begin(), way_length.end()));
+		_STD cout << NEW_LINE;
+	}
+	delete[] array_sizes;
 	return 0;
 }
 
-const _STD vector<_STD list<__int32>> Set_Connections_BA_Method()
+const _STD vector<_STD list<__int32>> Set_Connections_BA_Method(const size_t N)
 {
 	using namespace std::chrono_literals;
 	_STD mt19937 generator(time(nullptr));
@@ -56,7 +66,7 @@ const _STD vector<_STD list<__int32>> Set_Connections_BA_Method()
 	////ki -> amout of connections at each vertex
 	////kc -> amout of all connections
 
-	const size_t N{20};
+	//const size_t N{ };
 	//basic initialization
 	_STD vector<_STD list<__int32>> people(2);
 	//basic initialization
@@ -71,6 +81,9 @@ const _STD vector<_STD list<__int32>> Set_Connections_BA_Method()
 	float probability{ };
 	while (people.size() < N)
 	{
+		/*system("cls");
+		Display_Graph(people);
+		std::this_thread::sleep_for(1s);*/
 		__int32 sum{};
 
 		for (size_t i = 0; i < people.size(); ++i)
@@ -99,9 +112,6 @@ const _STD vector<_STD list<__int32>> Set_Connections_BA_Method()
 		{
 			people[people.size() - 1].push_front(0);
 		}
-		//system("cls");
-		//Display_Graph(people);
-		//std::this_thread::sleep_for(1s);
 	}
 	//system("cls");
 	return people;
@@ -140,7 +150,7 @@ const float Get_CC_Coefficient(const _STD vector<_STD list<__int32>>& people)
 void BFS(const::std::vector<::std::list<__int32>>& people, int v, ::std::vector<bool>& visited, ::std::vector<int32_t>& way_length)
 {
 	visited[v] = true;
-	_STD cout << v << " ";
+	//_STD cout << v << " ";
 
 	for (auto& i : people[v])
 	{
