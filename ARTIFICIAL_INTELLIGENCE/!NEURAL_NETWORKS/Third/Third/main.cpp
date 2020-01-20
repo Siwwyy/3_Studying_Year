@@ -126,6 +126,7 @@ int main(int argc, char* argv[])
 			//Counting E
 			E += static_cast<float>((0.5f) * pow((T[choice] - neuron_II1), 2));
 			//_STD cout << E << NEW_LINE;
+			//learning_cofficient -= 0.01;
 		}
 		if (E < E_max)
 		{
