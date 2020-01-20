@@ -36,6 +36,11 @@ Window::Window::Window(const Window* Object) :
 	}
 }
 
+const void Window::Window::Print() const
+{
+	
+}
+
 void Window::Window::Deleter(Window* To_Delete)
 {
 	delete To_Delete;

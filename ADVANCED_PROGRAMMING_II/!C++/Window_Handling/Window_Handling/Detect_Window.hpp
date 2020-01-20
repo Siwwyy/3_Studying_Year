@@ -17,13 +17,6 @@
 
 namespace Window
 {
-	struct Deleter
-	{
-		void operator()(Window& ls)
-		{
-			ls.~Window();
-		}
-	};
 
 	class Detect_Window
 	{
@@ -33,9 +26,7 @@ namespace Window
 		/*
 			ZMIENNE PRIVATE
 		*/
-		Window* win;
-		HWND Handle;
-		//static _STD vector<_STD unique_ptr<int>> vec_Windows;
+		_STD vector<_STD unique_ptr<Window>> vec_Windows;
 		//////////////////////////////////////////////////////////////////////////////		//////////////////////////////////////////////////////////////////////////////
 		/*
 			FUNKCJE PRIVATE
@@ -52,7 +43,7 @@ namespace Window
 		/*
 			FUNKCJE PUBLIC
 		*/
-		static BOOL CALLBACK Get_Window(HWND hwnd, LPARAM substring);
+		const void Print() const;
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			SETTERY PUBLIC
@@ -69,7 +60,7 @@ namespace Window
 		/*
 			GETTERY PUBLIC
 		*/
-		//static _STD vector<_STD unique_ptr<int>>& Get_vec_Windows();
+		_STD vector<_STD unique_ptr<Window>>& Get_vec_Windows();
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			DESTRUKTOR
@@ -77,6 +68,29 @@ namespace Window
 		virtual ~Detect_Window();
 	};
 
+
+	/*
+		OTHER FUNCTIONS
+	*/
+	static BOOL Get_Window(HWND hwnd, LPARAM substring)
+	{
+		const DWORD TITLE_SIZE = 1024;
+		WCHAR windowTitle[TITLE_SIZE];
+		GetWindowTextW(hwnd, windowTitle, TITLE_SIZE);
+
+		int length = ::GetWindowTextLength(hwnd);
+		_STD wstring title(&windowTitle[0]);
+
+		std::vector<std::wstring>& windowTitles = *(reinterpret_cast<std::vector<std::wstring>*>(substring));
+		
+		// List visible windows with a non-empty title
+		if (IsWindowVisible(hwnd) && title != L"")
+		{
+			windowTitles.emplace_back(title);
+			//std::wcout << hwnd << ":  " << windowTitle << NEW_LINE;
+		}
+		return TRUE;
+	}
 }
 
 #endif /* _DETECT_WINDOW_HPP_ */

@@ -5,24 +5,6 @@
 #define INCLUDE_FORBID
 #include "Engine.hpp"
 
-
-//BOOL CALLBACK Get_Window(HWND hwnd, LPARAM substring) 
-//{
-//	const DWORD TITLE_SIZE = 1024;
-//	WCHAR windowTitle[TITLE_SIZE];
-//	GetWindowTextW(hwnd, windowTitle, TITLE_SIZE);
-//
-//	int length = ::GetWindowTextLength(hwnd);
-//	_STD wstring title(&windowTitle[0]);
-//
-//	// List visible windows with a non-empty title
-//	if (IsWindowVisible(hwnd) && title != L"")
-//	{
-//		std::wcout << hwnd << ":  " << windowTitle << NEW_LINE;
-//	}
-//	return TRUE;
-//}
-
 int main(int argc, char* argv[])
 {
 	using _STD cout;

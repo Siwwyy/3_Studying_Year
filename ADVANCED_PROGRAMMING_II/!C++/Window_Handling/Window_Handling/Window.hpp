@@ -38,6 +38,7 @@ namespace Window
 		/*
 			FUNKCJE PUBLIC
 		*/
+		const void Print() const;
 		static void Deleter(Window * To_Delete);
 		//////////////////////////////////////////////////////////////////////////////
 		/*

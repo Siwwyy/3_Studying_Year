@@ -1,42 +1,29 @@
 #include "Detect_Window.hpp"
 
 Window::Detect_Window::Detect_Window():
-	Handle(NULL)
+	vec_Windows()
 {
-	/*vec_Windows.emplace_back(new Window[10]{});*/
-}
-
-BOOL Window::Detect_Window::Get_Window(HWND hwnd, LPARAM substring)
-{
-	const DWORD TITLE_SIZE = 1024;
-	WCHAR windowTitle[TITLE_SIZE];
-	GetWindowTextW(hwnd, windowTitle, TITLE_SIZE);
 	
-
-	int length = ::GetWindowTextLength(hwnd);
-	_STD wstring title(&windowTitle[0]);
-
-	//this->vec_Windows.emplace_back((&Window(windowTitle, TITLE_SIZE)));
-
-	// List visible windows with a non-empty title
-	if (IsWindowVisible(hwnd) && title != L"")
-	{
-		//Window A(windowTitle, TITLE_SIZE);
-		//vec_Windows.emplace_back(_STD move(_STD make_unique<Window>((new Window(windowTitle, TITLE_SIZE)))));
-		std::wcout << hwnd << ":  " << windowTitle << NEW_LINE;
-	}
-	return TRUE;
 }
 
-//::std::vector<::std::unique_ptr<int>>& Window::Detect_Window::Get_vec_Windows()
-//{
-//	return vec_Windows;
-//}
+const void Window::Detect_Window::Print() const
+{
+	for (typename _STD vector<_STD unique_ptr<Window>>::const_iterator iterator_vec_Windows = vec_Windows.begin(); iterator_vec_Windows != vec_Windows.end(); ++iterator_vec_Windows)
+	{
+		const WCHAR* window_title = (*iterator_vec_Windows)->Get_window_title();
+		_STD wcout << window_title << NEW_LINE;
+		//system("pause");
+		//system("cls");
+		//_STD wcout <<  << NEW_LINE;
+	}
+}
+
+::std::vector<::std::unique_ptr<Window::Window>>& Window::Detect_Window::Get_vec_Windows()
+{
+	return this->vec_Windows;
+}
 
 Window::Detect_Window::~Detect_Window()
 {
-	//vec_Windows.clear();
-	//vec_Windows.erase(vec_Windows.begin(), vec_Windows.end());
-	//vec_Windows.clear();
-	
+	vec_Windows.clear();
 }

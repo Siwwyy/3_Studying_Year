@@ -1,21 +1,25 @@
 #include "Engine.hpp"
 
-Engine::Engine::Engine():
-	Handle(NULL)
+Engine::Engine::Engine()
 {
 
 }
 
 void Engine::Engine::Start_Monitoring()
 {
-	std::vector<std::wstring> titles;
-	//WNDENUMPROC proc = &Detect_Window_Object.Get_Window;
-    EnumWindows(Window::Detect_Window::Get_Window, reinterpret_cast<LPARAM>(&titles));
+    std::vector<std::wstring> windowTitles;
+    EnumWindows(Window::Get_Window, reinterpret_cast<LPARAM>(&windowTitles));
 
-	//for (size_t i = 0; i < Detect_Window_Object.Get_vec_Windows().size(); ++i)
-	//{
-	//	_STD cout << Detect_Window_Object.Get_vec_Windows()[i].get()->Get_window_title() << NEW_LINE;
-	//}
+    Detect_Window_Object.Get_vec_Windows().resize(windowTitles.size());
+
+    //Insert handled windows names
+    for (typename _STD vector<std::wstring>::iterator iterator_windowTitles = windowTitles.begin(); iterator_windowTitles != windowTitles.end(); ++iterator_windowTitles)
+    {
+        Detect_Window_Object.Get_vec_Windows()[std::distance(windowTitles.begin(), iterator_windowTitles)] = std::make_unique<Window::Window>(new Window::Window((*iterator_windowTitles).c_str(), (*iterator_windowTitles).size()));
+    }
+    Detect_Window_Object.Print();
+
+    //system("cls");
 }
 
 Engine::Engine::~Engine()
