@@ -51,6 +51,7 @@ namespace Window
 		*/
 		//JEDNOARGUMENTOWE
 		Window& operator=(const Window& Object);
+		Window& operator=(const Window* Object);
 		//DWUARGUMENTOWE
 		//////////////////////////////////////////////////////////////////////////////
 		/*

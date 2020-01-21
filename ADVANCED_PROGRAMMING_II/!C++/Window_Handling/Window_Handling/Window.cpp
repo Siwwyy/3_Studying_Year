@@ -60,6 +60,20 @@ Window::Window& Window::Window::operator=(const Window& Object)
 	return *this;
 }
 
+Window::Window& Window::Window::operator=(const Window* Object)
+{
+	if (this != _STD addressof(*Object))
+	{
+		delete[] window_title;
+		this->window_title_size = Object->window_title_size;
+		for (size_t i = 0; i < this->window_title_size; ++i)
+		{
+			this->window_title[i] = Object->window_title[i];
+		}
+	}
+	return *this;
+}
+
 const DWORD Window::Window::Get_window_title_size() const
 {
 	return this->window_title_size;

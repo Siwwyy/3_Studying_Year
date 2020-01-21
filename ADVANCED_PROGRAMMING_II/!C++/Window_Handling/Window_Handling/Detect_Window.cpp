@@ -6,11 +6,11 @@ Window::Detect_Window::Detect_Window():
 	
 }
 
-Window::Detect_Window::Detect_Window(const Detect_Window& Object):
-	vec_Windows(Object.vec_Windows)
-{
-
-}
+//Window::Detect_Window::Detect_Window(const Detect_Window& Object):
+//	vec_Windows(Object.vec_Windows)
+//{
+//
+//}
 
 const void Window::Detect_Window::Print() const
 {
@@ -43,15 +43,15 @@ const void Window::Detect_Window::Print() const
 	}
 }
 
-Window::Detect_Window& Window::Detect_Window::operator=(const Detect_Window& Object)
-{
-	if (this != _STD addressof(Object))
-	{
-		vec_Windows.clear();
-		vec_Windows = Object.vec_Windows;
-	}
-	return *this;
-}
+//Window::Detect_Window& Window::Detect_Window::operator=(const Detect_Window& Object)
+//{
+//	if (this != _STD addressof(Object))
+//	{
+//		vec_Windows.clear();
+//		vec_Windows = Object.vec_Windows;
+//	}
+//	return *this;
+//}
 
 ::std::vector<::std::unique_ptr<Window::Window>>& Window::Detect_Window::Get_vec_Windows()
 {

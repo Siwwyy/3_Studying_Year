@@ -48,7 +48,7 @@
 
 #define NEW_LINE '\n'
 
-_STD mt19937 generator(time(nullptr));
+std::mt19937 generator(time(nullptr));
 
 class _Project
 {
@@ -73,10 +73,10 @@ public:
 
 int main(int argc, char* argv[])
 {
-	using _STD cout;
-	using _STD endl;
-	using _STD cin;
-	using _STD cerr;
+	using std::cout;
+	using std::endl;
+	using std::cin;
+	using std::cerr;
 
 	_Project Obj;
 
@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
 
 const double _Project::Simulate_Ride_Time(const double time_from, const double time_to)
 {
-	_STD normal_distribution<> waiting_time(time_from, time_to);
+	std::normal_distribution<> waiting_time(time_from, time_to);
 	return waiting_time(generator);
 }
 
@@ -108,9 +108,9 @@ _Project::_Project():
 void _Project::Etap_1()
 {
 	//losowanie zielonego, czerwonego swiatla badz wypadku(objazd)
-	_STD discrete_distribution<> x({ 40.0f, 40.0f, 20.0f });
+	std::discrete_distribution<> x({ 40.0f, 40.0f, 20.0f });
 
-	__int32 number = static_cast<__int32>(x(generator));
+	int number = static_cast<int>(x(generator));
 	//rozklad quassona zeby zmienic czestotliwosc wypadkow
 	if (number == 0)
 	{
@@ -125,9 +125,9 @@ void _Project::Etap_1()
 	{
 		time += Simulate_Ride_Time(10, 3);
 		//5 mozliwosci objazdu
-		_STD discrete_distribution<> x2({ 40.0f, 20.0f, 10.0f, 20.0f, 10.0f });
+		std::discrete_distribution<> x2({ 40.0f, 20.0f, 10.0f, 20.0f, 10.0f });
 
-		__int32 number_2 = static_cast<__int32>(x2(generator));
+		int number_2 = static_cast<int>(x2(generator));
 
 		if (number_2 == 0)
 		{
@@ -159,9 +159,9 @@ void _Project::Etap_1()
 void _Project::Etap_2()
 {
 	//losowanie zielonego, czerwonego swiatla badz zepsuta sygnalizacja
-	_STD discrete_distribution<> x({ 40.0f, 40.0f, 20.0f });
+	std::discrete_distribution<> x({ 40.0f, 40.0f, 20.0f });
 
-	__int32 number = static_cast<__int32>(x(generator));
+	int number = static_cast<int>(x(generator));
 
 	if (number == 0)
 	{
@@ -179,11 +179,11 @@ void _Project::Etap_2()
 
 void _Project::Etap_3()
 {
-	_STD bernoulli_distribution probability(0.5);
+	std::bernoulli_distribution probability(0.5);
 	bool temp = probability(generator);
 	if (!temp)
 	{
-		_STD normal_distribution<> waiting_time(4,1);//ujemny czas, popraw
+		std::normal_distribution<> waiting_time(4,1);//ujemny czas, popraw
 		time += waiting_time(generator);
 	}
 }
@@ -191,9 +191,9 @@ void _Project::Etap_3()
 void _Project::Etap_4()
 {
 	//losowanie zielonego, czerwonego swiatla badz jedzie pojazd uprzywilejowany
-	_STD discrete_distribution<> x({ 40.0f, 40.0f, 20.0f });
+	std::discrete_distribution<> x({ 40.0f, 40.0f, 20.0f });
 
-	__int32 number = static_cast<__int32>(x(generator));
+	int number = static_cast<int>(x(generator));
 
 	if (number == 0)
 	{
@@ -212,9 +212,9 @@ void _Project::Etap_4()
 void _Project::Etap_5()
 {
 	//losowanie zielonego, czerwonego swiatla badz wypadku(objazd)
-	_STD discrete_distribution<> x({ 40.0f, 40.0f, 20.0f });
+	std::discrete_distribution<> x({ 40.0f, 40.0f, 20.0f });
 
-	__int32 number = static_cast<__int32>(x(generator));
+	int number = static_cast<int>(x(generator));
 
 	if (number == 0)
 	{
@@ -228,9 +228,9 @@ void _Project::Etap_5()
 	{
 		time += Simulate_Ride_Time(15, 4);
 		//3 mozliwosci objazdu
-		_STD discrete_distribution<> x2({ 30.0f, 30.0f, 40.0f });
+		std::discrete_distribution<> x2({ 30.0f, 30.0f, 40.0f });
 
-		__int32 number_2 = static_cast<__int32>(x2(generator));
+		int number_2 = static_cast<int>(x2(generator));
 
 		if (number_2 == 0)
 		{
@@ -249,7 +249,7 @@ void _Project::Etap_5()
 
 void _Project::Symulacja_Monte_Carlo()
 {
-	_STD fstream file_out("file.out", _STD ios_base::out);
+	std::fstream file_out("file.out", std::ios_base::out);
 	for (size_t i = 0; i < 3000; i++)
 	{
 		time = this->start_time;

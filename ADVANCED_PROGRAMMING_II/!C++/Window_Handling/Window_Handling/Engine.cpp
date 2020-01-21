@@ -4,11 +4,12 @@ Engine::Engine::Engine()
 {
 
 }
-
-Engine::Engine::Engine(const Engine& Object)
-{
-
-}
+//
+//Engine::Engine::Engine(const Engine& Object):
+//    Detect_Window_Object(Object.Detect_Window_Object)
+//{
+//
+//}
 
 void Engine::Engine::Start_Monitoring()
 {
@@ -25,14 +26,14 @@ void Engine::Engine::Start_Monitoring()
     Detect_Window_Object.Print();
 }
 
-Engine::Engine& Engine::Engine::operator=(const Engine& Object)
-{
-    if (this != _STD addressof(Object))
-    {
-        Detect_Window_Object = Object.Detect_Window_Object;
-    }
-    return *this;
-}
+//Engine::Engine& Engine::Engine::operator=(const Engine& Object)
+//{
+//    if (this != _STD addressof(Object))
+//    {
+//        Detect_Window_Object = Object.Detect_Window_Object;
+//    }
+//    return *this;
+//}
 
 Engine::Engine::~Engine()
 {

@@ -37,7 +37,7 @@ namespace Engine
 			KONSTRUKTORY PUBLIC
 		*/
 		Engine();
-		Engine(const Engine & Object);
+		//Engine(const Engine & Object);
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			FUNKCJE PUBLIC
@@ -53,7 +53,7 @@ namespace Engine
 			OPERATORY PUBLIC
 		*/
 		//JEDNOARGUMENTOWE
-		Engine& operator=(const Engine& Object);
+		//Engine& operator=(const Engine& Object);
 		//DWUARGUMENTOWE
 		//////////////////////////////////////////////////////////////////////////////
 		/*
