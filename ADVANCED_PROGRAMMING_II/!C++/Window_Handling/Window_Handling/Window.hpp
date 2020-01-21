@@ -22,7 +22,7 @@ namespace Window
 		/*
 			ZMIENNE PRIVATE
 		*/
-		DWORD title_size;
+		DWORD window_title_size;
 		WCHAR* window_title;
 		//////////////////////////////////////////////////////////////////////////////
 	public:
@@ -31,7 +31,7 @@ namespace Window
 			KONSTRUKTORY PUBLIC
 		*/
 		Window();
-		Window(const WCHAR * window_title, const DWORD title_size);
+		Window(const WCHAR * window_title, const DWORD window_title_size);
 		Window(const Window& Object);
 		Window(const Window* Object);
 		//////////////////////////////////////////////////////////////////////////////
@@ -56,7 +56,7 @@ namespace Window
 		/*
 			GETTERY PUBLIC
 		*/
-		const DWORD Get_title_size() const;
+		const DWORD Get_window_title_size() const;
 		const WCHAR* Get_window_title() const;
 		//////////////////////////////////////////////////////////////////////////////
 		/*
