@@ -233,3 +233,28 @@ print("Test loss", test_loss)
 
 #print("Test labels ",test_labels.shape)
 #print("Test inputs ",test_inputs.shape)
+
+
+predictions = model.predict(test_inputs)
+
+#print(predictions[0])
+
+#np.argmax(predictions[0])
+
+#test_labels[0]
+
+img = test_inputs[1]
+
+print(img.shape)
+
+
+img = (np.expand_dims(img,0))
+
+print(img.shape)
+
+predictions_single = model.predict(img)
+
+print(predictions_single)
+
+#plot_value_array(1, predictions_single[0], test_labels)
+#_ = plt.xticks(range(10), rotation=45)
