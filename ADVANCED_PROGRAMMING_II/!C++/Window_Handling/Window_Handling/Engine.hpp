@@ -9,6 +9,8 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <thread>
+#include <functional>
 #include <windows.h>
 #include <string.h>
 
@@ -43,6 +45,7 @@ namespace Engine
 			FUNKCJE PUBLIC
 		*/
 		void Start_Monitoring();
+		void Print() const;
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			SETTERY PUBLIC

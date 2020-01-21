@@ -73,25 +73,25 @@ namespace Window
 	/*
 		OTHER FUNCTIONS
 	*/
-	static BOOL Get_Window(HWND hwnd, LPARAM substring)
-	{
-		const DWORD TITLE_SIZE = 1024;
-		WCHAR windowTitle[TITLE_SIZE];
-		GetWindowTextW(hwnd, windowTitle, TITLE_SIZE);
+	BOOL WINAPI Get_Window(HWND hwnd, LPARAM substring);
+	//{
+	//	const DWORD TITLE_SIZE = 1024;
+	//	WCHAR windowTitle[TITLE_SIZE];
+	//	GetWindowTextW(hwnd, windowTitle, TITLE_SIZE);
 
-		int length = ::GetWindowTextLength(hwnd);
-		_STD wstring title(&windowTitle[0]);
+	//	int length = ::GetWindowTextLength(hwnd);
+	//	_STD wstring title(&windowTitle[0]);
 
-		std::vector<std::wstring>& windowTitles = *(reinterpret_cast<std::vector<std::wstring>*>(substring));
-		
-		// List visible windows with a non-empty title
-		if (IsWindowVisible(hwnd) && title != L"")
-		{
-			windowTitles.emplace_back(title);
-			//std::wcout << hwnd << ":  " << windowTitle << NEW_LINE;
-		}
-		return TRUE;
-	}
+	//	std::vector<std::wstring>& windowTitles = *(reinterpret_cast<std::vector<std::wstring>*>(substring));
+	//	
+	//	// List visible windows with a non-empty title
+	//	if (IsWindowVisible(hwnd) && title != L"")
+	//	{
+	//		windowTitles.emplace_back(title);
+	//	}
+	//		std::wcout << hwnd << ":  " << windowTitle << NEW_LINE;
+	//	return TRUE;
+	//}
 }
 
 #endif /* _DETECT_WINDOW_HPP_ */

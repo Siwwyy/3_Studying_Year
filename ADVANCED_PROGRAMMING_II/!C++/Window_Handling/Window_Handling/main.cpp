@@ -35,9 +35,18 @@ int main(int argc, char* argv[])
 	//{
 	//	cout << "Nie znaleziono";
 	//}
-
+	HWND consoleWindowHandle = GetConsoleWindow();
+	::SetWindowPos(consoleWindowHandle, HWND_TOPMOST, 0, 0, 0, 0, SWP_DRAWFRAME | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+	::ShowWindow(consoleWindowHandle, SW_NORMAL);
 	Engine::Engine Engine_Object;
-	Engine_Object.Start_Monitoring();
+	for (size_t i = 0; i < 1000; ++i)
+	{
+		Engine_Object.Start_Monitoring();
+		Engine_Object.Print();
+		Sleep(2000);
+		system("cls");
+	}
+
 
 	_STD cout << NEW_LINE;
 	system("pause");
