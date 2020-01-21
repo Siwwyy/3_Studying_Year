@@ -39,6 +39,7 @@ namespace Window
 			KONSTRUKTORY PUBLIC
 		*/
 		Detect_Window();
+		Detect_Window(const Detect_Window & Object);
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			FUNKCJE PUBLIC
@@ -54,7 +55,7 @@ namespace Window
 			OPERATORY PUBLIC
 		*/
 		//JEDNOARGUMENTOWE
-
+		Detect_Window& operator=(const Detect_Window& Object);
 		//DWUARGUMENTOWE
 		//////////////////////////////////////////////////////////////////////////////
 		/*

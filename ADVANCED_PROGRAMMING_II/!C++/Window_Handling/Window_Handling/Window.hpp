@@ -50,7 +50,7 @@ namespace Window
 			OPERATORY PUBLIC
 		*/
 		//JEDNOARGUMENTOWE
-
+		Window& operator=(const Window& Object);
 		//DWUARGUMENTOWE
 		//////////////////////////////////////////////////////////////////////////////
 		/*

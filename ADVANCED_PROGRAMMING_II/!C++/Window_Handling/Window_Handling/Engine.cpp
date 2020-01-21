@@ -5,6 +5,11 @@ Engine::Engine::Engine()
 
 }
 
+Engine::Engine::Engine(const Engine& Object)
+{
+
+}
+
 void Engine::Engine::Start_Monitoring()
 {
     std::vector<std::wstring> windowTitles;
@@ -18,8 +23,15 @@ void Engine::Engine::Start_Monitoring()
         Detect_Window_Object.Get_vec_Windows()[std::distance(windowTitles.begin(), iterator_windowTitles)] = std::make_unique<Window::Window>(new Window::Window((*iterator_windowTitles).c_str(), (*iterator_windowTitles).size()));
     }
     Detect_Window_Object.Print();
+}
 
-    //system("cls");
+Engine::Engine& Engine::Engine::operator=(const Engine& Object)
+{
+    if (this != _STD addressof(Object))
+    {
+        Detect_Window_Object = Object.Detect_Window_Object;
+    }
+    return *this;
 }
 
 Engine::Engine::~Engine()

@@ -2,8 +2,9 @@
  *			   Copyright (c) by Damian Andrysiak. All rights reserved.
  *							Greetings for everyone!
 */
-#ifndef _ENGINE_HPP_
-#define _ENGINE_HPP_
+#ifndef _DISPLAY_HPP_
+#define _DISPLAY_HPP_
+
 #define NEW_LINE '\n'
 
 #include <iostream>
@@ -12,19 +13,19 @@
 #include <windows.h>
 #include <string.h>
 
-#include "Detect_Window.hpp"
-
-namespace Engine
+namespace Window
 {
 
-	class Engine
+	template<typename _Ty>
+	class Display
 	{
 	private:
+
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			ZMIENNE PRIVATE
 		*/
-		Window::Detect_Window Detect_Window_Object;
+
 		//////////////////////////////////////////////////////////////////////////////		//////////////////////////////////////////////////////////////////////////////
 		/*
 			FUNKCJE PRIVATE
@@ -36,13 +37,13 @@ namespace Engine
 		/*
 			KONSTRUKTORY PUBLIC
 		*/
-		Engine();
-		Engine(const Engine & Object);
+		Display();
+		Display(const Display & Object);
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			FUNKCJE PUBLIC
 		*/
-		void Start_Monitoring();
+
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			SETTERY PUBLIC
@@ -53,7 +54,7 @@ namespace Engine
 			OPERATORY PUBLIC
 		*/
 		//JEDNOARGUMENTOWE
-		Engine& operator=(const Engine& Object);
+		Display& operator=(const Display& Object);
 		//DWUARGUMENTOWE
 		//////////////////////////////////////////////////////////////////////////////
 		/*
@@ -64,9 +65,36 @@ namespace Engine
 		/*
 			DESTRUKTOR
 		*/
-		virtual ~Engine();
+		virtual ~Display();
 	};
 
+	template<typename _Ty>
+	inline Display<_Ty>::Display()
+	{
+
+	}
+
+	template<typename _Ty>
+	inline Display<_Ty>::Display(const Display& Object)
+	{
+
+	}
+
+	template<typename _Ty>
+	inline Display<_Ty>& Display<_Ty>::operator=(const Display& Object)
+	{
+		if (this != _STD addressof(Object))
+		{
+			//TO DO SOMETHING
+		}
+		return *this;
+	}
+
+	template<typename _Ty>
+	inline Display<_Ty>::~Display()
+	{
+
+	}
 }
 
-#endif /* _ENGINE_HPP_ */
+#endif /* _DISPLAY_HPP_ */

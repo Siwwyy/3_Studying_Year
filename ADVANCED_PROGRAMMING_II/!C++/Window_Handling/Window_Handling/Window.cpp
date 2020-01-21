@@ -46,6 +46,20 @@ void Window::Window::Deleter(Window* To_Delete)
 	delete To_Delete;
 }
 
+Window::Window& Window::Window::operator=(const Window& Object)
+{
+	if (this != _STD addressof(Object))
+	{
+		delete[] window_title;
+		this->window_title_size = Object.window_title_size;
+		for (size_t i = 0; i < this->window_title_size; ++i)
+		{
+			this->window_title[i] = Object.window_title[i];
+		}
+	}
+	return *this;
+}
+
 const DWORD Window::Window::Get_window_title_size() const
 {
 	return this->window_title_size;
@@ -60,5 +74,5 @@ Window::Window::~Window()
 {
 	this->window_title_size = NULL;
 	delete[] this->window_title;
-	_STD cout << "DESTRUKTOR WINDOW" << NEW_LINE;
+	//_STD cout << "DESTRUKTOR WINDOW" << NEW_LINE;
 }
