@@ -45,9 +45,9 @@ int main(int argc, char* argv[])
 		_STD vector<int32_t> way_length(false);
 		visited.resize(my_list.size());
 		way_length.resize(my_list.size());
-		_STD cout << "Visited: ";
+		//_STD cout << "Visited: ";
 		BFS(my_list, 0, visited, way_length);
-		_STD cout << NEW_LINE;
+		//_STD cout << NEW_LINE;
 
 		_STD cout << "Diameter: " << *std::max_element(way_length.begin(), way_length.end());
 		_STD cout << NEW_LINE;
