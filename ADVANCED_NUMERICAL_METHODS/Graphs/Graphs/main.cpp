@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 	{
 		_STD vector<_STD list<__int32>> my_list = Set_Connections_BA_Method(array_sizes[i]);
 		//Display_Graph(my_list);
-		_STD cout << "Clustering Coefficient " << Get_CC_Coefficient(my_list) << NEW_LINE;
+		//_STD cout << "Clustering Coefficient " << Get_CC_Coefficient(my_list) << NEW_LINE;
 
 		_STD vector<bool> visited(false);
 		_STD vector<int32_t> way_length(false);
@@ -49,10 +49,11 @@ int main(int argc, char* argv[])
 		BFS(my_list, 0, visited, way_length);
 		//_STD cout << NEW_LINE;
 
-		_STD cout << "Diameter: " << *std::max_element(way_length.begin(), way_length.end());
-		_STD cout << NEW_LINE;
-		_STD cout << "Radius: " << *std::max_element(way_length.begin(), std::max_element(way_length.begin(), way_length.end()));
-		_STD cout << NEW_LINE;
+		//_STD cout << "Diameter: " << *std::max_element(way_length.begin(), way_length.end());
+		//_STD cout << NEW_LINE;
+		//_STD cout << "Radius: " << *std::max_element(way_length.begin(), std::max_element(way_length.begin(), way_length.end()));
+		//_STD cout << NEW_LINE;
+		_STD cout << array_sizes[i] << " " << Get_CC_Coefficient(my_list) << " " << *std::max_element(way_length.begin(), std::max_element(way_length.begin(), way_length.end())) << " " << *std::max_element(way_length.begin(), way_length.end()) << NEW_LINE;
 	}
 	delete[] array_sizes;
 	return 0;

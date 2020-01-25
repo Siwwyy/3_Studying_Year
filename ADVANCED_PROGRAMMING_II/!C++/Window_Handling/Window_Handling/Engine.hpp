@@ -14,6 +14,11 @@
 #include <windows.h>
 #include <string.h>
 
+#include <locale>
+#include <codecvt>
+
+
+
 #include "Detect_Window.hpp"
 
 namespace Engine

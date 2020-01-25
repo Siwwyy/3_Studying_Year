@@ -13,6 +13,7 @@ Engine::Engine::Engine()
 
 void Engine::Engine::Start_Monitoring()
 {
+    Detect_Window_Object.Clear();
     for (HWND hwnd = GetTopWindow(NULL); hwnd != NULL; hwnd = GetNextWindow(hwnd, GW_HWNDNEXT))
     {
         if (!IsWindowVisible(hwnd))

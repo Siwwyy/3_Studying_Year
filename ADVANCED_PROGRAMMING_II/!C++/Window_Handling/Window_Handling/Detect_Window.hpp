@@ -45,6 +45,7 @@ namespace Window
 			FUNKCJE PUBLIC
 		*/
 		const void Print() const;
+		void Clear();
 		//////////////////////////////////////////////////////////////////////////////
 		/*
 			SETTERY PUBLIC

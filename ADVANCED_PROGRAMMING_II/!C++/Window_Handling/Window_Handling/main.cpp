@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 	{
 		Engine_Object.Start_Monitoring();
 		Engine_Object.Print();
-		Sleep(2000);
+		std::cin.get();
 		system("cls");
 	}
 

@@ -14,6 +14,8 @@ Window::Detect_Window::Detect_Window():
 
 const void Window::Detect_Window::Print() const
 {
+	std::ios_base::sync_with_stdio(false);
+
 	HWND Find{};
 	_STD wstring temp{};
 	for (typename _STD vector<_STD unique_ptr<Window>>::const_iterator iterator_vec_Windows = vec_Windows.begin(); iterator_vec_Windows != vec_Windows.end(); ++iterator_vec_Windows)
@@ -23,7 +25,7 @@ const void Window::Detect_Window::Print() const
 			temp += (*iterator_vec_Windows)->Get_window_title()[i];
 			//_STD wcout << (*iterator_vec_Windows)->Get_window_title()[i];
 		}
-		_STD wcout << temp.c_str() << NEW_LINE;
+		_STD wcout << temp << NEW_LINE;
 		//Find = FindWindow(0, reinterpret_cast<LPCWSTR>(&temp));
 		//Find = FindWindow(0, temp.c_str());
 		//if (Find)
@@ -41,7 +43,13 @@ const void Window::Detect_Window::Print() const
 		//}
 		temp.clear();
 		_STD wcout << NEW_LINE;
+		_STD wcout.clear();
 	}
+}
+
+void Window::Detect_Window::Clear()
+{
+	vec_Windows.clear();
 }
 
 //Window::Detect_Window& Window::Detect_Window::operator=(const Detect_Window& Object)
