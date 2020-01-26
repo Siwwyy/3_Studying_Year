@@ -44,7 +44,7 @@ def Load_Data(file_name):
     loaded_images = list()
     for filename in os.listdir(file_name):
         # load image
-        img_data = image.imread('images/' + filename)
+        img_data = image.imread(file_name+'/' + filename)
         loaded_images.append(img_data)
         print('> loaded %s %s' % (filename, img_data.shape))
 	    # store loaded image
