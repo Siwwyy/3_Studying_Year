@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "First", "First\First.pyproj", "{A35E878F-D6E4-4308-BAB9-49A6BCE53F77}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Keyboard_Event", "Keyboard_Event\Keyboard_Event.pyproj", "{29A18BD3-2F3E-47B0-BDDA-A201DF199C59}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Clock_Delta_Time", "Clock_Delta_Time\Clock_Delta_Time.pyproj", "{5412AA28-931E-4C2A-98D1-F6C265CA6254}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A35E878F-D6E4-4308-BAB9-49A6BCE53F77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A35E878F-D6E4-4308-BAB9-49A6BCE53F77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29A18BD3-2F3E-47B0-BDDA-A201DF199C59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29A18BD3-2F3E-47B0-BDDA-A201DF199C59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5412AA28-931E-4C2A-98D1-F6C265CA6254}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5412AA28-931E-4C2A-98D1-F6C265CA6254}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F800261D-F97D-4191-A830-4AC7EB901F8A}
+	EndGlobalSection
+EndGlobal

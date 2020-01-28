@@ -49,59 +49,59 @@ int main(int argc, char* argv[])
 
 	data2 = data;
 
-	Display_Array(data2);
+	//Display_Array(data2);
 	FastFourierTransform(data2, false);
-	Display_Array(data2);
+	//Display_Array(data2);
+	printf("FFT\n");
+	for (auto& x : data2) printf("( %.4f , %.4f )\n", abs(x.real()) > 0.0001 ? x.real() : 0., abs(x.imag()) > 0.0001 ? x.imag() : 0.);
 
 	FastFourierTransform(data2, true);
-	Display_Array(data2);
+	printf("Inverse \n");
+	for (auto& x : data2) printf("( %.4f , %.4f )\n", abs(x.real()) > 0.0001 ? x.real() : 0., abs(x.imag()) > 0.0001 ? x.imag() : 0.);
+
+	//Display_Array(data2);
 
 	//file_in.close();
 	system("pause");
 	return EXIT_SUCCESS;
 }
 
-void FastFourierTransform(std::vector<std::complex<double>>& in_array, bool logic)
+void FastFourierTransform(std::vector<std::complex<double>>& vec, bool invert)
 {
-	size_t size = in_array.size();
-	if (size == 1)
+	const int n = static_cast<int>(vec.size());
+	if (n == 1) return;
+
+	std::vector<std::complex<double>> v1, v2;
+	for (int i = 0; 2 * i < n; i++)
 	{
-		return;
+		v1.push_back(vec[2 * i]);
+		v2.push_back(vec[2 * i + 1]);
 	}
 
-	_STD vector<_STD complex<double>> left_array(size / 2);
-	_STD vector<_STD complex<double>> right_array(size / 2);
 
-	for (size_t i = 0; 2 * i < size; ++i)
+	FastFourierTransform(v1, invert);
+	FastFourierTransform(v2, invert);
+
+	double ang = 2 * M_PI / n;
+	if (invert) ang *= -1;
+	std::complex<double> o(1);
+	std::complex<double> on = std::exp(std::complex<double>(0., 1.) * ang);
+	for (int i = 0; 2 * i < n; i++)
 	{
-		left_array[i] = in_array[2 * i];
-		right_array[i] = in_array[2 * i + 1];
-	}
-
-	FastFourierTransform(left_array, logic);
-	FastFourierTransform(right_array, logic);
-
-	double in_arrayW = 2 * M_PI / size * (logic ? -1 : 1);
-	_STD complex<double> w(1);
-	_STD complex<double> wn(cos(in_arrayW));
-	_STD complex<double> sin(in_arrayW);
-
-	for (size_t i = 0; (2 * i) < size; ++i)
-	{
-		in_array[i] = left_array[i] + w * right_array[i];
-		in_array[i + (size / 2)] = left_array[i] - w * right_array[i];
-		if (logic == true)
+		vec[i] = v1[i] + o * v2[i];
+		vec[i + n / 2] = v1[i] - o * v2[i];
+		if (invert)
 		{
-			in_array[i] /= 2;
-			in_array[i + (size / 2)] /= 2;
+			vec[i] /= 2;
+			vec[i + n / 2] /= 2;
 		}
-		w *= wn;
+		o *= on;
 	}
 }
 
 void Display_Array(const std::vector<std::complex<double>>& in_array)
 {
-	for (auto& x : in_array)
+	/*for (auto& x : in_array)
 	{
 		if (x.real() > 0.0001)
 		{
@@ -123,5 +123,5 @@ void Display_Array(const std::vector<std::complex<double>>& in_array)
 		_STD cout << NEW_LINE;
 	}
 	_STD cout << NEW_LINE;
-	_STD cout << NEW_LINE;
+	_STD cout << NEW_LINE;*/
 }
