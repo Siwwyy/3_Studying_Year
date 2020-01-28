@@ -9,6 +9,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Keyboard_Event", "Keyboard_
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Clock_Delta_Time", "Clock_Delta_Time\Clock_Delta_Time.pyproj", "{5412AA28-931E-4C2A-98D1-F6C265CA6254}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Code_Segmentation", "Code_Segmentation\Code_Segmentation.pyproj", "{DCCB3E19-7CDC-4C85-9A5A-BAD017E1693D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,8 @@ Global
 		{29A18BD3-2F3E-47B0-BDDA-A201DF199C59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5412AA28-931E-4C2A-98D1-F6C265CA6254}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5412AA28-931E-4C2A-98D1-F6C265CA6254}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCCB3E19-7CDC-4C85-9A5A-BAD017E1693D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCCB3E19-7CDC-4C85-9A5A-BAD017E1693D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
