@@ -22,6 +22,10 @@ class Rocket(object):
             self.add_force(Vector2(2,0))
         if pressed_keys[pygame.K_LEFT]:
             self.add_force(Vector2(-2,0))
+        #if pressed_keys[pygame.K_UP]:
+        #    self.add_force(Vector2(0,-2))
+        #if pressed_keys[pygame.K_DOWN]:
+        #    self.add_force(Vector2(0,2))
 
         #physics
         self.velocity *= 0.8    #air resistance
@@ -31,6 +35,18 @@ class Rocket(object):
         self.acceleration *= 0  #set acceleration vector2 to 0 each coordinate
 
     def draw(self):
-        rectangle = pygame.Rect(self.position.x,self.position.y,50,50)
-        pygame.draw.rect(self.game.screen, (0,150,255), rectangle)
+        #base triangle
+        points = [Vector2(0,-10),Vector2(5,5), Vector2(-5,5)]
+        #rotate points
+        angle = self.velocity.angle_to(Vector2(0,1))
+        points = [p.rotate(angle) for p in points]
+        #fix y axis
+        points = [Vector2(p.x,p.y*-1) for p in points]
+        #add current position
+        points = [self.position+p*3 for p in points]
+
+        #draw triangle via linears
+        pygame.draw.polygon(self.game.screen, (0,150,255),points)
+        #rectangle = pygame.Rect(self.position.x,self.position.y,50,50)
+        #pygame.draw.rect(self.game.screen, (0,150,255), rectangle)
 

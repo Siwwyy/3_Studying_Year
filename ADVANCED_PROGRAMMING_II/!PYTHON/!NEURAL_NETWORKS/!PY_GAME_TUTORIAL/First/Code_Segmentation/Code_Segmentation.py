@@ -33,6 +33,7 @@ class Game(object):
             #Rendering
             self.screen.fill((0,0,0)) #erase screen
             self.draw()
+            self.drawGrid(self.screen.get_size()[0],self.screen.get_size()[1],self.screen)
             pygame.display.flip()
 
     def tick(self):
@@ -47,8 +48,17 @@ class Game(object):
     def draw(self):
         #drawing
         self.player.draw()
+  
+    def drawGrid(w, rows, surface):
+        sizeBtwn = w // rows
+ 
+        x = 0
+        y = 0
+        for l in range(rows):
+            x = x + sizeBtwn
+            y = y + sizeBtwn
+            pygame.draw.line(surface, (255,255,255), (x,0),(x,w))
+            pygame.draw.line(surface, (255,255,255), (0,y),(w,y))
         
-
-   
 if __name__ == "__main__":  #if program is not imported
     Game()
