@@ -13,7 +13,6 @@ class Game(object):
         #configuration down here
         self.fps_max = 60.0
         self.fps_delta = 0.0
-        #self.Neural = Neural_Network()
 
         #initialization
         pygame.init() #initialize whole pygame's modules as creators set up, add always, right behavior
@@ -32,7 +31,6 @@ class Game(object):
         self.temp_array2 = np.array([[0,0,0,0,0,0,0,0,0,0]]).T
         self.temp_int = 0
         self.divider = 11000.0
-        #np.resize(self.temp_array, (1,10))
         while True:
             self.player_pos = self.player.Get_Position()
             #handle events
@@ -65,14 +63,8 @@ class Game(object):
                                     val = -1
                                 pos += 100*val
                                 break
-                        #if self.player_pos.x + 100 < self.screen.get_size()[0]:
-                        #    pos += 100
-                        #elif self.player_pos.x - 100 >= 0:
-                        #    pos += -100
                         self.player.move_by_coordinates(pos)
                         break
-                    #else:
-                    #    self.player.move_by_coordinates(pos)
                 self.fps_delta -= 1/self.fps_max
   
 
@@ -84,31 +76,25 @@ class Game(object):
 
             #game logic
             for index,obstacle_pos in enumerate(self.obstacles,start=0):
-                #self.temp_array[0][index] = 0;
                 if self.player.Get_Position() == obstacle_pos.Get_Position():
                     sys.exit(0)
                 if obstacle_pos.Get_Position().y > self.screen.get_size()[1]:
                     pos = int(random.randrange(0, 1000, 100))
                     self.obstacles[index] = Obstacle(self,pos,0)
-                    #self.obstacles[index] = Obstacle(self,obstacle_pos.Get_Basic_Position().x,0) 
-                    my_index = int(pos/100)
-                    self.temp_array[my_index] = 1;
+                    self.temp_array[int(pos/100)] = 1;
                     self.temp_int += 1
             if self.temp_int > 5:
                 print("---------------------------------")
                 print(self.temp_array)
-                #self.Neural.Update_training_outputs(self.temp_array)
                 self.Neural = Perceptron(self.temp_array)
                 self.temp_int = 0
                 for index,i in enumerate(self.temp_array,start=0):
                     self.temp_array[index] = 0
-                #self.temp_array = self.temp_array2
                 self.outputs = self.Neural.Get_Output()
                 print(self.outputs)
                 if self.divider > 3000.0:
                     self.divider -= 1000.0
                 print("---------------------------------")
-                #wait = input("PRESS ENTER TO CONTINUE.")
                     
          
     def tick(self):
@@ -135,13 +121,7 @@ class Game(object):
         
 
 def main(): 
-
-    #episodes = 10
-    #for e in range(episodes):
     Game()
-
-
-
 
 
 if __name__ == "__main__":  #if program is not imported
