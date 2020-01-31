@@ -44,7 +44,8 @@ class Cube(object):
         #self.velocity += self.acceleration
         #self.position += self.velocity
         #self.acceleration *= 0  #set acceleration vector2 to 0 each coordinate
-
+    def move_by_coordinates(self,x):
+        self.position.x += x
     def draw(self):
         #base triangle
         #points = [Vector2(0,-10),Vector2(5,5), Vector2(-5,5)]
