@@ -20,17 +20,18 @@ class Game(object):
         pygame.display.set_caption("Siwy's Game")
         self.screen = pygame.display.set_mode((1000,1000))
         self.fps_clock = pygame.time.Clock() #clock object, remember ! pygame.init() first !
-        self.player = Cube(self,self.screen.get_size()[0]/2 - 300,self.screen.get_size()[1]-100)
+        self.player = Cube(self,self.screen.get_size()[0]/2 + 300,self.screen.get_size()[1]-100)
         self.obstacles = [Obstacle(self,0,0),Obstacle(self,200,0),Obstacle(self,300,200),Obstacle(self,600,100),Obstacle(self,800,300),Obstacle(self,700,400)]
         #1,0,1,1,0,0,1,0,1,0
         self.player_pos = self.player.Get_Position()
         print(np.array([[1,0,1,1,0,0,1,0,1,0]]).T)
-        self.temp_array3 = np.array([[1,0,1,1,0,0,1,0,1,0]]).T
+        self.temp_array3 = np.array([[1,0,1,1,0,0,1,1,1,0]]).T
         self.Neural = Perceptron(self.temp_array3)
         self.outputs = self.Neural.Get_Output()
         self.temp_array = np.array([[0,0,0,0,0,0,0,0,0,0]]).T
         self.temp_array2 = np.array([[0,0,0,0,0,0,0,0,0,0]]).T
         self.temp_int = 0
+        self.divider = 11000.0
         #np.resize(self.temp_array, (1,10))
         while True:
             self.player_pos = self.player.Get_Position()
@@ -44,7 +45,7 @@ class Game(object):
 
 
             #Ticking (clock ticking) ! for instance, make something 20 times per second
-            self.fps_delta += self.fps_clock.tick()/11000.0 #time between two frames
+            self.fps_delta += self.fps_clock.tick()/self.divider #time between two frames
             while self.fps_delta > 1/self.fps_max: #delay
                 for obstacle_pos in self.obstacles:
                     obstacle_pos.move_by_coordinates(0,100)
@@ -104,6 +105,8 @@ class Game(object):
                 #self.temp_array = self.temp_array2
                 self.outputs = self.Neural.Get_Output()
                 print(self.outputs)
+                if self.divider > 3000.0:
+                    self.divider -= 1000.0
                 print("---------------------------------")
                 #wait = input("PRESS ENTER TO CONTINUE.")
                     
