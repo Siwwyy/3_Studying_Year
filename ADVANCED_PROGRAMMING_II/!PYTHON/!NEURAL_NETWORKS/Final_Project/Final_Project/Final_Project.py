@@ -21,7 +21,7 @@ class Game(object):
         self.screen = pygame.display.set_mode((1000,1000))
         self.fps_clock = pygame.time.Clock() #clock object, remember ! pygame.init() first !
         self.player = Cube(self,self.screen.get_size()[0]/2 - 300,self.screen.get_size()[1]-100)
-        self.obstacles = [Obstacle(self,0,0),Obstacle(self,200,0),Obstacle(self,300,200),Obstacle(self,600,100),Obstacle(self,800,300)]
+        self.obstacles = [Obstacle(self,0,0),Obstacle(self,200,0),Obstacle(self,300,200),Obstacle(self,600,100),Obstacle(self,800,300),Obstacle(self,700,400)]
         #1,0,1,1,0,0,1,0,1,0
         self.player_pos = self.player.Get_Position()
         print(np.array([[1,0,1,1,0,0,1,0,1,0]]).T)
@@ -35,12 +35,12 @@ class Game(object):
         while True:
             self.player_pos = self.player.Get_Position()
             #handle events
-            #for event in pygame.event.get():
-            #    if event.type == pygame.QUIT:
-            #        sys.exit(0)
-            #    elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            #        sys.exit(0)
-            #    self.player.move(event)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit(0)
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    sys.exit(0)
+                #self.player.move(event)
 
 
             #Ticking (clock ticking) ! for instance, make something 20 times per second
@@ -93,7 +93,7 @@ class Game(object):
                     my_index = int(pos/100)
                     self.temp_array[my_index] = 1;
                     self.temp_int += 1
-            if self.temp_int > 4:
+            if self.temp_int > 5:
                 print("---------------------------------")
                 print(self.temp_array)
                 #self.Neural.Update_training_outputs(self.temp_array)
