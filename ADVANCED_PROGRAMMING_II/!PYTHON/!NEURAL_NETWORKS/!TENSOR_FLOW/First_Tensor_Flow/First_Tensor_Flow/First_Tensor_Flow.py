@@ -212,7 +212,8 @@ mnist = keras.datasets.mnist
 
 train_inputs, test_inputs = train_inputs/255, test_inputs/255
 
-
+#print(type(train_inputs))
+#print(type(test_inputs))
 
 
 print("Test labels ",test_labels.shape)

@@ -1,8 +1,11 @@
 
 import pygame, sys
 import random
+import numpy as np
 from Cube import Cube
 from Obstacle import Obstacle
+from Neural_Network import Neural_Network
+import Perceptron
 
 class Game(object):
 
@@ -10,25 +13,34 @@ class Game(object):
         #configuration down here
         self.fps_max = 60.0
         self.fps_delta = 0.0
+        #self.Neural = Neural_Network()
 
         #initialization
         pygame.init() #initialize whole pygame's modules as creators set up, add always, right behavior
+        pygame.display.set_caption("Siwy's Game")
         self.screen = pygame.display.set_mode((1000,1000))
         self.fps_clock = pygame.time.Clock() #clock object, remember ! pygame.init() first !
 
         self.player = Cube(self,self.screen.get_size()[0]/2 - 100,self.screen.get_size()[1]-100)
         self.obstacles = [Obstacle(self,0,0),Obstacle(self,200,0),Obstacle(self,300,200),Obstacle(self,600,100),Obstacle(self,800,300)]
-        #self.obstacle1 = Cube(self,0,200)
-        #self.obstacle2 = Cube(self,0,300)
-        #self.obstacle3 = Cube(self,0,300)
-        #self.obstacle4 = Cube(self,100,700)
+        #1,0,1,1,0,0,1,0,1,0
+        #target = [True,False,True,True,False,False,True,False,True,False]
+        #input = [False,False,True,False,False,False,True,False,True,False]
+        #predict = [False,False,True,False,False,False,True,False,True,False]
+        #train_target = np.array(target)
+        #train_input = np.array(input)
+        #train_predict = np.array(predict)
+        #self.Neural.Push_Train_Target(train_target)
+        #self.Neural.Push_Train_Inputs(train_input)
+        #self.Neural.Model_Fit()
+        ##self.Neural.Save_Weight("my_weights.out")
+        #self.Neural.Model_Predict(train_predict)
+        #self.Neural.Load_Weight("my_weights.out")
+        #self.Neural.Display_Object()
+
+        self.Neural = Perceptron()
+
         while True:
-            #if self.obstacle.Get_Position().y > self.screen.get_size()[1]:
-            #    self.obstacle = Cube(self,0,0)
-            #    #self.obstacle1 = Cube(self,200,0)
-            #    #self.obstacle2 = Cube(self,300,0)
-            #    #self.obstacle3 = Cube(self,0,300)
-            #    #self.obstacle4 = Cube(self,100,700)
             #handle events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -41,11 +53,8 @@ class Game(object):
             #Ticking (clock ticking) ! for instance, make something 20 times per second
             self.fps_delta += self.fps_clock.tick()/11000.0 #time between two frames
             while self.fps_delta > 1/self.fps_max: #delay
-                #self.player.move(event)
                 for obstacle_pos in self.obstacles:
                     obstacle_pos.move_by_coordinates(0,100)
-                #self.obstacle.move_by_coordinates(0,-100)
-                #self.tick() #everything drawing,moving etc. x times pers second
                 self.fps_delta -= 1/self.fps_max
   
 
@@ -65,12 +74,6 @@ class Game(object):
                     
          
     def tick(self):
-        #self.player.tick()
-        #pressed_keys = pygame.key.get_pressed()
-        #if pressed_keys[pygame.K_RIGHT]:
-        #    rectangle.x += 2
-        #if pressed_keys[pygame.K_LEFT]:
-        #    rectangle.x -= 2
         pass
 
     def draw(self):
@@ -93,6 +96,15 @@ class Game(object):
         pass
         
 
-   
-if __name__ == "__main__":  #if program is not imported
+def main(): 
+
+    #episodes = 10
+    #for e in range(episodes):
     Game()
+
+
+
+
+
+if __name__ == "__main__":  #if program is not imported
+    main()

@@ -25,7 +25,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Final_Project.py" />
+    <Compile Include="Neural_Network.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Obstacle.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Perceptron.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

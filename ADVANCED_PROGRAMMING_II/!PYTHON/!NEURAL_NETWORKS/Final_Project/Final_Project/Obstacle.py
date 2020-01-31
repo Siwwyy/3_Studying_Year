@@ -13,7 +13,7 @@ class Obstacle(object):
 
     def draw(self):
         rectangle = pygame.Rect(self.position.x,self.position.y,100,100)
-        pygame.draw.rect(self.game.screen, (0,150,255), rectangle)
+        pygame.draw.rect(self.game.screen, (200,0,0), rectangle)
 
     def Get_Position(self):
         return Vector2(self.position)
