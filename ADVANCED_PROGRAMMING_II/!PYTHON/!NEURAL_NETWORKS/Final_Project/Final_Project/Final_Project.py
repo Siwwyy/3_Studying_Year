@@ -20,14 +20,14 @@ class Game(object):
         self.screen = pygame.display.set_mode((1000,1000))
         self.fps_clock = pygame.time.Clock() #clock object, remember ! pygame.init() first !
         self.player = Cube(self,self.screen.get_size()[0]/2 - 500,self.screen.get_size()[1]-100)
-        self.obstacles = [Obstacle(self,0,0),Obstacle(self,200,0),Obstacle(self,300,200),Obstacle(self,400,100),Obstacle(self,600,100),Obstacle(self,800,300),Obstacle(self,700,400)]
-        #self.obstacles = [Obstacle(self,0,500),Obstacle(self,100,400),Obstacle(self,200,400),Obstacle(self,300,300),Obstacle(self,400,200),Obstacle(self,500,100),Obstacle(self,600,0)] #hard level
+        #self.obstacles = [Obstacle(self,0,0),Obstacle(self,200,0),Obstacle(self,300,200),Obstacle(self,400,100),Obstacle(self,600,100),Obstacle(self,800,300),Obstacle(self,700,400)]
+        self.obstacles = [Obstacle(self,0,700),Obstacle(self,100,600),Obstacle(self,200,500),Obstacle(self,300,400),Obstacle(self,400,300),Obstacle(self,500,200),Obstacle(self,600,100),Obstacle(self,700,0)] #hard level
         #1,0,1,1,0,0,1,0,1,0
         self.player_pos = self.player.Get_Position()
         #print(np.array([[1,0,1,1,0,0,1,0,1,0]]).T)
 
-        self.temp_array3 = np.array([[1,0,1,1,1,0,1,1,1,0]]).T
-        #self.temp_array3 = np.array([[1,1,1,1,1,1,1,0,0,0]]).T #hard level
+        #self.temp_array3 = np.array([[1,0,1,1,1,0,1,1,1,0]]).T
+        self.temp_array3 = np.array([[1,1,1,1,1,1,1,1,0,0]]).T #hard level
 
         self.Neural = Perceptron(self.temp_array3)
         self.outputs = self.Neural.Get_Output()
@@ -37,14 +37,23 @@ class Game(object):
 
         self.obstacle_counter = 0
         self.divider = 11000.0
-        while True:
+        self.running = True
+
+
+        self.font = pygame.font.SysFont("comicsansms", 72)
+        self.points = 0
+        self.text = self.font.render(str(self.points), True, (0, 128, 0))
+
+        while self.running:
             self.player_pos = self.player.Get_Position()    #get current player position
             #handle events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    sys.exit(0)
+                    #sys.exit(0)
+                    self.running = False
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    sys.exit(0)
+                    #sys.exit(0)
+                    self.running = False
                 #self.player.move(event)
 
 
@@ -76,6 +85,8 @@ class Game(object):
 
             #Rendering
             self.screen.fill((0,0,0)) #erase screen
+            self.text = self.font.render(str(self.points), True, (0, 128, 0))
+            self.screen.blit(self.text,(self.text.get_width() // 2, 240 - self.text.get_height() // 2))
             self.draw()
             self.drawGrid()
             pygame.display.flip()
@@ -83,7 +94,17 @@ class Game(object):
             #game logic
             for index,obstacle_pos in enumerate(self.obstacles,start=0):
                 if self.player.Get_Position() == obstacle_pos.Get_Position():   #if position of obstacle and player is identical
-                    sys.exit(0) #game over
+                    #sys.exit(0) #game over
+                    self.running = False #game over
+                    self.screen.fill((0,0,0)) #erase screen
+                    self.text = self.font.render("Game Over! You earned: " + str(self.points), True, (0, 128, 0))
+                    self.screen.blit(self.text,(500 - self.text.get_width() // 2, 500 - self.text.get_height() // 2))
+                    pygame.display.flip()
+                    while True:
+                        for event in pygame.event.get():
+                            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                                pygame.quit()
+                                sys.exit(0)
                 if obstacle_pos.Get_Position().y > self.screen.get_size()[1]:   #if obstacle pos is bigger than height of screen. It means that the obstacle disappear from screen. Draw it again
                     pos = int(random.randrange(0, 1000, 100)) #for randomizing the reborns of obstacle position
                     self.obstacles[index] = Obstacle(self,pos,0)
@@ -92,6 +113,7 @@ class Game(object):
             if self.obstacle_counter >= len(self.obstacles): #if obstacle counter is bigger than amount of the obstacles, start learning and predicting free spots for player
                 print("---------------------------------")
                 print(self.temp_array)
+                self.points += 1
                 self.Neural = Perceptron(self.temp_array)
                 self.obstacle_counter = 0
 
@@ -100,7 +122,7 @@ class Game(object):
 
                 self.outputs = self.Neural.Get_Output() #get the weights for players, where is obstacle or where isnt
                 print(self.outputs)
-                if self.divider > 4000.0:   #increase speed of game
+                if self.divider > 2000.0:   #increase speed of game
                     self.divider -= 1000.0
                 print("---------------------------------")
                     

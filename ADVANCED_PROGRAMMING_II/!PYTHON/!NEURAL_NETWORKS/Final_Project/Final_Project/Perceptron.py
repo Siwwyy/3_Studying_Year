@@ -12,7 +12,7 @@ class Perceptron(object):
 
         self.synaptic_weights = 2 * np.random.random((10,1)) - 1
 
-        for iteration in range(100):
+        for iteration in range(10):
 
             input_layer = self.training_inputs
 
