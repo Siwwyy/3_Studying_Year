@@ -18,7 +18,9 @@ class Cube(object):
                 self.position.x += -100
 
     def move_by_coordinates(self,x):
-        self.position.x += x
+        if self.position.x + 100 < self.game.screen.get_size()[0] and self.position.x >= 0:
+            self.position.x += x
+
     def draw(self):
         rectangle = pygame.Rect(self.position.x,self.position.y,100,100)
         pygame.draw.rect(self.game.screen, (0,150,255), rectangle)

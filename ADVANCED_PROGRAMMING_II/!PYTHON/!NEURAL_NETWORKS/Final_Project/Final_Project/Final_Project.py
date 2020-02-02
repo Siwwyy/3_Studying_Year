@@ -19,20 +19,26 @@ class Game(object):
         pygame.display.set_caption("Siwy's Game")
         self.screen = pygame.display.set_mode((1000,1000))
         self.fps_clock = pygame.time.Clock() #clock object, remember ! pygame.init() first !
-        self.player = Cube(self,self.screen.get_size()[0]/2 + 300,self.screen.get_size()[1]-100)
-        self.obstacles = [Obstacle(self,0,0),Obstacle(self,200,0),Obstacle(self,300,200),Obstacle(self,600,100),Obstacle(self,800,300),Obstacle(self,700,400)]
+        self.player = Cube(self,self.screen.get_size()[0]/2 - 500,self.screen.get_size()[1]-100)
+        self.obstacles = [Obstacle(self,0,0),Obstacle(self,200,0),Obstacle(self,300,200),Obstacle(self,400,100),Obstacle(self,600,100),Obstacle(self,800,300),Obstacle(self,700,400)]
+        #self.obstacles = [Obstacle(self,0,500),Obstacle(self,100,400),Obstacle(self,200,400),Obstacle(self,300,300),Obstacle(self,400,200),Obstacle(self,500,100),Obstacle(self,600,0)] #hard level
         #1,0,1,1,0,0,1,0,1,0
         self.player_pos = self.player.Get_Position()
-        print(np.array([[1,0,1,1,0,0,1,0,1,0]]).T)
-        self.temp_array3 = np.array([[1,0,1,1,0,0,1,1,1,0]]).T
+        #print(np.array([[1,0,1,1,0,0,1,0,1,0]]).T)
+
+        self.temp_array3 = np.array([[1,0,1,1,1,0,1,1,1,0]]).T
+        #self.temp_array3 = np.array([[1,1,1,1,1,1,1,0,0,0]]).T #hard level
+
         self.Neural = Perceptron(self.temp_array3)
         self.outputs = self.Neural.Get_Output()
-        self.temp_array = np.array([[0,0,0,0,0,0,0,0,0,0]]).T
+
+        self.temp_array = np.array([[0,0,0,0,0,0,0,0,0,0]]).T   #array where we indicate obstacle position or free spot
         self.temp_array2 = np.array([[0,0,0,0,0,0,0,0,0,0]]).T
-        self.temp_int = 0
+
+        self.obstacle_counter = 0
         self.divider = 11000.0
         while True:
-            self.player_pos = self.player.Get_Position()
+            self.player_pos = self.player.Get_Position()    #get current player position
             #handle events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -44,19 +50,19 @@ class Game(object):
 
             #Ticking (clock ticking) ! for instance, make something 20 times per second
             self.fps_delta += self.fps_clock.tick()/self.divider #time between two frames
-            while self.fps_delta > 1/self.fps_max: #delay
+            while self.fps_delta > 1/self.fps_max: #delay, always keep 60 fps
                 for obstacle_pos in self.obstacles:
-                    obstacle_pos.move_by_coordinates(0,100)
-                for index,out_pos in enumerate(self.outputs,start=0):
-                    value = int(round(out_pos[0],0))
+                    obstacle_pos.move_by_coordinates(0,100) #move down the obstacles by 100 px 
+                for index,out_pos in enumerate(self.outputs,start=0):   #iterate along outputs (our weights) from Neural Network and check where is obstacle (1) or where obstacle isnt (0)
+                    value = int(round(out_pos[0],0))    #remember, weights are floating points numbers, cast them into int
                     pos = 0
-                    cos = int(self.player_pos.x/100)
-                    if value == 1 and index == cos:
-                        for index1,out_pos1 in enumerate(self.outputs,start=0):
+                    player_position = int(self.player_pos.x/100)    #on which index player is currently => for example [0,0,0,0,1,0,0,0,0,0], player_position = 4
+                    if value == 1 and index == player_position: #if value from weights array is equal to 1 and player position is 1 at the same position as 1 at weights position
+                        for index1,out_pos1 in enumerate(self.outputs,start=0): #find the closest free spot to move there the player
                             value = int(round(out_pos1[0],0))
-                            if value == 0:
-                                index1 *= 100
-                                val = self.player_pos.x - index1
+                            if value == 0:  #if we found a free spot
+                                index1 *= 100   #cast index1 number (cause is from 0 to 9) to pixiels => 1*100 = 100px move as we want
+                                val = self.player_pos.x - index1    #player position = 400 index = 600 then: 400 - 600 = -200 * (-1) => move is 200 to right, cause free spot is on position 6 but player is on position number 4,
                                 if val < 0:
                                     val = 1
                                 else:
@@ -76,29 +82,28 @@ class Game(object):
 
             #game logic
             for index,obstacle_pos in enumerate(self.obstacles,start=0):
-                if self.player.Get_Position() == obstacle_pos.Get_Position():
-                    sys.exit(0)
-                if obstacle_pos.Get_Position().y > self.screen.get_size()[1]:
-                    pos = int(random.randrange(0, 1000, 100))
+                if self.player.Get_Position() == obstacle_pos.Get_Position():   #if position of obstacle and player is identical
+                    sys.exit(0) #game over
+                if obstacle_pos.Get_Position().y > self.screen.get_size()[1]:   #if obstacle pos is bigger than height of screen. It means that the obstacle disappear from screen. Draw it again
+                    pos = int(random.randrange(0, 1000, 100)) #for randomizing the reborns of obstacle position
                     self.obstacles[index] = Obstacle(self,pos,0)
-                    self.temp_array[int(pos/100)] = 1;
-                    self.temp_int += 1
-            if self.temp_int > 5:
+                    self.temp_array[int(pos/100)] = 1;  #set 1 on array where the obstacle is for array neural network predictions, pos/100 means the index, for example pos=400 px, 400/100 = 4th index
+                    self.obstacle_counter += 1  #increase obstacle counter by 1 after reborning
+            if self.obstacle_counter >= len(self.obstacles): #if obstacle counter is bigger than amount of the obstacles, start learning and predicting free spots for player
                 print("---------------------------------")
                 print(self.temp_array)
                 self.Neural = Perceptron(self.temp_array)
-                self.temp_int = 0
-                for index,i in enumerate(self.temp_array,start=0):
+                self.obstacle_counter = 0
+
+                for index,i in enumerate(self.temp_array,start=0):  #set everything in temp_array to 0 after learning. Default values setting up
                     self.temp_array[index] = 0
-                self.outputs = self.Neural.Get_Output()
+
+                self.outputs = self.Neural.Get_Output() #get the weights for players, where is obstacle or where isnt
                 print(self.outputs)
-                if self.divider > 3000.0:
+                if self.divider > 4000.0:   #increase speed of game
                     self.divider -= 1000.0
                 print("---------------------------------")
                     
-         
-    def tick(self):
-        pass
 
     def draw(self):
         #drawing
@@ -115,9 +120,6 @@ class Game(object):
             y = y + size
             pygame.draw.line(self.screen, (255,255,255), (x,0),(x,self.screen.get_size()[0]))
             pygame.draw.line(self.screen, (255,255,255), (0,y),(self.screen.get_size()[0],y))
-
-    def draw_obstacle(self):
-        pass
         
 
 def main(): 
