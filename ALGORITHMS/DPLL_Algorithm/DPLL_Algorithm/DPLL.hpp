@@ -17,19 +17,21 @@ namespace SAT
 		/*
 			PRIVATE VARIABLES
 		*/
-
+		std::vector<int> Data;
 		///////////////////////////////////////////////
 	public:
 		/*
 			PUBLIC CONSTRUCTORS
 		*/
 		DPLL();
+		DPLL(const std::vector<int> & my_data);
 		DPLL(const DPLL& Object);
 		///////////////////////////////////////////////
 		/*
 			PUBLIC FUNCTIONS
 		*/
-
+		void Print_Object() const;
+		const bool SAT_or_UNSAT();
 		///////////////////////////////////////////////
 		/*
 			PUBLIC SETTERS
@@ -55,7 +57,6 @@ namespace SAT
 		virtual ~DPLL();
 	};
 }
-
 
 
 #endif /* _DPLL_HPP_ */
