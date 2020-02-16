@@ -22,6 +22,7 @@ namespace SAT_File_Reader
 		std::vector<int> File;
 		std::string file_path;
 		std::fstream file_in;
+		int64_t max_value;
 		///////////////////////////////////////////////
 	public:
 		/*
@@ -45,6 +46,7 @@ namespace SAT_File_Reader
 			PUBLIC GETTERS
 		*/
 		const std::string Get_File_Path() const;
+		const int64_t Get_Max_Value() const;
 		const std::vector<int> Get_File() const;
 		///////////////////////////////////////////////
 		/*

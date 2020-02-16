@@ -2,6 +2,7 @@
 
 SAT_File_Reader::File_Reader::File_Reader():
 	File(),
+	max_value(),
 	file_path("file.in"),
 	file_in()
 {
@@ -16,6 +17,7 @@ SAT_File_Reader::File_Reader::File_Reader():
 
 SAT_File_Reader::File_Reader::File_Reader(const char * const file_path) :
 	File(),
+	max_value(),
 	file_path(file_path),
 	file_in()
 {
@@ -30,6 +32,7 @@ SAT_File_Reader::File_Reader::File_Reader(const char * const file_path) :
 
 SAT_File_Reader::File_Reader::File_Reader(const File_Reader& Object):
 	File(Object.File),
+	max_value(Object.max_value),
 	file_path(Object.file_path),
 	file_in()
 {
@@ -38,7 +41,6 @@ SAT_File_Reader::File_Reader::File_Reader(const File_Reader& Object):
 
 void SAT_File_Reader::File_Reader::Read()
 {
-	int32_t variables_range{};
 	int32_t variable{};
 	size_t number_of_lines{};
 	char c{};
@@ -46,7 +48,7 @@ void SAT_File_Reader::File_Reader::Read()
 
 	file_in >> c; //c
 	file_in >> f; //cnf
-	file_in >> variables_range; 
+	file_in >> max_value;
 	file_in >> number_of_lines;
 
 	//std::cout << c << ' ' << f << ' ';
@@ -86,6 +88,11 @@ const std::string SAT_File_Reader::File_Reader::Get_File_Path() const
 	return std::string(this->file_path);
 }
 
+const int64_t SAT_File_Reader::File_Reader::Get_Max_Value() const
+{
+	return int64_t(this->max_value);
+}
+
 const std::vector<int> SAT_File_Reader::File_Reader::Get_File() const
 {
 	return std::vector<int>(this->File);
@@ -106,6 +113,7 @@ SAT_File_Reader::File_Reader& SAT_File_Reader::File_Reader::operator=(const File
 SAT_File_Reader::File_Reader::~File_Reader()
 {
 	this->File.clear();
+	this->max_value = 0;
 	this->file_path.clear();
 	this->file_in.close();
 }

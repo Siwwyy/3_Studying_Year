@@ -14,8 +14,10 @@ int main(int argc, char* argv[])
 	SAT_File_Reader::File_Reader Obj("16v18c.in");
 	Obj.Read();
 
-	SAT::DPLL DPLL_Object(Obj.Get_File());
-	DPLL_Object.Print_Object();
+	SAT::DPLL DPLL_Object(Obj.Get_File(), Obj.Get_Max_Value());
+	DPLL_Object.SAT_or_UNSAT();
+	DPLL_Object.Print_Data();
+	DPLL_Object.Print_Unary_Variables();
 
 	_STD cin.get();
 	return EXIT_SUCCESS;
