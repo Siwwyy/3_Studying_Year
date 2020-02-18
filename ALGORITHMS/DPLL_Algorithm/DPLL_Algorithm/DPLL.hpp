@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <unordered_set>
+#include <set>
 #include <vector>
 #include <memory>
 #include <algorithm>
@@ -18,9 +19,11 @@ namespace SAT
 		/*
 			PRIVATE VARIABLES
 		*/
-		std::vector<int> Data;
-		std::unordered_set<int> Unary_Variables;
-		int64_t max_value;
+		std::vector<int64_t> Data;
+		std::unordered_set<int32_t> Unary_Variables;
+		//std::set<int32_t> Knowledge;
+		int64_t amount_of_literals;
+		int64_t* Knowledge;
 		///////////////////////////////////////////////
 		/*
 			PRIVATE FUNCTIONS
@@ -33,7 +36,7 @@ namespace SAT
 			PUBLIC CONSTRUCTORS
 		*/
 		DPLL() = delete;
-		DPLL(const std::vector<int> & my_data, const int64_t max_value);
+		DPLL(const std::vector<int64_t> & my_data, const int64_t amount_of_literals);
 		DPLL(const DPLL& Object);
 		///////////////////////////////////////////////
 		/*
@@ -41,7 +44,8 @@ namespace SAT
 		*/
 		void Print_Data() const;
 		void Print_Unary_Variables() const;
-		const bool SAT_or_UNSAT();
+		void Print_Knowledge() const;
+		void SAT_or_UNSAT();
 		///////////////////////////////////////////////
 		/*
 			PUBLIC SETTERS

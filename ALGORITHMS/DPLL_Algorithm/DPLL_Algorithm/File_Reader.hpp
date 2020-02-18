@@ -19,10 +19,10 @@ namespace SAT_File_Reader
 		/*
 			PRIVATE VARIABLES
 		*/
-		std::vector<int> File;
+		std::vector<int64_t> File;
 		std::string file_path;
 		std::fstream file_in;
-		int64_t max_value;
+		int64_t amout_of_literals;
 		///////////////////////////////////////////////
 	public:
 		/*
@@ -46,8 +46,8 @@ namespace SAT_File_Reader
 			PUBLIC GETTERS
 		*/
 		const std::string Get_File_Path() const;
-		const int64_t Get_Max_Value() const;
-		const std::vector<int> Get_File() const;
+		const int64_t Get_Amout_Of_Literals() const;
+		const std::vector<int64_t> Get_File() const;
 		///////////////////////////////////////////////
 		/*
 			PUBLIC OPERATORS
