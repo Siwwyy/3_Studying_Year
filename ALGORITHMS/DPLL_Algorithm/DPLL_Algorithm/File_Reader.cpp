@@ -59,12 +59,14 @@ void SAT_File_Reader::File_Reader::Read()
 
 	for (size_t i = 0; i < number_of_lines; ++i)
 	{
+		std::vector<int64_t> temp_vector{};
 		while (file_in >> variable && variable != 0)
 		{
-			File.emplace_back(variable);
+			temp_vector.emplace_back(variable);
 			variable = 0;
 		}
-		File.emplace_back(0);
+		temp_vector.emplace_back(0);
+		File.emplace_back(temp_vector);
 	}
 
 	//for (typename std::vector<int>::const_iterator vec_iterator = this->File.begin(); vec_iterator != this->File.end(); ++vec_iterator)
@@ -75,6 +77,20 @@ void SAT_File_Reader::File_Reader::Read()
 	//		std::cout << '\n';
 	//	}
 	//}
+}
+
+void SAT_File_Reader::File_Reader::Print() const
+{
+	std::cout << "|================================|" << '\n';
+	for (typename std::vector<std::vector<int64_t>>::const_iterator vec_iterator = this->File.begin(); vec_iterator != this->File.end(); ++vec_iterator)
+	{
+		for (typename std::vector<int64_t>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
+		{
+			std::cout << *vec_iterator_second << ' ';
+		}
+		std::cout << '\n';
+	}
+	std::cout << "|================================|" << '\n';
 }
 
 void SAT_File_Reader::File_Reader::Set_File_Path(const char* const file_path)
@@ -93,9 +109,9 @@ const int64_t SAT_File_Reader::File_Reader::Get_Amout_Of_Literals() const
 	return int64_t(this->amout_of_literals);
 }
 
-const std::vector<int64_t> SAT_File_Reader::File_Reader::Get_File() const
+const std::vector<std::vector<int64_t>> SAT_File_Reader::File_Reader::Get_File() const
 {
-	return std::vector<int64_t>(this->File);
+	return std::vector<std::vector<int64_t>>(this->File);
 }
 
 SAT_File_Reader::File_Reader& SAT_File_Reader::File_Reader::operator=(const File_Reader& Object)

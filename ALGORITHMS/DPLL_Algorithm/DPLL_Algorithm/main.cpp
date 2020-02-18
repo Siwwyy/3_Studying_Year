@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 	Obj.Read();
 
 	SAT::DPLL DPLL_Object(Obj.Get_File(), Obj.Get_Amout_Of_Literals());
-	DPLL_Object.SAT_or_UNSAT();
+	//DPLL_Object.SAT_or_UNSAT();
 	//DPLL_Object.Print_Data();
 	////DPLL_Object.Print_Unary_Variables();
 	//DPLL_Object.Print_Knowledge();

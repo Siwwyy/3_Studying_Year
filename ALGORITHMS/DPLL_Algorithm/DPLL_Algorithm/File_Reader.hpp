@@ -19,7 +19,7 @@ namespace SAT_File_Reader
 		/*
 			PRIVATE VARIABLES
 		*/
-		std::vector<int64_t> File;
+		std::vector<std::vector<int64_t>> File;
 		std::string file_path;
 		std::fstream file_in;
 		int64_t amout_of_literals;
@@ -36,6 +36,7 @@ namespace SAT_File_Reader
 			PUBLIC FUNCTIONS
 		*/
 		void Read();
+		void Print() const;
 		///////////////////////////////////////////////
 		/*
 			PUBLIC SETTERS
@@ -47,7 +48,7 @@ namespace SAT_File_Reader
 		*/
 		const std::string Get_File_Path() const;
 		const int64_t Get_Amout_Of_Literals() const;
-		const std::vector<int64_t> Get_File() const;
+		const std::vector<std::vector<int64_t>> Get_File() const;
 		///////////////////////////////////////////////
 		/*
 			PUBLIC OPERATORS

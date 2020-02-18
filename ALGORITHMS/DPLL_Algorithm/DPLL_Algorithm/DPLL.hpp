@@ -19,7 +19,7 @@ namespace SAT
 		/*
 			PRIVATE VARIABLES
 		*/
-		std::vector<int64_t> Data;
+		std::vector<std::vector<int64_t>> Data;
 		std::unordered_set<int32_t> Unary_Variables;
 		//std::set<int32_t> Knowledge;
 		int64_t amount_of_literals;
@@ -29,8 +29,10 @@ namespace SAT
 			PRIVATE FUNCTIONS
 		*/
 		void Find_Unaries();
-		void Erase_Useful_Variables();
-		void Create_Tree();
+		void Erase(const std::vector<std::vector<int64_t>>::iterator& _Where);
+		//void Create_Tree();
+		//void Delete_Rows();
+		//void Delete_Literal(const int64_t & literal);
 		void Add_To_Knowledge(int64_t position);
 		///////////////////////////////////////////////
 	public:
@@ -38,7 +40,7 @@ namespace SAT
 			PUBLIC CONSTRUCTORS
 		*/
 		DPLL() = delete;
-		DPLL(const std::vector<int64_t> & my_data, const int64_t amount_of_literals);
+		DPLL(const std::vector<std::vector<int64_t>> & my_data, const int64_t amount_of_literals);
 		DPLL(const DPLL& Object);
 		///////////////////////////////////////////////
 		/*
