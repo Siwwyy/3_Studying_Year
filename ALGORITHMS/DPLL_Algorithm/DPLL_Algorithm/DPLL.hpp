@@ -30,6 +30,8 @@ namespace SAT
 		*/
 		void Find_Unaries();
 		void Erase_Useful_Variables();
+		void Create_Tree();
+		void Add_To_Knowledge(int64_t position);
 		///////////////////////////////////////////////
 	public:
 		/*

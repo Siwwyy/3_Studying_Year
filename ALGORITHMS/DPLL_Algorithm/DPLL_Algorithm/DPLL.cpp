@@ -2,31 +2,11 @@
 
 void SAT::DPLL::Find_Unaries()
 {
-	/*size_t distance{};
-	for (typename std::vector<int32_t>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
-	{
-		if (*vec_iterator != 0)
-		{
-			++distance;
-		}
-		else
-		{
-			if (distance == 1)
-			{
-				Unary_Variables.insert(*(vec_iterator - 1));
-			}
-			distance = 0;
-		}
-	}*/
 	size_t distance{};
-	std::vector<int32_t>::const_iterator _First{};
-	std::vector<int32_t>::const_iterator _Last{};
-	//std::vector<int32_t> Temp_Vector(this->Data);
 	for (typename std::vector<int64_t>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
 		if (*vec_iterator != 0)
 		{
-			//_First = static_cast<std::vector<int32_t>::const_iterator>(vec_iterator);
 			++distance;
 		}
 		else
@@ -36,12 +16,13 @@ void SAT::DPLL::Find_Unaries()
 				/*
 					REMOVE FROM DATA VECTOR UNARY VARIABLES
 				*/
-				size_t position{};
-				if ((*(vec_iterator - 1)) < 0)
-				{
-					position = static_cast<size_t>(((*(vec_iterator - 1)) * -1) - 1);
-				}
-				Knowledge[position] = (*(vec_iterator - 1));
+				//size_t position{};
+				//if ((*(vec_iterator - 1)) < 0)
+				//{
+				//	position = static_cast<size_t>(((*(vec_iterator - 1)) * -1) - 1);
+				//}
+				//Knowledge[position] = (*(vec_iterator - 1));
+				Add_To_Knowledge(*(vec_iterator - 1));
 				for (typename std::vector<int64_t>::iterator vec_iterator_second = this->Data.begin(); vec_iterator_second != this->Data.end(); ++vec_iterator_second)
 				{
 					if (((*(vec_iterator - 1)) * -1) == (*vec_iterator_second))
@@ -51,76 +32,79 @@ void SAT::DPLL::Find_Unaries()
 				}
 				(*(vec_iterator - 1)) = ((amount_of_literals)+1);
 				(*(vec_iterator)) = ((amount_of_literals)+1);
-				//_Last = static_cast<std::vector<int32_t>::const_iterator>(vec_iterator);
-				//Temp_Vector.erase(_First, _Last);
 			}
 			distance = 0;
 		}
 	}
-	//this->Data = Temp_Vector;
 }
 
 void SAT::DPLL::Erase_Useful_Variables()
 {
-	std::remove(this->Data.begin(), this->Data.end(), ((amount_of_literals)+1));	//removing unecessary elements
-
-
-
-
-
-	/*typename std::vector<int32_t>::iterator zero_position{};
-	std::vector<int32_t> Data_Temp(this->Data);
-	for (typename std::unordered_set<int32_t>::const_iterator set_iterator = this->Unary_Variables.begin(); set_iterator != this->Unary_Variables.end(); ++set_iterator)
+	typename std::vector<int64_t>::iterator zero_position{};
+	for (size_t i = 0; i < static_cast<size_t>(this->amount_of_literals); ++i)
 	{
-		for (typename std::vector<int32_t>::iterator vec_iterator = Data_Temp.begin(); vec_iterator != Data_Temp.end(); ++vec_iterator)
+		if (Knowledge[i] != (this->amount_of_literals + 1))
 		{
-			if ((*vec_iterator) == 0 || std::distance(Data_Temp.begin(), vec_iterator) == 0)
+			for (typename std::vector<int64_t>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 			{
-				zero_position = vec_iterator;
-			}
-			if ((*vec_iterator) == (*set_iterator))
-			{
-				if (std::distance(Data_Temp.begin(), vec_iterator) == 0)
+				if ((*vec_iterator) == 0 || std::distance(this->Data.begin(), vec_iterator) == 0)
 				{
-					for (typename std::vector<int>::iterator vec_iterator_second = (zero_position); vec_iterator_second != Data_Temp.end(); ++vec_iterator_second)
+					zero_position = vec_iterator;
+				}
+				if ((*vec_iterator) == Knowledge[i])
+				{
+					if (std::distance(Data.begin(), vec_iterator) == 0)
 					{
-						if ((*vec_iterator_second) != 0)
+						for (typename std::vector<int64_t>::iterator vec_iterator_second = (zero_position); vec_iterator_second != this->Data.end(); ++vec_iterator_second)
 						{
-							(*vec_iterator_second) = (this->amount_of_literals + 1);
-						}
-						else
-						{
-							(*vec_iterator_second) = (this->amount_of_literals + 1);
-							break;
+							if ((*vec_iterator_second) != 0)
+							{
+								(*vec_iterator_second) = (this->amount_of_literals + 1);
+							}
+							else
+							{
+								(*vec_iterator_second) = (this->amount_of_literals + 1);
+								break;
+							}
 						}
 					}
-				}
-				else
-				{
-					for (typename std::vector<int32_t>::iterator vec_iterator_second = (zero_position + 1); vec_iterator_second != Data_Temp.end(); ++vec_iterator_second)
+					else
 					{
-						if ((*vec_iterator_second) != 0)
+						for (typename std::vector<int64_t>::iterator vec_iterator_second = (zero_position + 1); vec_iterator_second != this->Data.end(); ++vec_iterator_second)
 						{
-							(*vec_iterator_second) = (this->amount_of_literals + 1);
-						}
-						else
-						{
-							(*vec_iterator_second) = (this->amount_of_literals + 1);
-							break;
+							if ((*vec_iterator_second) != 0)
+							{
+								(*vec_iterator_second) = (this->amount_of_literals + 1);
+							}
+							else
+							{
+								(*vec_iterator_second) = (this->amount_of_literals + 1);
+								break;
+							}
 						}
 					}
 				}
 			}
 		}
 	}
-	Data.clear();
-	for (typename std::vector<int32_t>::iterator vec_iterator = Data_Temp.begin(); vec_iterator != Data_Temp.end(); ++vec_iterator)
+	Data.erase(std::remove(this->Data.begin(), this->Data.end(), ((amount_of_literals)+1)),this->Data.end());	//removing unecessary elements
+}
+
+void SAT::DPLL::Create_Tree()
+{
+	//Add_To_Knowledge(std::move(Data[0] - 1), Data[0]);
+	Add_To_Knowledge(Data[0]);
+	Data[0] = (this->amount_of_literals + 1);
+}
+
+void SAT::DPLL::Add_To_Knowledge(int64_t value)
+{
+	size_t position{ static_cast<size_t>(value - 1) };
+	if (value < 0)
 	{
-		if ((*vec_iterator) != (this->amount_of_literals + 1))
-		{
-			Data.emplace_back((*vec_iterator));
-		}
-	}*/
+		position = static_cast<size_t>(((value) * - 1) - 1);
+	}
+	Knowledge[position] = value;
 }
 
 SAT::DPLL::DPLL(const std::vector<int64_t> & my_data, const int64_t amount_of_literals):
@@ -135,8 +119,8 @@ SAT::DPLL::DPLL(const std::vector<int64_t> & my_data, const int64_t amount_of_li
 	}
 	Print_Data();
 	Print_Knowledge();
-	Find_Unaries();
-	Erase_Useful_Variables();
+	//Find_Unaries();
+	//Erase_Useful_Variables();
 }
 
 SAT::DPLL::DPLL(const DPLL& Object) :
@@ -190,20 +174,24 @@ void SAT::DPLL::Print_Knowledge() const
 	}
 	std::cout << '\n';
 	std::cout << "|================================|" << '\n';
+	std::cout << '\n';
+	std::cout << '\n';
 }
 
 void SAT::DPLL::SAT_or_UNSAT()
 {
-	if (this->Data.size() != 0)
+	if (this->Data.size() > 0)
 	{
-		//SAT_or_UNSAT();
+		Print_Data();
+		Print_Knowledge();
+		Create_Tree();
+		Find_Unaries();
+		Erase_Useful_Variables();
+		//std::cout << "SIZE " << this->Data.size() << '\n';
+		//system("pause");
+		SAT_or_UNSAT();
 	}
-	else
-	{
-		//GIVE RESULT SAT or UNSAT
-		//if some of literals arent in Data, you have to explicitly set their value to true
-		//for example, we have 7 literals given but in data we have from 1 to 5 (6 and 7 are implicit, defaultly set up to true)
-	}
+	
 }
 
 SAT::DPLL& SAT::DPLL::operator=(const DPLL& Object)
@@ -231,8 +219,23 @@ SAT::DPLL& SAT::DPLL::operator=(const DPLL& Object)
 
 SAT::DPLL::~DPLL()
 {
-	delete[] this->Knowledge;
-	this->Data.clear();
+	//GIVE RESULT SAT or UNSAT
+	//if some of literals arent in Data, you have to explicitly set their value to true
+	//for example, we have 7 literals given but in data we have from 1 to 5 (6 and 7 are implicit, defaultly set up to true)
+	for (size_t i = 0; i < static_cast<size_t>(this->amount_of_literals); ++i)
+	{
+		if (Knowledge[i] == (this->amount_of_literals + 1))
+		{
+			Knowledge[i] = (i + 1);
+		}
+	}
+	Print_Data();
+	Print_Knowledge();
+	if (this->Data.size() > 0)
+	{
+		this->Data.clear();
+	}
+	//delete[] Knowledge;
 	this->amount_of_literals = 0;
 	this->Unary_Variables.clear();
 }
