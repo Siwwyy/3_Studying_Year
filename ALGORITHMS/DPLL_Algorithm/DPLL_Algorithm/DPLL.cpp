@@ -16,12 +16,6 @@ void SAT::DPLL::Find_Unaries()
 				/*
 					REMOVE FROM DATA VECTOR UNARY VARIABLES
 				*/
-				//size_t position{};
-				//if ((*(vec_iterator - 1)) < 0)
-				//{
-				//	position = static_cast<size_t>(((*(vec_iterator - 1)) * -1) - 1);
-				//}
-				//Knowledge[position] = (*(vec_iterator - 1));
 				Add_To_Knowledge(*(vec_iterator - 1));
 				for (typename std::vector<int64_t>::iterator vec_iterator_second = this->Data.begin(); vec_iterator_second != this->Data.end(); ++vec_iterator_second)
 				{
@@ -40,6 +34,8 @@ void SAT::DPLL::Find_Unaries()
 
 void SAT::DPLL::Erase_Useful_Variables()
 {
+	//std::cout << "PRINTING" << '\n';
+	//Print_Data();
 	typename std::vector<int64_t>::iterator zero_position{};
 	for (size_t i = 0; i < static_cast<size_t>(this->amount_of_literals); ++i)
 	{
@@ -59,6 +55,7 @@ void SAT::DPLL::Erase_Useful_Variables()
 						{
 							if ((*vec_iterator_second) != 0)
 							{
+								Add_To_Knowledge((*vec_iterator_second));
 								(*vec_iterator_second) = (this->amount_of_literals + 1);
 							}
 							else
@@ -74,6 +71,7 @@ void SAT::DPLL::Erase_Useful_Variables()
 						{
 							if ((*vec_iterator_second) != 0)
 							{
+								Add_To_Knowledge((*vec_iterator_second));
 								(*vec_iterator_second) = (this->amount_of_literals + 1);
 							}
 							else
@@ -84,17 +82,24 @@ void SAT::DPLL::Erase_Useful_Variables()
 						}
 					}
 				}
+				//else if (((*vec_iterator) * -1) == Knowledge[i])
+				//{
+				//	(*vec_iterator) = (this->amount_of_literals + 1);
+				//}
 			}
 		}
 	}
+	//std::cout << "PRINTING 2" << '\n';
+	//Print_Data();
 	Data.erase(std::remove(this->Data.begin(), this->Data.end(), ((amount_of_literals)+1)),this->Data.end());	//removing unecessary elements
+	//std::cout << "PRINTING 3" << '\n';
+	//Print_Data();
+	//system("pause");
 }
 
 void SAT::DPLL::Create_Tree()
 {
-	//Add_To_Knowledge(std::move(Data[0] - 1), Data[0]);
 	Add_To_Knowledge(Data[0]);
-	Data[0] = (this->amount_of_literals + 1);
 }
 
 void SAT::DPLL::Add_To_Knowledge(int64_t value)
@@ -104,7 +109,10 @@ void SAT::DPLL::Add_To_Knowledge(int64_t value)
 	{
 		position = static_cast<size_t>(((value) * - 1) - 1);
 	}
-	Knowledge[position] = value;
+	if (position >= 0 && position < amount_of_literals)
+	{
+		Knowledge[position] = value;
+	}
 }
 
 SAT::DPLL::DPLL(const std::vector<int64_t> & my_data, const int64_t amount_of_literals):
@@ -119,8 +127,8 @@ SAT::DPLL::DPLL(const std::vector<int64_t> & my_data, const int64_t amount_of_li
 	}
 	Print_Data();
 	Print_Knowledge();
-	//Find_Unaries();
-	//Erase_Useful_Variables();
+	Find_Unaries();
+	Erase_Useful_Variables();
 }
 
 SAT::DPLL::DPLL(const DPLL& Object) :
@@ -188,10 +196,24 @@ void SAT::DPLL::SAT_or_UNSAT()
 		Find_Unaries();
 		Erase_Useful_Variables();
 		//std::cout << "SIZE " << this->Data.size() << '\n';
-		//system("pause");
+		system("pause");
 		SAT_or_UNSAT();
 	}
-	
+	else
+	{
+		//GIVE RESULT SAT or UNSAT
+		//if some of literals arent in Data, you have to explicitly set their value to true
+		//for example, we have 7 literals given but in data we have from 1 to 5 (6 and 7 are implicit, defaultly set up to true)
+		for (size_t i = 0; i < static_cast<size_t>(this->amount_of_literals); ++i)
+		{
+			if (Knowledge[i] == (this->amount_of_literals + 1))
+			{
+				Knowledge[i] = (i + 1);
+			}
+		}
+		Print_Data();
+		Print_Knowledge();
+	}
 }
 
 SAT::DPLL& SAT::DPLL::operator=(const DPLL& Object)
@@ -219,23 +241,11 @@ SAT::DPLL& SAT::DPLL::operator=(const DPLL& Object)
 
 SAT::DPLL::~DPLL()
 {
-	//GIVE RESULT SAT or UNSAT
-	//if some of literals arent in Data, you have to explicitly set their value to true
-	//for example, we have 7 literals given but in data we have from 1 to 5 (6 and 7 are implicit, defaultly set up to true)
-	for (size_t i = 0; i < static_cast<size_t>(this->amount_of_literals); ++i)
-	{
-		if (Knowledge[i] == (this->amount_of_literals + 1))
-		{
-			Knowledge[i] = (i + 1);
-		}
-	}
-	Print_Data();
-	Print_Knowledge();
 	if (this->Data.size() > 0)
 	{
 		this->Data.clear();
 	}
-	//delete[] Knowledge;
+	delete[] Knowledge;
 	this->amount_of_literals = 0;
 	this->Unary_Variables.clear();
 }
