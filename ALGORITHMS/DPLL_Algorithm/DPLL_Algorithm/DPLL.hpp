@@ -30,10 +30,14 @@ namespace SAT
 		*/
 		void Find_Unaries();
 		void Erase(const std::vector<std::vector<int64_t>>::iterator& _Where);
-		//void Create_Tree();
+		void Erase();
+		void Change_Row();
+		void Erase_Row(const std::vector<std::vector<int64_t>>::iterator& _Where);
+		void Create_Tree();
 		//void Delete_Rows();
 		//void Delete_Literal(const int64_t & literal);
 		void Add_To_Knowledge(int64_t position);
+		const bool Is_End();
 		///////////////////////////////////////////////
 	public:
 		/*

@@ -40,7 +40,7 @@ void SAT::DPLL::Find_Unaries()
 			(*vec_iterator)[0] = ((amount_of_literals)+1);
 			(*vec_iterator)[1] = ((amount_of_literals)+1);
 			//const std::vector<int64_t>::iterator & my_iterator = vec_iterator->begin();
-			Erase(vec_iterator);
+			//Erase(vec_iterator);
 		}
 	}
 }
@@ -48,7 +48,62 @@ void SAT::DPLL::Find_Unaries()
 void SAT::DPLL::Erase(const std::vector<std::vector<int64_t>>::iterator& _Where)
 {
 	//Data.erase(std::remove(this->Data.begin(), this->Data.end(), ((amount_of_literals)+1)), this->Data.end());	//removing unecessary elements
-	Data[std::distance(Data.begin(), _Where)].erase(std::remove(_Where->begin(), _Where->end(), ((amount_of_literals)+1)), _Where->end());	//removing unecessary elements
+	//Data[std::distance(Data.begin(), _Where)].erase(std::remove(_Where->begin(), _Where->end(), ((amount_of_literals)+1)), _Where->end());	//removing unecessary elements
+}
+
+void SAT::DPLL::Erase()
+{
+	//Data.erase(std::remove(Data.begin(), Data.end(), ((amount_of_literals)+1)), Data.end());	//removing unecessary elements
+}
+
+void SAT::DPLL::Change_Row()
+{
+	std::vector<int64_t>::iterator it{};
+	for (size_t i = 0; i < static_cast<size_t>(this->amount_of_literals); ++i)
+	{
+		if (Knowledge[i] != (this->amount_of_literals + 1))
+		{
+			for (typename std::vector<std::vector<int64_t>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
+			{
+				it = std::find(vec_iterator->begin(), vec_iterator->end(), Knowledge[i]);
+				if (it != vec_iterator->end())
+				{
+					for (typename std::vector<int64_t>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
+					{
+						(*vec_iterator_second) = ((amount_of_literals)+1);
+					}
+					//Erase(vec_iterator);
+					//Erase_Row(vec_iterator);
+				}
+				it = std::find(vec_iterator->begin(), vec_iterator->end(), (-1)*Knowledge[i]);
+				if (it != vec_iterator->end())
+				{
+					*it = ((amount_of_literals)+1);
+					//Erase(vec_iterator);
+				}
+			}
+		}
+	}
+	//Erase();
+}
+
+void SAT::DPLL::Erase_Row(const std::vector<std::vector<int64_t>>::iterator& _Where)
+{
+	//Data.erase(Data.begin() + std::distance(Data.begin(),_Where), Data.begin() + std::distance(Data.begin(), _Where) + 1);	//removing unecessary elements
+}
+
+void SAT::DPLL::Create_Tree()
+{
+	for (typename std::vector<std::vector<int64_t>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
+	{
+		for (typename std::vector<int64_t>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
+		{
+			if ((*vec_iterator_second) != ((amount_of_literals)+1))
+			{
+				Add_To_Knowledge((*vec_iterator_second));
+			}
+		}
+	}
 }
 
 
@@ -190,6 +245,21 @@ void SAT::DPLL::Add_To_Knowledge(int64_t value)
 	}
 }
 
+const bool SAT::DPLL::Is_End()
+{
+	for (typename std::vector<std::vector<int64_t>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
+	{
+		for (typename std::vector<int64_t>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
+		{
+			if ((*vec_iterator_second) != ((amount_of_literals)+1))
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 SAT::DPLL::DPLL(const std::vector<std::vector<int64_t>>& my_data, const int64_t amount_of_literals):
 	Data(my_data),
 	amount_of_literals(amount_of_literals),
@@ -211,6 +281,7 @@ SAT::DPLL::DPLL(const std::vector<std::vector<int64_t>>& my_data, const int64_t 
 	//system("pause");
 	Print_Data();
 	Find_Unaries();
+	Change_Row();
 	Print_Data();
 }
 
@@ -273,14 +344,14 @@ void SAT::DPLL::SAT_or_UNSAT()
 {
 	if (this->Data.size() > 0)
 	{
-		//Print_Data();
-		//Print_Knowledge();
-		//Create_Tree();
-		//Find_Unaries();
-		//Erase();
+		Print_Data();
+		Print_Knowledge();
+		Create_Tree();
+		Find_Unaries();
+		Change_Row();
 		////std::cout << "SIZE " << this->Data.size() << '\n';
-		//system("pause");
-		//SAT_or_UNSAT();
+		system("pause");
+		SAT_or_UNSAT();
 	}
 	else
 	{
