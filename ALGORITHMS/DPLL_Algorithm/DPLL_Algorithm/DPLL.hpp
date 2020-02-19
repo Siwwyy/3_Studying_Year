@@ -21,7 +21,6 @@ namespace SAT
 		*/
 		std::vector<std::vector<int64_t>> Data;
 		std::unordered_set<int32_t> Unary_Variables;
-		//std::set<int32_t> Knowledge;
 		int64_t amount_of_literals;
 		int64_t* Knowledge;
 		///////////////////////////////////////////////
@@ -29,10 +28,7 @@ namespace SAT
 			PRIVATE FUNCTIONS
 		*/
 		void Find_Unaries();
-		void Erase(const std::vector<std::vector<int64_t>>::iterator& _Where);
-		void Erase();
 		void Change_Row();
-		void Erase_Row(const std::vector<std::vector<int64_t>>::iterator& _Where);
 		void Create_Tree();
 		//void Delete_Rows();
 		//void Delete_Literal(const int64_t & literal);
