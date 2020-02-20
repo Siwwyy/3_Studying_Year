@@ -2,11 +2,11 @@
 #include <vector>
 #define _STD ::std::
 #define NEW_LINE '\n'
-#define STOPWATCH_ON
+//#define STOPWATCH_ON
 
 #include "File_Reader.hpp"
 #include "DPLL.hpp"
-#include "StopWatch.h"
+//#include "StopWatch.h"
 
 int main(int argc, char* argv[])
 {
