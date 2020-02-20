@@ -6,10 +6,8 @@ void SAT::DPLL::Find_Unaries()
 	{
 		if ((*vec_iterator).size() == 2)
 		{
-			//Add_To_Knowledge((*vec_iterator)[0].first);
-			//K.emplace_back(std::make_pair((*vec_iterator)[0].first, (*vec_iterator)[0].second));
 			K[static_cast<size_t>((*vec_iterator)[0].first - 1)] = std::make_pair((*vec_iterator)[0].first, (*vec_iterator)[0].second);
-			//(*vec_iterator)[0].first = static_cast<int64_t>((amount_of_literals) + (*vec_iterator)[0].first);
+			(*vec_iterator)[0].first = static_cast<int64_t>((amount_of_literals) + (*vec_iterator)[0].first);
 		}
 	}
 }
@@ -144,7 +142,8 @@ void SAT::DPLL::SAT_or_UNSAT()
 			}
 		}
 		Print_Data();
-		Print_Knowledge();
+		//Print_Knowledge();
+		Print_K();
 		std::cout << "SATISFIABLE" << '\n';
 	}
 }
