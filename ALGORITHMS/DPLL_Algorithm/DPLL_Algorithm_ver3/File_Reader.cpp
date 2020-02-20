@@ -56,34 +56,45 @@ void SAT_File_Reader::File_Reader::Read()
 
 	//File.emplace_back(variables_range);
 	//File.emplace_back(number_of_lines);
-	auto initialize_vector = []() -> int64_t
-	{
 
-	};
-
-	std::vector<SAT::Literal> literals{};
 	for (size_t i = 0; i < number_of_lines; ++i)
 	{
-		std::vector<SAT::Literal> temp_vector{};
+		std::vector<std::pair<int64_t, bool>> temp_vector{};
 		while (file_in >> variable && variable != 0)
 		{
-			//temp_vector.emplace_back(SAT::Literal(variable));
-			temp_vector.emplace_back(literals[static_cast<size_t>(variable - 1)]);
+			if (variable < 0)
+			{
+				variable *= -1;
+				temp_vector.emplace_back(std::make_pair(variable, false));
+			}
+			else
+			{
+				temp_vector.emplace_back(std::make_pair(variable, true));
+			}
 			variable = 0;
 		}
-		temp_vector.emplace_back(0);
+		temp_vector.emplace_back(std::make_pair(0, true));
 		File.emplace_back(temp_vector);
 	}
+
+	//for (typename std::vector<int>::const_iterator vec_iterator = this->File.begin(); vec_iterator != this->File.end(); ++vec_iterator)
+	//{
+	//	std::cout << *vec_iterator << ' ';
+	//	if (*vec_iterator == 0)
+	//	{
+	//		std::cout << '\n';
+	//	}
+	//}
 }
 
 void SAT_File_Reader::File_Reader::Print() const
 {
 	std::cout << "|================================|" << '\n';
-	for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator = this->File.begin(); vec_iterator != this->File.end(); ++vec_iterator)
+	for (typename std::vector<std::vector<std::pair<int64_t, bool>>>::const_iterator vec_iterator = this->File.begin(); vec_iterator != this->File.end(); ++vec_iterator)
 	{
-		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
+		for (typename std::vector<std::pair<int64_t, bool>>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 		{
-			std::cout << vec_iterator_second->Get_Value() << ' ';
+			std::cout << vec_iterator_second->first << ' ';
 		}
 		std::cout << '\n';
 	}
@@ -106,9 +117,9 @@ const int64_t SAT_File_Reader::File_Reader::Get_Amout_Of_Literals() const
 	return int64_t(this->amout_of_literals);
 }
 
-const std::vector<std::vector<SAT::Literal>> SAT_File_Reader::File_Reader::Get_File() const
+const std::vector<std::vector<std::pair<int64_t, bool>>> SAT_File_Reader::File_Reader::Get_File() const
 {
-	return std::vector<std::vector<SAT::Literal>>(this->File);
+	return std::vector<std::vector<std::pair<int64_t, bool>>>(this->File);
 }
 
 SAT_File_Reader::File_Reader& SAT_File_Reader::File_Reader::operator=(const File_Reader& Object)

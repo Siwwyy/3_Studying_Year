@@ -1,77 +1,71 @@
-#ifndef _DPLL_HPP_
-#define _DPLL_HPP_
+#ifndef _LITERAL_HPP_
+#define _LITERAL_HPP_
 #pragma once
-
-#include "Literal.hpp"
 
 #include <iostream>
 #include <string>
-#include <unordered_set>
-#include <set>
 #include <vector>
 #include <memory>
+#include <fstream>
 #include <algorithm>
+#include <cstdint>
 #include <functional>
 
 namespace SAT
 {
-	class DPLL
+	class Literal
 	{
 	private:
+		enum STATUS
+		{
+			TRUE,
+			FALSE,
+			UNTAGGED
+		};
 		/*
 			PRIVATE VARIABLES
 		*/
-		std::vector<std::vector<Literal>> Data;
-		std::unordered_set<int32_t> Unary_Variables;
-		int64_t amount_of_literals;
-		int64_t* Knowledge;
-		///////////////////////////////////////////////
-		/*
-			PRIVATE FUNCTIONS
-		*/
-		void Find_Unaries();
-		void Add_To_Knowledge(int64_t value);
+		STATUS status;
+		int64_t value;
 		///////////////////////////////////////////////
 	public:
 		/*
 			PUBLIC CONSTRUCTORS
 		*/
-		DPLL() = delete;
-		DPLL(const std::vector<std::vector<Literal>> & my_data, const int64_t amount_of_literals);
-		DPLL(const DPLL& Object);
+		Literal() = delete;
+		Literal(const int64_t & value);
+		Literal(const Literal& Object);
 		///////////////////////////////////////////////
 		/*
 			PUBLIC FUNCTIONS
 		*/
-		void Print_Data() const;
-		void Print_Unary_Variables() const;
-		void Print_Knowledge() const;
-		void SAT_or_UNSAT();
+
 		///////////////////////////////////////////////
 		/*
 			PUBLIC SETTERS
 		*/
-
+		void Set_Status(const Literal::STATUS status);
+		void Set_Value(const int64_t value);
 		///////////////////////////////////////////////
 		/*
 			PUBLIC GETTERS
 		*/
-
+		const Literal::STATUS Get_Status() const;
+		const int64_t Get_Value() const;
 		///////////////////////////////////////////////
 		/*
 			PUBLIC OPERATORS
 		*/
 		//UNARY
-		DPLL& operator=(const DPLL& Object);
+		Literal& operator=(const Literal& Object);
 		//BINARY
 		///////////////////////////////////////////////
 		/*
 			DESTRUCTOR
 		*/
 		///////////////////////////////////////////////
-		virtual ~DPLL();
+		virtual ~Literal();
 	};
 }
 
-
-#endif /* _DPLL_HPP_ */
+#endif /* _LITERAL_HPP_ */

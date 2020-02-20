@@ -24,18 +24,12 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Literal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DPLL.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="File_Reader.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Literal.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

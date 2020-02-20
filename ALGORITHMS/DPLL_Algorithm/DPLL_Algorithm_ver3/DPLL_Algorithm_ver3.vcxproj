@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{DAFE52CF-EA3E-4583-AEA1-84E5A4A61F48}</ProjectGuid>
-    <RootNamespace>DPLLAlgorithmver2</RootNamespace>
+    <ProjectGuid>{AC54B436-3B22-41F3-A77A-8DC5F2027290}</ProjectGuid>
+    <RootNamespace>DPLLAlgorithmver3</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -140,13 +140,11 @@
   <ItemGroup>
     <ClCompile Include="DPLL.cpp" />
     <ClCompile Include="File_Reader.cpp" />
-    <ClCompile Include="Literal.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DPLL.hpp" />
     <ClInclude Include="File_Reader.hpp" />
-    <ClInclude Include="Literal.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

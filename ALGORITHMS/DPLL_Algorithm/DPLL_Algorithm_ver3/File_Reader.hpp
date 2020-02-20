@@ -2,8 +2,6 @@
 #define _FILE_READER_HPP_
 #pragma once
 
-#include "Literal.hpp"
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -21,7 +19,7 @@ namespace SAT_File_Reader
 		/*
 			PRIVATE VARIABLES
 		*/
-		std::vector<std::vector<SAT::Literal>> File;
+		std::vector<std::vector<std::pair<int64_t, bool>>> File;
 		std::string file_path;
 		std::fstream file_in;
 		int64_t amout_of_literals;
@@ -50,7 +48,7 @@ namespace SAT_File_Reader
 		*/
 		const std::string Get_File_Path() const;
 		const int64_t Get_Amout_Of_Literals() const;
-		const std::vector<std::vector<SAT::Literal>> Get_File() const;
+		const std::vector<std::vector<std::pair<int64_t, bool>>> Get_File() const;
 		///////////////////////////////////////////////
 		/*
 			PUBLIC OPERATORS
