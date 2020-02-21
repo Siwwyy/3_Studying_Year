@@ -1,8 +1,6 @@
-#ifndef _FILE_READER_HPP_
-#define _FILE_READER_HPP_
+#ifndef _LITERAL_HPP_
+#define _LITERAL_HPP_
 #pragma once
-
-#include "Literal.hpp"
 
 #include <iostream>
 #include <string>
@@ -13,58 +11,66 @@
 #include <cstdint>
 #include <functional>
 
-namespace SAT_File_Reader
+namespace SAT
 {
-	class File_Reader
+	class Literal
 	{
 	private:
+
 		/*
 			PRIVATE VARIABLES
 		*/
-		std::vector<std::vector<SAT::Literal>> File;
-		std::string file_path;
-		std::fstream file_in;
-		int64_t amount_of_literals;
+		//STATUS status;
+		int64_t value;
+		bool visited;
 		///////////////////////////////////////////////
 	public:
+		enum class STATUS
+		{
+			TRUE,
+			FALSE
+		}status;
 		/*
 			PUBLIC CONSTRUCTORS
 		*/
-		File_Reader();
-		File_Reader(const char * const file_path);
-		File_Reader(const File_Reader& Object);
+		Literal();
+		Literal(const int64_t & value);
+		Literal(const Literal& Object);
 		///////////////////////////////////////////////
 		/*
 			PUBLIC FUNCTIONS
 		*/
-		void Read();
-		void Print() const;
+
 		///////////////////////////////////////////////
 		/*
 			PUBLIC SETTERS
 		*/
-		void Set_File_Path(const char* const file_path);
+		void Set_Status(const Literal::STATUS status);
+		void Set_Value(const int64_t value);
+		void Set_Visited(const bool visited);
 		///////////////////////////////////////////////
 		/*
 			PUBLIC GETTERS
 		*/
-		const std::string Get_File_Path() const;
-		const int64_t Get_Amout_Of_Literals() const;
-		const std::vector<std::vector<SAT::Literal>> & Get_File() const;
+		const Literal::STATUS Get_Status() const;
+		const int64_t Get_Value() const;
+		const bool Get_Visited() const;
+		const Literal & Get_Object() const;
 		///////////////////////////////////////////////
 		/*
 			PUBLIC OPERATORS
 		*/
 		//UNARY
-		File_Reader& operator=(const File_Reader& Object);
+		Literal& operator=(const Literal& Object);
+		const bool operator==(const int64_t& value) const;
 		//BINARY
 		///////////////////////////////////////////////
 		/*
 			DESTRUCTOR
 		*/
 		///////////////////////////////////////////////
-		virtual ~File_Reader();
+		virtual ~Literal();
 	};
 }
 
-#endif /* _FILE_READER_HPP_ */
+#endif /* _LITERAL_HPP_ */
