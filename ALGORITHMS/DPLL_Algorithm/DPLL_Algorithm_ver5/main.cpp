@@ -46,10 +46,17 @@ int main(int argc, char* argv[])
 	//SAT_File_Reader::File_Reader Obj("file2.in");
 	Obj.Read();
 	//Obj.Print();
+	//Obj.Print_Literals();
+
+	SAT::DPLL DPLL_Object(Obj.Get_File(), Obj.Get_Literals() ,Obj.Get_Amout_Of_Literals());
+	DPLL_Object.Print_Data();
+	DPLL_Object.Print_Literals();
+
+	Obj.Print();
 	Obj.Print_Literals();
 
-	//SAT::DPLL DPLL_Object(Obj.Get_File(), Obj.Get_Amout_Of_Literals());
-
+	DPLL_Object.Print_Data();
+	DPLL_Object.Print_Literals();
 
 	//std::vector<std::reference_wrapper<MyClass>> vec;
 

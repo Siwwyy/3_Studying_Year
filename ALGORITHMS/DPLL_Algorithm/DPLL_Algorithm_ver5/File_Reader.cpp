@@ -59,11 +59,12 @@ void SAT_File_Reader::File_Reader::Read()
 
 	//File.emplace_back(variables_range);
 	//File.emplace_back(number_of_lines);
-	Literals.resize(amount_of_literals);
-	for (size_t i = 0; i < number_of_lines; ++i)
+	//Literals.resize(amount_of_literals+1);
+	for (size_t i = 0; i < amount_of_literals+1; ++i)
 	{
-		//SAT::Literal Obj((static_cast<int64_t>(i + 1)));
-		Literals[i].Set_Value(static_cast<int64_t>(i + 1));
+		SAT::Literal Obj((static_cast<int64_t>(i + 1)));
+		//Literals[i].get().Set_Value(static_cast<int64_t>(i));
+		Literals.emplace_back(Obj);//.operator SAT::Literal& () = SAT::Literal(static_cast<int64_t>(i));
 		//Literals.emplace_back(Obj);
 	}
 	for (size_t i = 0; i < number_of_lines; ++i)
@@ -73,11 +74,11 @@ void SAT_File_Reader::File_Reader::Read()
 			//File.emplace_back(variable);
 			if (variable < 0)
 			{
-				File.emplace_back(std::make_pair(Literals[static_cast<size_t>(variable - 1)], true));
+				//File.emplace_back(std::make_pair(Literals[static_cast<size_t>(((-1)*variable))], true));
 			}
 			else
 			{
-				File.emplace_back(std::make_pair(Literals[static_cast<size_t>(variable - 1)], false));
+				//File.emplace_back(std::make_pair(Literals[static_cast<size_t>(variable)], false));
 			}
 			variable = {};
 		}
@@ -91,7 +92,7 @@ void SAT_File_Reader::File_Reader::Read()
 	//		std::cout << '\n';
 	//	}
 	//}
-	Print_Literals();
+	//File[0].first.get().Set_Value(1000);
 }
 
 void SAT_File_Reader::File_Reader::Print() const
@@ -99,17 +100,34 @@ void SAT_File_Reader::File_Reader::Print() const
 	std::cout << "|================================|" << '\n';
 	for (typename std::vector<std::pair<std::reference_wrapper<SAT::Literal>, bool>>::const_iterator vec_iterator = this->File.begin(); vec_iterator != this->File.end(); ++vec_iterator)
 	{
-		std::cout << vec_iterator->first.get().Get_Value() << ' ' << vec_iterator->second << ' ';
+		if (vec_iterator->first.get().Get_Value() == 0)
+		{
+			//std::cout << vec_iterator->first.get().Get_Value() << ' ' << vec_iterator->second << '\n';
+			std::cout << vec_iterator->first.get().Get_Value() << '\n';
+		}
+		else
+		{
+			//std::cout << vec_iterator->first.get().Get_Value() << ' ' << vec_iterator->second << ' ';
+			if (vec_iterator->second == true)
+			{
+				std::cout << '-' << vec_iterator->first.get().Get_Value() << ' ';
+			}
+			else
+			{
+				std::cout << vec_iterator->first.get().Get_Value() << ' ';
+			}
+		}
 	}
-	std::cout << "\n|================================|" << '\n';
+	//std::cout << &File[0].first.get() << '\n';
+	std::cout << "|================================|" << '\n';
 }
 
 void SAT_File_Reader::File_Reader::Print_Literals() const
 {
 	std::cout << "|================================|" << '\n';
-	for (typename std::vector<SAT::Literal>::const_iterator vec_iterator = this->Literals.begin(); vec_iterator != this->Literals.end(); ++vec_iterator)
+	for (typename std::vector< std::reference_wrapper<SAT::Literal>>::const_iterator vec_iterator = this->Literals.begin(); vec_iterator != this->Literals.end(); ++vec_iterator)
 	{
-		std::cout << vec_iterator->Get_Value() << ' ';
+		std::cout << vec_iterator->get().Get_Value() << ' ';
 	}
 	std::cout << "\n|================================|" << '\n';
 }
@@ -133,6 +151,11 @@ const int64_t SAT_File_Reader::File_Reader::Get_Amout_Of_Literals() const
 const std::vector<std::pair<std::reference_wrapper<SAT::Literal>, bool>> SAT_File_Reader::File_Reader::Get_File() const
 {
 	return this->File;
+}
+
+const std::vector< std::reference_wrapper<SAT::Literal>>& SAT_File_Reader::File_Reader::Get_Literals() const
+{
+	return this->Literals;
 }
 
 SAT_File_Reader::File_Reader& SAT_File_Reader::File_Reader::operator=(const File_Reader& Object)

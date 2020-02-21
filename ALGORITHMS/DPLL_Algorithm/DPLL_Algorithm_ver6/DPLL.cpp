@@ -2,33 +2,18 @@
 
 void SAT::DPLL::Find_Unaries()
 {
-	size_t distance{};
-	for (typename std::vector<std::pair<std::reference_wrapper<Literal>, bool>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
+	for (typename std::vector<std::vector<int64_t>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
-		//if ((*vec_iterator).size() == 2)
-		//{
-		//	Add_To_Knowledge((*vec_iterator)[0]);
-		//	(*vec_iterator)[0] = ((amount_of_literals)+1);
-		//	(*vec_iterator)[1] = ((amount_of_literals)+1);
-		//}
-		if (vec_iterator->first.get().Get_Value() != 0)
+		if ((*vec_iterator).size() == 2)
 		{
-			++distance;
-		}
-		else
-		{
-			if (distance == 1)
-			{
-				vec_iterator->first.get().Set_Status(SAT::Literal::STATUS::TRUE);
-			}
-			distance = 0;
+			(*vec_iterator)[0] = ((amount_of_literals)+1);
+			(*vec_iterator)[1] = ((amount_of_literals)+1);
 		}
 	}
 }
 
-SAT::DPLL::DPLL(const std::vector<std::pair<std::reference_wrapper<Literal>, bool>> my_data, const std::vector< std::reference_wrapper<SAT::Literal>>& Literals,const int64_t amount_of_literals):
+SAT::DPLL::DPLL(const std::vector<std::vector<int64_t>>& my_data, const int64_t amount_of_literals):
 	Data(my_data),
-	Literals(Literals),
 	amount_of_literals(amount_of_literals),
 	Unary_Variables()
 {
@@ -37,10 +22,9 @@ SAT::DPLL::DPLL(const std::vector<std::pair<std::reference_wrapper<Literal>, boo
 	{
 		Knowledge[i] = (this->amount_of_literals + 1);//default value means that there is not a value inside
 	}
-	//Print_Data();
-	//Print_Knowledge();
-	//Find_Unaries();
-	//Change_Row();
+	Print_Data();
+	Print_Knowledge();
+	Find_Unaries();
 }
 
 SAT::DPLL::DPLL(const DPLL& Object) :
@@ -53,34 +37,22 @@ SAT::DPLL::DPLL(const DPLL& Object) :
 	{
 		Knowledge[i] = (this->amount_of_literals + 1);//default value means that there is not a value inside
 	}
-	//Print_Data();
-	//Print_Knowledge();
-	//Find_Unaries();
-	//Change_Row();
+	Print_Data();
+	Print_Knowledge();
+	Find_Unaries();
 }
 
 void SAT::DPLL::Print_Data() const
 {
 	std::cout << "|================================|" << '\n';
-	for (typename std::vector<std::pair<std::reference_wrapper<Literal>, bool>>::const_iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
+	for (typename std::vector<std::vector<int64_t>>::const_iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
-		if (vec_iterator->first.get().Get_Value() == 0)
+		for (typename std::vector<int64_t>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 		{
-			std::cout << vec_iterator->first.get().Get_Value() << '\n';
+			std::cout << *vec_iterator_second << ' ';
 		}
-		else
-		{
-			if (vec_iterator->second == true)
-			{
-				std::cout << '-' << vec_iterator->first.get().Get_Value() << ' ';
-			}
-			else
-			{
-				std::cout << vec_iterator->first.get().Get_Value() << ' ';
-			}
-		}
+		std::cout << '\n';
 	}
-	//std::cout << &Data[0].first.get() << '\n';
 	std::cout << "|================================|" << '\n';
 }
 
@@ -107,17 +79,6 @@ void SAT::DPLL::Print_Knowledge() const
 	std::cout << "|================================|" << '\n';
 	std::cout << '\n';
 	std::cout << '\n';
-}
-
-void SAT::DPLL::Print_Literals()
-{
-	std::cout << "|================================|" << '\n';
-	for (typename std::vector< std::reference_wrapper<SAT::Literal>>::const_iterator vec_iterator = this->Literals.begin(); vec_iterator != this->Literals.end(); ++vec_iterator)
-	{
-		std::cout << vec_iterator->get().Get_Value() << ' ';
-	}
-	Literals[0].get().Set_Value(1000);
-	std::cout << "\n|================================|" << '\n';
 }
 
 void SAT::DPLL::SAT_or_UNSAT()
@@ -164,10 +125,9 @@ SAT::DPLL& SAT::DPLL::operator=(const DPLL& Object)
 		{
 			Knowledge[i] = (this->amount_of_literals + 1);	//default value means that there is not a value inside
 		}
-		//Print_Data();
-		//Print_Knowledge();
-		//Find_Unaries();
-		//Change_Row();
+		Print_Data();
+		Print_Knowledge();
+		Find_Unaries();
 	}
 	return *this;
 }

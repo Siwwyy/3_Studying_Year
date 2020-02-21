@@ -16,19 +16,20 @@ namespace SAT
 	class Literal
 	{
 	private:
-		enum STATUS
+
+		/*
+			PRIVATE VARIABLES
+		*/
+		//STATUS status;
+		int64_t value;
+		///////////////////////////////////////////////
+	public:
+		enum class STATUS
 		{
 			TRUE,
 			FALSE,
 			UNTAGGED
-		};
-		/*
-			PRIVATE VARIABLES
-		*/
-		STATUS status;
-		int64_t value;
-		///////////////////////////////////////////////
-	public:
+		}status;
 		/*
 			PUBLIC CONSTRUCTORS
 		*/
