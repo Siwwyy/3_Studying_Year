@@ -86,7 +86,7 @@ const bool SAT::DPLL::Is_Unsatisfiable() const
 		{
 			if (vec_iterator_second->Get_Status() != SAT::Literal::STATUS::FALSE && vec_iterator_second->Get_Value() != 0)
 			{
-				std::cout << "Algos sie jebnal\n";
+				//std::cout << "Algos sie jebnal\n";
 				return false;
 			}
 		}
