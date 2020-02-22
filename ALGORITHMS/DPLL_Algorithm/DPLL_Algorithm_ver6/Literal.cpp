@@ -3,7 +3,7 @@
 SAT::Literal::Literal() :
 	value(0),
 	visited(false),
-	status(SAT::Literal::STATUS::TRUE)
+	status(SAT::Literal::STATUS::UNTAGGED)
 {
 
 }
@@ -11,7 +11,7 @@ SAT::Literal::Literal() :
 SAT::Literal::Literal(const int64_t& value):
 	value(value),
 	visited(false),
-	status(SAT::Literal::STATUS::TRUE)
+	status(SAT::Literal::STATUS::UNTAGGED)
 {
 	//if (value < 0)
 	//{
@@ -44,12 +44,12 @@ void SAT::Literal::Set_Visited(const bool visited)
 
 const SAT::Literal::STATUS SAT::Literal::Get_Status() const
 {
-	return Literal::STATUS(this->status);
+	return this->status;
 }
 
 const int64_t SAT::Literal::Get_Value() const
 {
-	return int64_t(this->value);
+	return this->value;
 }
 
 const bool SAT::Literal::Get_Visited() const
@@ -84,7 +84,7 @@ const bool SAT::Literal::operator==(const int64_t& value) const
 
 SAT::Literal::~Literal()
 {
-	this->status = SAT::Literal::STATUS::TRUE;
+	this->status = SAT::Literal::STATUS::UNTAGGED;
 	this->value = 0;
 	this->visited = false;
 }

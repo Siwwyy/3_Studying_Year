@@ -25,6 +25,14 @@ int main(int argc, char* argv[])
 	//START_STOPWATCH
 	DPLL_Object.SAT_or_UNSAT();
 	//STOP_STOPWATCH
+
+	//std::queue<int> A;
+	//A.push(1);
+	//A.push(2);
+	//A.push(3);
+
+	//std::cout << A.back();
+
 	_STD cin.get();
 	return EXIT_SUCCESS;
 }

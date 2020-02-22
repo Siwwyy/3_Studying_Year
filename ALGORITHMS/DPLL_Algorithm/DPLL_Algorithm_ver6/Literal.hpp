@@ -28,6 +28,7 @@ namespace SAT
 		enum class STATUS
 		{
 			TRUE,
+			UNTAGGED,
 			FALSE
 		}status;
 		/*

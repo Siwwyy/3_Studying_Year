@@ -27,6 +27,7 @@ namespace SAT
 		std::queue<int64_t> Q;
 		int64_t amount_of_literals;
 		int64_t* Knowledge;
+		//int64_t current_literal;
 		///////////////////////////////////////////////
 		/*
 			PRIVATE FUNCTIONS
@@ -35,6 +36,8 @@ namespace SAT
 		const bool Is_Conflict();
 		const bool Is_End();
 		void Mark_As_Visited();
+		void Take_First_Literal();
+		void Set_Literal_Status(const int64_t value);
 		///////////////////////////////////////////////
 	public:
 		/*
