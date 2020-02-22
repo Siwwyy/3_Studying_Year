@@ -22,16 +22,9 @@ int main(int argc, char* argv[])
 	Obj.Read();
 
 	SAT::DPLL DPLL_Object(Obj.Get_File(), Obj.Get_Amout_Of_Literals());
-	//START_STOPWATCH
+	START_STOPWATCH
 	DPLL_Object.SAT_or_UNSAT();
-	//STOP_STOPWATCH
-
-	//std::queue<int> A;
-	//A.push(1);
-	//A.push(2);
-	//A.push(3);
-
-	//std::cout << A.back();
+	STOP_STOPWATCH
 
 	_STD cin.get();
 	return EXIT_SUCCESS;

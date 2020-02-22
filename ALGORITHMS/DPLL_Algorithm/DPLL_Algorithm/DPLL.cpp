@@ -158,8 +158,8 @@ void SAT::DPLL::SAT_or_UNSAT()
 {
 	if (Is_End() == false)
 	{
-		Print_Data();
-		Print_Knowledge();
+	//	Print_Data();
+		//Print_Knowledge();
 		Create_Tree();
 		Find_Unaries();
 		Change_Row();

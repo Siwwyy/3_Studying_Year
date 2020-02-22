@@ -29,7 +29,7 @@ const bool SAT::DPLL::Find_Unaries()
 		{
 			for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 			{
-				if (vec_iterator_second->Get_Value() != 0)
+				if (vec_iterator_second->Get_Value() != 0 && vec_iterator_second->Get_Visited() == false)
 				{
 					Q.push(vec_iterator_second->Get_Value());
 					Set_Literal_Status(vec_iterator_second->Get_Value());					
@@ -71,6 +71,22 @@ const bool SAT::DPLL::Is_End()
 		{
 			if (vec_iterator_second->Get_Visited() == false)
 			{
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+const bool SAT::DPLL::Is_Unsatisfiable() const
+{
+	for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
+	{
+		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
+		{
+			if (vec_iterator_second->Get_Status() != SAT::Literal::STATUS::FALSE && vec_iterator_second->Get_Value() != 0)
+			{
+				std::cout << "Algos sie jebnal\n";
 				return false;
 			}
 		}
@@ -120,14 +136,12 @@ void SAT::DPLL::Mark_As_Visited()
 
 void SAT::DPLL::Take_First_Literal()
 {
-	//int64_t current_literal{};
 	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
 		for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 		{
-			if (vec_iterator_second->Get_Visited() != true && vec_iterator_second->Get_Value() != 0)
+			if (vec_iterator_second->Get_Visited() == false && vec_iterator_second->Get_Value() != 0)
 			{
-				//current_literal = vec_iterator_second->Get_Value();
 				Q.push(vec_iterator_second->Get_Value());
 				Set_Literal_Status(vec_iterator_second->Get_Value());
 				return;
@@ -237,16 +251,16 @@ void SAT::DPLL::SAT_or_UNSAT()
 			if (Find_Unaries() == true)
 			{
 				Mark_As_Visited();
-				Print_Data();
-				system("pause");
+				//Print_Data();
+				//system("pause");
 				SAT_or_UNSAT();
 			}
 			else
 			{
 				Take_First_Literal();
 				Mark_As_Visited();
-				Print_Data();
-				system("pause");
+				//Print_Data();
+				//system("pause");
 				//system("pause");
 				SAT_or_UNSAT();
 			}
@@ -254,57 +268,45 @@ void SAT::DPLL::SAT_or_UNSAT()
 		else
 		{
 			//backtrack
+			//remember to check is USATISFIABLE, if everything status == false then print unsatisfiable
 		}
+	}
+	else if (Is_Unsatisfiable() == true)
+	{
+		std::cout << "\nUNSATISFIABLE" << '\n';
 	}
 	else
 	{
-		//Give the result
-		std::set<int64_t> Out{};
+		size_t counter{};
+		int64_t value{};
 		while(Q.empty() == false)
 		{
-			Out.insert(Q.front());
-			Q.pop();
-		}
-		size_t i{1};
-		for (typename std::set<int64_t>::iterator set_iterator = Out.begin(); set_iterator != Out.end(); ++set_iterator)
-		{
-			if (*set_iterator == i)
+			value = Q.front();
+			if (value < 0)
 			{
-				std::cout << *set_iterator << ' ';
+				counter = static_cast<size_t>((value * (-1)) - 1);
 			}
 			else
 			{
-				std::cout << i << ' ';
+				counter = static_cast<size_t>(value - 1);
 			}
-			++i;
+			Knowledge[counter] = value;
+			Q.pop();
+			value = {};
 		}
-		std::cout << "SATISFIABLE" << '\n';
+		for (size_t i = 0; i < static_cast<size_t>(this->amount_of_literals); ++i)
+		{
+			if (Knowledge[i] == (this->amount_of_literals + 1))
+			{
+				std::cout << (i + 1) << ' ';
+			}
+			else
+			{
+				std::cout << Knowledge[i] << ' ';
+			}
+		}
+		std::cout << "\nSATISFIABLE" << '\n';
 	}
-	//if (Is_End() == false)
-	//{
-	//	Print_Data();
-	//	Print_Knowledge();
-	//	Create_Tree();
-	//	Find_Unaries();
-	//	Change_Row();
-	//	SAT_or_UNSAT();
-	//}
-	//else
-	//{
-	//	//GIVE RESULT SAT or UNSAT
-	//	//if some of literals arent in Data, you have to explicitly set their value to true
-	//	//for example, we have 7 literals given but in data we have from 1 to 5 (6 and 7 are implicit, defaultly set up to true)
-	//	for (size_t i = 0; i < static_cast<size_t>(this->amount_of_literals); ++i)
-	//	{
-	//		if (Knowledge[i] == (this->amount_of_literals + 1))
-	//		{
-	//			Knowledge[i] = (i + 1);
-	//		}
-	//	}
-	//	Print_Data();
-	//	Print_Knowledge();
-	//	std::cout << "SATISFIABLE" << '\n';
-	//}
 }
 
 SAT::DPLL& SAT::DPLL::operator=(const DPLL& Object)

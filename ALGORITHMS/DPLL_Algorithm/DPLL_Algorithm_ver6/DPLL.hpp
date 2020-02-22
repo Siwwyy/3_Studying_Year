@@ -35,6 +35,7 @@ namespace SAT
 		const bool Find_Unaries();
 		const bool Is_Conflict();
 		const bool Is_End();
+		const bool Is_Unsatisfiable() const;
 		void Mark_As_Visited();
 		void Take_First_Literal();
 		void Set_Literal_Status(const int64_t value);
