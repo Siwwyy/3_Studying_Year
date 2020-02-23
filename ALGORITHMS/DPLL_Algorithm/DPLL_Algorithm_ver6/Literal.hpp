@@ -64,6 +64,7 @@ namespace SAT
 		//UNARY
 		Literal& operator=(const Literal& Object);
 		const bool operator==(const int64_t& value) const;
+		const bool operator==(const Literal& Object) const;
 		//BINARY
 		///////////////////////////////////////////////
 		/*

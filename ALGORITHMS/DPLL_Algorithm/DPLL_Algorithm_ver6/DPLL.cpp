@@ -19,7 +19,7 @@ const bool SAT::DPLL::Find_Unaries()
 	{
 		if ((*vec_iterator).size() == 2 && (*vec_iterator)[0].Get_Visited() == false)
 		{
-			Q.push((*vec_iterator)[0].Get_Value());
+			Q.push_back((*vec_iterator)[0].Get_Value());
 			Set_Literal_Status((*vec_iterator)[0].Get_Value());
 			(*vec_iterator)[0].Set_Visited(true);
 			(*vec_iterator)[1].Set_Visited(true);
@@ -31,7 +31,7 @@ const bool SAT::DPLL::Find_Unaries()
 			{
 				if (vec_iterator_second->Get_Value() != 0 && vec_iterator_second->Get_Visited() == false)
 				{
-					Q.push(vec_iterator_second->Get_Value());
+					Q.push_back(vec_iterator_second->Get_Value());
 					Set_Literal_Status(vec_iterator_second->Get_Value());					
 				}
 				vec_iterator_second->Set_Visited(true);
@@ -44,17 +44,35 @@ const bool SAT::DPLL::Find_Unaries()
 
 const bool SAT::DPLL::Is_Conflict()
 {
+	auto Amount_Of_Unvisited = [&](const std::vector<std::vector<SAT::Literal>>::const_iterator& _Where) -> size_t
+	{
+		size_t size{};
+		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator = _Where->begin(); vec_iterator != _Where->end(); ++vec_iterator)
+		{
+			if (vec_iterator->Get_Visited() == false)
+			{
+				++size;
+			}
+		}
+		return size;
+	};
+
 	for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
-		if ((*vec_iterator).size() == 2 && (*vec_iterator)[0].Get_Visited() == false)
+		if (Amount_Of_Unvisited(vec_iterator) == 2 && (*vec_iterator)[1].Get_Value() != 0)
 		{
-			for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator_second = this->Data.begin(); vec_iterator_second != this->Data.end(); ++vec_iterator_second)
+			for (typename std::vector<SAT::Literal>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 			{
-				if ((*vec_iterator_second).size() == 2 && (*vec_iterator_second)[0].Get_Visited() == false)
+				if (vec_iterator_second->Get_Value() != 0 && vec_iterator_second->Get_Visited() == false)
 				{
-					if ((*vec_iterator)[0].Get_Value() == (-1) * (*vec_iterator_second)[0].Get_Value())
+					std::vector<SAT::Literal>::const_iterator it{};
+					for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator_third = (vec_iterator+1); vec_iterator_third != this->Data.end(); ++vec_iterator_third)
 					{
-						return true;
+						it = std::find(vec_iterator_third->begin(), vec_iterator_third->end(), *vec_iterator_second);
+						if (it != vec_iterator_third->end() && it->Get_Visited() == false)
+						{
+							return true;
+						}
 					}
 				}
 			}
@@ -142,8 +160,8 @@ void SAT::DPLL::Take_First_Literal()
 		{
 			if (vec_iterator_second->Get_Visited() == false && vec_iterator_second->Get_Value() != 0)
 			{
-				Q.push(vec_iterator_second->Get_Value());
 				Set_Literal_Status(vec_iterator_second->Get_Value());
+				Q.push_back(vec_iterator_second->Get_Value());
 				return;
 			}
 		}
@@ -152,11 +170,42 @@ void SAT::DPLL::Take_First_Literal()
 
 void SAT::DPLL::Backtrack()
 {
+	std::vector<SAT::Literal>::iterator it{};
+	int64_t value{ Q.back() };
+	Q.pop_back();
 	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
-		for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
+		it = std::find(vec_iterator->begin(), vec_iterator->end(), value);
+		if (it != vec_iterator->end() && it->Get_Status() != SAT::Literal::STATUS::UNTAGGED)
 		{
-
+			if (it->Get_Value() > 0)
+			{
+				if (it->Get_Status() == SAT::Literal::STATUS::TRUE)
+				{
+					for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
+					{
+						vec_iterator_second->Set_Visited(false);
+					}
+				}
+				else if (it->Get_Status() == SAT::Literal::STATUS::FALSE)
+				{
+					it->Set_Visited(false);
+				}
+			}
+			else
+			{
+				if (it->Get_Status() == SAT::Literal::STATUS::TRUE)
+				{
+					it->Set_Visited(false);
+				}
+				else if (it->Get_Status() == SAT::Literal::STATUS::FALSE)
+				{
+					for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
+					{
+						vec_iterator_second->Set_Visited(false);
+					}
+				}
+			}
 		}
 	}
 }
@@ -169,13 +218,21 @@ void SAT::DPLL::Set_Literal_Status(const int64_t value)
 		it = std::find(vec_iterator->begin(), vec_iterator->end(), value);
 		if (it != vec_iterator->end() && it->Get_Visited() == false)
 		{
+			//if (it->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
+			//{
+			//	it->status = SAT::Literal::STATUS::TRUE;
+			//}
+			//else if (it->Get_Status() == SAT::Literal::STATUS::TRUE)
+			//{
+			//	it->status = SAT::Literal::STATUS::FALSE;
+			//}
 			if (it->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
 			{
-				it->status = SAT::Literal::STATUS::TRUE;
-			}
-			else if (it->Get_Status() == SAT::Literal::STATUS::TRUE)
-			{
 				it->status = SAT::Literal::STATUS::FALSE;
+			}
+			else if (it->Get_Status() == SAT::Literal::STATUS::FALSE)
+			{
+				it->status = SAT::Literal::STATUS::TRUE;
 			}
 		}
 	}
@@ -281,6 +338,8 @@ void SAT::DPLL::SAT_or_UNSAT()
 			//backtrack
 			//remember to check is USATISFIABLE, if everything status == false then print unsatisfiable
 			Backtrack();
+			SAT_or_UNSAT();
+			//system("pause");
 		}
 	}
 	else if (Is_Unsatisfiable() == true)
@@ -303,7 +362,7 @@ void SAT::DPLL::SAT_or_UNSAT()
 				counter = static_cast<size_t>(value - 1);
 			}
 			Knowledge[counter] = value;
-			Q.pop();
+			Q.pop_front();
 			value = {};
 		}
 		for (size_t i = 0; i < static_cast<size_t>(this->amount_of_literals); ++i)

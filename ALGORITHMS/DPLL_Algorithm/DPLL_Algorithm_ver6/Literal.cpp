@@ -82,6 +82,15 @@ const bool SAT::Literal::operator==(const int64_t& value) const
 	return false;
 }
 
+const bool SAT::Literal::operator==(const Literal& Object) const
+{
+	if (this->value == (-1) * Object.value)
+	{
+		return true;
+	}
+	return false;
+}
+
 SAT::Literal::~Literal()
 {
 	this->status = SAT::Literal::STATUS::UNTAGGED;

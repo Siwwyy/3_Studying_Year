@@ -24,7 +24,7 @@ namespace SAT
 		*/
 		std::vector<std::vector<SAT::Literal>> Data;
 		std::unordered_set<int32_t> Unary_Variables;
-		std::queue<int64_t> Q;
+		std::deque<int64_t> Q;
 		int64_t amount_of_literals;
 		int64_t* Knowledge;
 		//int64_t current_literal;
