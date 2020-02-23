@@ -23,11 +23,9 @@ namespace SAT
 			PRIVATE VARIABLES
 		*/
 		std::vector<std::vector<SAT::Literal>> Data;
-		std::unordered_set<int32_t> Unary_Variables;
 		std::deque<int64_t> Q;
 		int64_t amount_of_literals;
 		int64_t* Knowledge;
-		//int64_t current_literal;
 		///////////////////////////////////////////////
 		/*
 			PRIVATE FUNCTIONS
@@ -53,7 +51,6 @@ namespace SAT
 			PUBLIC FUNCTIONS
 		*/
 		void Print_Data() const;
-		void Print_Unary_Variables() const;
 		void Print_Knowledge() const;
 		void SAT_or_UNSAT();
 		///////////////////////////////////////////////

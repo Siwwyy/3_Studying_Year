@@ -78,7 +78,7 @@ const bool SAT::DPLL::Is_Conflict()
 					for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator_third = (vec_iterator+1); vec_iterator_third != this->Data.end(); ++vec_iterator_third)
 					{
 						it = std::find(vec_iterator_third->begin(), vec_iterator_third->end(), *vec_iterator_second);
-						if (it != vec_iterator_third->end() && it->Get_Visited() == false)
+						if (it != vec_iterator_third->end() && it->Get_Visited() == false && Amount_Of_Unvisited(vec_iterator_third) == 2)
 						{
 							return true;
 						}
@@ -181,7 +181,28 @@ void SAT::DPLL::Take_First_Literal()
 			if (vec_iterator_second->Get_Visited() == false && vec_iterator_second->Get_Value() != 0)
 			{
 				Set_Literal_Status(vec_iterator_second->Get_Value());
-				Q.push_back(vec_iterator_second->Get_Value());
+				if (vec_iterator_second->Get_Status() == SAT::Literal::STATUS::TRUE)
+				{
+					if (vec_iterator_second->Get_Value() < 0)
+					{
+						Q.push_back((-1) * vec_iterator_second->Get_Value());
+					}
+					else
+					{
+						Q.push_back(vec_iterator_second->Get_Value());
+					}
+				}
+				else if (vec_iterator_second->Get_Status() == SAT::Literal::STATUS::FALSE)
+				{
+					if (vec_iterator_second->Get_Value() < 0)
+					{
+						Q.push_back(vec_iterator_second->Get_Value());
+					}
+					else
+					{
+						Q.push_back((-1) * vec_iterator_second->Get_Value());
+					}
+				}
 				return;
 			}
 		}
@@ -265,8 +286,7 @@ void SAT::DPLL::Set_Literal_Status(const int64_t value)
 SAT::DPLL::DPLL(const std::vector<std::vector<SAT::Literal>>& my_data, const int64_t amount_of_literals):
 	Data(my_data),
 	Q(),
-	amount_of_literals(amount_of_literals),
-	Unary_Variables()
+	amount_of_literals(amount_of_literals)
 {
 	this->Knowledge = new int64_t[this->amount_of_literals];
 	for (size_t i = 0; i < static_cast<size_t>(this->amount_of_literals); ++i)
@@ -274,24 +294,20 @@ SAT::DPLL::DPLL(const std::vector<std::vector<SAT::Literal>>& my_data, const int
 		Knowledge[i] = (this->amount_of_literals + 1);//default value means that there is not a value inside
 	}
 	//Print_Data();
-	//Print_Knowledge();
-	//Find_Unaries();
+	//system("pause");
+	//std::cout << "\n\n";
 }
 
 SAT::DPLL::DPLL(const DPLL& Object) :
 	Data(Object.Data),
 	Q(Object.Q),
-	amount_of_literals(Object.amount_of_literals),
-	Unary_Variables(Object.Unary_Variables)
+	amount_of_literals(Object.amount_of_literals)
 {
 	this->Knowledge = new int64_t[this->amount_of_literals];
 	for (size_t i = 0; i < static_cast<size_t>(this->amount_of_literals); ++i)
 	{
 		Knowledge[i] = (this->amount_of_literals + 1);//default value means that there is not a value inside
 	}
-	//Print_Data();
-	//Print_Knowledge();
-	//Find_Unaries();
 }
 
 void SAT::DPLL::Print_Data() const
@@ -301,22 +317,14 @@ void SAT::DPLL::Print_Data() const
 	{
 		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 		{
-			std::cout << vec_iterator_second->Get_Value() << ' ' << std::boolalpha << vec_iterator_second->Get_Visited() << " | ";
-			//std::cout << vec_iterator_second->Get_Value() << ' ' << static_cast<int32_t>(vec_iterator_second->Get_Status()) << ' ' << std::boolalpha << vec_iterator_second->Get_Visited() << " | ";
+			//std::cout << vec_iterator_second->Get_Value() << ' ' << std::boolalpha << vec_iterator_second->Get_Visited() << " | ";
+			if (vec_iterator_second->Get_Visited() == false)
+			{
+				std::cout << vec_iterator_second->Get_Value() << ' ' << std::boolalpha << vec_iterator_second->Get_Visited() << " | ";
+			}
 		}
 		std::cout << '\n';
 	}
-	std::cout << "|================================|" << '\n';
-}
-
-void SAT::DPLL::Print_Unary_Variables() const
-{
-	std::cout << "|================================|" << '\n';
-	for (typename std::unordered_set<int>::const_iterator set_iterator = this->Unary_Variables.begin(); set_iterator != this->Unary_Variables.end(); ++set_iterator)
-	{
-		std::cout << *set_iterator << ' ';
-	}
-	std::cout << '\n';
 	std::cout << "|================================|" << '\n';
 }
 
@@ -338,22 +346,30 @@ void SAT::DPLL::SAT_or_UNSAT()
 {
 	if (Is_End() == false)
 	{
-		if (Is_Conflict() == false)
+		//Print_Data();
+		if (Is_Conflict() == false)	//check this function later
 		{
+		
+			//system("pause");
 			if (Find_Unaries() == true)
 			{
 				Mark_As_Visited();
 				//Print_Data();
+				//std::cout << "\n Unary\n";
+				//std::cout << "===========================================\n";
 				//system("pause");
+				//std::cout << "\n\n";
 				SAT_or_UNSAT();
 			}
 			else
 			{
 				Take_First_Literal();
 				Mark_As_Visited();
-				//Print_Data();
+			//	Print_Data();
+				//std::cout << "\n Took first literal\n";
+				//std::cout << "===========================================\n";
 				//system("pause");
-				//system("pause");
+				//std::cout << "\n\n";
 				SAT_or_UNSAT();
 			}
 		}
@@ -362,8 +378,12 @@ void SAT::DPLL::SAT_or_UNSAT()
 			//backtrack
 			//remember to check is USATISFIABLE, if everything status == false then print unsatisfiable
 			Backtrack();
+			//Print_Data();
+			//std::cout << "\n Going backwards\n";
+			//std::cout << "===========================================\n";
+		//	system("pause");
+			//std::cout << "\n\n";
 			SAT_or_UNSAT();
-			//system("pause");
 		}
 	}
 	else if (Is_Unsatisfiable() == true)
@@ -372,6 +392,7 @@ void SAT::DPLL::SAT_or_UNSAT()
 	}
 	else
 	{
+		std::cout << "SATISFIABLE" << '\n' << '\n';
 		size_t counter{};
 		int64_t value{};
 		while(Q.empty() == false)
@@ -400,7 +421,7 @@ void SAT::DPLL::SAT_or_UNSAT()
 				std::cout << Knowledge[i] << ' ';
 			}
 		}
-		std::cout << "\nSATISFIABLE" << '\n';
+		std::cout << "0" << '\n' << '\n';
 	}
 }
 
@@ -410,12 +431,10 @@ SAT::DPLL& SAT::DPLL::operator=(const DPLL& Object)
 	{
 		delete[] this->Knowledge;
 		this->Data.clear();
-		this->Q.empty();
-		this->Unary_Variables.clear();
+		this->Q.clear();
 		this->Data = Object.Data;
 		this->Q = Object.Q;
 		this->amount_of_literals = Object.amount_of_literals;
-		this->Unary_Variables = Object.Unary_Variables;
 		this->Knowledge = new int64_t[this->amount_of_literals];
 		for (size_t i = 0; i < static_cast<size_t>(this->amount_of_literals); ++i)
 		{
@@ -433,6 +452,5 @@ SAT::DPLL::~DPLL()
 	}
 	delete[] Knowledge;
 	this->amount_of_literals = 0;
-	this->Unary_Variables.clear();
-	this->Q.empty();
+	this->Q.clear();
 }
