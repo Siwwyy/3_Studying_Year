@@ -106,7 +106,7 @@ const bool SAT::DPLL::Is_End()
 	return true;
 }
 
-const bool SAT::DPLL::Is_satisfiable()
+const bool SAT::DPLL::Is_unsatisfiable() const
 {
 	//If all of literals are visitied and with false status
 	for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
@@ -116,8 +116,9 @@ const bool SAT::DPLL::Is_satisfiable()
 			/*
 				vec_iterator_second->Get_Status() != SAT::Literal::STATUS::FALSE
 				This means that we estimated with both states (true of false) each value. If is still unsatisfiable, we will receive information about it
+				Is unsatisfiable when each value has a false and still we dont have a result
 			*/
-			if (vec_iterator_second->Get_Status() != SAT::Literal::STATUS::FALSE && vec_iterator_second->Get_Value() != 0)
+			if (vec_iterator_second->Get_Status() == SAT::Literal::STATUS::TRUE)
 			{
 				return false;
 			}
@@ -181,28 +182,23 @@ void SAT::DPLL::Take_First_Literal()
 			if (vec_iterator_second->Get_Visited() == false && vec_iterator_second->Get_Value() != 0)
 			{
 				Set_Literal_Status(vec_iterator_second->Get_Value());
-				if (vec_iterator_second->Get_Status() == SAT::Literal::STATUS::TRUE)
-				{
-					if (vec_iterator_second->Get_Value() < 0)
-					{
-						Q.push_back((-1) * vec_iterator_second->Get_Value());
-					}
-					else
-					{
-						Q.push_back(vec_iterator_second->Get_Value());
-					}
-				}
-				else if (vec_iterator_second->Get_Status() == SAT::Literal::STATUS::FALSE)
-				{
-					if (vec_iterator_second->Get_Value() < 0)
-					{
-						Q.push_back(vec_iterator_second->Get_Value());
-					}
-					else
-					{
-						Q.push_back((-1) * vec_iterator_second->Get_Value());
-					}
-				}
+				//if (vec_iterator_second->Get_Status() == SAT::Literal::STATUS::TRUE)
+				//{
+				//	Q.push_back(vec_iterator_second->Get_Value());
+				//}
+				//else if (vec_iterator_second->Get_Status() == SAT::Literal::STATUS::FALSE)
+				//{
+				//	Q.push_back((-1) * vec_iterator_second->Get_Value());
+				//}
+				Q.push_back(vec_iterator_second->Get_Value());
+				//if (vec_iterator_second->Get_Status() == SAT::Literal::STATUS::TRUE)
+				//{
+				//	Q.push_back(vec_iterator_second->Get_Value());
+				//}
+				//else if (vec_iterator_second->Get_Status() == SAT::Literal::STATUS::FALSE)
+				//{
+				//	Q.push_back((-1) * vec_iterator_second->Get_Value());
+				//}
 				return;
 			}
 		}
@@ -346,11 +342,11 @@ void SAT::DPLL::SAT_or_UNSAT()
 {
 	if (Is_End() == false)
 	{
-		//Print_Data();
+		Print_Data();
 		if (Is_Conflict() == false)	//check this function later
 		{
 		
-			//system("pause");
+			system("pause");
 			if (Find_Unaries() == true)
 			{
 				Mark_As_Visited();
@@ -388,7 +384,7 @@ void SAT::DPLL::SAT_or_UNSAT()
 	}
 	else
 	{
-		if (Is_satisfiable() == false)
+		if (Is_unsatisfiable() == true)
 		{
 			std::cout << "\nUNSATISFIABLE" << '\n';
 		}

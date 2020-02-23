@@ -33,7 +33,7 @@ namespace SAT
 		const bool Find_Unaries();
 		const bool Is_Conflict();
 		const bool Is_End();
-		const bool Is_satisfiable();
+		const bool Is_unsatisfiable() const;
 		void Mark_As_Visited();
 		void Take_First_Literal();
 		void Backtrack();
