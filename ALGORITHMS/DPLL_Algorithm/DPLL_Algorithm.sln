@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DPLL_Algorithm_ver6", "DPLL
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DPLL_Algorithm_ver_final", "DPLL_Algorithm_ver_final\DPLL_Algorithm_ver_final.vcxproj", "{2F1FF763-387D-4E9F-8230-D978C12E6D94}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DPLL_Algorithm_ver_finalna2", "DPLL_Algorithm_ver_finalna2\DPLL_Algorithm_ver_finalna2.vcxproj", "{609524FF-E9C9-4B49-ADAB-AEBB80097B0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -81,6 +83,14 @@ Global
 		{2F1FF763-387D-4E9F-8230-D978C12E6D94}.Release|x64.Build.0 = Release|x64
 		{2F1FF763-387D-4E9F-8230-D978C12E6D94}.Release|x86.ActiveCfg = Release|Win32
 		{2F1FF763-387D-4E9F-8230-D978C12E6D94}.Release|x86.Build.0 = Release|Win32
+		{609524FF-E9C9-4B49-ADAB-AEBB80097B0E}.Debug|x64.ActiveCfg = Debug|x64
+		{609524FF-E9C9-4B49-ADAB-AEBB80097B0E}.Debug|x64.Build.0 = Debug|x64
+		{609524FF-E9C9-4B49-ADAB-AEBB80097B0E}.Debug|x86.ActiveCfg = Debug|Win32
+		{609524FF-E9C9-4B49-ADAB-AEBB80097B0E}.Debug|x86.Build.0 = Debug|Win32
+		{609524FF-E9C9-4B49-ADAB-AEBB80097B0E}.Release|x64.ActiveCfg = Release|x64
+		{609524FF-E9C9-4B49-ADAB-AEBB80097B0E}.Release|x64.Build.0 = Release|x64
+		{609524FF-E9C9-4B49-ADAB-AEBB80097B0E}.Release|x86.ActiveCfg = Release|Win32
+		{609524FF-E9C9-4B49-ADAB-AEBB80097B0E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
