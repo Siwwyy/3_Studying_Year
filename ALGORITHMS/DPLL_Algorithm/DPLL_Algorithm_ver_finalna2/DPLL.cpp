@@ -20,15 +20,16 @@ const bool SAT::DPLL::Find_Unaries()
 		}
 		return size;
 	};
-
+	int64_t value{};
 	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
 		if ((*vec_iterator).size() == 2 && (*vec_iterator)[0].Get_Visited() == false)	//case nr1.
 		{
-			Q.push_back((*vec_iterator)[0].Get_Value());	//add to queue
-			(*vec_iterator)[0].Set_Who_Visited((*vec_iterator)[0].Get_Value());
+			value = (*vec_iterator)[0].Get_Value();
+			Q.push_back(value);	//add to queue
+			(*vec_iterator)[0].Set_Who_Visited(value);
 			(*vec_iterator)[0].Set_Visited(true);
-			if ((*vec_iterator)[0].Get_Value() < 0)
+			if (value < 0)
 			{
 				(*vec_iterator)[0].Set_Status(SAT::Literal::STATUS::FALSE);
 			}
@@ -36,14 +37,36 @@ const bool SAT::DPLL::Find_Unaries()
 			{
 				(*vec_iterator)[0].Set_Status(SAT::Literal::STATUS::TRUE);
 			}
-			(*vec_iterator)[1].Set_Who_Visited((*vec_iterator)[0].Get_Value());
+			(*vec_iterator)[1].Set_Who_Visited(value);
 			(*vec_iterator)[1].Set_Visited(true);
 			Mark_Visited(vec_iterator->begin());
 			return true;
 		}
 		else if (Amount_Of_Unvisited(vec_iterator) == 2)	//case nr2.
 		{
-
+			for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
+			{
+				if (vec_iterator_second->Get_Value() != 0 && vec_iterator_second->Get_Visited() == false)
+				{
+					value = vec_iterator_second->Get_Value();
+					Q.push_back(value);
+					//Set_Literal_Status_Unary(vec_iterator_second->Get_Value());
+					if (value < 0)
+					{
+						vec_iterator_second->Set_Status(SAT::Literal::STATUS::FALSE);
+					}
+					else
+					{
+						vec_iterator_second->Set_Status(SAT::Literal::STATUS::TRUE);
+					}
+				}
+				if (vec_iterator_second->Get_Visited() == false)
+				{
+					vec_iterator_second->Set_Visited(true);	//mark rest of values as a visitied
+					vec_iterator_second->Set_Who_Visited(value);	//mark rest of values as a visitied
+				}
+			}
+			return true;
 		}
 	}
 	return false;
@@ -73,8 +96,9 @@ void SAT::DPLL::Take_First_Literal()
 			if (vec_iterator_second->Get_Visited() == false && vec_iterator_second->Get_Value() != 0)
 			{
 				Q.push_back(vec_iterator_second->Get_Value());
-				//think about setting up the status
+				Set_Status(vec_iterator_second);
 				Mark_Visited(vec_iterator_second);
+				return;
 			}
 		}
 	}
@@ -162,9 +186,6 @@ SAT::DPLL::DPLL(const std::vector<std::vector<SAT::Literal>>& my_data, const int
 	{
 		Knowledge[i] = (this->amount_of_literals + 1);//default value means that there is not a value inside
 	}
-	//Print_Data();
-	//system("pause");
-	//std::cout << "\n\n";
 }
 
 SAT::DPLL::DPLL(const DPLL& Object) :
@@ -250,7 +271,7 @@ void SAT::DPLL::SAT_or_UNSAT()
 	}
 	else
 	{
-		if (/*Is_unsatisfiable() == */true)
+		if (/*Is_unsatisfiable() == */false)
 		{
 			std::cout << "\nUNSATISFIABLE" << '\n';
 		}
