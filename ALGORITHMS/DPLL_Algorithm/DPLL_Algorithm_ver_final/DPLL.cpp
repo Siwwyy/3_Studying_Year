@@ -300,22 +300,22 @@ void SAT::DPLL::Set_Literal_Status(const int64_t value)
 		it = std::find(vec_iterator->begin(), vec_iterator->end(), value);
 		if (it != vec_iterator->end() && it->Get_Visited() == false)
 		{
-			//if (it->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
-			//{
-			//	it->status = SAT::Literal::STATUS::TRUE;
-			//}
-			//else if (it->Get_Status() == SAT::Literal::STATUS::TRUE)
-			//{
-			//	it->status = SAT::Literal::STATUS::FALSE;
-			//}
 			if (it->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
-			{
-				it->status = SAT::Literal::STATUS::FALSE;
-			}
-			else if (it->Get_Status() == SAT::Literal::STATUS::FALSE)
 			{
 				it->status = SAT::Literal::STATUS::TRUE;
 			}
+			else if (it->Get_Status() == SAT::Literal::STATUS::TRUE)
+			{
+				it->status = SAT::Literal::STATUS::FALSE;
+			}
+			//if (it->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
+			//{
+			//	it->status = SAT::Literal::STATUS::FALSE;
+			//}
+			//else if (it->Get_Status() == SAT::Literal::STATUS::FALSE)
+			//{
+			//	it->status = SAT::Literal::STATUS::TRUE;
+			//}
 		}
 	}
 }
@@ -401,12 +401,12 @@ void SAT::DPLL::SAT_or_UNSAT()
 			Mark_As_Visited();
 			if (Is_Conflict() == true)	//check this function later
 			{
-				Print_Data();
-				system("pause");
+				//Print_Data();
+				//system("pause");
 				Backtrack();
 				//std::cout << '\n' << '\n';
-				Print_Data();
-				system("pause");
+				//Print_Data();
+				//system("pause");
 			}
 			SAT_or_UNSAT();
 		}
