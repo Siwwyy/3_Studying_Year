@@ -23,6 +23,7 @@ namespace SAT
 		//STATUS status;
 		int64_t value;
 		bool visited;
+		int64_t who_visited;
 		///////////////////////////////////////////////
 	public:
 		enum class STATUS
@@ -47,6 +48,7 @@ namespace SAT
 			PUBLIC SETTERS
 		*/
 		void Set_Status(const Literal::STATUS status);
+		void Set_Who_Visited(const int64_t who_visited);
 		void Set_Value(const int64_t value);
 		void Set_Visited(const bool visited);
 		///////////////////////////////////////////////
@@ -55,6 +57,7 @@ namespace SAT
 		*/
 		const Literal::STATUS Get_Status() const;
 		const int64_t Get_Value() const;
+		const int64_t Get_Who_Visited() const;
 		const bool Get_Visited() const;
 		const Literal & Get_Object() const;
 		///////////////////////////////////////////////

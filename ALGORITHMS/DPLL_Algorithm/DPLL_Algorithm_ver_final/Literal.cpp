@@ -2,6 +2,7 @@
 
 SAT::Literal::Literal() :
 	value(0),
+	who_visited(0),
 	visited(false),
 	status(SAT::Literal::STATUS::UNTAGGED)
 {
@@ -10,6 +11,7 @@ SAT::Literal::Literal() :
 
 SAT::Literal::Literal(const int64_t& value):
 	value(value),
+	who_visited(0),
 	visited(false),
 	status(SAT::Literal::STATUS::UNTAGGED)
 {
@@ -21,6 +23,7 @@ SAT::Literal::Literal(const int64_t& value):
 
 SAT::Literal::Literal(const Literal& Object) :
 	value(Object.value),
+	who_visited(Object.who_visited),
 	visited(Object.visited),
 	status(Object.status)
 {
@@ -30,6 +33,11 @@ SAT::Literal::Literal(const Literal& Object) :
 void SAT::Literal::Set_Status(const Literal::STATUS status)
 {
 	this->status = status;
+}
+
+void SAT::Literal::Set_Who_Visited(const int64_t who_visited)
+{
+	this->who_visited = who_visited;
 }
 
 void SAT::Literal::Set_Value(const int64_t value)
@@ -52,6 +60,11 @@ const int64_t SAT::Literal::Get_Value() const
 	return this->value;
 }
 
+const int64_t SAT::Literal::Get_Who_Visited() const
+{
+	return this->who_visited;
+}
+
 const bool SAT::Literal::Get_Visited() const
 {
 	return this->visited;
@@ -68,6 +81,7 @@ SAT::Literal& SAT::Literal::operator=(const Literal& Object)
 	{
 		this->status = Object.status;
 		this->value = Object.value;
+		this->who_visited = Object.who_visited;
 		this->visited = Object.visited;
 	}
 	return *this;
@@ -95,5 +109,6 @@ SAT::Literal::~Literal()
 {
 	this->status = SAT::Literal::STATUS::UNTAGGED;
 	this->value = 0;
+	this->who_visited = 0;
 	this->visited = false;
 }

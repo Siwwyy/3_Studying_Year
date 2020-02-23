@@ -28,20 +28,28 @@ const bool SAT::DPLL::Find_Unaries()
 			Q.push_back((*vec_iterator)[0].Get_Value());	//add to queue
 			Set_Literal_Status_Unary((*vec_iterator)[0].Get_Value());
 			(*vec_iterator)[0].Set_Visited(true);	//mark as a visited
+			(*vec_iterator)[0].Set_Who_Visited((*vec_iterator)[0].Get_Value());	//mark as a visited
 			(*vec_iterator)[1].Set_Visited(true);	//mark as a visited
+			(*vec_iterator)[1].Set_Who_Visited((*vec_iterator)[0].Get_Value());	//mark as a visited
 
 			return true;
 		}
 		else if (Amount_Of_Unvisited(vec_iterator) == 2)	//case nr2.
 		{
+			int64_t value{};
 			for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 			{
 				if (vec_iterator_second->Get_Value() != 0 && vec_iterator_second->Get_Visited() == false)
 				{
 					Q.push_back(vec_iterator_second->Get_Value());
 					Set_Literal_Status_Unary(vec_iterator_second->Get_Value());	
+					value = vec_iterator_second->Get_Value();
 				}
-				vec_iterator_second->Set_Visited(true);	//mark rest of values as a visitied
+				if (vec_iterator_second->Get_Visited() == 0)
+				{
+					vec_iterator_second->Set_Visited(true);	//mark rest of values as a visitied
+					vec_iterator_second->Set_Who_Visited(value);	//mark rest of values as a visitied
+				}
 			}
 			return true;
 		}
@@ -147,25 +155,41 @@ void SAT::DPLL::Mark_As_Visited()
 				{
 					for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 					{
-						vec_iterator_second->Set_Visited(true);
+						if (vec_iterator_second->Get_Visited() == 0)
+						{
+							vec_iterator_second->Set_Visited(true);
+							vec_iterator_second->Set_Who_Visited(Q.back());	//mark rest of values as a visitied
+						}
 					}
 				}
 				else if (it->Get_Status() == SAT::Literal::STATUS::FALSE)
 				{
-					it->Set_Visited(true);
+					if (it->Get_Visited() == 0)
+					{
+						it->Set_Visited(true);
+						it->Set_Who_Visited(Q.back());	//mark rest of values as a visitied
+					}
 				}
 			}
 			else
 			{
 				if (it->Get_Status() == SAT::Literal::STATUS::TRUE)
 				{
-					it->Set_Visited(true);
+					if (it->Get_Visited() == 0)
+					{
+						it->Set_Visited(true);
+						it->Set_Who_Visited(Q.back());	//mark rest of values as a visitied
+					}
 				}
 				else if (it->Get_Status() == SAT::Literal::STATUS::FALSE)
 				{
 					for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 					{
-						vec_iterator_second->Set_Visited(true);
+						if (vec_iterator_second->Get_Visited() == 0)
+						{
+							vec_iterator_second->Set_Visited(true);
+							vec_iterator_second->Set_Who_Visited(Q.back());	//mark rest of values as a visitied
+						}
 					}
 				}
 			}
@@ -217,7 +241,7 @@ void SAT::DPLL::Backtrack()
 	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
 		it = std::find(vec_iterator->begin(), vec_iterator->end(), value);
-		if (it != vec_iterator->end() && it->Get_Status() != SAT::Literal::STATUS::UNTAGGED)	//here is a failure returning each literal, we want to return a single step !
+		if (it != vec_iterator->end() && it->Get_Status() != SAT::Literal::STATUS::UNTAGGED && it->Get_Who_Visited() == value)	//here is a failure returning each literal, we want to return a single step !
 		{
 			if (it->Get_Value() > 0)
 			{
@@ -225,25 +249,41 @@ void SAT::DPLL::Backtrack()
 				{
 					for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 					{
-						vec_iterator_second->Set_Visited(false);
+						if (vec_iterator_second->Get_Who_Visited() == value)
+						{
+							vec_iterator_second->Set_Visited(false);
+							vec_iterator_second->Set_Who_Visited(0);
+						}
 					}
 				}
 				else if (it->Get_Status() == SAT::Literal::STATUS::FALSE)
 				{
-					it->Set_Visited(false);
+					if (it->Get_Who_Visited() == value)
+					{
+						it->Set_Visited(false);
+						it->Set_Who_Visited(0);
+					}
 				}
 			}
 			else
 			{
 				if (it->Get_Status() == SAT::Literal::STATUS::TRUE)
 				{
-					it->Set_Visited(false);
+					if (it->Get_Who_Visited() == value)
+					{
+						it->Set_Visited(false);
+						it->Set_Who_Visited(0);
+					}
 				}
 				else if (it->Get_Status() == SAT::Literal::STATUS::FALSE)
 				{
 					for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 					{
-						vec_iterator_second->Set_Visited(false);
+						if (vec_iterator_second->Get_Who_Visited() == value)
+						{
+							vec_iterator_second->Set_Visited(false);
+							vec_iterator_second->Set_Who_Visited(0);
+						}
 					}
 				}
 			}
@@ -361,10 +401,12 @@ void SAT::DPLL::SAT_or_UNSAT()
 			Mark_As_Visited();
 			if (Is_Conflict() == true)	//check this function later
 			{
+				Print_Data();
+				system("pause");
 				Backtrack();
 				//std::cout << '\n' << '\n';
-				//Print_Data();
-				//system("pause");
+				Print_Data();
+				system("pause");
 			}
 			SAT_or_UNSAT();
 		}
