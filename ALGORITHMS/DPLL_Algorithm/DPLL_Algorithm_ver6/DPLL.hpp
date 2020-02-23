@@ -38,6 +38,7 @@ namespace SAT
 		const bool Is_Unsatisfiable() const;
 		void Mark_As_Visited();
 		void Take_First_Literal();
+		void Backtrack();
 		void Set_Literal_Status(const int64_t value);
 		///////////////////////////////////////////////
 	public:

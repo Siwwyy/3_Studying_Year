@@ -150,6 +150,17 @@ void SAT::DPLL::Take_First_Literal()
 	}
 }
 
+void SAT::DPLL::Backtrack()
+{
+	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
+	{
+		for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
+		{
+
+		}
+	}
+}
+
 void SAT::DPLL::Set_Literal_Status(const int64_t value)
 {
 	std::vector<SAT::Literal>::iterator it{};
@@ -269,6 +280,7 @@ void SAT::DPLL::SAT_or_UNSAT()
 		{
 			//backtrack
 			//remember to check is USATISFIABLE, if everything status == false then print unsatisfiable
+			Backtrack();
 		}
 	}
 	else if (Is_Unsatisfiable() == true)
