@@ -26,9 +26,10 @@ const bool SAT::DPLL::Find_Unaries()
 		if ((*vec_iterator).size() == 2 && (*vec_iterator)[0].Get_Visited() == false)	//case nr1.
 		{
 			Q.push_back((*vec_iterator)[0].Get_Value());	//add to queue
-			Set_Literal_Status((*vec_iterator)[0].Get_Value());
+			Set_Literal_Status_Unary((*vec_iterator)[0].Get_Value());
 			(*vec_iterator)[0].Set_Visited(true);	//mark as a visited
 			(*vec_iterator)[1].Set_Visited(true);	//mark as a visited
+
 			return true;
 		}
 		else if (Amount_Of_Unvisited(vec_iterator) == 2)	//case nr2.
@@ -38,7 +39,7 @@ const bool SAT::DPLL::Find_Unaries()
 				if (vec_iterator_second->Get_Value() != 0 && vec_iterator_second->Get_Visited() == false)
 				{
 					Q.push_back(vec_iterator_second->Get_Value());
-					Set_Literal_Status(vec_iterator_second->Get_Value());					
+					Set_Literal_Status_Unary(vec_iterator_second->Get_Value());	
 				}
 				vec_iterator_second->Set_Visited(true);	//mark rest of values as a visitied
 			}
@@ -65,7 +66,7 @@ const bool SAT::DPLL::Is_Conflict()
 		}
 		return size;
 	};
-
+	//Print_Data();
 	for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
 		if (Amount_Of_Unvisited(vec_iterator) == 2 && (*vec_iterator)[1].Get_Value() != 0)	//if we have 2 unvisited values in a row but different from unary row (it cannot be a unary, unary is a special)
@@ -216,7 +217,7 @@ void SAT::DPLL::Backtrack()
 	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
 		it = std::find(vec_iterator->begin(), vec_iterator->end(), value);
-		if (it != vec_iterator->end() && it->Get_Status() != SAT::Literal::STATUS::UNTAGGED)
+		if (it != vec_iterator->end() && it->Get_Status() != SAT::Literal::STATUS::UNTAGGED)	//here is a failure returning each literal, we want to return a single step !
 		{
 			if (it->Get_Value() > 0)
 			{
@@ -259,22 +260,35 @@ void SAT::DPLL::Set_Literal_Status(const int64_t value)
 		it = std::find(vec_iterator->begin(), vec_iterator->end(), value);
 		if (it != vec_iterator->end() && it->Get_Visited() == false)
 		{
-			if (it->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
-			{
-				it->status = SAT::Literal::STATUS::TRUE;
-			}
-			else if (it->Get_Status() == SAT::Literal::STATUS::TRUE)
-			{
-				it->status = SAT::Literal::STATUS::FALSE;
-			}
 			//if (it->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
-			//{
-			//	it->status = SAT::Literal::STATUS::FALSE;
-			//}
-			//else if (it->Get_Status() == SAT::Literal::STATUS::FALSE)
 			//{
 			//	it->status = SAT::Literal::STATUS::TRUE;
 			//}
+			//else if (it->Get_Status() == SAT::Literal::STATUS::TRUE)
+			//{
+			//	it->status = SAT::Literal::STATUS::FALSE;
+			//}
+			if (it->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
+			{
+				it->status = SAT::Literal::STATUS::FALSE;
+			}
+			else if (it->Get_Status() == SAT::Literal::STATUS::FALSE)
+			{
+				it->status = SAT::Literal::STATUS::TRUE;
+			}
+		}
+	}
+}
+
+void SAT::DPLL::Set_Literal_Status_Unary(const int64_t value)
+{
+	std::vector<SAT::Literal>::iterator it{};
+	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
+	{
+		it = std::find(vec_iterator->begin(), vec_iterator->end(), value);
+		if (it != vec_iterator->end() && it->Get_Visited() == false)
+		{
+			it->status = SAT::Literal::STATUS::TRUE;
 		}
 	}
 }
@@ -342,43 +356,26 @@ void SAT::DPLL::SAT_or_UNSAT()
 {
 	if (Is_End() == false)
 	{
-		Print_Data();
-		if (Is_Conflict() == false)	//check this function later
+		if (Find_Unaries() == true)
 		{
-		
-			system("pause");
-			if (Find_Unaries() == true)
+			Mark_As_Visited();
+			if (Is_Conflict() == true)	//check this function later
 			{
-				Mark_As_Visited();
+				Backtrack();
+				//std::cout << '\n' << '\n';
 				//Print_Data();
-				//std::cout << "\n Unary\n";
-				//std::cout << "===========================================\n";
 				//system("pause");
-				//std::cout << "\n\n";
-				SAT_or_UNSAT();
 			}
-			else
-			{
-				Take_First_Literal();
-				Mark_As_Visited();
-			//	Print_Data();
-				//std::cout << "\n Took first literal\n";
-				//std::cout << "===========================================\n";
-				//system("pause");
-				//std::cout << "\n\n";
-				SAT_or_UNSAT();
-			}
+			SAT_or_UNSAT();
 		}
 		else
 		{
-			//backtrack
-			//remember to check is USATISFIABLE, if everything status == false then print unsatisfiable
-			Backtrack();
-			//Print_Data();
-			//std::cout << "\n Going backwards\n";
-			//std::cout << "===========================================\n";
-		//	system("pause");
-			//std::cout << "\n\n";
+			Take_First_Literal();
+			Mark_As_Visited();
+			if (Is_Conflict() == true)	//check this function later
+			{
+				Backtrack();
+			}
 			SAT_or_UNSAT();
 		}
 	}
@@ -453,3 +450,45 @@ SAT::DPLL::~DPLL()
 	this->amount_of_literals = 0;
 	this->Q.clear();
 }
+
+/*
+//Print_Data();
+		//system("pause");
+		//if (Is_Conflict() == false)	//check this function later
+		//{
+		//	//system("pause");
+		//	if (Find_Unaries() == true)
+		//	{
+		//		Mark_As_Visited();
+		//		//Print_Data();
+		//		//std::cout << "\n Unary\n";
+		//		//std::cout << "===========================================\n";
+		//		//system("pause");
+		//		//std::cout << "\n\n";
+		//		SAT_or_UNSAT();
+		//	}
+		//	else
+		//	{
+		//		Take_First_Literal();
+		//		Mark_As_Visited();
+		//	//	Print_Data();
+		//		//std::cout << "\n Took first literal\n";
+		//		//std::cout << "===========================================\n";
+		//		//system("pause");
+		//		//std::cout << "\n\n";
+		//		SAT_or_UNSAT();
+		//	}
+		//}
+		//else
+		//{
+		//	//backtrack
+		//	//remember to check is USATISFIABLE, if everything status == false then print unsatisfiable
+		//	Backtrack();
+		//	//Print_Data();
+		//	//std::cout << "\n Going backwards\n";
+		//	//std::cout << "===========================================\n";
+		//	//system("pause");
+		//	//std::cout << "\n\n";
+		//	SAT_or_UNSAT();
+		//}
+*/

@@ -38,6 +38,7 @@ namespace SAT
 		void Take_First_Literal();
 		void Backtrack();
 		void Set_Literal_Status(const int64_t value);
+		void Set_Literal_Status_Unary(const int64_t value);
 		///////////////////////////////////////////////
 	public:
 		/*
