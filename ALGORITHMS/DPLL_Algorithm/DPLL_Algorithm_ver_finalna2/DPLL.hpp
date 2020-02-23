@@ -30,7 +30,11 @@ namespace SAT
 		/*
 			PRIVATE FUNCTIONS
 		*/
-		const bool Is_End();
+		const bool Find_Unaries();
+		const bool Is_End() const;
+		void Take_First_Literal();
+		void Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where);
+		void Set_Status(const std::vector<SAT::Literal>::iterator& _Where);
 		///////////////////////////////////////////////
 	public:
 		/*
