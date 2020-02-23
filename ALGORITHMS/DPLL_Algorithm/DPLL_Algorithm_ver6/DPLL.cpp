@@ -2,7 +2,13 @@
 
 const bool SAT::DPLL::Find_Unaries()
 {
-	auto Amount_Of_Unvisited = [&](const std::vector<std::vector<SAT::Literal>>::iterator & _Where) -> size_t
+	/*
+		FINDING UNARIES
+		Here we have a bunch of cases
+		1. If is just a for example 1 0 row. Algorithm will find it immediately
+		2. If row is larger but we visited some of values from row for example 1->visited 2->visited 3 ->visitied 4->unvisitied 0 ->unvisited. Algorithm will return a true cause it is a unary
+	*/
+	auto Amount_Of_Unvisited = [&](const std::vector<std::vector<SAT::Literal>>::iterator & _Where) -> size_t	//this case is looking for row where are 2 unvisited values, 0 and other literal for example 1,2,3,4,5 etc. 1 0, 2 0 etc.
 	{
 		size_t size{};
 		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator = _Where->begin(); vec_iterator != _Where->end(); ++vec_iterator)
@@ -17,15 +23,15 @@ const bool SAT::DPLL::Find_Unaries()
 
 	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
-		if ((*vec_iterator).size() == 2 && (*vec_iterator)[0].Get_Visited() == false)
+		if ((*vec_iterator).size() == 2 && (*vec_iterator)[0].Get_Visited() == false)	//case nr1.
 		{
-			Q.push_back((*vec_iterator)[0].Get_Value());
+			Q.push_back((*vec_iterator)[0].Get_Value());	//add to queue
 			Set_Literal_Status((*vec_iterator)[0].Get_Value());
-			(*vec_iterator)[0].Set_Visited(true);
-			(*vec_iterator)[1].Set_Visited(true);
+			(*vec_iterator)[0].Set_Visited(true);	//mark as a visited
+			(*vec_iterator)[1].Set_Visited(true);	//mark as a visited
 			return true;
 		}
-		else if (Amount_Of_Unvisited(vec_iterator) == 2)
+		else if (Amount_Of_Unvisited(vec_iterator) == 2)	//case nr2.
 		{
 			for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 			{
@@ -34,7 +40,7 @@ const bool SAT::DPLL::Find_Unaries()
 					Q.push_back(vec_iterator_second->Get_Value());
 					Set_Literal_Status(vec_iterator_second->Get_Value());					
 				}
-				vec_iterator_second->Set_Visited(true);
+				vec_iterator_second->Set_Visited(true);	//mark rest of values as a visitied
 			}
 			return true;
 		}
@@ -44,6 +50,9 @@ const bool SAT::DPLL::Find_Unaries()
 
 const bool SAT::DPLL::Is_Conflict()
 {
+	/*
+		Here we are looking for a conflicts. For example: when we have a 4 0 row and -4 0 row => true != false, two unaries with same literal but with different value
+	*/
 	auto Amount_Of_Unvisited = [&](const std::vector<std::vector<SAT::Literal>>::const_iterator& _Where) -> size_t
 	{
 		size_t size{};
@@ -59,7 +68,7 @@ const bool SAT::DPLL::Is_Conflict()
 
 	for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
-		if (Amount_Of_Unvisited(vec_iterator) == 2 && (*vec_iterator)[1].Get_Value() != 0)
+		if (Amount_Of_Unvisited(vec_iterator) == 2 && (*vec_iterator)[1].Get_Value() != 0)	//if we have 2 unvisited values in a row but different from unary row (it cannot be a unary, unary is a special)
 		{
 			for (typename std::vector<SAT::Literal>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 			{
@@ -83,6 +92,7 @@ const bool SAT::DPLL::Is_Conflict()
 
 const bool SAT::DPLL::Is_End()
 {
+	//Seeking for end, if all of literals are visitied then we have end and result
 	for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
 		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
@@ -98,13 +108,17 @@ const bool SAT::DPLL::Is_End()
 
 const bool SAT::DPLL::Is_Unsatisfiable() const
 {
+	//If all of literals are visitied and with false status
 	for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
 		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 		{
+			/*
+				vec_iterator_second->Get_Status() != SAT::Literal::STATUS::FALSE
+				This means that we estimated with both states (true of false) each value. If is still unsatisfiable, we will receive information about it
+			*/
 			if (vec_iterator_second->Get_Status() != SAT::Literal::STATUS::FALSE && vec_iterator_second->Get_Value() != 0)
 			{
-				//std::cout << "Algos sie jebnal\n";
 				return false;
 			}
 		}
@@ -114,6 +128,11 @@ const bool SAT::DPLL::Is_Unsatisfiable() const
 
 void SAT::DPLL::Mark_As_Visited()
 {
+	/*
+		Marking as visitied
+		Ealier, We added a literal to queue, now we are forced to mark literals as a visitied for example. We added to queue literal 1 and set up status to True.
+		In rows where is a 1 we have to mark whole row as a visited, in rows where is -1 we mark only -1 as a visited
+	*/
 	std::vector<SAT::Literal>::iterator it{};
 	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
@@ -154,6 +173,7 @@ void SAT::DPLL::Mark_As_Visited()
 
 void SAT::DPLL::Take_First_Literal()
 {
+	//If unary variable isint exist, we have to take first possible literal and push it into queue
 	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
 		for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
@@ -170,6 +190,9 @@ void SAT::DPLL::Take_First_Literal()
 
 void SAT::DPLL::Backtrack()
 {
+	//If we encountered a conflict, we are forced to change status to opposite site for example, we had literal 1 with true status and now we are chaning it into false and checking corectness again
+	//In this function we are going backwards, removing last added element from queue and in rows where him exists, we mark literals to unvisited state. For example
+	//We hava to pop back literal 1, if is true and literal is 1 then unvisit whole row, where is -1 (with true state) unvisit only -1. This have the same behavior with false state but only -1 with false gives 1
 	std::vector<SAT::Literal>::iterator it{};
 	int64_t value{ Q.back() };
 	Q.pop_back();
@@ -212,28 +235,29 @@ void SAT::DPLL::Backtrack()
 
 void SAT::DPLL::Set_Literal_Status(const int64_t value)
 {
+	//Here we set up a state to each literal equal to our value
 	std::vector<SAT::Literal>::iterator it{};
 	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
 		it = std::find(vec_iterator->begin(), vec_iterator->end(), value);
 		if (it != vec_iterator->end() && it->Get_Visited() == false)
 		{
-			//if (it->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
-			//{
-			//	it->status = SAT::Literal::STATUS::TRUE;
-			//}
-			//else if (it->Get_Status() == SAT::Literal::STATUS::TRUE)
-			//{
-			//	it->status = SAT::Literal::STATUS::FALSE;
-			//}
 			if (it->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
-			{
-				it->status = SAT::Literal::STATUS::FALSE;
-			}
-			else if (it->Get_Status() == SAT::Literal::STATUS::FALSE)
 			{
 				it->status = SAT::Literal::STATUS::TRUE;
 			}
+			else if (it->Get_Status() == SAT::Literal::STATUS::TRUE)
+			{
+				it->status = SAT::Literal::STATUS::FALSE;
+			}
+			//if (it->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
+			//{
+			//	it->status = SAT::Literal::STATUS::FALSE;
+			//}
+			//else if (it->Get_Status() == SAT::Literal::STATUS::FALSE)
+			//{
+			//	it->status = SAT::Literal::STATUS::TRUE;
+			//}
 		}
 	}
 }
