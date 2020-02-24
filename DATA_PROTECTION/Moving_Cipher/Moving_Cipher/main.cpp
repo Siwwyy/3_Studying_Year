@@ -118,7 +118,7 @@ void Print_Data(const std::vector<std::vector<char>>& Data)
 void Encrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 {
 	const std::string alphabet = "ABCDEFGHIJKLMNOUPRSTWUXYZ0123456789";
-	shift_value %= alphabet.size() + 1;
+	shift_value %= 35;
 	auto Encryptor = [&](const char _sign) -> char
 	{
 		int32_t sign_value = static_cast<char>(_sign);
@@ -131,8 +131,8 @@ void Encrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 		{
 			if (sign_value + shift_value > 57)
 			{
-				int32_t temp_value = (57 - sign_value) - 57;
-				sign_value = (65 + temp_value) - 1;
+				int32_t temp_value = (57 - sign_value);
+				sign_value = 65 + (shift_value - temp_value);
 			}
 			else
 			{
@@ -143,8 +143,10 @@ void Encrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 		{
 			if (sign_value + shift_value > 90)
 			{
-				int32_t temp_value = (sign_value + shift_value) - 90;
-				sign_value = (48 + temp_value) - 1;
+				int32_t temp_value = (90 - sign_value);
+				sign_value = 48 + (shift_value - temp_value);
+			/*	int32_t temp_value = (sign_value + shift_value) - 90;
+				sign_value = (48 + temp_value) - 1;*/
 			}
 			else
 			{
@@ -166,7 +168,7 @@ void Encrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 void Decrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 {
 	const std::string alphabet = "ABCDEFGHIJKLMNOUPRSTWUXYZ0123456789";
-	shift_value %= alphabet.size() + 1;
+	shift_value %= 35;
 	auto Encryptor = [&](const char _sign) -> char
 	{
 		int32_t sign_value = static_cast<char>(_sign);
