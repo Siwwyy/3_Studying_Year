@@ -1,5 +1,7 @@
 #include "DPLL.hpp"
 
+int a = 0;
+
 const bool SAT::DPLL::Find_Unaries()
 {
 	/*
@@ -30,17 +32,17 @@ const bool SAT::DPLL::Find_Unaries()
 			(*vec_iterator)[0].Set_Who_Visited(value);
 			(*vec_iterator)[0].Set_Visited(true);
 			//change this if
-			//if (value < 0)
-			//{
-			//	(*vec_iterator)[0].Set_Status(SAT::Literal::STATUS::FALSE);
-			//}
-			//else
-			//{
-			//	(*vec_iterator)[0].Set_Status(SAT::Literal::STATUS::TRUE);
-			//}
+			if (value < 0)
+			{
+				(*vec_iterator)[0].Set_Status(SAT::Literal::STATUS::FALSE);
+			}
+			else
+			{
+				(*vec_iterator)[0].Set_Status(SAT::Literal::STATUS::TRUE);
+			}
 			(*vec_iterator)[1].Set_Who_Visited(value);
 			(*vec_iterator)[1].Set_Visited(true);
-			Set_Status(vec_iterator->begin());
+			//Set_Status(vec_iterator->begin());
 			Mark_Visited(vec_iterator->begin());
 			return true;
 		}
@@ -52,20 +54,15 @@ const bool SAT::DPLL::Find_Unaries()
 				{
 					value = vec_iterator_second->Get_Value();
 					Q.push_back(value);
-					//Set_Literal_Status_Unary(vec_iterator_second->Get_Value());
-					//if (value < 0)
-					//{
-					//	if (vec_iterator_second->Get_Status() == SAT::Literal::STATUS::FALSE)
-					//	{
-
-					//	}
-					//	vec_iterator_second->Set_Status(SAT::Literal::STATUS::FALSE);
-					//}
-					//else
-					//{
-					//	vec_iterator_second->Set_Status(SAT::Literal::STATUS::TRUE);
-					//}
-					Set_Status(vec_iterator_second);
+					if (value < 0)
+					{
+						vec_iterator_second->Set_Status(SAT::Literal::STATUS::FALSE);
+					}
+					else
+					{
+						vec_iterator_second->Set_Status(SAT::Literal::STATUS::TRUE);
+					}
+					//Set_Status(vec_iterator_second);
 					Mark_Visited(vec_iterator_second);
 				}
 				if (vec_iterator_second->Get_Visited() == false)
@@ -147,7 +144,10 @@ void SAT::DPLL::Take_First_Literal()
 			{
 				Q.push_back(vec_iterator_second->Get_Value());
 				Set_Status(vec_iterator_second);
-				Mark_Visited(vec_iterator_second);
+				if (a != 2)
+				{
+					Mark_Visited(vec_iterator_second);
+				}
 				return;
 			}
 		}
@@ -188,7 +188,7 @@ void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 			{
 				if (_Where->Get_Status() == SAT::Literal::STATUS::TRUE)
 				{
-					it->Set_Status(SAT::Literal::STATUS::TRUE);
+					//it->Set_Status(SAT::Literal::STATUS::TRUE);
 					for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 					{
 						if (vec_iterator_second->Get_Visited() == false)
@@ -200,7 +200,7 @@ void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 				}
 				else if (_Where->Get_Status() == SAT::Literal::STATUS::FALSE)
 				{
-					it->Set_Status(SAT::Literal::STATUS::FALSE);
+					//it->Set_Status(SAT::Literal::STATUS::FALSE);
 					if (it->Get_Visited() == false)
 					{
 						it->Set_Visited(true);
@@ -212,7 +212,7 @@ void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 			{
 				if (_Where->Get_Status() == SAT::Literal::STATUS::TRUE)
 				{
-					it->Set_Status(SAT::Literal::STATUS::FALSE);
+					//it->Set_Status(SAT::Literal::STATUS::FALSE);
 					if (it->Get_Visited() == false)
 					{
 						it->Set_Visited(true);
@@ -221,7 +221,7 @@ void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 				}
 				else if (_Where->Get_Status() == SAT::Literal::STATUS::FALSE)
 				{
-					it->Set_Status(SAT::Literal::STATUS::TRUE);
+					//it->Set_Status(SAT::Literal::STATUS::TRUE);
 					for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 					{
 						if (vec_iterator_second->Get_Visited() == false)
@@ -243,15 +243,18 @@ void SAT::DPLL::Set_Status(const std::vector<SAT::Literal>::iterator& _Where)
 	{
 		//_Where->status = SAT::Literal::STATUS::TRUE;
 		_Where->status = SAT::Literal::STATUS::FALSE;
+		a = 0;
 	}
 	else if (_Where->Get_Status() == SAT::Literal::STATUS::FALSE)
 	{
 		_Where->status = SAT::Literal::STATUS::TRUE;
+		a = 1;
 	}
 	else if (_Where->Get_Status() == SAT::Literal::STATUS::TRUE)
 	{
 		_Where->status = SAT::Literal::STATUS::UNTAGGED;
 		Backtrack();
+		a = 2;
 	}
 }
 
