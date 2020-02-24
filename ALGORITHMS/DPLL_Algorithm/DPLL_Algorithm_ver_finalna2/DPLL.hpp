@@ -32,7 +32,9 @@ namespace SAT
 		*/
 		const bool Find_Unaries();
 		const bool Is_End() const;
+		const bool Is_Conflict() const;
 		void Take_First_Literal();
+		void Backtrack();
 		void Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where);
 		void Set_Status(const std::vector<SAT::Literal>::iterator& _Where);
 		///////////////////////////////////////////////

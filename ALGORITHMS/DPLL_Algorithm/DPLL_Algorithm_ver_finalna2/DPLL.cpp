@@ -59,6 +59,7 @@ const bool SAT::DPLL::Find_Unaries()
 					{
 						vec_iterator_second->Set_Status(SAT::Literal::STATUS::TRUE);
 					}
+					Mark_Visited(vec_iterator_second);
 				}
 				if (vec_iterator_second->Get_Visited() == false)
 				{
@@ -87,6 +88,48 @@ const bool SAT::DPLL::Is_End() const
 	return true;
 }
 
+const bool SAT::DPLL::Is_Conflict() const
+{
+	/*
+		Here we are looking for a conflicts. For example: when we have a 4 0 row and -4 0 row => true != false, two unaries with same literal but with different value
+	*/
+	auto Amount_Of_Unvisited = [&](const std::vector<std::vector<SAT::Literal>>::const_iterator& _Where) -> size_t
+	{
+		size_t size{};
+		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator = _Where->begin(); vec_iterator != _Where->end(); ++vec_iterator)
+		{
+			if (vec_iterator->Get_Visited() == false)
+			{
+				++size;
+			}
+		}
+		return size;
+	};
+	//Print_Data();
+	for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
+	{
+		if (Amount_Of_Unvisited(vec_iterator) == 2 && (*vec_iterator)[1].Get_Value() != 0)	//if we have 2 unvisited values in a row but different from unary row (it cannot be a unary, unary is a special)
+		{
+			for (typename std::vector<SAT::Literal>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
+			{
+				if (vec_iterator_second->Get_Value() != 0 && vec_iterator_second->Get_Visited() == false)
+				{
+					std::vector<SAT::Literal>::const_iterator it{};
+					for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator_third = (vec_iterator + 1); vec_iterator_third != this->Data.end(); ++vec_iterator_third)
+					{
+						it = std::find(vec_iterator_third->begin(), vec_iterator_third->end(), *vec_iterator_second);
+						if (it != vec_iterator_third->end() && it->Get_Visited() == false && Amount_Of_Unvisited(vec_iterator_third) == 2)
+						{
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
 void SAT::DPLL::Take_First_Literal()
 {
 	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
@@ -104,6 +147,11 @@ void SAT::DPLL::Take_First_Literal()
 	}
 }
 
+void SAT::DPLL::Backtrack()
+{
+
+}
+
 void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 {
 	std::vector<SAT::Literal>::iterator it{};
@@ -116,6 +164,7 @@ void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 			{
 				if (_Where->Get_Status() == SAT::Literal::STATUS::TRUE)
 				{
+					it->Set_Status(SAT::Literal::STATUS::TRUE);
 					for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 					{
 						if (vec_iterator_second->Get_Visited() == false)
@@ -127,6 +176,7 @@ void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 				}
 				else if (_Where->Get_Status() == SAT::Literal::STATUS::FALSE)
 				{
+					it->Set_Status(SAT::Literal::STATUS::FALSE);
 					if (it->Get_Visited() == false)
 					{
 						it->Set_Visited(true);
@@ -138,6 +188,7 @@ void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 			{
 				if (_Where->Get_Status() == SAT::Literal::STATUS::TRUE)
 				{
+					it->Set_Status(SAT::Literal::STATUS::FALSE);
 					if (it->Get_Visited() == false)
 					{
 						it->Set_Visited(true);
@@ -146,6 +197,7 @@ void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 				}
 				else if (_Where->Get_Status() == SAT::Literal::STATUS::FALSE)
 				{
+					it->Set_Status(SAT::Literal::STATUS::TRUE);
 					for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 					{
 						if (vec_iterator_second->Get_Visited() == false)
@@ -164,7 +216,8 @@ void SAT::DPLL::Set_Status(const std::vector<SAT::Literal>::iterator& _Where)
 {
 	if (_Where->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
 	{
-		_Where->status = SAT::Literal::STATUS::TRUE;
+		//_Where->status = SAT::Literal::STATUS::TRUE;
+		_Where->status = SAT::Literal::STATUS::FALSE;
 	}
 	else if (_Where->Get_Status() == SAT::Literal::STATUS::TRUE)
 	{
@@ -238,11 +291,29 @@ void SAT::DPLL::SAT_or_UNSAT()
 	{
 		if (Find_Unaries() == true)
 		{
+			if (Is_Conflict() == true)
+			{
+				//Print_Data();
+				//system("pause");
+				Backtrack();
+				//std::cout << '\n' << '\n';
+				//Print_Data();
+				//system("pause");
+			}
 			SAT_or_UNSAT();
 		}
 		else
 		{
 			Take_First_Literal();
+			if (Is_Conflict() == true)	//check this function later
+			{
+				//Print_Data();
+				//system("pause");
+				Backtrack();
+				//std::cout << '\n' << '\n';
+				//Print_Data();
+				//system("pause");
+			}
 			SAT_or_UNSAT();
 		}
 		//{
