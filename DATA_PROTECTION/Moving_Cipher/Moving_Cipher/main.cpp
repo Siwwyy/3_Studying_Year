@@ -11,7 +11,7 @@ void Print_Data(const std::vector<std::vector<char>> & Data);
 void Encrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value);
 void Decrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value);
 
-const std::string alphabet = "ABCDEFGHIJKLMNOUPRSTWUXYZ0123456789";
+const std::string alphabet = "ABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
 
 int main(int argc, char* argv[])
 {

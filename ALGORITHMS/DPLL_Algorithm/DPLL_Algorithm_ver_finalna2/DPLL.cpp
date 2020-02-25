@@ -1,7 +1,5 @@
 #include "DPLL.hpp"
 
-int a = 0;
-
 const bool SAT::DPLL::Find_Unaries()
 {
 	/*
@@ -42,7 +40,6 @@ const bool SAT::DPLL::Find_Unaries()
 			}
 			(*vec_iterator)[1].Set_Who_Visited(value);
 			(*vec_iterator)[1].Set_Visited(true);
-			//Set_Status(vec_iterator->begin());
 			Mark_Visited(vec_iterator->begin());
 			return true;
 		}
@@ -54,15 +51,21 @@ const bool SAT::DPLL::Find_Unaries()
 				{
 					value = vec_iterator_second->Get_Value();
 					Q.push_back(value);
-					if (value < 0)
-					{
-						vec_iterator_second->Set_Status(SAT::Literal::STATUS::FALSE);
-					}
-					else
-					{
-						vec_iterator_second->Set_Status(SAT::Literal::STATUS::TRUE);
-					}
+					//if (value < 0)
+					//{
+					//	vec_iterator_second->Set_Status(SAT::Literal::STATUS::FALSE);
+					//}
+					//else
+					//{
+					//	vec_iterator_second->Set_Status(SAT::Literal::STATUS::TRUE);
+					//}
 					//Set_Status(vec_iterator_second);
+					//if (value == -36)
+					//{
+					//	Print_Data();
+					//}
+					//vec_iterator_second->Set_Status(SAT::Literal::STATUS::TRUE);
+					Set_Status(vec_iterator_second);
 					Mark_Visited(vec_iterator_second);
 				}
 				if (vec_iterator_second->Get_Visited() == false)
@@ -84,6 +87,21 @@ const bool SAT::DPLL::Is_End() const
 		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 		{
 			if (vec_iterator_second->Get_Visited() == false)
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+const bool SAT::DPLL::Is_unsatisfiable() const
+{
+	for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
+	{
+		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
+		{
+			if (vec_iterator_second->Get_Status() == SAT::Literal::STATUS::TRUE)
 			{
 				return false;
 			}
@@ -142,10 +160,18 @@ void SAT::DPLL::Take_First_Literal()
 		{
 			if (vec_iterator_second->Get_Visited() == false && vec_iterator_second->Get_Value() != 0)
 			{
-				Q.push_back(vec_iterator_second->Get_Value());
 				Set_Status(vec_iterator_second);
-				if (a != 2)
+				if (vec_iterator_second->Get_Status() != SAT::Literal::STATUS::UNTAGGED)
 				{
+					//if (vec_iterator_second->Get_Value() < 0 && vec_iterator_second->Get_Status() == SAT::Literal::STATUS::TRUE)
+					//{
+					//	Q.push_back((-1) * vec_iterator_second->Get_Value());
+					//}
+					//else if (vec_iterator_second->Get_Value() < 0 && vec_iterator_second->Get_Status() == SAT::Literal::STATUS::FALSE)
+					//{
+					//	Q.push_back((-1) * vec_iterator_second->Get_Value());
+					//}
+					Q.push_back(vec_iterator_second->Get_Value());
 					Mark_Visited(vec_iterator_second);
 				}
 				return;
@@ -178,6 +204,19 @@ void SAT::DPLL::Backtrack()
 
 void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 {
+	auto Amount_Of_Unvisited = [&](const std::vector<std::vector<SAT::Literal>>::iterator& _Where) -> size_t
+	{
+		size_t size{};
+		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator = _Where->begin(); vec_iterator != _Where->end(); ++vec_iterator)
+		{
+			if (vec_iterator->Get_Visited() == false)
+			{
+				++size;
+			}
+		}
+		return size;
+	};
+
 	std::vector<SAT::Literal>::iterator it{};
 	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
@@ -188,7 +227,6 @@ void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 			{
 				if (_Where->Get_Status() == SAT::Literal::STATUS::TRUE)
 				{
-					//it->Set_Status(SAT::Literal::STATUS::TRUE);
 					for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 					{
 						if (vec_iterator_second->Get_Visited() == false)
@@ -200,8 +238,18 @@ void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 				}
 				else if (_Where->Get_Status() == SAT::Literal::STATUS::FALSE)
 				{
-					//it->Set_Status(SAT::Literal::STATUS::FALSE);
-					if (it->Get_Visited() == false)
+					if (Amount_Of_Unvisited(vec_iterator) == 2)
+					{
+						for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
+						{
+							if (vec_iterator_second->Get_Visited() == false)
+							{
+								vec_iterator_second->Set_Visited(true);
+								vec_iterator_second->Set_Who_Visited(_Where->Get_Value());
+							}
+						}
+					}
+					else if (it->Get_Visited() == false)
 					{
 						it->Set_Visited(true);
 						it->Set_Who_Visited(_Where->Get_Value());
@@ -212,8 +260,18 @@ void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 			{
 				if (_Where->Get_Status() == SAT::Literal::STATUS::TRUE)
 				{
-					//it->Set_Status(SAT::Literal::STATUS::FALSE);
-					if (it->Get_Visited() == false)
+					if (Amount_Of_Unvisited(vec_iterator) == 2)
+					{
+						for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
+						{
+							if (vec_iterator_second->Get_Visited() == false)
+							{
+								vec_iterator_second->Set_Visited(true);
+								vec_iterator_second->Set_Who_Visited(_Where->Get_Value());
+							}
+						}
+					}
+					else if (it->Get_Visited() == false)
 					{
 						it->Set_Visited(true);
 						it->Set_Who_Visited(_Where->Get_Value());
@@ -221,7 +279,6 @@ void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 				}
 				else if (_Where->Get_Status() == SAT::Literal::STATUS::FALSE)
 				{
-					//it->Set_Status(SAT::Literal::STATUS::TRUE);
 					for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 					{
 						if (vec_iterator_second->Get_Visited() == false)
@@ -241,20 +298,17 @@ void SAT::DPLL::Set_Status(const std::vector<SAT::Literal>::iterator& _Where)
 	//if status of first literal changes, start changing rest of values again
 	if (_Where->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
 	{
-		//_Where->status = SAT::Literal::STATUS::TRUE;
-		_Where->status = SAT::Literal::STATUS::FALSE;
-		a = 0;
-	}
-	else if (_Where->Get_Status() == SAT::Literal::STATUS::FALSE)
-	{
 		_Where->status = SAT::Literal::STATUS::TRUE;
-		a = 1;
+		//_Where->status = SAT::Literal::STATUS::FALSE;
 	}
 	else if (_Where->Get_Status() == SAT::Literal::STATUS::TRUE)
 	{
+		_Where->status = SAT::Literal::STATUS::FALSE;
+	}
+	else if (_Where->Get_Status() == SAT::Literal::STATUS::FALSE)
+	{
 		_Where->status = SAT::Literal::STATUS::UNTAGGED;
 		Backtrack();
-		a = 2;
 	}
 }
 
@@ -320,16 +374,11 @@ void SAT::DPLL::SAT_or_UNSAT()
 	{
 		if (Find_Unaries() == true)
 		{
+			//is stopping on unary value
 			if (Is_Conflict() == true)
 			{
-				//Print_Data();
-				//system("pause");
 				Backtrack();
-				//std::cout << '\n' << '\n';
-				//Print_Data();
-				//system("pause");
 			}
-			//system("pause");
 			SAT_or_UNSAT();
 		}
 		else
@@ -337,43 +386,14 @@ void SAT::DPLL::SAT_or_UNSAT()
 			Take_First_Literal();
 			if (Is_Conflict() == true)	//check this function later
 			{
-				//Print_Data();
-				//system("pause");
 				Backtrack();
-				//std::cout << '\n' << '\n';
-				//Print_Data();
-				//system("pause");
 			}
-			//system("pause");
 			SAT_or_UNSAT();
 		}
-		//{
-		//	Mark_As_Visited();
-		//	if (Is_Conflict() == true)	//check this function later
-		//	{
-		//		//Print_Data();
-		//		//system("pause");
-		//		Backtrack();
-		//		//std::cout << '\n' << '\n';
-		//		//Print_Data();
-		//		//system("pause");
-		//	}
-		//	SAT_or_UNSAT();
-		//}
-		//else
-		//{
-		//	Take_First_Literal();
-		//	Mark_As_Visited();
-		//	if (Is_Conflict() == true)	//check this function later
-		//	{
-		//		Backtrack();
-		//	}
-		//	SAT_or_UNSAT();
-		//}
 	}
 	else
 	{
-		if (/*Is_unsatisfiable() == */false)
+		if (Is_unsatisfiable() == true)
 		{
 			std::cout << "\nUNSATISFIABLE" << '\n';
 		}
