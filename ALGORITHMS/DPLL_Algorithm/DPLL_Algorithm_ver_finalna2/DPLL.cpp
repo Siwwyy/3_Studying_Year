@@ -389,13 +389,13 @@ void SAT::DPLL::SAT_or_UNSAT()
 				//	std::cout << "I TAKE: " << Q.back().first << " " << static_cast<int32_t>(Q.back().second) << '\n';
 				//	system("pause");
 				//}
-				std::cout << "I TAKE: " << Q.back().first << " " << static_cast<int32_t>(Q.back().second) << '\n';
+				//std::cout << "I TAKE: " << Q.back().first << " " << static_cast<int32_t>(Q.back().second) << '\n';
 			}
 			if (Is_Conflict() == true)
 			{
 				Backtrack();
 			}
-			system("pause");
+			//system("pause");
 			SAT_or_UNSAT();
 		}
 		else
@@ -408,13 +408,13 @@ void SAT::DPLL::SAT_or_UNSAT()
 				//	std::cout << "I TAKE: " << Q.back().first << " " << static_cast<int32_t>(Q.back().second) << '\n';
 				//	system("pause");
 				//}
-				std::cout << "I TAKE: " << Q.back().first << " " << static_cast<int32_t>(Q.back().second) << '\n';
+				//std::cout << "I TAKE: " << Q.back().first << " " << static_cast<int32_t>(Q.back().second) << '\n';
 			}
 			if (Is_Conflict() == true)	//check this function later
 			{
 				Backtrack();
 			}
-			system("pause");
+			//system("pause");
 			SAT_or_UNSAT();
 		}
 	}
@@ -432,17 +432,37 @@ void SAT::DPLL::SAT_or_UNSAT()
 			while (Q.empty() == false)
 			{
 				value = Q.front().first;
-				if (value < 0)
-				{
-					counter = static_cast<size_t>((value * (-1)) - 1);
-				}
-				else
+				//if (value < 0)
+				//{
+				//	counter = static_cast<size_t>((value * (-1)) - 1);
+				//}
+				//else
+				//{
+				//	counter = static_cast<size_t>(value - 1);
+				//}
+				if (value > 0 && Q.front().second == SAT::Literal::STATUS::TRUE)
 				{
 					counter = static_cast<size_t>(value - 1);
+					Knowledge[counter] = value;
 				}
-				Knowledge[counter] = value;
+				else if (value < 0 && Q.front().second == SAT::Literal::STATUS::TRUE)
+				{
+					counter = static_cast<size_t>((value * (-1)) - 1);
+					Knowledge[counter] = (-1) * value;
+				}
+				else if (value > 0 && Q.front().second == SAT::Literal::STATUS::FALSE)
+				{
+					counter = static_cast<size_t>((value * (-1)) - 1);
+					Knowledge[counter] = (-1) * value;
+				}
+				else if (value < 0 && Q.front().second == SAT::Literal::STATUS::FALSE)
+				{
+					counter = static_cast<size_t>(value - 1);
+					Knowledge[counter] = value;
+				}
 				Q.pop_front();
 				value = {};
+				counter = {};
 			}
 			for (size_t i = 0; i < static_cast<size_t>(this->amount_of_literals); ++i)
 			{
