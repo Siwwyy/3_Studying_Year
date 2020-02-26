@@ -23,7 +23,7 @@ namespace SAT
 			PRIVATE VARIABLES
 		*/
 		std::vector<std::vector<SAT::Literal>> Data;
-		std::deque<int64_t> Q;
+		std::deque<std::pair<int64_t, SAT::Literal::STATUS>> Q;
 		int64_t amount_of_literals;
 		int64_t* Knowledge;
 		///////////////////////////////////////////////
