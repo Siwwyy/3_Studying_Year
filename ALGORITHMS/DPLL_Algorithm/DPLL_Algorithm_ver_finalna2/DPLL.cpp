@@ -89,7 +89,7 @@ const bool SAT::DPLL::Is_End() const
 	{
 		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 		{
-			if (vec_iterator_second->Get_Visited() == false)
+			if (vec_iterator_second->Get_Visited() == false && vec_iterator_second->Get_Status() != SAT::Literal::STATUS::FALSE)
 			{
 				return false;
 			}
@@ -104,7 +104,7 @@ const bool SAT::DPLL::Is_unsatisfiable() const
 	{
 		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
 		{
-			if (vec_iterator_second->Get_Status() == SAT::Literal::STATUS::FALSE)
+			if (vec_iterator_second->Get_Status() == SAT::Literal::STATUS::TRUE)
 			{
 				return false;
 			}
@@ -302,20 +302,30 @@ void SAT::DPLL::Set_Status(const std::vector<SAT::Literal>::iterator& _Where)
 	if (_Where->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
 	{
 		_Where->status = SAT::Literal::STATUS::TRUE;
-		//_Where->status = SAT::Literal::STATUS::FALSE;
 	}
 	else if (_Where->Get_Status() == SAT::Literal::STATUS::TRUE)
-	//else if (_Where->Get_Status() == SAT::Literal::STATUS::FALSE)
 	{
 		_Where->status = SAT::Literal::STATUS::FALSE;
-		//_Where->status = SAT::Literal::STATUS::TRUE;
 	}
 	else if (_Where->Get_Status() == SAT::Literal::STATUS::FALSE)
-	//else if (_Where->Get_Status() == SAT::Literal::STATUS::TRUE)
 	{
 		_Where->status = SAT::Literal::STATUS::UNTAGGED;
 		Backtrack();
 	}
+
+	//if (_Where->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
+	//{
+	//	_Where->status = SAT::Literal::STATUS::FALSE;
+	//}
+	//else if (_Where->Get_Status() == SAT::Literal::STATUS::FALSE)
+	//{
+	//	_Where->status = SAT::Literal::STATUS::TRUE;
+	//}
+	//else if (_Where->Get_Status() == SAT::Literal::STATUS::TRUE)
+	//{
+	//	_Where->status = SAT::Literal::STATUS::UNTAGGED;
+	//	Backtrack();
+	//}
 }
 
 SAT::DPLL::DPLL(const std::vector<std::vector<SAT::Literal>>& my_data, const int64_t amount_of_literals):
@@ -328,6 +338,8 @@ SAT::DPLL::DPLL(const std::vector<std::vector<SAT::Literal>>& my_data, const int
 	{
 		Knowledge[i] = (this->amount_of_literals + 1);//default value means that there is not a value inside
 	}
+	this->max_iteration = pow(2, amount_of_literals);
+	this->current_iteration = {};
 }
 
 SAT::DPLL::DPLL(const DPLL& Object) :
@@ -376,7 +388,8 @@ void SAT::DPLL::Print_Knowledge() const
 
 void SAT::DPLL::SAT_or_UNSAT()
 {
-	if (Is_End() == false)
+	//if (Is_End() == false)
+	if (current_iteration <= max_iteration && Is_End() == false)
 	{
 		//remember about nulling everything if backtrack goes to 1 
 		//set to null everything
@@ -396,6 +409,7 @@ void SAT::DPLL::SAT_or_UNSAT()
 				Backtrack();
 			}
 			//system("pause");
+			++current_iteration;
 			SAT_or_UNSAT();
 		}
 		else
@@ -415,6 +429,7 @@ void SAT::DPLL::SAT_or_UNSAT()
 				Backtrack();
 			}
 			//system("pause");
+			++current_iteration;
 			SAT_or_UNSAT();
 		}
 	}
@@ -432,14 +447,6 @@ void SAT::DPLL::SAT_or_UNSAT()
 			while (Q.empty() == false)
 			{
 				value = Q.front().first;
-				//if (value < 0)
-				//{
-				//	counter = static_cast<size_t>((value * (-1)) - 1);
-				//}
-				//else
-				//{
-				//	counter = static_cast<size_t>(value - 1);
-				//}
 				if (value > 0 && Q.front().second == SAT::Literal::STATUS::TRUE)
 				{
 					counter = static_cast<size_t>(value - 1);
@@ -452,12 +459,12 @@ void SAT::DPLL::SAT_or_UNSAT()
 				}
 				else if (value > 0 && Q.front().second == SAT::Literal::STATUS::FALSE)
 				{
-					counter = static_cast<size_t>((value * (-1)) - 1);
+					counter = static_cast<size_t>((value) - 1);
 					Knowledge[counter] = (-1) * value;
 				}
 				else if (value < 0 && Q.front().second == SAT::Literal::STATUS::FALSE)
 				{
-					counter = static_cast<size_t>(value - 1);
+					counter = static_cast<size_t>((value * (-1)) - 1);
 					Knowledge[counter] = value;
 				}
 				Q.pop_front();

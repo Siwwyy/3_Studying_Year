@@ -26,6 +26,8 @@ namespace SAT
 		std::deque<std::pair<int64_t, SAT::Literal::STATUS>> Q;
 		int64_t amount_of_literals;
 		int64_t* Knowledge;
+		int64_t max_iteration;
+		int64_t current_iteration;
 		///////////////////////////////////////////////
 		/*
 			PRIVATE FUNCTIONS
