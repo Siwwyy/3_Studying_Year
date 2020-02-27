@@ -13,6 +13,7 @@ const bool SAT::DPLL::Find_Unaries()
 		size_t size{};
 		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator = _Where->begin(); vec_iterator != _Where->end(); ++vec_iterator)
 		{
+			//finding rows where are 2 unvisited literals, 0 and for example literal nr 2
 			if (vec_iterator->Get_Visited() == false)
 			{
 				++size;
@@ -26,8 +27,6 @@ const bool SAT::DPLL::Find_Unaries()
 		if ((*vec_iterator).size() == 2 && (*vec_iterator)[0].Get_Visited() == false)	//case nr1.
 		{
 			value = (*vec_iterator)[0].Get_Value();
-			//Q.push_back(value);	//add to queue
-			Q.push_back(std::make_pair(value, (*vec_iterator)[0].Get_Status()));
 			(*vec_iterator)[0].Set_Who_Visited(value);
 			(*vec_iterator)[0].Set_Visited(true);
 			//change this if
@@ -41,6 +40,7 @@ const bool SAT::DPLL::Find_Unaries()
 			}
 			(*vec_iterator)[1].Set_Who_Visited(value);
 			(*vec_iterator)[1].Set_Visited(true);
+			Q.push_back(std::make_pair(value, (*vec_iterator)[0].Get_Status()));
 			Mark_Visited(vec_iterator->begin());
 			return true;
 		}
@@ -51,22 +51,6 @@ const bool SAT::DPLL::Find_Unaries()
 				if (vec_iterator_second->Get_Value() != 0 && vec_iterator_second->Get_Visited() == false)
 				{
 					value = vec_iterator_second->Get_Value();
-					//Q.push_back(value);
-					
-					//if (value < 0)
-					//{
-					//	vec_iterator_second->Set_Status(SAT::Literal::STATUS::FALSE);
-					//}
-					//else
-					//{
-					//	vec_iterator_second->Set_Status(SAT::Literal::STATUS::TRUE);
-					//}
-					//Set_Status(vec_iterator_second);
-					//if (value == -36)
-					//{
-					//	Print_Data();
-					//}
-					//vec_iterator_second->Set_Status(SAT::Literal::STATUS::TRUE);
 					Set_Status(vec_iterator_second);
 					Q.push_back(std::make_pair(value, vec_iterator_second->Get_Status()));
 					Mark_Visited(vec_iterator_second);
@@ -85,6 +69,7 @@ const bool SAT::DPLL::Find_Unaries()
 
 const bool SAT::DPLL::Is_End() const
 {
+	//This function checks if is end? This functions permits to 
 	for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
 		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
@@ -130,7 +115,7 @@ const bool SAT::DPLL::Is_Conflict() const
 		}
 		return size;
 	};
-	//Print_Data();
+
 	for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
 		if (Amount_Of_Unvisited(vec_iterator) == 2 && (*vec_iterator)[1].Get_Value() != 0)	//if we have 2 unvisited values in a row but different from unary row (it cannot be a unary, unary is a special)
@@ -157,6 +142,7 @@ const bool SAT::DPLL::Is_Conflict() const
 
 void SAT::DPLL::Take_First_Literal()
 {
+	//If unary variable isint exist, we have to take first possible literal and push it into queue
 	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
 		for (typename std::vector<SAT::Literal>::iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
@@ -166,14 +152,6 @@ void SAT::DPLL::Take_First_Literal()
 				Set_Status(vec_iterator_second);
 				if (vec_iterator_second->Get_Status() != SAT::Literal::STATUS::UNTAGGED)
 				{
-					//if (vec_iterator_second->Get_Value() < 0 && vec_iterator_second->Get_Status() == SAT::Literal::STATUS::TRUE)
-					//{
-					//	Q.push_back((-1) * vec_iterator_second->Get_Value());
-					//}
-					//else if (vec_iterator_second->Get_Value() < 0 && vec_iterator_second->Get_Status() == SAT::Literal::STATUS::FALSE)
-					//{
-					//	Q.push_back((-1) * vec_iterator_second->Get_Value());
-					//}
 					Q.push_back(std::make_pair(vec_iterator_second->Get_Value(), vec_iterator_second->Get_Status()));
 					Mark_Visited(vec_iterator_second);
 				}
@@ -185,6 +163,9 @@ void SAT::DPLL::Take_First_Literal()
 
 void SAT::DPLL::Backtrack()
 {
+	//If we encountered a conflict, we are forced to change status to opposite site for example, we had literal 1 with true status and now we are chaning it into false and checking corectness again
+	//In this function we are going backwards, removing last added element from queue and in rows where him exists, we mark literals to unvisited state. For example
+	//We hava to pop back literal 1, if is true and literal is 1 then unvisit whole row, where is -1 (with true state) unvisit only -1. This have the same behavior with false state but only -1 with false gives 1
 	std::vector<SAT::Literal>::iterator it{};
 	int64_t value{ Q.back().first };
 	Q.pop_back();
@@ -219,7 +200,14 @@ void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 		}
 		return size;
 	};
-
+	/*
+		This function marks literas equal to value or marks whole row as a visited
+	*/
+	/*
+		Marking as visitied
+		Ealier, We added a literal to queue, now we are forced to mark literals as a visitied for example. We added to queue literal 1 and set up status to True.
+		In rows where is a 1 we have to mark whole row as a visited, in rows where is -1 we mark only -1 as a visited
+	*/
 	std::vector<SAT::Literal>::iterator it{};
 	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
@@ -298,7 +286,10 @@ void SAT::DPLL::Mark_Visited(const std::vector<SAT::Literal>::iterator& _Where)
 
 void SAT::DPLL::Set_Status(const std::vector<SAT::Literal>::iterator& _Where)
 {
-	//if status of first literal changes, start changing rest of values again
+	/*
+		This functions sets up STATUS (in other words, literal value true or false
+		Starts from untagged = unvalued
+	*/
 	if (_Where->Get_Status() == SAT::Literal::STATUS::UNTAGGED)
 	{
 		_Where->status = SAT::Literal::STATUS::TRUE;
@@ -310,6 +301,8 @@ void SAT::DPLL::Set_Status(const std::vector<SAT::Literal>::iterator& _Where)
 	else if (_Where->Get_Status() == SAT::Literal::STATUS::FALSE)
 	{
 		_Where->status = SAT::Literal::STATUS::UNTAGGED;
+		//if we set up 2 possible literal values true and false
+		//function will set untagged again and make a backtrack
 		Backtrack();
 	}
 
@@ -344,8 +337,10 @@ SAT::DPLL::DPLL(const std::vector<std::vector<SAT::Literal>>& my_data, const int
 
 SAT::DPLL::DPLL(const DPLL& Object) :
 	Data(Object.Data),
-	Q(Object.Q),
-	amount_of_literals(Object.amount_of_literals)
+	Q(),
+	amount_of_literals(Object.amount_of_literals),
+	max_iteration(Object.max_iteration),
+	current_iteration(0)
 {
 	this->Knowledge = new int64_t[this->amount_of_literals];
 	for (size_t i = 0; i < static_cast<size_t>(this->amount_of_literals); ++i)
@@ -388,47 +383,24 @@ void SAT::DPLL::Print_Knowledge() const
 
 void SAT::DPLL::SAT_or_UNSAT()
 {
-	//if (Is_End() == false)
 	if (current_iteration <= max_iteration && Is_End() == false)
 	{
-		//remember about nulling everything if backtrack goes to 1 
-		//set to null everything
 		if (Find_Unaries() == true)
 		{
-			if (Q.empty() == false)
-			{
-				//if (Q.back().first == 700)
-				//{
-				//	std::cout << "I TAKE: " << Q.back().first << " " << static_cast<int32_t>(Q.back().second) << '\n';
-				//	system("pause");
-				//}
-				//std::cout << "I TAKE: " << Q.back().first << " " << static_cast<int32_t>(Q.back().second) << '\n';
-			}
 			if (Is_Conflict() == true)
 			{
 				Backtrack();
 			}
-			//system("pause");
 			++current_iteration;
 			SAT_or_UNSAT();
 		}
 		else
 		{
 			Take_First_Literal();
-			if (Q.empty() == false)
-			{
-				//if (Q.back().first == 700)
-				//{
-				//	std::cout << "I TAKE: " << Q.back().first << " " << static_cast<int32_t>(Q.back().second) << '\n';
-				//	system("pause");
-				//}
-				//std::cout << "I TAKE: " << Q.back().first << " " << static_cast<int32_t>(Q.back().second) << '\n';
-			}
 			if (Is_Conflict() == true)	//check this function later
 			{
 				Backtrack();
 			}
-			//system("pause");
 			++current_iteration;
 			SAT_or_UNSAT();
 		}
@@ -514,5 +486,7 @@ SAT::DPLL::~DPLL()
 	}
 	delete[] Knowledge;
 	this->amount_of_literals = 0;
+	this->max_iteration = 0;
+	this->current_iteration = 0;
 	this->Q.clear();
 }
