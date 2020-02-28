@@ -1,4 +1,5 @@
 import sys
+import math
 
 def Fun4():
     test = [11.0, "Ala ma koty", 12, 4, "5"]
@@ -28,4 +29,27 @@ def Fun5():
         print(i)
 
 def Fun6():
-    pass
+    a = [1,4,-6,10,11,15,20]
+    print(sum(a))
+
+def Fun7():
+    list1 = [1,4,-6,10,11,15,20]
+    print(max(list1))
+    list = []
+    #for i in range(10):
+    i = int()
+    while i < 10:
+        x = int(input())
+        list.append(x)
+        i += 1
+    print("Sum: ",sum(list))
+    print("Max: ",max(list))
+
+
+def Fun8(a,b):
+    return math.pow(a,b)
+
+
+def info_list(list):
+    return max(list),sum(list)
+
