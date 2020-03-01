@@ -69,7 +69,7 @@ const bool SAT::DPLL::Find_Unaries()
 
 const bool SAT::DPLL::Is_End() const
 {
-	//This function checks if is end? This functions permits to 
+	//This function checks if is end? This functions permits to next function recursion
 	for (typename std::vector<std::vector<SAT::Literal>>::const_iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
 		for (typename std::vector<SAT::Literal>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != vec_iterator->end(); ++vec_iterator_second)
@@ -169,6 +169,10 @@ void SAT::DPLL::Backtrack()
 	std::vector<SAT::Literal>::iterator it{};
 	int64_t value{ Q.back().first };
 	Q.pop_back();
+	while (Q.back().first == value)
+	{
+		Q.pop_back();
+	}
 	for (typename std::vector<std::vector<SAT::Literal>>::iterator vec_iterator = this->Data.begin(); vec_iterator != this->Data.end(); ++vec_iterator)
 	{
 		it = std::find(vec_iterator->begin(), vec_iterator->end(), value);
@@ -383,7 +387,7 @@ void SAT::DPLL::Print_Knowledge() const
 
 void SAT::DPLL::SAT_or_UNSAT()
 {
-	if (current_iteration <= max_iteration && Is_End() == false)
+	if (Is_End() == false)
 	{
 		if (Find_Unaries() == true)
 		{
@@ -391,7 +395,16 @@ void SAT::DPLL::SAT_or_UNSAT()
 			{
 				Backtrack();
 			}
-			++current_iteration;
+			if (Q.empty() == false)
+			{
+				if (Q.back().first == 278)
+				{
+					std::cout << Q.back().first << " " << static_cast<int32_t>(Q.back().second) << '\n';//BREAKPOINT HERE
+				}
+			}
+			//std::cout << Q.back().first << " " << static_cast<int32_t>(Q.back().second) << '\n';
+			////++current_iteration;
+			//system("pause");
 			SAT_or_UNSAT();
 		}
 		else
@@ -401,7 +414,9 @@ void SAT::DPLL::SAT_or_UNSAT()
 			{
 				Backtrack();
 			}
-			++current_iteration;
+			//std::cout << Q.back().first << " " << static_cast<int32_t>(Q.back().second) << '\n';
+			////++current_iteration;
+			//system("pause");
 			SAT_or_UNSAT();
 		}
 	}
