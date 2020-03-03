@@ -30,24 +30,24 @@ int main(int argc, char* argv[])
 	std::vector<char> Data2{};
 	std::map<char, float> Freq{};
 
-	int16_t choice{};
-	int16_t shift_value{};
-	std::cout << "Shift value: ";
-	std::cin >> shift_value;
-	std::cout << NEW_LINE;
-	std::cin >> choice;
-	if (choice == 1)
-	{
-		Load_Data(Data, "file4.in");
-		Encrypt_Data(Data, shift_value);
-		Save_Data(Data, "file4.out");
-	}
-	else if (choice == 2)
-	{
-		Load_Data(Data, "file4.out");
-		Decrypt_Data(Data, shift_value);
-		Save_Data(Data, "file4_decrypted.out");
-	}
+	//int16_t choice{};
+	//int16_t shift_value{};
+	//std::cout << "Shift value: ";
+	//std::cin >> shift_value;
+	//std::cout << NEW_LINE;
+	//std::cin >> choice;
+	//if (choice == 1)
+	//{
+	//	Load_Data(Data, "file6.in");
+	//	Encrypt_Data(Data, shift_value);
+	//	Save_Data(Data, "file6.out");
+	//}
+	//else if (choice == 2)
+	//{
+	//	Load_Data(Data, "file6.out");
+	//	Decrypt_Data(Data, shift_value);
+	//	Save_Data(Data, "file6_decrypted.out");
+	//}
 
 	//Load_Data(Data2, "bardzotajnezaszyfrowane.txt");
 	//Count_Frequency(Data2, Freq);
@@ -205,7 +205,6 @@ void Print_Data(const std::vector<std::vector<char>>& Data)
 
 void Encrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 {
-	//shift_value = (::alphabet.size() % shift_value);
 	shift_value = (shift_value % ::alphabet.size());
 	auto Encryptor = [&](const char _sign) -> char
 	{
@@ -261,7 +260,6 @@ void Encrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 
 void Decrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 {
-	//shift_value = (::alphabet.size() % shift_value);
 	shift_value = (shift_value % ::alphabet.size());
 	auto Decryptor = [&](const char _sign) -> char
 	{
@@ -318,30 +316,9 @@ void Decrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 
 void Count_Frequency(std::vector<char>& Data, std::map<char, float>& Freq)
 {
-	//auto If_correct_sign = [&](const char _sign) -> bool
-	//{
-	//	int32_t sign_value = static_cast<char>(_sign);
-	//	if (sign_value >= 97 && sign_value <= 122)
-	//	{
-	//		sign_value -= 32;
-	//	}
-
-	//	if ((sign_value >= 48 && sign_value <= 57))
-	//	{
-	//		return true;
-	//	}
-	//	else if (sign_value >= 65 && sign_value <= 90)
-	//	{
-	//		return true;
-	//	}
-	//	return false;
-	//};
-
 	for (typename std::vector<char>::iterator vec_iterator = Data.begin(); vec_iterator != Data.end(); ++vec_iterator)
 	{
 		Freq[*vec_iterator]++;
-		/*Freq[*vec_iterator] /= static_cast<float>(Data.size());
-		Freq[*vec_iterator] *= 100;*/
 	}
 
 	for (typename std::map<char, float>::iterator map_iterator = Freq.begin(); map_iterator != Freq.end(); ++map_iterator)
