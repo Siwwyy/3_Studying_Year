@@ -44,41 +44,41 @@ int main(int argc, char* argv[])
 	//}
 	//else if (choice == 2)
 	//{
-	//	Load_Data(Data, "file4.out");
+	//	Load_Data(Data, "file6.out");
 	//	Decrypt_Data(Data, shift_value);
-	//	Save_Data(Data, "file4_decrypted.out");
+	//	Save_Data(Data, "file6_decrypted.out");
 	//}
 
-	Load_Data(Data2, "bardzotajnezaszyfrowane.txt");
-	Count_Frequency(Data2, Freq);
+	//Load_Data(Data2, "bardzotajnezaszyfrowane.txt");
+	//Count_Frequency(Data2, Freq);
 
-	typedef std::function<bool(std::pair<char, float>, std::pair<char, float>)> Comparator;
+	//typedef std::function<bool(std::pair<char, float>, std::pair<char, float>)> Comparator;
 
-	// Defining a lambda function to compare two pairs. It will compare two pairs using second field
-	Comparator compFunctor = [](std::pair<char, float> elem1, std::pair<char, float> elem2)
-	{
-		return elem1.second > elem2.second;
-	};
+	//// Defining a lambda function to compare two pairs. It will compare two pairs using second field
+	//Comparator compFunctor = [](std::pair<char, float> elem1, std::pair<char, float> elem2)
+	//{
+	//	return elem1.second > elem2.second;
+	//};
 
-	// Declaring a set that will store the pairs using above comparision logic
-	std::set<std::pair<char, float>, Comparator> setOfWords(Freq.begin(), Freq.end(), compFunctor);
+	//// Declaring a set that will store the pairs using above comparision logic
+	//std::set<std::pair<char, float>, Comparator> setOfWords(Freq.begin(), Freq.end(), compFunctor);
 
-	// Iterate over a set using range base for loop
-	// It will display the items in sorted order of values
-	for (std::pair<char, float> element : setOfWords)
-		std::cout << element.first << " :: " << element.second << std::endl;
+	//// Iterate over a set using range base for loop
+	//// It will display the items in sorted order of values
+	//for (std::pair<char, float> element : setOfWords)
+	//	std::cout << element.first << " :: " << element.second << std::endl;
 
-	Load_Data(Data2, "file6.in");
-	Count_Frequency(Data2, Freq);
+	//Load_Data(Data2, "file6.in");
+	//Count_Frequency(Data2, Freq);
 
-	std::cout << '\n';
-	// Declaring a set that will store the pairs using above comparision logic
-	std::set<std::pair<char, float>, Comparator> setOfWords1(Freq.begin(), Freq.end(), compFunctor);
+	//std::cout << '\n';
+	//// Declaring a set that will store the pairs using above comparision logic
+	//std::set<std::pair<char, float>, Comparator> setOfWords1(Freq.begin(), Freq.end(), compFunctor);
 
-	// Iterate over a set using range base for loop
-	// It will display the items in sorted order of values
-	for (std::pair<char, float> element : setOfWords1)
-		std::cout << element.first << " :: " << element.second << std::endl;
+	//// Iterate over a set using range base for loop
+	//// It will display the items in sorted order of values
+	//for (std::pair<char, float> element : setOfWords1)
+	//	std::cout << element.first << " :: " << element.second << std::endl;
 
 	system("pause");
 	return EXIT_SUCCESS;
@@ -205,11 +205,10 @@ void Print_Data(const std::vector<std::vector<char>>& Data)
 
 void Encrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 {
-	//shift_value = (::alphabet.size() % shift_value);
 	shift_value = (shift_value % ::alphabet.size());
 	auto Encryptor = [&](const char _sign) -> char
 	{
-		int32_t sign_value = static_cast<char>(_sign);
+		int8_t sign_value = static_cast<int8_t>(_sign);
 		if (sign_value >= 97 && sign_value <= 122)
 		{
 			sign_value -= 32;
@@ -219,11 +218,11 @@ void Encrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 		{
 			if (sign_value + shift_value > 57)
 			{
-				int32_t temp_value = (57 - sign_value);
-				sign_value = 65 + (shift_value - temp_value - 1);
+				int8_t temp_value = (sign_value + shift_value) - 57 - 1;
+				sign_value = 65 + temp_value;
 				if (sign_value > 90)
 				{
-					sign_value = 48 + (sign_value - 90 - 1);
+					sign_value = (sign_value - 90 - 1) + 48;
 				}
 			}
 			else
@@ -235,11 +234,11 @@ void Encrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 		{
 			if (sign_value + shift_value > 90)
 			{
-				int32_t temp_value = (90 - sign_value);
-				sign_value = (48 + (shift_value - temp_value - 1));
+				int8_t temp_value = (sign_value + shift_value) - 90 - 1;
+				sign_value = 48 + temp_value;
 				if (sign_value > 57)
 				{
-					sign_value = 65 + (sign_value - 57 - 1);
+					sign_value = (sign_value - 57 - 1) + 65;
 				}
 			}
 			else
@@ -261,11 +260,11 @@ void Encrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 
 void Decrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 {
-	//shift_value = (::alphabet.size() % shift_value);
 	shift_value = (shift_value % ::alphabet.size());
 	auto Decryptor = [&](const char _sign) -> char
 	{
-		int32_t sign_value = static_cast<char>(_sign);
+		int8_t sign_value = static_cast<int8_t>(_sign);
+		int8_t shift = shift_value;
 		if (sign_value >= 97 && sign_value <= 122)
 		{
 			sign_value -= 32;
@@ -273,31 +272,34 @@ void Decrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 
 		if ((sign_value >= 48 && sign_value <= 57))
 		{
-			if (sign_value - shift_value < 48)
+			if (sign_value - shift < 48)
 			{
-				int32_t temp_value = (sign_value - 48);
-				sign_value = (90 - (shift_value - temp_value - 1));
-
-			}
-			else
-			{
-				sign_value -= shift_value;
-			}
-		}
-		else if (sign_value >= 65 && sign_value <= 90)
-		{
-			if (sign_value - shift_value < 65)
-			{
-				int32_t temp_value = (sign_value - 65);
-				sign_value = (57 - (shift_value - temp_value - 1));
-				if (sign_value < 48)
+				shift -= (sign_value - 48) + 1;
+				sign_value = 90 - shift;
+				if (sign_value < 65)
 				{
-					sign_value = 65 + (sign_value - 57 - 1);
+					sign_value = 57 - (65 - sign_value) + 1;
 				}
 			}
 			else
 			{
-				sign_value -= shift_value;
+				sign_value -= shift;
+			}
+		}
+		else if (sign_value >= 65 && sign_value <= 90)
+		{
+			if (sign_value - shift < 65)
+			{
+				shift -= (sign_value - 65) + 1;
+				sign_value = 57 - shift;
+				if (sign_value < 48)
+				{
+					sign_value = 90 - (48 - sign_value) + 1;
+				}
+			}
+			else
+			{
+				sign_value -= shift;
 			}
 		}
 		return static_cast<char>(sign_value);
@@ -314,30 +316,9 @@ void Decrypt_Data(std::vector<std::vector<char>>& Data, size_t shift_value)
 
 void Count_Frequency(std::vector<char>& Data, std::map<char, float>& Freq)
 {
-	//auto If_correct_sign = [&](const char _sign) -> bool
-	//{
-	//	int32_t sign_value = static_cast<char>(_sign);
-	//	if (sign_value >= 97 && sign_value <= 122)
-	//	{
-	//		sign_value -= 32;
-	//	}
-
-	//	if ((sign_value >= 48 && sign_value <= 57))
-	//	{
-	//		return true;
-	//	}
-	//	else if (sign_value >= 65 && sign_value <= 90)
-	//	{
-	//		return true;
-	//	}
-	//	return false;
-	//};
-
 	for (typename std::vector<char>::iterator vec_iterator = Data.begin(); vec_iterator != Data.end(); ++vec_iterator)
 	{
 		Freq[*vec_iterator]++;
-		/*Freq[*vec_iterator] /= static_cast<float>(Data.size());
-		Freq[*vec_iterator] *= 100;*/
 	}
 
 	for (typename std::map<char, float>::iterator map_iterator = Freq.begin(); map_iterator != Freq.end(); ++map_iterator)
