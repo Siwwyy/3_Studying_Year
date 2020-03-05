@@ -30,26 +30,30 @@ int main(int argc, char* argv[])
 	std::vector<char> Data2{};
 	std::map<char, float> Freq{};
 
-	//int16_t choice{};
-	//int16_t shift_value{};
-	//std::cout << "Shift value: ";
-	//std::cin >> shift_value;
-	//std::cout << NEW_LINE;
-	//std::cin >> choice;
-	//if (choice == 1)
-	//{
-	//	Load_Data(Data, "file6.in");
-	//	Encrypt_Data(Data, shift_value);
-	//	Save_Data(Data, "file6.out");
-	//}
-	//else if (choice == 2)
-	//{
-	//	Load_Data(Data, "file6.out");
-	//	Decrypt_Data(Data, shift_value);
-	//	Save_Data(Data, "file6_decrypted.out");
-	//}
+	int16_t choice{};
+	int16_t shift_value{};
+	std::cout << "Shift value: ";
+	std::cin >> shift_value;
+	std::cout << NEW_LINE;
+	std::cin >> choice;
+	if (choice == 1)
+	{
+		Load_Data(Data, "file6.in");
+		Encrypt_Data(Data, shift_value);
+		Save_Data(Data, "file6.out");
+	}
+	else if (choice == 2)
+	{
+		//Load_Data(Data, "alamakota.out");
+		Load_Data(Data, "bardzotajnezaszyfrowane.txt");
+		Decrypt_Data(Data, shift_value);
+		Save_Data(Data, "bardzotajnezaszyfrowane_decrypted.out");
+	}
 
+	//Load_Data(Data2, "file6.out");
 	//Load_Data(Data2, "bardzotajnezaszyfrowane.txt");
+	//Load_Data(Data2, "bardzotajneniezaszyfrowane.txt");
+	//Load_Data(Data2, "sample.txt");
 	//Count_Frequency(Data2, Freq);
 
 	//typedef std::function<bool(std::pair<char, float>, std::pair<char, float>)> Comparator;
@@ -147,13 +151,24 @@ void Load_Data(std::vector<char>& Data, const std::string file_name)
 			}
 			return false;
 		};
+
+		auto Sign_Value = [&](const char _sign) -> char
+		{
+			int8_t sign_value = static_cast<int8_t>(_sign);
+			if (sign_value >= 97 && sign_value <= 122)
+			{
+				sign_value -= 32;
+			}
+			return static_cast<char>(sign_value);
+		};
+
 		char temp{};
 		while (file_in.eof() == false)
 		{
 			file_in.read(&temp, sizeof(char));
 			if (If_correct_sign(temp))
 			{
-				Data.emplace_back(temp);
+				Data.emplace_back(Sign_Value(temp));
 			}
 			temp = {};
 		}
@@ -321,8 +336,28 @@ void Count_Frequency(std::vector<char>& Data, std::map<char, float>& Freq)
 		Freq[*vec_iterator]++;
 	}
 
+	std::fstream file_out{};
+	file_out.open("SAMPLE_Frequency_10000.out", std::ios_base::out);
+	if (file_out.good() == false)
+	{
+		std::cerr << "[ FILE UNABLE TO OPEN ] \n";
+		file_out.close();
+	}
+
+
 	for (typename std::map<char, float>::iterator map_iterator = Freq.begin(); map_iterator != Freq.end(); ++map_iterator)
 	{
 		map_iterator->second = static_cast<float>(map_iterator->second / Data.size()) * 100;
 	}
+
+	std::vector<std::pair<char, float>> vec{ std::make_move_iterator(Freq.begin()), std::make_move_iterator(Freq.end()) };
+	std::sort(vec.begin(), vec.end(),[](auto p1, auto p2) {return p1.second > p2.second; });
+
+
+	size_t counter{};
+	for (typename std::vector<std::pair<char, float>>::const_iterator vec_iterator = vec.begin(); vec_iterator != vec.end(); ++vec_iterator)
+	{
+		file_out << counter++ << ' ' << vec_iterator->first << ' ' << vec_iterator->second << " %" << '\n';
+	}
+	file_out.close();
 }
