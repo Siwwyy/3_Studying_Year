@@ -56,34 +56,6 @@ int main(int argc, char* argv[])
 	//Load_Data(Data2, "sample.txt");
 	//Count_Frequency(Data2, Freq);
 
-	//typedef std::function<bool(std::pair<char, float>, std::pair<char, float>)> Comparator;
-
-	//// Defining a lambda function to compare two pairs. It will compare two pairs using second field
-	//Comparator compFunctor = [](std::pair<char, float> elem1, std::pair<char, float> elem2)
-	//{
-	//	return elem1.second > elem2.second;
-	//};
-
-	//// Declaring a set that will store the pairs using above comparision logic
-	//std::set<std::pair<char, float>, Comparator> setOfWords(Freq.begin(), Freq.end(), compFunctor);
-
-	//// Iterate over a set using range base for loop
-	//// It will display the items in sorted order of values
-	//for (std::pair<char, float> element : setOfWords)
-	//	std::cout << element.first << " :: " << element.second << std::endl;
-
-	//Load_Data(Data2, "file6.in");
-	//Count_Frequency(Data2, Freq);
-
-	//std::cout << '\n';
-	//// Declaring a set that will store the pairs using above comparision logic
-	//std::set<std::pair<char, float>, Comparator> setOfWords1(Freq.begin(), Freq.end(), compFunctor);
-
-	//// Iterate over a set using range base for loop
-	//// It will display the items in sorted order of values
-	//for (std::pair<char, float> element : setOfWords1)
-	//	std::cout << element.first << " :: " << element.second << std::endl;
-
 	system("pause");
 	return EXIT_SUCCESS;
 }
