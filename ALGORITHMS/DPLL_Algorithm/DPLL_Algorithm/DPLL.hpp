@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <string>
+#include <unordered_set>
+#include <set>
 #include <vector>
 #include <memory>
 #include <algorithm>
@@ -17,19 +19,37 @@ namespace SAT
 		/*
 			PRIVATE VARIABLES
 		*/
-
+		std::vector<std::vector<int64_t>> Data;
+		std::unordered_set<int32_t> Unary_Variables;
+		int64_t amount_of_literals;
+		int64_t* Knowledge;
+		///////////////////////////////////////////////
+		/*
+			PRIVATE FUNCTIONS
+		*/
+		void Find_Unaries();
+		void Change_Row();
+		void Create_Tree();
+		//void Delete_Rows();
+		//void Delete_Literal(const int64_t & literal);
+		void Add_To_Knowledge(int64_t position);
+		const bool Is_End();
 		///////////////////////////////////////////////
 	public:
 		/*
 			PUBLIC CONSTRUCTORS
 		*/
-		DPLL();
+		DPLL() = delete;
+		DPLL(const std::vector<std::vector<int64_t>> & my_data, const int64_t amount_of_literals);
 		DPLL(const DPLL& Object);
 		///////////////////////////////////////////////
 		/*
 			PUBLIC FUNCTIONS
 		*/
-
+		void Print_Data() const;
+		void Print_Unary_Variables() const;
+		void Print_Knowledge() const;
+		void SAT_or_UNSAT();
 		///////////////////////////////////////////////
 		/*
 			PUBLIC SETTERS
@@ -55,7 +75,6 @@ namespace SAT
 		virtual ~DPLL();
 	};
 }
-
 
 
 #endif /* _DPLL_HPP_ */

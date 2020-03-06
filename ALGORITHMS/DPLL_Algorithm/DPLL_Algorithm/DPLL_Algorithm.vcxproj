@@ -138,7 +138,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DPLL.cpp" />
+    <ClCompile Include="File_Reader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="StopWatch.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DPLL.hpp" />
+    <ClInclude Include="File_Reader.hpp" />
+    <ClInclude Include="StopWatch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

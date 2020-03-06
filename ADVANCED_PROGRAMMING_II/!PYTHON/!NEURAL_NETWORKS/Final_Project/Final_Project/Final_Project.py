@@ -4,7 +4,7 @@ import random
 import numpy as np
 from Cube import Cube
 from Obstacle import Obstacle
-from Neural_Network import Neural_Network
+#from Neural_Network import Neural_Network
 from Perceptron import Perceptron
 
 class Game(object):
