@@ -152,19 +152,19 @@ int main()
 
 
             //OPENFILENAME ofn;
-            //wchar_t szFileName[MAX_PATH]{};
+            //char szFileName[MAX_PATH]{};
 
             //ZeroMemory(&ofn, sizeof(ofn));
 
             //ofn.lStructSize = sizeof(ofn); // SEE NOTE BELOW
             //ofn.hwndOwner = savedlg;
             //ofn.lpstrFilter = L"Text Files (*.txt)\0*.txt\0All Files (*.*)\0*.*\0";
-            //ofn.lpstrFile = szFileName;
+            //ofn.lpstrFile = (LPWSTR)szFileName;
             //ofn.nMaxFile = MAX_PATH;
-            //ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
-            //ofn.lpstrDefExt = L"txt";
+            ////ofn.Flags = OFN_
+            ////ofn.lpstrDefExt = L"txt";
 
-            //if (GetOpenFileName(&ofn))
+            //if (GetSaveFileName(&ofn))
             //{
             //    // Do something usefull with the filename stored in szFileName 
             //}
@@ -239,7 +239,70 @@ int main()
                 }
 
             }*/
-            SendMessage(edit, WM_GETTEXT, 0, (LPARAM)wtxt);
+            //int slength = SendMessage(savedlg1, WM_GETTEXTLENGTH, NULL,1);
+            ////SendMessage(savedlg1, WM_GETTEXT, 0, (LPARAM)wtxt);
+            //SendMessage(savedlg1, WM_GETTEXT, slength, (LPARAM)wtxt);
+            //char filename[MAX_PATH];
+
+            //OPENFILENAME ofn;
+            //ZeroMemory(&filename, sizeof(filename));
+            //ZeroMemory(&ofn, sizeof(ofn));
+            //ofn.lStructSize = sizeof(ofn);
+            //ofn.hwndOwner = savedlg;  // If you have a window to center over, put its HANDLE here
+            //ofn.lpstrFilter = L"Text Files\0*.txt\0Any File\0*.*\0";
+            //ofn.lpstrFile = (LPWSTR)filename;
+            //ofn.nMaxFile = MAX_PATH;
+            //ofn.lpstrTitle = L"Save As";
+            ////ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
+
+            //if (GetSaveFileName(&ofn))
+            //{
+            //    std::cout << "You chose the file \"" << filename << "\"\n";
+            //}
+            //else
+            //{
+            //    // All this stuff below is to tell you exactly how you messed up above. 
+            //    // Once you've got that fixed, you can often (not always!) reduce it to a 'user cancelled' assumption.
+            //    switch (CommDlgExtendedError())
+            //    {
+            //    case CDERR_DIALOGFAILURE: std::cout << "CDERR_DIALOGFAILURE\n";   break;
+            //    case CDERR_FINDRESFAILURE: std::cout << "CDERR_FINDRESFAILURE\n";  break;
+            //    case CDERR_INITIALIZATION: std::cout << "CDERR_INITIALIZATION\n";  break;
+            //    case CDERR_LOADRESFAILURE: std::cout << "CDERR_LOADRESFAILURE\n";  break;
+            //    case CDERR_LOADSTRFAILURE: std::cout << "CDERR_LOADSTRFAILURE\n";  break;
+            //    case CDERR_LOCKRESFAILURE: std::cout << "CDERR_LOCKRESFAILURE\n";  break;
+            //    case CDERR_MEMALLOCFAILURE: std::cout << "CDERR_MEMALLOCFAILURE\n"; break;
+            //    case CDERR_MEMLOCKFAILURE: std::cout << "CDERR_MEMLOCKFAILURE\n";  break;
+            //    case CDERR_NOHINSTANCE: std::cout << "CDERR_NOHINSTANCE\n";     break;
+            //    case CDERR_NOHOOK: std::cout << "CDERR_NOHOOK\n";          break;
+            //    case CDERR_NOTEMPLATE: std::cout << "CDERR_NOTEMPLATE\n";      break;
+            //    case CDERR_STRUCTSIZE: std::cout << "CDERR_STRUCTSIZE\n";      break;
+            //    case FNERR_BUFFERTOOSMALL: std::cout << "FNERR_BUFFERTOOSMALL\n";  break;
+            //    case FNERR_INVALIDFILENAME: std::cout << "FNERR_INVALIDFILENAME\n"; break;
+            //    case FNERR_SUBCLASSFAILURE: std::cout << "FNERR_SUBCLASSFAILURE\n"; break;
+            //    default: std::cout << "You cancelled.\n";
+            //    }
+            //}
+            wchar_t temp[1024];
+            HWND tempWindowHandle = 0;
+            HWND tempView = 0;
+            HWND tempDirect = 0;
+            HWND tempFloatNotify = 0;
+            HWND tempCombo = 0;
+            HWND tempField = 0;
+
+
+
+            PostMessage(start, WM_COMMAND, 4, 0);
+            tempWindowHandle = FindWindow(NULL, L"Save As");
+            tempView = FindWindowEx(tempWindowHandle, NULL, L"DUIViewWndClassName", NULL);
+            tempDirect = FindWindowEx(tempView, NULL, L"DirectUIHWND", NULL);
+            tempFloatNotify = FindWindowEx(tempDirect, NULL, L"FloatNotifySink", NULL);
+            tempCombo = FindWindowEx(tempFloatNotify, NULL, L"ComboBox", NULL);
+            tempField = FindWindowEx(tempCombo, NULL, L"Edit", NULL);
+            cout << "Edit handle: " << hex << tempField << endl;
+            wcin.getline(wtxt, 1024);
+            SendMessage(tempField, WM_SETTEXT, 0, (LPARAM)wtxt);
             std::cin.get();
             //ShowWindow(savedlg, SW_SHOW);
 
