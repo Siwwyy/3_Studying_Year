@@ -38,22 +38,25 @@ int main(int argc, char* argv[])
 	std::cin >> choice;
 	if (choice == 1)
 	{
-		Load_Data(Data, "file6.in");
+		Load_Data(Data, "SPRAWDZENIE/file.in");
 		Encrypt_Data(Data, shift_value);
-		Save_Data(Data, "file6.out");
+		Save_Data(Data, "SPRAWDZENIE/file.out");
 	}
 	else if (choice == 2)
 	{
 		//Load_Data(Data, "alamakota.out");
-		Load_Data(Data, "bardzotajnezaszyfrowane.txt");
+		Load_Data(Data, "SPRAWDZENIE/file.out");
 		Decrypt_Data(Data, shift_value);
-		Save_Data(Data, "bardzotajnezaszyfrowane_decrypted.out");
+		Save_Data(Data, "SPRAWDZENIE/file_decrypted.out");
 	}
 
 	//Load_Data(Data2, "file6.out");
 	//Load_Data(Data2, "bardzotajnezaszyfrowane.txt");
 	//Load_Data(Data2, "bardzotajneniezaszyfrowane.txt");
 	//Load_Data(Data2, "sample.txt");
+	//Count_Frequency(Data2, Freq);
+
+	//Load_Data(Data2, "SPRAWDZENIE/10000.in");
 	//Count_Frequency(Data2, Freq);
 
 	system("pause");
@@ -309,7 +312,7 @@ void Count_Frequency(std::vector<char>& Data, std::map<char, float>& Freq)
 	}
 
 	std::fstream file_out{};
-	file_out.open("SAMPLE_Frequency_10000.out", std::ios_base::out);
+	file_out.open("SPRAWDZENIE/10000_frequency.out", std::ios_base::out);
 	if (file_out.good() == false)
 	{
 		std::cerr << "[ FILE UNABLE TO OPEN ] \n";
