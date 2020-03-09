@@ -11,12 +11,21 @@
 
 void Load_Data(std::string & Data, const std::string file_name);
 void Initialize_Alphabet(std::vector<std::vector<char>> & Alphabet, const int32_t Shift_Value);
+void Print_Alphabet(std::vector<std::vector<char>> & Alphabet);
+void Encrypt(std::vector<std::vector<char>> & Alphabet, std::string & Data, std::string Key);
+
+const std::string our_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 int main(int argc, char* argv[])
 {
 	std::string Data{};
-	std::vector<std::vector<char>> Alphabet{};
+	std::vector<std::vector<char>> Alphabet(our_alphabet.size());
+	std::string Key = "B";
 	Load_Data(Data, "file.in");
+	Initialize_Alphabet(Alphabet,1);
+	Print_Alphabet(Alphabet);
+	Encrypt(Alphabet, Data, Key);
+	std::cin.get();
 	return 0;
 }
 
@@ -27,11 +36,114 @@ void Load_Data(std::string& Data, const std::string file_name)
 	std::stringstream buffer;
 	buffer << file.rdbuf();
 	Data = buffer.str();
-
-
 }
 
 void Initialize_Alphabet(std::vector<std::vector<char>>& Alphabet , const int32_t Shift_Value)
 {
-
+	size_t counter{};
+	for (typename std::vector<std::vector<char>>::iterator vec_iterator_first = Alphabet.begin(); vec_iterator_first != Alphabet.end(); ++vec_iterator_first)
+	{
+		vec_iterator_first->resize(our_alphabet.size());
+		for (typename std::vector<char>::iterator vec_iterator_second = vec_iterator_first->begin(); vec_iterator_second != vec_iterator_first->end(); ++vec_iterator_second)
+		{
+			*vec_iterator_second = our_alphabet.at(static_cast<size_t>(((0 + std::distance(Alphabet.begin(),vec_iterator_first) + counter) % our_alphabet.size())));
+			counter++;
+		}
+	}
 }
+
+void Print_Alphabet(std::vector<std::vector<char>>& Alphabet)
+{
+	for (typename std::vector<std::vector<char>>::iterator vec_iterator_first = Alphabet.begin(); vec_iterator_first != Alphabet.end(); ++vec_iterator_first)
+	{
+		for (typename std::vector<char>::iterator vec_iterator_second = vec_iterator_first->begin(); vec_iterator_second != vec_iterator_first->end(); ++vec_iterator_second)
+		{
+			std::cout << *vec_iterator_second << ' ';
+		}
+		std::cout << '\n';
+	}
+}
+
+void Encrypt(std::vector<std::vector<char>>& Alphabet, std::string& Data, std::string Key)
+{
+	auto Correct_Sign = [&](const char & sign) -> bool
+	{
+		int8_t sign_value = static_cast<int8_t>(sign);
+		if (sign_value >= 97 && sign_value <= 122)
+		{
+			sign_value -= 32;
+		}
+
+		if ((sign_value >= 48 && sign_value <= 57))
+		{
+			return true;
+		}
+		else if (sign_value >= 65 && sign_value <= 90)
+		{
+			return true;
+		}
+		return false;
+	};
+	std::cout << '\n';
+	for (typename std::string::iterator string_iterator = Data.begin(); string_iterator != Data.end(); ++string_iterator)
+	{
+		if (Correct_Sign(*string_iterator) == true)
+		{
+			std::vector<char>::iterator it = std::find(Alphabet[0].begin(), Alphabet[0].end(), *string_iterator);
+			const size_t position = std::distance(Alphabet[0].begin(), it);
+			std::vector<char>::iterator it_second = std::find(Alphabet[position].begin(), Alphabet[position].end(), Alphabet[position][position]);
+			//std::cout << *it << ' ';
+			std::cout << *it_second << ' ';
+
+			//std::cin.get();
+		}
+
+	}
+	std::cout << '\n';
+}
+
+
+/*
+auto Correct_Signs = [&](const char sign) -> char
+	{
+		int8_t sign_value = static_cast<int8_t>(sign);
+		if (sign_value >= 97 && sign_value <= 122)
+		{
+			sign_value -= 32;
+		}
+
+		if ((sign_value >= 48 && sign_value <= 57))
+		{
+			if (sign_value + shift_value > 57)
+			{
+				int8_t temp_value = (sign_value + shift_value) - 57 - 1;
+				sign_value = 65 + temp_value;
+				if (sign_value > 90)
+				{
+					sign_value = (sign_value - 90 - 1) + 48;
+				}
+			}
+			else
+			{
+				sign_value += shift_value;
+			}
+		}
+		else if (sign_value >= 65 && sign_value <= 90)
+		{
+			if (sign_value + shift_value > 90)
+			{
+				int8_t temp_value = (sign_value + shift_value) - 90 - 1;
+				sign_value = 48 + temp_value;
+				if (sign_value > 57)
+				{
+					sign_value = (sign_value - 57 - 1) + 65;
+				}
+			}
+			else
+			{
+				sign_value += shift_value;
+			}
+		}
+		return static_cast<char>(sign_value);
+	};
+*/
