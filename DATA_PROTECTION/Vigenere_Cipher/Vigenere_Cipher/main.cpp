@@ -11,7 +11,7 @@
 
 void Load_Data(std::string & Data, const std::string file_name);
 void Save_Data(std::string & Data, const std::string file_name);
-void Initialize_Alphabet(std::vector<std::vector<char>> & Alphabet, const int32_t Shift_Value);
+void Initialize_Alphabet(std::vector<std::vector<char>> & Alphabet);
 void Print_Alphabet(std::vector<std::vector<char>> & Alphabet);
 void Encrypt(std::vector<std::vector<char>> & Alphabet, std::string & Data, std::string Key);
 
@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 	std::vector<std::vector<char>> Alphabet(our_alphabet.size());
 	std::string Key = "BCDE";
 	Load_Data(Data, "file.in");
-	Initialize_Alphabet(Alphabet,1);
+	Initialize_Alphabet(Alphabet);
 	//Print_Alphabet(Alphabet);
 	Encrypt(Alphabet, Data, Key);
 	Save_Data(Data, "file.out");
@@ -48,7 +48,7 @@ void Save_Data(std::string& Data, const std::string file_name)
 	file << buffer.rdbuf();
 }
 
-void Initialize_Alphabet(std::vector<std::vector<char>>& Alphabet , const int32_t Shift_Value)
+void Initialize_Alphabet(std::vector<std::vector<char>>& Alphabet)
 {
 	size_t counter{};
 	for (typename std::vector<std::vector<char>>::iterator vec_iterator_first = Alphabet.begin(); vec_iterator_first != Alphabet.end(); ++vec_iterator_first)
