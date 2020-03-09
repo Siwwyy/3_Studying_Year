@@ -10,6 +10,7 @@
 #define NEW_LINE '\n'
 
 void Load_Data(std::string & Data, const std::string file_name);
+void Save_Data(std::string & Data, const std::string file_name);
 void Initialize_Alphabet(std::vector<std::vector<char>> & Alphabet, const int32_t Shift_Value);
 void Print_Alphabet(std::vector<std::vector<char>> & Alphabet);
 void Encrypt(std::vector<std::vector<char>> & Alphabet, std::string & Data, std::string Key);
@@ -20,12 +21,13 @@ int main(int argc, char* argv[])
 {
 	std::string Data{};
 	std::vector<std::vector<char>> Alphabet(our_alphabet.size());
-	std::string Key = "B";
+	std::string Key = "BCDE";
 	Load_Data(Data, "file.in");
 	Initialize_Alphabet(Alphabet,1);
-	Print_Alphabet(Alphabet);
+	//Print_Alphabet(Alphabet);
 	Encrypt(Alphabet, Data, Key);
-	std::cin.get();
+	Save_Data(Data, "file.out");
+	system("pause");
 	return 0;
 }
 
@@ -36,6 +38,14 @@ void Load_Data(std::string& Data, const std::string file_name)
 	std::stringstream buffer;
 	buffer << file.rdbuf();
 	Data = buffer.str();
+}
+
+void Save_Data(std::string& Data, const std::string file_name)
+{
+	std::fstream file;
+	file.open(file_name.c_str(), std::ios_base::out);
+	std::stringstream buffer(Data);
+	file << buffer.rdbuf();
 }
 
 void Initialize_Alphabet(std::vector<std::vector<char>>& Alphabet , const int32_t Shift_Value)
@@ -84,66 +94,24 @@ void Encrypt(std::vector<std::vector<char>>& Alphabet, std::string& Data, std::s
 		}
 		return false;
 	};
-	std::cout << '\n';
+	std::string::iterator string_iterator_key = Key.begin();
 	for (typename std::string::iterator string_iterator = Data.begin(); string_iterator != Data.end(); ++string_iterator)
 	{
 		if (Correct_Sign(*string_iterator) == true)
 		{
-			std::vector<char>::iterator it = std::find(Alphabet[0].begin(), Alphabet[0].end(), *string_iterator);
-			const size_t position = std::distance(Alphabet[0].begin(), it);
-			std::vector<char>::iterator it_second = std::find(Alphabet[position].begin(), Alphabet[position].end(), Alphabet[position][position]);
-			//std::cout << *it << ' ';
-			std::cout << *it_second << ' ';
-
-			//std::cin.get();
+			if (string_iterator_key != Key.end())
+			{
+				std::vector<char>::iterator it = std::find(Alphabet[0].begin(), Alphabet[0].end(), *string_iterator);
+				const size_t position = std::distance(Alphabet[0].begin(), it);
+				std::vector<char>::iterator it_second = std::find(Alphabet[0].begin(), Alphabet[0].end(), *string_iterator_key);
+				//std::cout << *it << " -> " << *it_second << '\n';
+				*string_iterator = it_second[position];
+				++string_iterator_key;
+			}
+			if (string_iterator_key == Key.end())
+			{
+				string_iterator_key = Key.begin();
+			}
 		}
-
 	}
-	std::cout << '\n';
 }
-
-
-/*
-auto Correct_Signs = [&](const char sign) -> char
-	{
-		int8_t sign_value = static_cast<int8_t>(sign);
-		if (sign_value >= 97 && sign_value <= 122)
-		{
-			sign_value -= 32;
-		}
-
-		if ((sign_value >= 48 && sign_value <= 57))
-		{
-			if (sign_value + shift_value > 57)
-			{
-				int8_t temp_value = (sign_value + shift_value) - 57 - 1;
-				sign_value = 65 + temp_value;
-				if (sign_value > 90)
-				{
-					sign_value = (sign_value - 90 - 1) + 48;
-				}
-			}
-			else
-			{
-				sign_value += shift_value;
-			}
-		}
-		else if (sign_value >= 65 && sign_value <= 90)
-		{
-			if (sign_value + shift_value > 90)
-			{
-				int8_t temp_value = (sign_value + shift_value) - 90 - 1;
-				sign_value = 48 + temp_value;
-				if (sign_value > 57)
-				{
-					sign_value = (sign_value - 57 - 1) + 65;
-				}
-			}
-			else
-			{
-				sign_value += shift_value;
-			}
-		}
-		return static_cast<char>(sign_value);
-	};
-*/
