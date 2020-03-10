@@ -24,14 +24,15 @@ int main(int argc, char* argv[])
 	std::vector<std::vector<char>> Alphabet(our_alphabet.size());
 	//std::string Key = "9AB";
 	std::string Key = "BCDE";
-	Load_Data(Data, "file.in");
-	//Load_Data(Data, "file.out"); //out means is ready for decrypt
+	//Load_Data(Data, "file.in");
+	Load_Data(Data, "file.out"); //out means is ready for decrypt
 	Initialize_Alphabet(Alphabet);
-	//Print_Alphabet(Alphabet);
-	Encrypt(Alphabet, Data, Key);
-	//Decrypt(Alphabet, Data, Key);
-	Save_Data(Data, "file.out");
-	//Save_Data(Data, "file_decrypted.out");
+	/*Print_Alphabet(Alphabet);
+	std::cin.get();*/
+	//Encrypt(Alphabet, Data, Key);
+	Decrypt(Alphabet, Data, Key);
+	//Save_Data(Data, "file.out");
+	Save_Data(Data, "file_decrypted.out");
 	system("pause");
 	return 0;
 }
@@ -156,10 +157,22 @@ void Decrypt(std::vector<std::vector<char>>& Alphabet, std::string& Data, std::s
 		{
 			if (string_iterator_key != Key.end())
 			{
-				std::vector<char>::iterator it = std::find(Alphabet[0].begin(), Alphabet[0].end(), *string_iterator);
-				const size_t position = std::distance(Alphabet[0].begin(), it);
-				std::vector<char>::iterator it_second = std::find(Alphabet[0].begin(), Alphabet[0].end(), *string_iterator_key);
-				*string_iterator = it_second[position];
+				//std::vector<char>::iterator it = std::find(Alphabet[0].begin(), Alphabet[0].end(), *string_iterator);
+				//std::vector<char>::iterator it_second = std::find(Alphabet[0].begin(), Alphabet[0].end(), *string_iterator_key);
+
+				//const size_t position_data = std::distance(Alphabet[0].begin(), it);
+				//const size_t position_key = std::distance(Alphabet[0].begin(), it_second);
+
+				//std::cout << *it << " -> " << Alphabet[position_key][position_data] << '\n';
+				//std::cin.get();
+				//*string_iterator = it_second[position];
+
+				std::vector<char>::iterator it = std::find(Alphabet[0].begin(), Alphabet[0].end(), *string_iterator_key);
+				const size_t position_data = std::distance(Alphabet[0].begin(), it);
+				std::vector<char>::iterator it_second = std::find(Alphabet[position_data].begin(), Alphabet[position_data].end(), *string_iterator);
+				const size_t position_key = std::distance(Alphabet[position_data].begin(), it_second);
+
+				*string_iterator = Alphabet[0][position_key];
 				++string_iterator_key;
 			}
 			if (string_iterator_key == Key.end())
