@@ -6,6 +6,7 @@
 #include <ostream>
 #include <sstream>
 #include <cstdint>
+#include <functional>
 
 #define NEW_LINE '\n'
 
@@ -13,13 +14,33 @@ void Load_Data(std::string & Data, const std::string file_name);
 void Save_Data(std::string & Data, const std::string file_name);
 void Initialize_Alphabet(std::vector<std::vector<char>> & Alphabet);
 void Print_Alphabet(std::vector<std::vector<char>> & Alphabet);
-void Encrypt(std::vector<std::vector<char>> & Alphabet, std::string & Data, std::string& Key);
-void Decrypt(std::vector<std::vector<char>> & Alphabet, std::string & Data, std::string& Key);
+void Encrypt(std::vector<std::vector<char>> & Alphabet, std::string & Data, std::string& Key, const std::function<bool(char&)> & lambda);
+void Decrypt(std::vector<std::vector<char>> & Alphabet, std::string & Data, std::string& Key, const std::function<bool(char&)> & lambda);
 
 const std::string our_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 int main(int argc, char* argv[])
 {
+	auto Correct_Sign = [&](char& sign) -> bool
+	{
+		int8_t sign_value = static_cast<int8_t>(sign);
+		if (sign_value >= 97 && sign_value <= 122)
+		{
+			sign_value -= 32;
+		}
+		if ((sign_value >= 48 && sign_value <= 57))
+		{
+			sign = static_cast<char>(sign_value);
+			return true;
+		}
+		else if (sign_value >= 65 && sign_value <= 90)
+		{
+			sign = static_cast<char>(sign_value);
+			return true;
+		}
+		return false;
+	};
+
 	std::string Data{};
 	std::vector<std::vector<char>> Alphabet(our_alphabet.size());
 	//std::string Key = "9AB";
@@ -29,8 +50,8 @@ int main(int argc, char* argv[])
 	Initialize_Alphabet(Alphabet);
 	/*Print_Alphabet(Alphabet);
 	std::cin.get();*/
-	//Encrypt(Alphabet, Data, Key);
-	Decrypt(Alphabet, Data, Key);
+	//Encrypt(Alphabet, Data, Key, Correct_Sign);
+	Decrypt(Alphabet, Data, Key, Correct_Sign);
 	//Save_Data(Data, "file.out");
 	Save_Data(Data, "file_decrypted.out");
 	system("pause");
@@ -80,33 +101,12 @@ void Print_Alphabet(std::vector<std::vector<char>>& Alphabet)
 	}
 }
 
-void Encrypt(std::vector<std::vector<char>>& Alphabet, std::string& Data, std::string & Key)
+void Encrypt(std::vector<std::vector<char>>& Alphabet, std::string& Data, std::string & Key, const std::function<bool(char&)>& lambda)
 {
-	auto Correct_Sign = [&](char & sign) -> bool
-	{
-		int8_t sign_value = static_cast<int8_t>(sign);
-		if (sign_value >= 97 && sign_value <= 122)
-		{
-			sign_value -= 32;
-
-		}
-
-		if ((sign_value >= 48 && sign_value <= 57))
-		{
-			sign = static_cast<char>(sign_value);
-			return true;
-		}
-		else if (sign_value >= 65 && sign_value <= 90)
-		{
-			sign = static_cast<char>(sign_value);
-			return true;
-		}
-		return false;
-	};
 	std::string::iterator string_iterator_key = Key.begin();
 	for (typename std::string::iterator string_iterator = Data.begin(); string_iterator != Data.end(); ++string_iterator)
 	{
-		if (Correct_Sign(*string_iterator) == true)
+		if (lambda(*string_iterator) == true)
 		{
 			if (string_iterator_key != Key.end())
 			{
@@ -116,9 +116,6 @@ void Encrypt(std::vector<std::vector<char>>& Alphabet, std::string& Data, std::s
 				const size_t position_data = std::distance(Alphabet[0].begin(), it);
 				const size_t position_key = std::distance(Alphabet[0].begin(), it_second);
 
-				//std::cout << *it << " -> " << Alphabet[position_key][position_data] << '\n';
-				//std::cin.get();
-				//*string_iterator = it_second[position];
 				*string_iterator = Alphabet[position_key][position_data];
 				++string_iterator_key;
 			}
@@ -130,43 +127,15 @@ void Encrypt(std::vector<std::vector<char>>& Alphabet, std::string& Data, std::s
 	}
 }
 
-void Decrypt(std::vector<std::vector<char>>& Alphabet, std::string& Data, std::string& Key)
+void Decrypt(std::vector<std::vector<char>>& Alphabet, std::string& Data, std::string& Key, const std::function<bool(char&)>& lambda)
 {
-	auto Correct_Sign = [&](const char& sign) -> bool
-	{
-		int8_t sign_value = static_cast<int8_t>(sign);
-		if (sign_value >= 97 && sign_value <= 122)
-		{
-			sign_value -= 32;
-		}
-
-		if ((sign_value >= 48 && sign_value <= 57))
-		{
-			return true;
-		}
-		else if (sign_value >= 65 && sign_value <= 90)
-		{
-			return true;
-		}
-		return false;
-	};
 	std::string::iterator string_iterator_key = Key.begin();
 	for (typename std::string::iterator string_iterator = Data.begin(); string_iterator != Data.end(); ++string_iterator)
 	{
-		if (Correct_Sign(*string_iterator) == true)
+		if (lambda(*string_iterator) == true)
 		{
 			if (string_iterator_key != Key.end())
 			{
-				//std::vector<char>::iterator it = std::find(Alphabet[0].begin(), Alphabet[0].end(), *string_iterator);
-				//std::vector<char>::iterator it_second = std::find(Alphabet[0].begin(), Alphabet[0].end(), *string_iterator_key);
-
-				//const size_t position_data = std::distance(Alphabet[0].begin(), it);
-				//const size_t position_key = std::distance(Alphabet[0].begin(), it_second);
-
-				//std::cout << *it << " -> " << Alphabet[position_key][position_data] << '\n';
-				//std::cin.get();
-				//*string_iterator = it_second[position];
-
 				std::vector<char>::iterator it = std::find(Alphabet[0].begin(), Alphabet[0].end(), *string_iterator_key);
 				const size_t position_data = std::distance(Alphabet[0].begin(), it);
 				std::vector<char>::iterator it_second = std::find(Alphabet[position_data].begin(), Alphabet[position_data].end(), *string_iterator);
