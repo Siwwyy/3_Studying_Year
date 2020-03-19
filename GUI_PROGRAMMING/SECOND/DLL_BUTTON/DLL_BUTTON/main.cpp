@@ -8,6 +8,9 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 int main(int argc, char* argv[])
 {
+    //BUTTON::CButtonsLibrary Obj(200,200,L"Buttonek");
+    BUTTON::CButtonsLibrary Obj(200,200);
+    Obj.Show();
 //int WINAPI main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 //{
     //MSG msg;
