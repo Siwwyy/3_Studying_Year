@@ -24,10 +24,11 @@ int main(int argc, char* argv[])
 
 	std::string Data{};
 	std::string Occurences{};
-	const size_t minimal_seeking_length{ 3 };
+	const size_t minimal_seeking_length{ 5 };
 
 
-	Load_Data(Data, "file.in");
+	//Load_Data(Data, "file.in");
+	Load_Data(Data, "Out.out");
 	//Load_Data(Data, "file_big.in");
 	//Load_Data(Data, "file2.in");
 	//Print_Data(Data);
@@ -174,9 +175,8 @@ void Find_Occurences(const std::string& Data, std::string& Occurences, size_t mi
 	}
 
 	std::vector<int32_t> Differences{};
-	int tab[18]{};
+	int tab[19]{};
 
-	//std::cout << "|================================|" << '\n';
 	for (typename std::vector<std::vector<std::pair<std::string, size_t>>>::const_iterator vec_iterator = Temp.begin(); vec_iterator != Temp.end(); ++vec_iterator)
 	{
 		for (typename std::vector<std::pair<std::string, size_t>>::const_iterator vec_iterator_second = vec_iterator->begin(); vec_iterator_second != (vec_iterator->end() - 1); ++vec_iterator_second)
@@ -196,7 +196,7 @@ void Find_Occurences(const std::string& Data, std::string& Occurences, size_t mi
 		}
 	}
 
-	for (size_t i = 0; i < 18; ++i)
+	for (size_t i = 0; i < 19; ++i)
 	{
 		std::cout << "Dla N: " << (i + 2) << " " << tab[i] << std::endl;
 	}
