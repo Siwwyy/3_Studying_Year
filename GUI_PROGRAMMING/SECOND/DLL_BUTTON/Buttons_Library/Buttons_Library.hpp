@@ -34,7 +34,6 @@ namespace BUTTON
 		int32_t x_pos;
 		int32_t y_pos;
 		wchar_t button_name[1024];
-		//EXPIMP_TEMPLATE std::wstring button_name;
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/*
 			PRIVATE FUNCTIONS
@@ -91,6 +90,7 @@ namespace BUTTON
 		/////////////////////////////////////////////////////////////////////////////////////////////
 	};
 }
+
 extern "C" BUTTONSLIBRARY_API int nButtonsLibrary;
 
 BUTTONSLIBRARY_API int fnButtonsLibrary(void);
