@@ -2,7 +2,9 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <unordered_map>
 #include <map>
+#include <unordered_set>
 #include <set>
 #include <algorithm>
 #include <functional>
@@ -13,7 +15,6 @@
 constexpr char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 void Load_Data(std::string& Data, const std::string &file_name);
-void Print_Data(const std::string& Data);
 void Find_Occurences(const std::string& Data, size_t minimal_seeking_length);
 
 int main(int argc, char* argv[])
@@ -23,38 +24,32 @@ int main(int argc, char* argv[])
 	using std::cin;
 
 	std::string Data{};
-	const size_t minimal_seeking_length{ 5 };
+	std::string file_path{};
+	size_t minimal_seeking_length{ 3 };
 
+	std::cout << "Podaj sciezke do pliku \n$ ";
+	std::cin >> file_path;
+	std::cout << "\nPodaj minimalna dlugosc \n$ ";
+	std::cin >> minimal_seeking_length;
 
-	//Load_Data(Data, "file.in");
-	Load_Data(Data, "Out.out");
-	//Load_Data(Data, "file_big.in");
-	//Load_Data(Data, "file2.in");
-	//Print_Data(Data);
+	if (minimal_seeking_length < 2)
+	{
+		minimal_seeking_length = 2;
+	}
 
+	Load_Data(Data, file_path);
 	Find_Occurences(Data, minimal_seeking_length);
 
-	system("pause");
 	return EXIT_SUCCESS;
 }
 
-
-
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 void Load_Data(std::string& Data, const std::string & file_name)
 {
-	//std::fstream file;
-	//file.open(file_name.c_str(), std::ios_base::in);
-	//std::stringstream buffer;
-	//buffer << file.rdbuf();
-	//Data = buffer.str();
-	//file.close();
 	std::fstream file_in{};
 	file_in.open(file_name.c_str(), std::ios_base::in);
 	if (file_in.good() == false)
@@ -107,68 +102,44 @@ void Load_Data(std::string& Data, const std::string & file_name)
 	file_in.close();
 }
 
-void Print_Data(const std::string& Data)
-{
-	for (typename std::string::const_iterator string_iterator = Data.begin(); string_iterator != Data.end(); ++string_iterator)
-	{
-		std::cout << *string_iterator;
-	}
-	std::cout << NEW_LINE;
-}
-
 void Find_Occurences(const std::string& Data, size_t minimal_seeking_length)
 {
-
-	//std::vector<std::vector<std::pair<std::string, size_t>>> Temp{};
-	//std::vector<std::pair<std::string, size_t>> Temp_Second{};
-	//std::set<std::string> visitied{};
-
-	std::map<std::string, std::set<int32_t>> Occurences;
+	std::unordered_map<std::string, std::set<int32_t>> Occurences;
 	std::string sub_string{};
-	
+
 	while(minimal_seeking_length <= 20)
 	{
 		for (size_t i = 0; i < Data.size(); ++i)
 		{
 			sub_string = Data.substr(i, minimal_seeking_length);
-			if (sub_string.size() == minimal_seeking_length)
-			{
-				Occurences[sub_string].insert(i);
-//				std::cout << sub_string << '\n';
-			}
+			Occurences[sub_string].insert(i);
 		}
-		//std::cin.get();
 		++minimal_seeking_length;
 	}
 
 	std::vector<int32_t> Differences{};
 	int tab[19]{};
 
-	for (typename std::map<std::string, std::set<int32_t>>::const_iterator map_iterator = Occurences.begin(); map_iterator != Occurences.end(); ++map_iterator)
+	for (typename std::unordered_map<std::string, std::set<int32_t>>::const_iterator map_iterator = Occurences.begin(); map_iterator != Occurences.end(); ++map_iterator)
 	{
 		if (map_iterator->second.size() > 1)
 		{
-			//std::cout << map_iterator->first << " : ";
-			for (typename std::set<int32_t>::const_iterator set_iterator = map_iterator->second.begin(); set_iterator != map_iterator->second.end(); ++set_iterator)
+			size_t counter{};
+			int32_t temporary{ *map_iterator->second.begin() };
+			for (typename std::set<int32_t>::iterator set_iterator = map_iterator->second.begin(); set_iterator != map_iterator->second.end(); ++set_iterator)
 			{
-				//std::cout << *set_iterator << ' ';
-				//int32_t temporary{ *map_iterator->second.begin() };
-				Differences.emplace_back((*set_iterator) - *map_iterator->second.begin());
-				
-			}
-			//std::cout << '\n';
-		}
-
-	}
-	//system("pause");
-
-	for (typename std::vector<int32_t>::const_iterator vec_iterator = Differences.begin(); vec_iterator != Differences.end(); ++vec_iterator)
-	{
-		for (size_t i = 2; i <= 20; ++i)
-		{
-			if (*(vec_iterator) % i == 0)
-			{
-				tab[i - 2]++;
+				if (counter > 0)
+				{
+					Differences.emplace_back(static_cast<int32_t>(*set_iterator - temporary));
+					for (size_t i = 2; i <= 20; ++i)
+					{
+						if (*(Differences.end() - 1) % i == 0)
+						{
+							tab[i - 2]++;
+						}
+					}
+				}
+				++counter;
 			}
 		}
 	}
