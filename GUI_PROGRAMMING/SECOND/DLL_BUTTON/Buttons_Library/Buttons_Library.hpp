@@ -8,10 +8,8 @@
 
 #ifdef BUTTONSLIBRARY_EXPORTS
 	#define BUTTONSLIBRARY_API __declspec(dllexport)
-	//#define EXPIMP_TEMPLATE
 #else
 	#define BUTTONSLIBRARY_API __declspec(dllimport)
-	//#define EXPIMP_TEMPLATE extern
 #endif
 
 #include <iostream>
@@ -51,7 +49,6 @@ namespace BUTTON
 		*/
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		CButtonsLibrary(void) = delete;
-		//CButtonsLibrary(const int32_t x_pos, const int32_t y_pos, const std::wstring& button_name);
 		CButtonsLibrary(const int32_t x_pos, const int32_t y_pos, const wchar_t * const _ptr);
 		CButtonsLibrary(const CButtonsLibrary& Object);
 		/////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,7 +59,6 @@ namespace BUTTON
 		void Set_X_Pos(const int32_t x_pos);
 		void Set_Y_Pos(const int32_t y_pos);
 		void Set_Button_Name(const wchar_t* const _ptr);
-		//void Set_Button_Name(const EXPIMP_TEMPLATE std::wstring& button_name);
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/*
 			PUBLIC FUNCTIONS

@@ -71,68 +71,17 @@ BUTTONSLIBRARY_API void BUTTON::CButtonsLibrary::Set_Button_Name(const wchar_t* 
         this->button_name[i] = _ptr[i];
         ++i;
     }
+    while (button_name[i] != '\0')
+    {
+        this->button_name[i] = '\0';
+        ++i;
+    }
     DestroyWindow(this->hWnd);
     CreateButton();
 }
 
 BUTTONSLIBRARY_API void BUTTON::CButtonsLibrary::Show()
 {
-    //wchar_t wtxt[1024];
-
-    //HWND start = 0;
-    //HWND edit = 0;
-    //start = FindWindow(NULL, L"Untilted - Notepad");
-
-    //if (start == NULL)
-    //{
-    //    std::cout << "Notepad not found\n";
-    //}
-    //std::cout << "Window handle: " << std::hex << start << std::endl;
-
-    //int n;
-    //bool exit{ true };
-    //while (exit)
-    //{
-    //    std::cout << "********************************************" << std::endl
-    //        << "* options:" << std::endl
-    //        << "* 1. end" << std::endl
-    //        << "* 2. Find notepad using name" << std::endl
-    //        << "* 3. Find notepad using class" << std::endl
-    //        << "********************************************" << std::endl
-    //        << "selection: ";
-    //    std::cin >> n;
-
-    //    switch (n)
-    //    {
-    //        case 0:
-    //        case 1:
-    //            exit = false;
-
-    //        case 2:
-    //    
-    //            std::cout << "enter name: ";
-    //            std::wcin.getline(wtxt, 64);
-    //            std::wcout << wtxt << std::endl;
-    //            //1 — Notatnik
-    //            //1 - Notatnik
-    //            start = FindWindow(NULL, wtxt);
-    //            //start = FindWindow(NULL, L"1 — Notatnik");
-    //            std::cout << (start ? "sukcess!" : "failure") << std::endl;
-    //            break;
-    //    
-    //        case 3:
-    //            start = FindWindowEx(NULL, NULL, L"Notepad", NULL);
-    //            std::cout << (start ? "sukcess!" : "failure") << std::endl;
-    //            edit = FindWindowEx(start, NULL, L"Edit", NULL);
-    //            std::cout << (edit ? "sukcess!" : "failure") << std::endl;
-    //            std::cout << "Window handle: " << std::hex << start << std::endl;
-    //            std::cout << "Edit handle: " << std::hex << edit << std::endl;
-    //            break;
-
-    //        default: std::cout << "Niepoprawna liczba\n";
-    //    }
-    //}
-    //SendMessage(start, WM_CLOSE, NULL, NULL);
     HWND quit_hwnd = CreateWindow(TEXT("button"), TEXT("Quit") , WS_VISIBLE | WS_POPUP, this->x_pos, this->y_pos+50, 80, 25, NULL, NULL, NULL, NULL);
     while (GetMessage(&msg, NULL, 0, 0))
     {
@@ -141,16 +90,10 @@ BUTTONSLIBRARY_API void BUTTON::CButtonsLibrary::Show()
             switch (msg.message)
             {
                 case WM_LBUTTONDOWN:
-                    //std::cout << "WM_LBUTTONDOWN" << '\n';
                     break;
                 case WM_LBUTTONUP:
-                    //std::cout << "WM_LBUTTONUP" << '\n';
-                    //add destroing window here
-                    //SendMessage(start, WM_CLOSE, NULL, NULL);
                     Beep(2000, 500);
                     break;
-
-                //default: std::cout << "| " << msg.message << " |"<< '\n';
             }
         }
         if (msg.hwnd == quit_hwnd)
@@ -158,13 +101,10 @@ BUTTONSLIBRARY_API void BUTTON::CButtonsLibrary::Show()
             switch (msg.message)
             {
                 case WM_LBUTTONUP:
-                    //std::cout << "WM_LBUTTONUP" << '\n';
-                    //add destroing window here
-                    //SendMessage(start, WM_CLOSE, NULL, NULL);
+                    DestroyWindow(quit_hwnd);
+                    DestroyWindow(this->hWnd);
                     PostQuitMessage(0);
                     break;
-
-                //default: std::cout << "| " << msg.message << " |"<< '\n';
             }
         }
         TranslateMessage(&msg);
