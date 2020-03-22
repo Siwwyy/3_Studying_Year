@@ -44,16 +44,18 @@ int main(int argc, char* argv[])
 	std::string Data{};
 	std::vector<std::vector<char>> Alphabet(our_alphabet.size());
 	//std::string Key = "9AB";
-	std::string Key = "BCDE";
+	std::string Key = "Z01";
 	//Load_Data(Data, "file.in");
-	Load_Data(Data, "file.out"); //out means is ready for decrypt
+	//Load_Data(Data, "file_Julian.in");
+	Load_Data(Data, "file_Julian.out");
+	//Load_Data(Data, "file.out"); //out means is ready for decrypt
 	Initialize_Alphabet(Alphabet);
 	/*Print_Alphabet(Alphabet);
 	std::cin.get();*/
 	//Encrypt(Alphabet, Data, Key, Correct_Sign);
 	Decrypt(Alphabet, Data, Key, Correct_Sign);
-	//Save_Data(Data, "file.out");
-	Save_Data(Data, "file_decrypted.out");
+    //Save_Data(Data, "file_Julian.out");
+	Save_Data(Data, "file_Julian_decrypted.out");
 	system("pause");
 	return 0;
 }
