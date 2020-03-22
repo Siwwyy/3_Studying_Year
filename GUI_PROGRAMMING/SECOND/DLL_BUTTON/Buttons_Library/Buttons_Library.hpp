@@ -35,6 +35,7 @@ namespace BUTTON
 		MSG msg;
 		int32_t x_pos;
 		int32_t y_pos;
+		wchar_t button_name[1024];
 		//EXPIMP_TEMPLATE std::wstring button_name;
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/*
@@ -51,7 +52,7 @@ namespace BUTTON
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		CButtonsLibrary(void) = delete;
 		//CButtonsLibrary(const int32_t x_pos, const int32_t y_pos, const std::wstring& button_name);
-		CButtonsLibrary(const int32_t x_pos, const int32_t y_pos);
+		CButtonsLibrary(const int32_t x_pos, const int32_t y_pos, const wchar_t * const _ptr);
 		CButtonsLibrary(const CButtonsLibrary& Object);
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/*
@@ -60,6 +61,7 @@ namespace BUTTON
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		void Set_X_Pos(const int32_t x_pos);
 		void Set_Y_Pos(const int32_t y_pos);
+		void Set_Button_Name(const wchar_t* const _ptr);
 		//void Set_Button_Name(const EXPIMP_TEMPLATE std::wstring& button_name);
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/*
@@ -83,7 +85,7 @@ namespace BUTTON
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		const int32_t Get_X_Pos(void) const;
 		const int32_t Get_Y_Pos(void) const;
-		//const EXPIMP_TEMPLATE std::wstring Get_Button_Name(void) const;
+		const wchar_t *const Get_Button_Name(void) const;
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/*
 			DESTRUCTOR
@@ -96,5 +98,3 @@ namespace BUTTON
 extern "C" BUTTONSLIBRARY_API int nButtonsLibrary;
 
 BUTTONSLIBRARY_API int fnButtonsLibrary(void);
-
-BUTTONSLIBRARY_API LRESULT CALLBACK Window_Process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
