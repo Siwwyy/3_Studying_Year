@@ -43,14 +43,14 @@ int main(int argc, char* argv[])
 
 	std::string Data{};
 	std::vector<std::vector<char>> Alphabet(our_alphabet.size());
-	std::string Key = "Z01";
-	Load_Data(Data, "file_Julian.in");	//niezaszyfrowany
+	std::string Key = "MYSAMPLEKEY";
+	Load_Data(Data, "TEST.in");	//niezaszyfrowany
 	//Load_Data(Data, "file_Julian.out");	//zaszyfrowany
 	Initialize_Alphabet(Alphabet);
-	//Encrypt(Alphabet, Data, Key, Correct_Sign);	//szyfrowanie
-	Decrypt(Alphabet, Data, Key, Correct_Sign);	//odszyfrowywanie
-    //Save_Data(Data, "file_Julian.out");	//zaszyfrowany plik
-	Save_Data(Data, "file_Julian_decrypted.out");	//odszyfrowany
+	Encrypt(Alphabet, Data, Key, Correct_Sign);	//szyfrowanie
+	//Decrypt(Alphabet, Data, Key, Correct_Sign);	//odszyfrowywanie
+    Save_Data(Data, "TEST.out");	//zaszyfrowany plik
+	//Save_Data(Data, "file_Julian_decrypted.out");	//odszyfrowany
 	system("pause");
 	return 0;
 }
