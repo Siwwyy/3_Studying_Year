@@ -78,11 +78,11 @@ namespace Horse_Race
 		public void Start_Race()
 		{
 			UInt32 placement_counter = 0;
-			while(placement_counter < 4)
+			while(placement_counter < 5)
 			{
 				for (UInt32 i = 0; i < (UInt32)Horse_Participants.Length; ++i)
 				{
-					Horse_Participants[i] = Horse_Participants[i]++;
+					Horse_Participants[i]++;
 					if(this.Horse_Participants[i].Position == this.road_size)
 					{
 						this.Placement[placement_counter] = this.Horse_Participants[i].Horse_Name;
