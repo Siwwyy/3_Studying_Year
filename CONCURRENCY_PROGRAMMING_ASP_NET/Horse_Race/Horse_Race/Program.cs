@@ -7,7 +7,7 @@ namespace Horse_Race
     {
         static void Main(string[] args)
         {
-            Sluzewiec Obj = new Sluzewiec(300);
+            Sluzewiec Obj = new Sluzewiec(10);
             //Obj.Print();
             Obj.Start_Race();
         }
