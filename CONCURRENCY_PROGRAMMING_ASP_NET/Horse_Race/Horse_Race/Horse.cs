@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace Horse_Race
 {
@@ -63,12 +64,24 @@ namespace Horse_Race
 		{
 			Console.WriteLine("Name | {0} | Speed: {1}", this.horse_name, this.speed);
 		}
+
+		public void Run(object Position_Locker)
+		{
+			while(true)
+			{
+				lock(Position_Locker)
+				{
+					this.position += this.speed;
+				}
+				Thread.Sleep(500);
+			}
+		}
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/*
 			PUBLIC OPERATORS
 		*/
 		//UNARY
-		public static Horse operator++(Horse horse)
+		public static Horse operator ++(Horse horse)
 		{
 			//if (ReferenceEquals(horse, null))
 			//{
@@ -124,6 +137,7 @@ namespace Horse_Race
 				this.position = value;
 			}
 		}
+
 		/////////////////////////////////////////////////////////////////////////////////////////////
 	}
 }
