@@ -227,30 +227,73 @@ namespace Horse_Race
         //}
 
 
-        static Barrier barrier = new Barrier(5, b => Console.WriteLine("--- All horse have reached the barrier ---"));
-        static Random random = new Random();
+        //static Barrier barrier = new Barrier(5, b => Console.WriteLine("--- All horse have reached the barrier ---"));
+        //static Random random = new Random();
+
+        //static void Main()
+        //{
+        //    Task horse1 = Task.Run(() => Race("Horse1", random.Next(1, 1000)));
+        //    Task horse2 = Task.Run(() => Race("Horse2", random.Next(1, 1000)));
+        //    Task horse3 = Task.Run(() => Race("Horse3", random.Next(1, 1000)));
+        //    Task horse4 = Task.Run(() => Race("Horse4", random.Next(1, 1000)));
+        //    Task horse5 = Task.Run(() => Race("Horse5", random.Next(1, 1000)));
+
+        //    // this is solely here to stop the app closing until all threads have completed
+        //    Task.WaitAll(horse1, horse2, horse3, horse4, horse5);
+        //}
+
+        //static void Race(string horse, int speed)
+        //{
+        //    Console.WriteLine(horse + " is at the start gate" + " " + speed);
+        //    barrier.SignalAndWait();
+
+        //    // wait a random amount of time before the horse reaches the finish line
+        //    Task.Delay(speed);
+        //    Console.WriteLine(horse + " reached finishing line");
+        //    barrier.SignalAndWait();
+        //}
+
+
+        static Barrier _barrier = new Barrier(3, b => Console.WriteLine());
+
+        static int[] arr = new int[3];
 
         static void Main()
         {
-            Task horse1 = Task.Run(() => Race("Horse1", random.Next(1, 1000)));
-            Task horse2 = Task.Run(() => Race("Horse2", random.Next(1, 1000)));
-            Task horse3 = Task.Run(() => Race("Horse3", random.Next(1, 1000)));
-            Task horse4 = Task.Run(() => Race("Horse4", random.Next(1, 1000)));
-            Task horse5 = Task.Run(() => Race("Horse5", random.Next(1, 1000)));
-
-            // this is solely here to stop the app closing until all threads have completed
-            Task.WaitAll(horse1, horse2, horse3, horse4, horse5);
+            arr[0] = 1;
+            arr[1] = 2;
+            arr[2] = 3;
+            var t = new Thread(Speak); t.Start(0);
+            var t1 = new Thread(Speak); t1.Start(1);
+            var t2 = new Thread(Speak); t2.Start(2);
         }
 
-        static void Race(string horse, int speed)
+        static void Speak(object obj)
         {
-            Console.WriteLine(horse + " is at the start gate" + " " + speed);
-            barrier.SignalAndWait();
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    Console.Write(i + " ");
+            //    _barrier.SignalAndWait();
+            //}
+            while (arr[Convert.ToInt32(obj)] < 15)
+            {
+                Console.WriteLine("Value: " + arr[Convert.ToInt32(obj)] + " | Object numer: " + obj);
+                if (Convert.ToInt32(obj) == 0)
+                {
+                    arr[Convert.ToInt32(obj)] += 4;
 
-            // wait a random amount of time before the horse reaches the finish line
-            Task.Delay(speed);
-            Console.WriteLine(horse + " reached finishing line");
-            barrier.SignalAndWait();
+                }
+                else
+                {
+                    arr[Convert.ToInt32(obj)] += Convert.ToInt32(obj);
+                }
+                Thread.Sleep(1000);
+                _barrier.SignalAndWait();
+            }
+            Console.WriteLine("Value: " + arr[Convert.ToInt32(obj)] + " | Object numer: " + obj);
+
+            _barrier.RemoveParticipant();
+
         }
     }
 }
