@@ -16,6 +16,7 @@ namespace Temp_Horse_Race
         /////////////////////////////////////////////////////////////////////////////////////////////
         Horse[] Horse_Participants;
         List<String> list;
+        List<String> list_injury;
         Thread[] Threads;
         Thread Print_Thread;
         Barrier Barrier;
@@ -72,15 +73,29 @@ namespace Temp_Horse_Race
 
         private void Run(object index)
         {
-            while (Horse_Participants[Convert.ToUInt32(index)].Position < this.road_size)
+            while (Horse_Participants[Convert.ToUInt32(index)].Position < this.road_size && Horse_Participants[Convert.ToUInt32(index)].injury == false)
             {
-                Horse_Participants[Convert.ToUInt32(index)].Make_Move();
+                if (Get_Random_Value(1, 10) == 5)
+                {
+                    Horse_Participants[Convert.ToUInt32(index)].injury = true;
+                }
+                else
+                {
+                    Horse_Participants[Convert.ToUInt32(index)].Make_Move();
+                }
                 Thread.Sleep(300);
                 this.Barrier.SignalAndWait();
             }
             lock (Name_Locker)
             {
-                list.Add(Horse_Participants[Convert.ToUInt32(index)].Horse_Name);
+                if (Horse_Participants[Convert.ToUInt32(index)].injury == true)
+                {
+                    list_injury.Add(Horse_Participants[Convert.ToUInt32(index)].Horse_Name);
+                }
+                else
+                {
+                    list.Add(Horse_Participants[Convert.ToUInt32(index)].Horse_Name);
+                }
             }
             this.Barrier.RemoveParticipant();
         }
@@ -99,6 +114,7 @@ namespace Temp_Horse_Race
             this.Barrier = new Barrier(participantCount: Horse_Participants.Length);
             this.road_size = 1000;
             this.list = new List<String>();
+            this.list_injury = new List<String>();
 
             Threads = new Thread[this.Horse_Participants.Length];
             for (UInt32 i = 0; i < this.Horse_Participants.Length; ++i)
@@ -111,6 +127,7 @@ namespace Temp_Horse_Race
             Initialize_Horse_Participants();
             this.road_size = road_size;
             this.list = new List<String>();
+            this.list_injury = new List<String>();
             this.Barrier = new Barrier(participantCount: Horse_Participants.Length);
 
             Threads = new Thread[this.Horse_Participants.Length];
@@ -164,6 +181,12 @@ namespace Temp_Horse_Race
                 {
                     Console.WriteLine("Place {0} takes horse {1}", (i + 1), horse_placement);
                     ++i;
+                }
+                Console.WriteLine();
+                Console.WriteLine("Injuried");
+                foreach (var horse_injury in list_injury)
+                {
+                    Console.WriteLine("Injuried horeses: {0}", horse_injury);
                 }
             }
         }

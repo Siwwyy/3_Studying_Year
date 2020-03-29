@@ -17,6 +17,7 @@ namespace Temp_Horse_Race
         String horse_name;
         Int32 speed;
         Int32 position;
+        public bool injury = false;
         /////////////////////////////////////////////////////////////////////////////////////////////
         /*
 			PRIVATE CONSTRUCTORS
