@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <functional>
 #include <map>
 #include <math.h>
 
@@ -74,27 +75,6 @@ private:
 		ZMIENNE PRIVATE
 	*/
 	/////////////////////////////////////////////////////////////////////////
-	friend struct less_two;
-	template <class _Ty = void>
-	struct less_two 
-	{
-		_CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef _Ty first_argument_type;
-		_CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef _Ty second_argument_type;
-		_CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef bool result_type;
-
-		constexpr bool operator()(const _Ty& _Left, const _Ty& _Right) const
-		{
-			std::map<char, int32_t>::iterator it = std::find(Occurencies.begin(), Occurencies.end(), _Left);
-			std::map<char, int32_t>::iterator it2 = std::find(Occurencies.begin(), Occurencies.end(), _Right);
-			if(it->second < it2->second)
-			{
-				return _Left < _Right;
-			}
-			return _Left > _Right;
-		}
-	};
-
-
 	std::string Data;
 	std::map<char, int32_t> Occurencies;
 	std::vector<std::pair<char, int32_t>> map_copy;
@@ -230,26 +210,37 @@ void Huffman_Coding::Find_Occurencies()
 	//{
 	//	map_copy.emplace_back(std::make_pair(map_iterator->first, map_iterator->second));
 	//}
-	//std::vector<std::pair<char, int> > mapcopy1(Occurencies.begin(), Occurencies.end());
-	//std::sort(mapcopy1.begin(), mapcopy1.end(), Huffman_Coding());
+	std::vector<std::pair<char, int32_t>> mapcopy1(Occurencies.begin(), Occurencies.end());
+	typedef std::function<bool(std::pair<char, int32_t>, std::pair<char, int32_t>)> Comparator;
+	Comparator compFunctor =
+		[](std::pair<char, int32_t> elem1, std::pair<char, int32_t> elem2)
+	{
+		return elem1.second < elem2.second;
+	};
+	std::sort(mapcopy1.begin(), mapcopy1.end(), compFunctor);
 
 	//for (typename std::vector<std::pair<char, int32_t>>::const_iterator vec_iterator = mapcopy1.begin(); vec_iterator != mapcopy1.end(); ++vec_iterator)
 	//{
 	//	std::cout << "Sign: " << vec_iterator->first << " Took place: " << vec_iterator->second << " times" << NEW_LINE;
 	//}
+	//for (typename std::map<char, int32_t>::const_iterator map_iterator = this->Occurencies.begin(); map_iterator != this->Occurencies.end(); ++map_iterator)
+	//{
+	//	if(map_iterator->second < (map_iterator + 1)->s)
+	//}
+	this->map_copy = mapcopy1;
 }
 
 void Huffman_Coding::Print_Occurencies() const
 {
-	for (typename std::map<char, int32_t>::const_iterator map_iterator = this->Occurencies.begin(); map_iterator != this->Occurencies.end(); ++map_iterator)
-	{
-		std::cout << "Sign: " << map_iterator->first << " Took place: " << map_iterator->second << " times" << NEW_LINE;
-	}
-
-	//for (typename std::vector<std::pair<char, int32_t>>::const_iterator vec_iterator = this->map_copy.begin(); vec_iterator != this->map_copy.end(); ++vec_iterator)
+	//for (typename std::map<char, int32_t>::const_iterator map_iterator = this->Occurencies.begin(); map_iterator != this->Occurencies.end(); ++map_iterator)
 	//{
-	//	std::cout << "Sign: " << vec_iterator->first << " Took place: " << vec_iterator->second << " times" << NEW_LINE;
+	//	std::cout << "Sign: " << map_iterator->first << " Took place: " << map_iterator->second << " times" << NEW_LINE;
 	//}
+
+	for (typename std::vector<std::pair<char, int32_t>>::const_iterator vec_iterator = this->map_copy.begin(); vec_iterator != this->map_copy.end(); ++vec_iterator)
+	{
+		std::cout << "Sign: " << vec_iterator->first << " Took place: " << vec_iterator->second << " times" << NEW_LINE;
+	}
 }
 
 Huffman_Coding::~Huffman_Coding()
