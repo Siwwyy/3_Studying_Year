@@ -136,7 +136,7 @@ int main(int argc, char* argv[])
 	Load_Data(Data, file_name);
 
 	Huffman_Coding Obj(Data);
-	//Obj.Print_Occurencies();
+	Obj.Print_Occurencies();
 	Obj.Create_Tree();
 	std::cin.get();
 	return EXIT_SUCCESS;
@@ -213,6 +213,10 @@ void Huffman_Coding::Find_Occurencies()
 
 	auto compFunctor = [&](std::pair<char, int32_t>& elem1, std::pair<char, int32_t>& elem2)
 	{
+		if (elem1.second < elem2.second)
+		{
+			std::swap(elem1, elem1);
+		}
 		return elem1.second < elem2.second;
 	};
 	std::sort(mapcopy1.begin(), mapcopy1.end(), compFunctor);
@@ -235,7 +239,7 @@ void Huffman_Coding::Print_Occurencies() const
 
 void Huffman_Coding::Create_Tree()
 {
-	std::vector<std::pair<int32_t, bool>> Tree{};
+	std::vector<std::pair<int32_t, std::pair<bool, bool>>> Tree{};
 
 	//auto the_smallest_in_tree = [&](const typename std::vector<int32_t>::const_iterator current_pos)
 	//{
@@ -254,63 +258,100 @@ void Huffman_Coding::Create_Tree()
 
 	if (this->map_copy.size() > 1)
 	{
+		size_t i = 0;
+		bool if_break = false;
 		for (typename std::vector<std::pair<char, int32_t>>::iterator vec_iterator = this->map_copy.begin(); vec_iterator != this->map_copy.end(); ++vec_iterator)
 		{
-			if (std::distance(this->map_copy.begin(), vec_iterator) == 0)
+			while (if_break == false)
 			{
-				//false means it is not a node
-				//true means it is a node
-				Tree.emplace_back(std::make_pair(vec_iterator->second, false));
-				Tree.emplace_back(std::make_pair((vec_iterator + 1)->second, false));
-				Tree.emplace_back(std::make_pair(vec_iterator->second + (vec_iterator + 1)->second, true));
-			}
-			//else if (std::distance(this->map_copy.begin(), vec_iterator) % 2 == 0)
-			else if (vec_iterator->second != (Tree.end() - 2)->first || (vec_iterator + 1) == this->map_copy.end())
-			{
-				if ((vec_iterator + 1) != this->map_copy.end())
+				if (Tree.size() == 0)
 				{
-					if ((Tree.end() - 1)->first <= (vec_iterator + 1)->second)
-					{
-						Tree.emplace_back(std::make_pair(vec_iterator->second, false));
-						Tree.emplace_back(std::make_pair(vec_iterator->second + (Tree.end() - 2)->first, true));
-					}
-					else
-					{
-						Tree.emplace_back(std::make_pair(vec_iterator->second, false));
-						Tree.emplace_back(std::make_pair((vec_iterator + 1)->second, false));
-						Tree.emplace_back(std::make_pair(vec_iterator->second + (vec_iterator + 1)->second, true));
-					}
+					//false means it is not a node
+					//true means it is a node
+					Tree.emplace_back(std::make_pair(map_copy[i].second, std::make_pair(0,false)));
+					Tree.emplace_back(std::make_pair(map_copy[i + 1].second, std::make_pair(1, false)));
+					Tree.emplace_back(std::make_pair(map_copy[i].second + map_copy[i + 1].second, std::make_pair(0, true)));
+					i = std::distance(this->map_copy.begin(), (vec_iterator + 2));
+					break;
 				}
 				else
 				{
-					////std::cin.get();
-					//int32_t sum{};
-					//size_t counter{};
-					//for (int32_t i = Tree.size() - 1; i >= 0; --i)
-					//{
-					//	//std::cout << Tree[i].first << ' ' << std::boolalpha << Tree[i].second << '\n';
-					//	if (Tree[i].second == true)
-					//	{
-					//		sum += Tree[i].first;
-					//		++counter;
-					//	}
-					//	if (counter == 2)
-					//	{
-
-					//		break;
-					//	}
-					//}
-					//std::cin.get();
+					if (i + 1 < map_copy.size())
+					{
+						if ((Tree.end() - 1)->first <= map_copy[i + 1].second)
+						{
+							Tree.emplace_back(std::make_pair(map_copy[i].second, std::make_pair(1, false)));
+							Tree.emplace_back(std::make_pair(map_copy[i].second + (Tree.end() - 2)->first, std::make_pair(0, true)));
+							i = std::distance(this->map_copy.begin(), (vec_iterator + 2));
+							break;
+						}
+						else
+						{
+							Tree.emplace_back(std::make_pair(map_copy[i].second, std::make_pair(1, false)));
+							Tree.emplace_back(std::make_pair(map_copy[i + 1].second, std::make_pair(0, false)));
+							Tree.emplace_back(std::make_pair(map_copy[i].second + map_copy[i + 1].second, std::make_pair(1, false)));
+							i = std::distance(this->map_copy.begin(), (vec_iterator + 2));
+							break;
+						}
+					}
+					else
+					{
+						//to do something
+						//merge array finally
+						//std::cin.get();
+						if_break = true;
+						//Tree.emplace_back(std::make_pair(20,std::make_pair(0, true)));
+						break;
+					}
 				}
 			}
 		}
+
+
+		////Tree.emplace_back(std::make_pair((Tree.end() - 1)->first + (Tree.end() - 2)->first, true));
+		//for (typename std::vector<std::pair<int32_t, bool>>::const_iterator vec_iterator = Tree.begin(); vec_iterator != Tree.end(); ++vec_iterator)
+		//{
+		//	std::cout << vec_iterator->first << ' ' << std::boolalpha << vec_iterator->second << '\n';
+		//}
 		//Tree.emplace_back(std::make_pair((Tree.end() - 1)->first + (Tree.end() - 2)->first, true));
-		for (typename std::vector<std::pair<int32_t, bool>>::const_iterator vec_iterator = Tree.begin(); vec_iterator != Tree.end(); ++vec_iterator)
+		//for (typename std::vector<std::pair<int32_t, std::pair<bool, bool>>>::const_iterator vec_iterator = Tree.begin(); vec_iterator != Tree.end(); ++vec_iterator)
+		//{
+		//	std::cout << vec_iterator->first << ' ' << std::boolalpha << vec_iterator->second.second << '\n';
+		//}
+		//std::cin.get();
+		size_t counter{};
+		for (size_t i = 0; i < Tree.size(); ++i)
 		{
-			std::cout << vec_iterator->first << ' ' << std::boolalpha << vec_iterator->second << '\n';
+			if (Tree[i].second.second == false)
+			{
+				std::cout << map_copy[counter].first << " ";
+				counter++;
+				for (size_t j = i; j < Tree.size(); ++j)
+				{
+					if (Tree[j].second.second == true)
+					{
+						if (Tree[j].second.first == 0)
+						{
+							std::cout << "0";
+						}
+						else
+						{
+							std::cout << "1";
+						}
+					}
+
+
+				}
+				std::cout << "\n";
+			}
+
 		}
 		std::cin.get();
+
+
+		
 	}
+
 	else
 	{
 		std::cout << this->map_copy[0].first << " code is: " << "0\n";
@@ -319,6 +360,5 @@ void Huffman_Coding::Create_Tree()
 
 Huffman_Coding::~Huffman_Coding()
 {
+
 }
-
-

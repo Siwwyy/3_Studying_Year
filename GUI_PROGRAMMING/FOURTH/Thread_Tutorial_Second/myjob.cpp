@@ -5,36 +5,25 @@ MyJob::MyJob(QObject *parent) : QObject(parent)
 
 }
 
-void MyJob::start(const QString & name)
+void MyJob::start()
 {
     this->mStop = false;
 
-    for(int i =0; i < 999999; ++i)
+    while(mStop == false)
     {
-        if(mStop == true)
-        {
-            return;
-        }
-        //temp += "d";
-        qDebug() << "From thread: " << i;
-        Fill();
-        Erase();
-        emit on_number(temp);
-        //emit erase(temp);
-        QThread::currentThread()->msleep(100);
+        emit on_number();
+        QThread::currentThread()->msleep(200);
     }
 }
 
-void MyJob::Fill()
+void MyJob::eraser(const int & delay)
 {
-    temp += "d";
-    QThread::currentThread()->msleep(100);
-}
-
-void MyJob::Erase()
-{
-    temp.remove(temp.size() - 1,1);
-    QThread::currentThread()->msleep(400);
+    while(mStop == false)
+    {
+        emit erase(this->delay);
+        qDebug() << "Eraser " <<this->delay;
+        QThread::currentThread()->msleep(this->delay);
+    }
 }
 
 void MyJob::stop()

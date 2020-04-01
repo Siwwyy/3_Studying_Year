@@ -10,23 +10,22 @@ class MyJob : public QObject
     Q_OBJECT
 public:
     explicit MyJob(QObject *parent = nullptr);
-
-    void start(const QString &name);
-
-    void Fill();
-    void Erase();
+    QString str;
+    int delay = 500;
+    void start();
+    void eraser(const int & delay);
 
 signals:
 
-    void on_number(const QString &name);
-    void erase(const QString &name);
+    void on_number();
+    void erase(const int & delay);
 
 public slots:
    void stop();
 
 private:
     bool mStop;
-    QString temp;
+
 };
 
 #endif // MYJOB_H

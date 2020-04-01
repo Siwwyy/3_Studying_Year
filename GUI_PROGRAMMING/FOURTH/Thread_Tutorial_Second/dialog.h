@@ -30,9 +30,11 @@ private slots:
     void on_Start_Button_clicked();
     void on_Stop_Button_clicked();
 
+    void on_Ustaw_Ms_clicked();
+
 public slots:
-    void new_number(const QString & name);
-    void delete_number(const QString & name);
+    void new_number();
+    void delete_number();
 
 private:
     Ui::Dialog *ui;
