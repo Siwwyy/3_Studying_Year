@@ -211,9 +211,8 @@ void Huffman_Coding::Find_Occurencies()
 	//	map_copy.emplace_back(std::make_pair(map_iterator->first, map_iterator->second));
 	//}
 	std::vector<std::pair<char, int32_t>> mapcopy1(Occurencies.begin(), Occurencies.end());
-	typedef std::function<bool(std::pair<char, int32_t>, std::pair<char, int32_t>)> Comparator;
-	Comparator compFunctor =
-		[](std::pair<char, int32_t> elem1, std::pair<char, int32_t> elem2)
+	//typedef std::function<bool(std::pair<char, int32_t>&, std::pair<char, int32_t>&)> Comparator;
+	auto compFunctor = [&](std::pair<char, int32_t>& elem1, std::pair<char, int32_t>& elem2)
 	{
 		return elem1.second < elem2.second;
 	};

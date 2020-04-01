@@ -32,6 +32,7 @@ int main(int argc, char* argv[])
 	std::thread Filler_Thread2(Filler, std::ref(_str));
 	std::thread Filler_Thread3(Filler, std::ref(_str));
 	std::thread Filler_Thread4(Filler, std::ref(_str));
+	//std::thread * t = new std::thread(Filler, std::ref(_str));
 
 	std::thread Eater_Thread(Eater, std::ref(_str));
 
