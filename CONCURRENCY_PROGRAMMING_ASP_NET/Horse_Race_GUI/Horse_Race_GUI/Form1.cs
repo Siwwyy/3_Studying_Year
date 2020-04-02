@@ -45,7 +45,7 @@ namespace Horse_Race_GUI
         static Random rand = new Random();
         private Int32 Get_Random_Value(int beginning, int end)
         {
- 
+
             return (Int32)(rand.Next(beginning, end));
         }
 
@@ -58,7 +58,7 @@ namespace Horse_Race_GUI
                     for (UInt32 i = 0; i < (UInt32)Horse_Participants.Length; ++i)
                     {
 
-   
+
                     }
                     Thread.Sleep(300);
                     //Console.Clear();
@@ -223,7 +223,7 @@ namespace Horse_Race_GUI
         {
             for (UInt32 i = 0; i < (UInt32)Horse_Participants.Length; ++i)
             {
-                if(Horse_Participants[i].Position <= this.progressBars[i].Maximum)
+                if (Horse_Participants[i].Position <= this.progressBars[i].Maximum)
                 {
                     lock (Position_Locker)
                     {
@@ -241,7 +241,10 @@ namespace Horse_Race_GUI
         {
             for (UInt32 i = 0; i < this.Threads.Length; ++i)
             {
-                Threads[i].IsBackground = true;
+                if (Threads[i].IsAlive == true)
+                {
+                    Threads[i].IsBackground = true;
+                }
             }
         }
     }
