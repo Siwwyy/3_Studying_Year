@@ -28,158 +28,94 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.horse1 = new System.Windows.Forms.PictureBox();
-            this.horse2 = new System.Windows.Forms.PictureBox();
-            this.horse3 = new System.Windows.Forms.PictureBox();
-            this.horse4 = new System.Windows.Forms.PictureBox();
-            this.horse5 = new System.Windows.Forms.PictureBox();
+            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.horse1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.horse2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.horse3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.horse4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.horse5)).BeginInit();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.progressBar2 = new System.Windows.Forms.ProgressBar();
+            this.progressBar3 = new System.Windows.Forms.ProgressBar();
+            this.progressBar4 = new System.Windows.Forms.ProgressBar();
+            this.progressBar5 = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
-            // 
-            // horse1
-            // 
-            this.horse1.Image = ((System.Drawing.Image)(resources.GetObject("horse1.Image")));
-            this.horse1.Location = new System.Drawing.Point(12, 12);
-            this.horse1.Name = "horse1";
-            this.horse1.Size = new System.Drawing.Size(100, 50);
-            this.horse1.TabIndex = 0;
-            this.horse1.TabStop = false;
-            // 
-            // horse2
-            // 
-            this.horse2.Image = ((System.Drawing.Image)(resources.GetObject("horse2.Image")));
-            this.horse2.Location = new System.Drawing.Point(12, 68);
-            this.horse2.Name = "horse2";
-            this.horse2.Size = new System.Drawing.Size(100, 50);
-            this.horse2.TabIndex = 1;
-            this.horse2.TabStop = false;
-            // 
-            // horse3
-            // 
-            this.horse3.Image = ((System.Drawing.Image)(resources.GetObject("horse3.Image")));
-            this.horse3.Location = new System.Drawing.Point(12, 124);
-            this.horse3.Name = "horse3";
-            this.horse3.Size = new System.Drawing.Size(100, 50);
-            this.horse3.TabIndex = 2;
-            this.horse3.TabStop = false;
-            // 
-            // horse4
-            // 
-            this.horse4.Image = ((System.Drawing.Image)(resources.GetObject("horse4.Image")));
-            this.horse4.Location = new System.Drawing.Point(12, 180);
-            this.horse4.Name = "horse4";
-            this.horse4.Size = new System.Drawing.Size(100, 50);
-            this.horse4.TabIndex = 3;
-            this.horse4.TabStop = false;
-            // 
-            // horse5
-            // 
-            this.horse5.Image = ((System.Drawing.Image)(resources.GetObject("horse5.Image")));
-            this.horse5.Location = new System.Drawing.Point(12, 236);
-            this.horse5.Name = "horse5";
-            this.horse5.Size = new System.Drawing.Size(100, 50);
-            this.horse5.TabIndex = 4;
-            this.horse5.TabStop = false;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(1524, 265);
+            this.button1.Location = new System.Drawing.Point(709, 158);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 5;
-            this.button1.Text = "button1";
+            this.button1.Text = "Start";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // textBox1
+            // timer1
             // 
-            this.textBox1.Location = new System.Drawing.Point(1499, 31);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 6;
+            this.timer1.Enabled = true;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // textBox2
+            // progressBar1
             // 
-            this.textBox2.Location = new System.Drawing.Point(1499, 72);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 7;
+            this.progressBar1.Location = new System.Drawing.Point(12, 5);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(772, 23);
+            this.progressBar1.TabIndex = 11;
             // 
-            // textBox3
+            // progressBar2
             // 
-            this.textBox3.Location = new System.Drawing.Point(1499, 112);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 8;
+            this.progressBar2.Location = new System.Drawing.Point(12, 34);
+            this.progressBar2.Name = "progressBar2";
+            this.progressBar2.Size = new System.Drawing.Size(772, 23);
+            this.progressBar2.TabIndex = 12;
             // 
-            // textBox4
+            // progressBar3
             // 
-            this.textBox4.Location = new System.Drawing.Point(1499, 158);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 20);
-            this.textBox4.TabIndex = 9;
+            this.progressBar3.Location = new System.Drawing.Point(12, 61);
+            this.progressBar3.Name = "progressBar3";
+            this.progressBar3.Size = new System.Drawing.Size(772, 23);
+            this.progressBar3.TabIndex = 13;
             // 
-            // textBox5
+            // progressBar4
             // 
-            this.textBox5.Location = new System.Drawing.Point(1499, 204);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(100, 20);
-            this.textBox5.TabIndex = 10;
+            this.progressBar4.Location = new System.Drawing.Point(12, 88);
+            this.progressBar4.Name = "progressBar4";
+            this.progressBar4.Size = new System.Drawing.Size(772, 23);
+            this.progressBar4.TabIndex = 14;
+            // 
+            // progressBar5
+            // 
+            this.progressBar5.Location = new System.Drawing.Point(12, 117);
+            this.progressBar5.Name = "progressBar5";
+            this.progressBar5.Size = new System.Drawing.Size(772, 23);
+            this.progressBar5.TabIndex = 15;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.ClientSize = new System.Drawing.Size(1611, 300);
-            this.Controls.Add(this.textBox5);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.ClientSize = new System.Drawing.Size(920, 193);
+            this.Controls.Add(this.progressBar5);
+            this.Controls.Add(this.progressBar4);
+            this.Controls.Add(this.progressBar3);
+            this.Controls.Add(this.progressBar2);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.horse5);
-            this.Controls.Add(this.horse4);
-            this.Controls.Add(this.horse3);
-            this.Controls.Add(this.horse2);
-            this.Controls.Add(this.horse1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.horse1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.horse2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.horse3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.horse4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.horse5)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox horse1;
-        private System.Windows.Forms.PictureBox horse2;
-        private System.Windows.Forms.PictureBox horse3;
-        private System.Windows.Forms.PictureBox horse4;
-        private System.Windows.Forms.PictureBox horse5;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar progressBar2;
+        private System.Windows.Forms.ProgressBar progressBar3;
+        private System.Windows.Forms.ProgressBar progressBar4;
+        private System.Windows.Forms.ProgressBar progressBar5;
     }
 }
 

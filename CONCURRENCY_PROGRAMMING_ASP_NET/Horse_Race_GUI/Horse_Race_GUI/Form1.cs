@@ -20,11 +20,9 @@ namespace Horse_Race_GUI
         Horse[] Horse_Participants;
         List<String> list;
         Thread[] Threads;
-        Thread Print_Thread;
         Barrier Barrier;
         Int32 road_size;
-        PictureBox[] pictureBoxes;
-        TextBox[] textBoxes;
+        ProgressBar[] progressBars;
 
         //LOCKERS
         object Name_Locker = new object();
@@ -38,16 +36,16 @@ namespace Horse_Race_GUI
         private void Initialize_Horse_Participants()
         {
             Horse_Participants = new Horse[5];
-            Horse_Participants[0] = new Horse("Mark 1", Get_Random_Value(1, 6));
-            Horse_Participants[1] = new Horse("Henry 2", Get_Random_Value(1, 6));
-            Horse_Participants[2] = new Horse("Peter 3", Get_Random_Value(1, 6));
-            Horse_Participants[3] = new Horse("Oliver 4", Get_Random_Value(1, 6));
-            Horse_Participants[4] = new Horse("Marcus 5", Get_Random_Value(1, 6));
+            Horse_Participants[0] = new Horse("Mark 1", Get_Random_Value(1, 10));
+            Horse_Participants[1] = new Horse("Henry 2", Get_Random_Value(1, 10));
+            Horse_Participants[2] = new Horse("Peter 3", Get_Random_Value(1, 10));
+            Horse_Participants[3] = new Horse("Oliver 4", Get_Random_Value(1, 10));
+            Horse_Participants[4] = new Horse("Marcus 5", Get_Random_Value(1, 10));
         }
-
+        static Random rand = new Random();
         private Int32 Get_Random_Value(int beginning, int end)
         {
-            Random rand = new Random();
+ 
             return (Int32)(rand.Next(beginning, end));
         }
 
@@ -59,15 +57,8 @@ namespace Horse_Race_GUI
                 {
                     for (UInt32 i = 0; i < (UInt32)Horse_Participants.Length; ++i)
                     {
-                        this.pictureBoxes[i].Left += Horse_Participants[i].Position;
-                        //this.textBoxes[i].Text = Horse_Participants[i].Position.ToString();
-                        //lock (Name_Locker)
-                        //WriteTextSafe(Horse_Participants[i].Position.ToString(), i);
-                        //{
-                        //    //Console.Write(" => {0} {1}", Horse_Participants[i].Horse_Name, Horse_Participants[i].Position);
 
-                        //}
-                        //Console.Write("\n");
+   
                     }
                     Thread.Sleep(300);
                     //Console.Clear();
@@ -75,32 +66,16 @@ namespace Horse_Race_GUI
             }
         }
 
-        private delegate void SafeCallDelegate(string text, uint i);
-        private void WriteTextSafe(string text, uint i)
-        {
-            if (this.textBoxes[i].InvokeRequired)
-            {
-                var d = new SafeCallDelegate(WriteTextSafe);
-                this.textBoxes[i].Invoke(d, new object[] { text,i });
-            }
-            else
-            {
-                this.textBoxes[i].Text = text;
-            }
-        }
 
-
-
-        //private void SetText()
-        //{
-        //    WriteTextSafe("This text was set safely.");
-        //}
 
         private void Run(object index)
         {
             while (Horse_Participants[Convert.ToUInt32(index)].Position < this.road_size)
             {
-                Horse_Participants[Convert.ToUInt32(index)].Make_Move();
+                lock (Position_Locker)
+                {
+                    Horse_Participants[Convert.ToUInt32(index)].Make_Move();
+                }
                 Thread.Sleep(300);
                 this.Barrier.SignalAndWait();
             }
@@ -132,19 +107,18 @@ namespace Horse_Race_GUI
             {
                 Threads[i] = new Thread(Run);
             }
-            this.pictureBoxes = new PictureBox[5];
-            pictureBoxes[0] = horse1;
-            pictureBoxes[1] = horse2;
-            pictureBoxes[2] = horse3;
-            pictureBoxes[3] = horse4;
-            pictureBoxes[4] = horse5;
 
-            this.textBoxes = new TextBox[5];
-            textBoxes[0] = textBox1;
-            textBoxes[1] = textBox2;
-            textBoxes[2] = textBox3;
-            textBoxes[3] = textBox4;
-            textBoxes[4] = textBox5;
+            this.progressBars = new ProgressBar[5];
+            progressBars[0] = progressBar1;
+            progressBars[1] = progressBar2;
+            progressBars[2] = progressBar3;
+            progressBars[3] = progressBar4;
+            progressBars[4] = progressBar5;
+
+            for (UInt32 i = 0; i < (UInt32)progressBars.Length; ++i)
+            {
+                progressBars[i].Maximum = this.road_size;
+            }
         }
         public Form1(Int32 road_size)
         {
@@ -159,19 +133,18 @@ namespace Horse_Race_GUI
             {
                 Threads[i] = new Thread(Run);
             }
-            this.pictureBoxes = new PictureBox[5];
-            pictureBoxes[0] = horse1;
-            pictureBoxes[1] = horse2;
-            pictureBoxes[2] = horse3;
-            pictureBoxes[3] = horse4;
-            pictureBoxes[4] = horse5;
 
-            this.textBoxes = new TextBox[5];
-            textBoxes[0] = textBox1;
-            textBoxes[1] = textBox2;
-            textBoxes[2] = textBox3;
-            textBoxes[3] = textBox4;
-            textBoxes[4] = textBox5;
+            this.progressBars = new ProgressBar[5];
+            progressBars[0] = progressBar1;
+            progressBars[1] = progressBar2;
+            progressBars[2] = progressBar3;
+            progressBars[3] = progressBar4;
+            progressBars[4] = progressBar5;
+
+            for (UInt32 i = 0; i < (UInt32)progressBars.Length; ++i)
+            {
+                progressBars[i].Maximum = this.road_size;
+            }
         }
         /////////////////////////////////////////////////////////////////////////////////////////////
         /*
@@ -194,17 +167,10 @@ namespace Horse_Race_GUI
 
         public void Start_Race()
         {
-            Print_Thread = new Thread(Print_Roads);
-            Print_Thread.Start();
             for (UInt32 i = 0; i < this.Threads.Length; ++i)
             {
                 Threads[i].Start(i);
             }
-            for (UInt32 i = 0; i < this.Threads.Length; ++i)
-            {
-                Threads[i].Join();
-            }
-            Print_Thread.IsBackground = true;
         }
 
         public void Print_Results()
@@ -251,6 +217,32 @@ namespace Horse_Race_GUI
         private void button1_Click(object sender, EventArgs e)
         {
             Start_Race();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            for (UInt32 i = 0; i < (UInt32)Horse_Participants.Length; ++i)
+            {
+                if(Horse_Participants[i].Position <= this.progressBars[i].Maximum)
+                {
+                    lock (Position_Locker)
+                    {
+                        this.progressBars[i].Value = Horse_Participants[i].Position;
+                    }
+                }
+                else
+                {
+                    this.progressBars[i].Value = this.progressBars[i].Maximum;
+                }
+            }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            for (UInt32 i = 0; i < this.Threads.Length; ++i)
+            {
+                Threads[i].IsBackground = true;
+            }
         }
     }
 }
