@@ -59,10 +59,10 @@ namespace Horse_Race_GUI
                 {
                     for (UInt32 i = 0; i < (UInt32)Horse_Participants.Length; ++i)
                     {
-                        //this.pictureBoxes[i].Left += Horse_Participants[i].Position;
+                        this.pictureBoxes[i].Left += Horse_Participants[i].Position;
                         //this.textBoxes[i].Text = Horse_Participants[i].Position.ToString();
                         //lock (Name_Locker)
-                        WriteTextSafe(Horse_Participants[i].Position.ToString(), i);
+                        //WriteTextSafe(Horse_Participants[i].Position.ToString(), i);
                         //{
                         //    //Console.Write(" => {0} {1}", Horse_Participants[i].Horse_Name, Horse_Participants[i].Position);
 
