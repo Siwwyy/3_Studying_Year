@@ -17,6 +17,7 @@ namespace Horse_Race_GUI
         String horse_name;
         Int32 speed;
         Int32 position;
+        public bool injury = false;
         /////////////////////////////////////////////////////////////////////////////////////////////
         /*
 			PRIVATE CONSTRUCTORS

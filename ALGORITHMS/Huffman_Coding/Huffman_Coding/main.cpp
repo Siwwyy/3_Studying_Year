@@ -90,6 +90,7 @@ public:
 
 		for (typename std::map<char, int32_t>::const_iterator map_iterator = Occurencies.begin(); map_iterator != Occurencies.end(); ++map_iterator)
 		{
+			std::cout << map_iterator->first << " : " << map_iterator->second << '\n';
 			minHeap.push(new Node(map_iterator->first, map_iterator->second));
 		}
 

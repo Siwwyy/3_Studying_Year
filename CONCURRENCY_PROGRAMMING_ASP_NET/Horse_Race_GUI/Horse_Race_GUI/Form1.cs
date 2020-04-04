@@ -19,15 +19,16 @@ namespace Horse_Race_GUI
         /////////////////////////////////////////////////////////////////////////////////////////////
         Horse[] Horse_Participants;
         List<String> list;
+        List<String> list_injury;
         Thread[] Threads;
         Barrier Barrier;
         Int32 road_size;
         ProgressBar[] progressBars;
-
+        bool end_race = false;
+        static Random rand = new Random();
         //LOCKERS
         object Name_Locker = new object();
         object Position_Locker = new object();
-        object Console_Locker = new object();
         /////////////////////////////////////////////////////////////////////////////////////////////
         /*
 			PRIVATE FUNCTIONS
@@ -42,37 +43,21 @@ namespace Horse_Race_GUI
             Horse_Participants[3] = new Horse("Oliver 4", Get_Random_Value(1, 10));
             Horse_Participants[4] = new Horse("Marcus 5", Get_Random_Value(1, 10));
         }
-        static Random rand = new Random();
+
         private Int32 Get_Random_Value(int beginning, int end)
         {
-
             return (Int32)(rand.Next(beginning, end));
         }
 
-        private void Print_Roads()
-        {
-            while (Thread.CurrentThread.IsBackground == false)
-            {
-                lock (Console_Locker)
-                {
-                    for (UInt32 i = 0; i < (UInt32)Horse_Participants.Length; ++i)
-                    {
-
-
-                    }
-                    Thread.Sleep(300);
-                    //Console.Clear();
-                }
-            }
-        }
-
-
-
         private void Run(object index)
         {
-            while (Horse_Participants[Convert.ToUInt32(index)].Position < this.road_size)
+            while (Horse_Participants[Convert.ToUInt32(index)].Position < this.road_size && Horse_Participants[Convert.ToUInt32(index)].injury == false)
             {
-                lock (Position_Locker)
+                if (Get_Random_Value(1, 30) == 5)
+                {
+                    Horse_Participants[Convert.ToUInt32(index)].injury = true;
+                }
+                else
                 {
                     Horse_Participants[Convert.ToUInt32(index)].Make_Move();
                 }
@@ -81,7 +66,19 @@ namespace Horse_Race_GUI
             }
             lock (Name_Locker)
             {
-                list.Add(Horse_Participants[Convert.ToUInt32(index)].Horse_Name);
+                if (Horse_Participants[Convert.ToUInt32(index)].injury == true)
+                {
+                    list_injury.Add(Horse_Participants[Convert.ToUInt32(index)].Horse_Name);
+                    this.Threads[Convert.ToUInt32(index)].IsBackground = true;
+                }
+                else
+                {
+                    list.Add(Horse_Participants[Convert.ToUInt32(index)].Horse_Name);
+                }
+                if (list.Count + list_injury.Count == Horse_Participants.Length)
+                {
+                    this.end_race = true;
+                }
             }
             this.Barrier.RemoveParticipant();
         }
@@ -101,6 +98,7 @@ namespace Horse_Race_GUI
             this.Barrier = new Barrier(participantCount: Horse_Participants.Length);
             this.road_size = 1000;
             this.list = new List<String>();
+            this.list_injury = new List<String>();
 
             Threads = new Thread[this.Horse_Participants.Length];
             for (UInt32 i = 0; i < this.Horse_Participants.Length; ++i)
@@ -126,6 +124,7 @@ namespace Horse_Race_GUI
             Initialize_Horse_Participants();
             this.road_size = road_size;
             this.list = new List<String>();
+            this.list_injury = new List<String>();
             this.Barrier = new Barrier(participantCount: Horse_Participants.Length);
 
             Threads = new Thread[this.Horse_Participants.Length];
@@ -167,24 +166,10 @@ namespace Horse_Race_GUI
 
         public void Start_Race()
         {
+            this.timer1.Enabled = true;
             for (UInt32 i = 0; i < this.Threads.Length; ++i)
             {
                 Threads[i].Start(i);
-            }
-        }
-
-        public void Print_Results()
-        {
-            lock (Console_Locker)
-            {
-                //Console.Clear();
-                //Console.WriteLine("Placement is following ");
-                int i = 0;
-                foreach (var horse_placement in list)
-                {
-                    // Console.WriteLine("Place {0} takes horse {1}", (i + 1), horse_placement);
-                    ++i;
-                }
             }
         }
         /////////////////////////////////////////////////////////////////////////////////////////////
@@ -211,29 +196,53 @@ namespace Horse_Race_GUI
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //Start_Race();
+            this.button2.Enabled = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            this.button1.Enabled = false;
+            this.button2.Enabled = true;
             Start_Race();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            for (UInt32 i = 0; i < (UInt32)Horse_Participants.Length; ++i)
+            if (end_race == false)
             {
-                if (Horse_Participants[i].Position <= this.progressBars[i].Maximum)
+                this.button2.Enabled = false;
+                for (UInt32 i = 0; i < (UInt32)Horse_Participants.Length; ++i)
                 {
-                    lock (Position_Locker)
+                    if (Horse_Participants[i].Position <= this.progressBars[i].Maximum)
                     {
-                        this.progressBars[i].Value = Horse_Participants[i].Position;
+                        lock (Position_Locker)
+                        {
+                            this.progressBars[i].Value = Horse_Participants[i].Position;
+                        }
+                    }
+                    else
+                    {
+                        this.progressBars[i].Value = this.progressBars[i].Maximum;
                     }
                 }
-                else
+            }
+            else
+            {
+                int i = 0;
+                foreach (var horse_placement in list)
                 {
-                    this.progressBars[i].Value = this.progressBars[i].Maximum;
+                    String temp = "Place " + (i + 1) + " takes horse " + horse_placement + '\n';
+                    placement_textbox.Text += temp;
+                    ++i;
                 }
+                foreach (var horse_injury in list_injury)
+                {
+                    String temp = "Injuried horeses " + horse_injury + '\n';
+                    placement_textbox.Text += temp;
+                    Console.WriteLine("Injuried horeses: {0}", horse_injury);
+                }
+                this.timer1.Enabled = false;
+                this.button2.Enabled = true;
             }
         }
 
@@ -246,6 +255,40 @@ namespace Horse_Race_GUI
                     Threads[i].IsBackground = true;
                 }
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            placement_textbox.Text = "";
+            this.timer1.Enabled = false;
+            for (UInt32 i = 0; i < this.Horse_Participants.Length; ++i)
+            {
+                lock (Position_Locker)
+                {
+                    Horse_Participants[i].Position = this.road_size;
+                }
+            }
+
+            for (UInt32 i = 0; i < this.Threads.Length; ++i)
+            {
+                Threads[i].Join();
+            }
+
+            for (UInt32 i = 0; i < (UInt32)progressBars.Length; ++i)
+            {
+                this.progressBars[i].Value = this.progressBars[i].Minimum;
+            }
+
+            for (UInt32 i = 0; i < this.Horse_Participants.Length; ++i)
+            {
+                Threads[i] = new Thread(Run);
+            }
+            this.list = new List<String>();
+            this.list_injury = new List<String>();
+            Initialize_Horse_Participants();
+            this.Barrier = new Barrier(participantCount: Horse_Participants.Length);
+            end_race = false;
+            Start_Race();
         }
     }
 }
