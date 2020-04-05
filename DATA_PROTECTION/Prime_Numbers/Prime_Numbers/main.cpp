@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 		{
 			Data[i].second = true;
 			Prime_Numbers.emplace_back(Data[i].first);
-			for (size_t j = i; j < Data.size(); ++j)
+			for (size_t j = i+i; j < Data.size(); ++j)
 			{
 				if (Data[j].first % Data[i].first == 0)
 				{
