@@ -206,3 +206,64 @@ void MainWindow::on_Usun_Ksiazki_clicked()
         }
     }
 }
+
+void MainWindow::on_Wyswietl_Czytelnicy_Wypozycz_clicked()
+{
+    QSqlQueryModel * model = new QSqlQueryModel();
+
+    if(Connection_Open() == true)
+    {
+        QSqlQuery * query = new QSqlQuery(this->db);
+
+        query->prepare("SELECT * FROM Czytelnicy WHERE Czytelnicy.Imie != '""' AND Czytelnicy.Nazwisko != '""' ");
+
+        query->exec();
+        model->setQuery(*query);
+
+        ui->Lista_Wypozycz_Czytelnicy->setModel(model);
+
+        qDebug() << (model->rowCount());
+
+        Connection_Close();
+    }
+}
+
+void MainWindow::on_Wyswietl_Ksiazki_Wypozycz_clicked()
+{
+    QSqlQueryModel * model = new QSqlQueryModel();
+
+    if(Connection_Open() == true)
+    {
+        QSqlQuery * query = new QSqlQuery(this->db);
+
+        query->prepare("SELECT * FROM Ksiazki");
+
+        query->exec();
+        model->setQuery(*query);
+
+        ui->Lista_Wypozycz_Ksiazki->setModel(model);
+
+        qDebug() << (model->rowCount());
+
+        Connection_Close();
+    }
+}
+
+void MainWindow::on_Wypozycz_Ksiazke_clicked()
+{
+   // ui->temp1->setText(QString::number(ui->Lista_Wypozycz_Ksiazki->currentIndex().row()));
+
+    //ui->temp1->setText(ui->Lista_Wypozycz_Czytelnicy->
+
+
+}
+
+void MainWindow::on_Lista_Wypozycz_Czytelnicy_clicked(const QModelIndex &index)
+{
+    ui->temp1->setText(QString::number(index.row()));
+}
+
+void MainWindow::on_Lista_Wypozycz_Ksiazki_clicked(const QModelIndex &index)
+{
+    ui->temp2->setText(QString::number(index.row()));
+}

@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QString>
 
 QT_BEGIN_NAMESPACE
 
@@ -42,6 +43,16 @@ private slots:
     void on_Dodaj_Ksiazki_clicked();
 
     void on_Usun_Ksiazki_clicked();
+
+    void on_Wyswietl_Czytelnicy_Wypozycz_clicked();
+
+    void on_Wyswietl_Ksiazki_Wypozycz_clicked();
+
+    void on_Wypozycz_Ksiazke_clicked();
+
+    void on_Lista_Wypozycz_Czytelnicy_clicked(const QModelIndex &index);
+
+    void on_Lista_Wypozycz_Ksiazki_clicked(const QModelIndex &index);
 
 private:
     Ui::MainWindow *ui;
