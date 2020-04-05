@@ -33,6 +33,16 @@ private slots:
 
     void on_Dodaj_Czytelnicy_clicked();
 
+    void on_Usun_Czytelnicy_clicked();
+
+    void on_MainWindow_destroyed();
+
+    void on_Wyswietl_Ksiazki_clicked();
+
+    void on_Dodaj_Ksiazki_clicked();
+
+    void on_Usun_Ksiazki_clicked();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

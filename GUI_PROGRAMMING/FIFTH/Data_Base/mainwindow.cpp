@@ -6,6 +6,10 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setFixedSize(QSize(800, 500));
+    this->setWindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
+    this->db = QSqlDatabase::addDatabase("QSQLITE");
+    this->db.setDatabaseName("E:/!!PROJECTS_VS/!!3_Studying_Year/GUI_PROGRAMMING/FIFTH/Data_Base/DB.db");
 }
 
 MainWindow::~MainWindow()
@@ -15,9 +19,6 @@ MainWindow::~MainWindow()
 
 bool MainWindow::Connection_Open()
 {
-    this->db = QSqlDatabase::addDatabase("QSQLITE");
-    this->db.setDatabaseName("E:/!!PROJECTS_VS/!!3_Studying_Year/GUI_PROGRAMMING/FIFTH/Data_Base/DB.db");
-
     if(this->db.open() == false)
     {
         qDebug() << "Failed to open the database\n";
@@ -48,7 +49,8 @@ void MainWindow::on_Wyswietl_Czytelnicy_clicked()
         query->exec();
         model->setQuery(*query);
 
-        ui->tableView->setModel(model);
+        ui->Lista_Czytelnikow->setModel(model);
+        //ui->
 
         qDebug() << (model->rowCount());
 
@@ -62,22 +64,145 @@ void MainWindow::on_Dodaj_Czytelnicy_clicked()
     QString name = ui->Imie_Czytelnicy->text();
     QString surname = ui->Nazwisko_Czytelnicy->text();
 
+    if(name != "" && surname != "")
+    {
+        if(Connection_Open() == true)
+        {
+            QSqlQuery * query = new QSqlQuery(this->db);
+
+            query->prepare("INSERT INTO Czytelnicy (Imie,Nazwisko,id_Ksiazki) VALUES ('"+name+"', '"+surname+"',NULL)");
+
+            if(query->exec() == true)
+            {
+                //qDebug() << ("Inserted to DB");
+                QMessageBox::information(this,tr("Information"), tr("Successed insertion to DB"),QMessageBox::Ok);
+            }
+            else
+            {
+                //qDebug() << ("Error");
+                QMessageBox::information(this,tr("Information"), tr("Failed insertion to DB"),QMessageBox::Ok);
+            }
+
+            Connection_Close();
+            on_Wyswietl_Czytelnicy_clicked();
+        }
+    }
+}
+
+void MainWindow::on_Usun_Czytelnicy_clicked()
+{
+    //DELETE FROM Czytelnicy WHERE Czytelnicy.Imie = "" AND Czytelnicy.Nazwisko = ""
+    QString name = ui->Imie_Czytelnicy->text();
+    QString surname = ui->Nazwisko_Czytelnicy->text();
+
+    if(name != "" && surname != "")
+    {
+        if(Connection_Open() == true)
+        {
+            QSqlQuery * query = new QSqlQuery(this->db);
+
+            query->prepare("DELETE FROM Czytelnicy WHERE Imie ='"+name+"' AND Nazwisko = '"+surname+"'");
+
+            if(query->exec() == true)
+            {
+                //qDebug() << ("Inserted to DB");
+                QMessageBox::information(this,tr("Information"), tr("User: "+ name.toLatin1() +" "+ surname.toLatin1() +" has been deleted"),QMessageBox::Ok);
+            }
+            else
+            {
+                //qDebug() << ("Error");
+                QMessageBox::information(this,tr("Information"), tr("User: "+ name.toLatin1() +" "+ surname.toLatin1() +" has been deleted"),QMessageBox::Ok);
+            }
+
+            Connection_Close();
+            on_Wyswietl_Czytelnicy_clicked();
+        }
+    }
+}
+
+void MainWindow::on_MainWindow_destroyed()
+{
+    Connection_Close();
+}
+
+void MainWindow::on_Wyswietl_Ksiazki_clicked()
+{
+    QSqlQueryModel * model = new QSqlQueryModel();
+
     if(Connection_Open() == true)
     {
         QSqlQuery * query = new QSqlQuery(this->db);
 
-        query->prepare("INSERT INTO Czytelnicy (Imie,Nazwisko,id_Ksiazki) VALUES ('"+name+"', '"+surname+"',NULL)");
+        query->prepare("SELECT * FROM Ksiazki");
 
-        if(query->exec() == true)
-        {
-            qDebug() << ("Inserted to DB");
-        }
-        else
-        {
-            qDebug() << ("Error");
-        }
+        query->exec();
+        model->setQuery(*query);
+
+        ui->Lista_Ksiazek->setModel(model);
+
+        qDebug() << (model->rowCount());
 
         Connection_Close();
-        on_Wyswietl_Czytelnicy_clicked();
+    }
+}
+
+void MainWindow::on_Dodaj_Ksiazki_clicked()
+{
+    //INSERT INTO Ksiazki (Tytul,Autor_Imie,Autor_Nazwisko) VALUES ("Test","Test","Test")
+    QString title = ui->Tytul_Ksiazki->text();
+    QString name = ui->Imie_Ksiazki->text();
+    QString surname = ui->Nazwisko_Ksiazki->text();
+
+    if(title != "" && name != ""  && surname != "")
+    {
+        if(Connection_Open() == true)
+        {
+            QSqlQuery * query = new QSqlQuery(this->db);
+
+            query->prepare("INSERT INTO Ksiazki (Tytul,Autor_Imie,Autor_Nazwisko) VALUES ('"+title+"','"+name+"','"+surname+"')");
+
+            if(query->exec() == true)
+            {
+                qDebug() << ("Inserted to DB");
+                QMessageBox::information(this,tr("Information"), tr("Successed insertion to DB"),QMessageBox::Ok);
+            }
+            else
+            {
+                qDebug() << ("Error");
+                QMessageBox::information(this,tr("Information"), tr("Failed insertion to DB"),QMessageBox::Ok);
+            }
+
+            Connection_Close();
+            on_Wyswietl_Ksiazki_clicked();
+        }
+    }
+}
+
+void MainWindow::on_Usun_Ksiazki_clicked()
+{
+    QString title = ui->Tytul_Ksiazki->text();
+
+    if(title != "")
+    {
+        if(Connection_Open() == true)
+        {
+            QSqlQuery * query = new QSqlQuery(this->db);
+
+            query->prepare("DELETE FROM Ksiazki WHERE Tytul = '"+title+"' ");
+
+            if(query->exec() == true)
+            {
+                //qDebug() << ("Inserted to DB");
+                QMessageBox::information(this,tr("Information"), tr("Book: "+ title.toLatin1() +" has been deleted"),QMessageBox::Ok);
+            }
+            else
+            {
+                //qDebug() << ("Error");
+                QMessageBox::information(this,tr("Information"), tr("Book: "+ title.toLatin1() +" has been deleted"),QMessageBox::Ok);
+            }
+
+            Connection_Close();
+            on_Wyswietl_Ksiazki_clicked();
+        }
     }
 }
