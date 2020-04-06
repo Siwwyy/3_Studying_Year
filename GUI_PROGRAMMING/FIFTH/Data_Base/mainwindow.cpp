@@ -263,15 +263,15 @@ void MainWindow::on_Wypozycz_Ksiazke_clicked()
             QSqlQuery * query = new QSqlQuery(this->db);
 //= (SELECT id_Ksiazki FROM Czytelnicy)
             //split this update to select first and then update if id_ksiazka isnt exist in table
-            query->prepare("UPDATE Czytelnicy SET id_Ksiazki = '"+QString::number(ksiazki_id).toLatin1()+"' WHERE id_Czytelnicy = '"+QString::number(czytelnicy_id).toLatin1()+"' and id_Ksiazki != (SELECT id_Ksiazki FROM Czytelnicy)");
-
+            //UPDATE Czytelnicy SET id_Ksiazki = 1 WHERE id_Czytelnicy = 3 and id_Ksiazki != (SELECT id_Ksiazki FROM Czytelnicy)
+            query->prepare("UPDATE Czytelnicy SET id_Ksiazki = '"+QString::number(ksiazki_id).toLatin1()+"' WHERE id_Czytelnicy = '"+QString::number(czytelnicy_id).toLatin1()+"'and id_Ksiazki != (SELECT id_Ksiazki FROM Czytelnicy) ");
             if(query->exec() == false)
             {
-                   QMessageBox::information(this,tr("Information"), tr("Book isnt available to borrow"),QMessageBox::Ok);
+                QMessageBox::information(this,tr("Information"), tr("Book isnt available to borrow"), QMessageBox::Ok);
             }
             else
             {
-                QMessageBox::information(this,tr("Information"), tr("Book has been borrowed"),QMessageBox::Ok);
+                QMessageBox::information(this,tr("Information"), tr("Book has been borrowed"), QMessageBox::Ok);
             }
             Connection_Close();
             on_Wyswietl_Czytelnicy_Wypozycz_clicked();
@@ -282,6 +282,8 @@ void MainWindow::on_Wypozycz_Ksiazke_clicked()
     {
         QMessageBox::information(this,tr("Information"), tr("Click on both tables"),QMessageBox::Ok);
     }
+    this->czytelnicy_id = -1;
+    this->ksiazki_id = -1;
 }
 
 void MainWindow::on_Lista_Wypozycz_Czytelnicy_clicked(const QModelIndex &index)
@@ -326,4 +328,6 @@ void MainWindow::on_Oddaj_Ksiazke_clicked()
     {
         QMessageBox::information(this,tr("Information"), tr("Click on both tables"),QMessageBox::Ok);
     }
+    this->czytelnicy_id = -1;
+    this->ksiazki_id = -1;
 }
