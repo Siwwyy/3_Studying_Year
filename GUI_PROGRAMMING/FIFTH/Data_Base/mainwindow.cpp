@@ -259,9 +259,11 @@ void MainWindow::on_Wypozycz_Ksiazke_clicked()
     {
         if(Connection_Open() == true)
         {
+            //UPDATE Czytelnicy SET id_Ksiazki = 1 WHERE id_Czytelnicy = 14 and id_Ksiazki != (SELECT id_Ksiazki FROM Czytelnicy)
             QSqlQuery * query = new QSqlQuery(this->db);
-
-            query->prepare("UPDATE Czytelnicy SET id_Ksiazki = '"+QString::number(ksiazki_id).toLatin1()+"' WHERE id_Czytelnicy = '"+QString::number(czytelnicy_id).toLatin1()+"' and id_Ksiazki IS NULL ");
+//= (SELECT id_Ksiazki FROM Czytelnicy)
+            //split this update to select first and then update if id_ksiazka isnt exist in table
+            query->prepare("UPDATE Czytelnicy SET id_Ksiazki = '"+QString::number(ksiazki_id).toLatin1()+"' WHERE id_Czytelnicy = '"+QString::number(czytelnicy_id).toLatin1()+"' and id_Ksiazki != (SELECT id_Ksiazki FROM Czytelnicy)");
 
             if(query->exec() == false)
             {
