@@ -54,8 +54,13 @@ private slots:
 
     void on_Lista_Wypozycz_Ksiazki_clicked(const QModelIndex &index);
 
+    void on_Oddaj_Ksiazke_clicked();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
+
+    qint32 czytelnicy_id;
+    qint32 ksiazki_id;
 };
 #endif // MAINWINDOW_H

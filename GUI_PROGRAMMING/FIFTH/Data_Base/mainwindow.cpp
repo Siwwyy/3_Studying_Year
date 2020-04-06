@@ -3,7 +3,9 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::MainWindow),
+      czytelnicy_id(-1),
+      ksiazki_id(-1)
 {
     ui->setupUi(this);
     this->setFixedSize(QSize(800, 500));
@@ -251,19 +253,75 @@ void MainWindow::on_Wyswietl_Ksiazki_Wypozycz_clicked()
 
 void MainWindow::on_Wypozycz_Ksiazke_clicked()
 {
-   // ui->temp1->setText(QString::number(ui->Lista_Wypozycz_Ksiazki->currentIndex().row()));
+    //UPDATE Czytelnicy SET id_Ksiazki = 1 WHERE id_Czytelnicy = 13
 
-    //ui->temp1->setText(ui->Lista_Wypozycz_Czytelnicy->
+    if(this->czytelnicy_id != -1 && this->ksiazki_id != -1)
+    {
+        if(Connection_Open() == true)
+        {
+            QSqlQuery * query = new QSqlQuery(this->db);
 
+            query->prepare("UPDATE Czytelnicy SET id_Ksiazki = '"+QString::number(ksiazki_id).toLatin1()+"' WHERE id_Czytelnicy = '"+QString::number(czytelnicy_id).toLatin1()+"' and id_Ksiazki IS NULL ");
 
+            if(query->exec() == false)
+            {
+                   QMessageBox::information(this,tr("Information"), tr("Book isnt available to borrow"),QMessageBox::Ok);
+            }
+            else
+            {
+                QMessageBox::information(this,tr("Information"), tr("Book has been borrowed"),QMessageBox::Ok);
+            }
+            Connection_Close();
+            on_Wyswietl_Czytelnicy_Wypozycz_clicked();
+            on_Wyswietl_Ksiazki_Wypozycz_clicked();
+        }
+    }
+    else
+    {
+        QMessageBox::information(this,tr("Information"), tr("Click on both tables"),QMessageBox::Ok);
+    }
 }
 
 void MainWindow::on_Lista_Wypozycz_Czytelnicy_clicked(const QModelIndex &index)
 {
-    ui->temp1->setText(QString::number(index.row()));
+    //ui->temp1->setText(QString::number(index.row()));
+    //ui->Lista_Wypozycz_Ksiazki->selectRow(index.row());
+    //ui->temp1->setText(QString::number();
+    //ui->temp1->setText(ui->Lista_Wypozycz_Czytelnicy->model()->index(index.row(),0).data().toString());
+    this->czytelnicy_id = ui->Lista_Wypozycz_Czytelnicy->model()->index(index.row(),0).data().toInt();
 }
 
 void MainWindow::on_Lista_Wypozycz_Ksiazki_clicked(const QModelIndex &index)
 {
-    ui->temp2->setText(QString::number(index.row()));
+    //ui->temp2->setText(ui->Lista_Wypozycz_Ksiazki->model()->index(index.row(),0).data().toString());
+    this->ksiazki_id = ui->Lista_Wypozycz_Ksiazki->model()->index(index.row(),0).data().toInt();
+}
+
+void MainWindow::on_Oddaj_Ksiazke_clicked()
+{
+    if(this->czytelnicy_id != -1)
+    {
+        if(Connection_Open() == true)
+        {
+            QSqlQuery * query = new QSqlQuery(this->db);
+
+            query->prepare("UPDATE Czytelnicy SET id_Ksiazki = NULL WHERE id_Czytelnicy = '"+QString::number(czytelnicy_id).toLatin1()+"' and id_Ksiazki IS NOT NULL ");
+
+            if(query->exec() == false)
+            {
+                   QMessageBox::information(this,tr("Information"), tr("Book hasn't be returned"),QMessageBox::Ok);
+            }
+            else
+            {
+                QMessageBox::information(this,tr("Information"), tr("Book has been returned"),QMessageBox::Ok);
+            }
+            Connection_Close();
+            on_Wyswietl_Czytelnicy_Wypozycz_clicked();
+            on_Wyswietl_Ksiazki_Wypozycz_clicked();
+        }
+    }
+    else
+    {
+        QMessageBox::information(this,tr("Information"), tr("Click on both tables"),QMessageBox::Ok);
+    }
 }

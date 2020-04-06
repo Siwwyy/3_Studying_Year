@@ -310,30 +310,10 @@
        <string>Wyswietl Ksiazki</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="temp1">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>400</y>
-        <width>113</width>
-        <height>20</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="temp2">
-      <property name="geometry">
-       <rect>
-        <x>320</x>
-        <y>400</y>
-        <width>113</width>
-        <height>20</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QPushButton" name="Wypozycz_Ksiazke">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>270</x>
         <y>390</y>
         <width>241</width>
         <height>41</height>
@@ -341,6 +321,19 @@
       </property>
       <property name="text">
        <string>Wypozycz Wybrana Ksiazke</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="Oddaj_Ksiazke">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>390</y>
+        <width>241</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Oddaj Wybrana Ksiazke</string>
       </property>
      </widget>
     </widget>
