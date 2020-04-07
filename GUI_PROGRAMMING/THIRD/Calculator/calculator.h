@@ -30,6 +30,7 @@ private slots:
     void EqualButtonPressed();
     void ChangeNumberSign();
     void Erase();
+    void on_Dot_clicked();
 };
 
 #endif // CALCULATOR_H

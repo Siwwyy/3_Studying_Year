@@ -1117,7 +1117,7 @@ QPushButton:pressed
      </widget>
     </item>
     <item row="3" column="4">
-     <widget class="QPushButton" name="MemoryGet">
+     <widget class="QPushButton" name="Dot">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -1145,7 +1145,7 @@ QPushButton:pressed
 }</string>
       </property>
       <property name="text">
-       <string>M</string>
+       <string>.</string>
       </property>
      </widget>
     </item>

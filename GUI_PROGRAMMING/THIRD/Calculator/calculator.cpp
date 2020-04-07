@@ -7,6 +7,7 @@ bool divTrigger = false;
 bool multTrigger = false;
 bool addTrigger = false;
 bool subTrigger = false;
+bool dot_mode = false;
 
 Calculator::Calculator(QWidget *parent)
     : QMainWindow(parent)
@@ -53,13 +54,29 @@ void Calculator::NumPressed()
     QString displayVal = ui->Display->text();
     if((displayVal.toDouble()) == 0 || (displayVal.toDouble()) == 0.0)
     {
-        ui->Display->setText(butVal);
+        if(dot_mode == false)
+        {
+            ui->Display->setText(butVal);
+        }
+        else
+        {
+           ui->Display->setText(displayVal+butVal);
+        }
     }
     else
     {
-        QString newVal = displayVal + butVal;
-        double dblNewVal = newVal.toDouble();
-        ui->Display->setText(QString::number(dblNewVal, 'g',16));
+        if(dot_mode == false)
+        {
+            QString newVal = displayVal + butVal;
+            double dblNewVal = newVal.toDouble();
+            ui->Display->setText(QString::number(dblNewVal, 'g',16));
+        }
+        else
+        {
+            QString newVal = displayVal.append(butVal);
+            double dblNewVal = newVal.toDouble();
+            ui->Display->setText(QString::number(dblNewVal, 'g',16));
+        }
     }
 }
 
@@ -70,7 +87,7 @@ void Calculator::MathButtonPressed()
     multTrigger = false;
     addTrigger = false;
     subTrigger = false;
-
+    dot_mode = false;
     // Store current value in Display
     QString displayVal = ui->Display->text();
     calc_value = displayVal.toDouble();
@@ -158,6 +175,16 @@ void Calculator::ChangeNumberSign()
 
 void Calculator::Erase()
 {
+    dot_mode = false;
     ui->Display->setText(QString::number(0.0));
 }
 
+void Calculator::on_Dot_clicked()
+{
+    QString displayVal = ui->Display->text();
+    if(displayVal.contains('.') == false)
+    {
+        dot_mode = true;
+        ui->Display->setText(displayVal + ".");
+    }
+}

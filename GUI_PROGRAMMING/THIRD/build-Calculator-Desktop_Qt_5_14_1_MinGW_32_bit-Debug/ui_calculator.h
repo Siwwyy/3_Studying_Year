@@ -45,7 +45,7 @@ public:
     QPushButton *Button1;
     QPushButton *Button4;
     QPushButton *ChangeSign;
-    QPushButton *MemoryGet;
+    QPushButton *Dot;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *Calculator)
@@ -554,12 +554,12 @@ public:
 
         gridLayout->addWidget(ChangeSign, 4, 2, 1, 1);
 
-        MemoryGet = new QPushButton(centralwidget);
-        MemoryGet->setObjectName(QString::fromUtf8("MemoryGet"));
-        sizePolicy.setHeightForWidth(MemoryGet->sizePolicy().hasHeightForWidth());
-        MemoryGet->setSizePolicy(sizePolicy);
-        MemoryGet->setFont(font);
-        MemoryGet->setStyleSheet(QString::fromUtf8("QPushButton\n"
+        Dot = new QPushButton(centralwidget);
+        Dot->setObjectName(QString::fromUtf8("Dot"));
+        sizePolicy.setHeightForWidth(Dot->sizePolicy().hasHeightForWidth());
+        Dot->setSizePolicy(sizePolicy);
+        Dot->setFont(font);
+        Dot->setStyleSheet(QString::fromUtf8("QPushButton\n"
 "{\n"
 "	background-color: #FF8C00;\n"
 "	border: 1px solid gray;\n"
@@ -573,7 +573,7 @@ public:
 "	padding: 5px;\n"
 "}"));
 
-        gridLayout->addWidget(MemoryGet, 3, 4, 1, 1);
+        gridLayout->addWidget(Dot, 3, 4, 1, 1);
 
         Calculator->setCentralWidget(centralwidget);
         statusbar = new QStatusBar(Calculator);
@@ -608,7 +608,7 @@ public:
         Button1->setText(QCoreApplication::translate("Calculator", "1", nullptr));
         Button4->setText(QCoreApplication::translate("Calculator", "4", nullptr));
         ChangeSign->setText(QCoreApplication::translate("Calculator", "+/-", nullptr));
-        MemoryGet->setText(QCoreApplication::translate("Calculator", "M", nullptr));
+        Dot->setText(QCoreApplication::translate("Calculator", ".", nullptr));
     } // retranslateUi
 
 };
