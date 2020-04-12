@@ -23,12 +23,12 @@ bool MainWindow::Connection_Open()
 {
     if(this->db.open() == false)
     {
-        qDebug() << "Failed to open the database\n";
+        //qDebug() << "Failed to open the database\n";
         return false;
     }
     else
     {
-        qDebug() << "Connected to the database\n";
+        //qDebug() << "Connected to the database\n";
         return true;
     }
 }
@@ -54,7 +54,7 @@ void MainWindow::on_Wyswietl_Czytelnicy_clicked()
         ui->Lista_Czytelnikow->setModel(model);
         //ui->
 
-        qDebug() << (model->rowCount());
+        //qDebug() << (model->rowCount());
 
         Connection_Close();
     }
@@ -142,7 +142,7 @@ void MainWindow::on_Wyswietl_Ksiazki_clicked()
 
         ui->Lista_Ksiazek->setModel(model);
 
-        qDebug() << (model->rowCount());
+       //qDebug() << (model->rowCount());
 
         Connection_Close();
     }
@@ -165,12 +165,12 @@ void MainWindow::on_Dodaj_Ksiazki_clicked()
 
             if(query->exec() == true)
             {
-                qDebug() << ("Inserted to DB");
+                //qDebug() << ("Inserted to DB");
                 QMessageBox::information(this,tr("Information"), tr("Successed insertion to DB"),QMessageBox::Ok);
             }
             else
             {
-                qDebug() << ("Error");
+                //qDebug() << ("Error");
                 QMessageBox::information(this,tr("Information"), tr("Failed insertion to DB"),QMessageBox::Ok);
             }
 
@@ -224,7 +224,7 @@ void MainWindow::on_Wyswietl_Czytelnicy_Wypozycz_clicked()
 
         ui->Lista_Wypozycz_Czytelnicy->setModel(model);
 
-        qDebug() << (model->rowCount());
+        //qDebug() << (model->rowCount());
 
         Connection_Close();
     }
@@ -245,7 +245,7 @@ void MainWindow::on_Wyswietl_Ksiazki_Wypozycz_clicked()
 
         ui->Lista_Wypozycz_Ksiazki->setModel(model);
 
-        qDebug() << (model->rowCount());
+        //qDebug() << (model->rowCount());
 
         Connection_Close();
     }
@@ -259,23 +259,28 @@ void MainWindow::on_Wypozycz_Ksiazke_clicked()
     {
         if(Connection_Open() == true)
         {
+            QSqlQueryModel * model = new QSqlQueryModel();
             //UPDATE Czytelnicy SET id_Ksiazki = 1 WHERE id_Czytelnicy = 14 and id_Ksiazki != (SELECT id_Ksiazki FROM Czytelnicy)
             QSqlQuery * query = new QSqlQuery(this->db);
 //= (SELECT id_Ksiazki FROM Czytelnicy)
             //split this update to select first and then update if id_ksiazka isnt exist in table
             //UPDATE Czytelnicy SET id_Ksiazki = 1 WHERE id_Czytelnicy = 3 and id_Ksiazki != (SELECT id_Ksiazki FROM Czytelnicy)
-            query->prepare("UPDATE Czytelnicy SET id_Ksiazki = '"+QString::number(ksiazki_id).toLatin1()+"' WHERE id_Czytelnicy = '"+QString::number(czytelnicy_id).toLatin1()+"'and id_Ksiazki != (SELECT id_Ksiazki FROM Czytelnicy) ");
-            if(query->exec() == false)
+            query->prepare("SELECT id_Ksiazki FROM Czytelnicy WHERE id_Ksiazki = '"+QString::number(ksiazki_id).toLatin1()+"' ");
+            query->exec();
+            model->setQuery(*query);
+            qDebug() << (model->rowCount());
+            if(model->rowCount() == 0)
             {
-                QMessageBox::information(this,tr("Information"), tr("Book isnt available to borrow"), QMessageBox::Ok);
+                query->prepare("UPDATE Czytelnicy SET id_Ksiazki = '"+QString::number(ksiazki_id).toLatin1()+"' WHERE id_Czytelnicy = '"+QString::number(czytelnicy_id).toLatin1()+"' ");
+                QMessageBox::information(this,tr("Information"), tr("Book has been borrowed"), QMessageBox::Ok);
+                Connection_Close();
+                on_Wyswietl_Czytelnicy_Wypozycz_clicked();
+                on_Wyswietl_Ksiazki_Wypozycz_clicked();
             }
             else
             {
-                QMessageBox::information(this,tr("Information"), tr("Book has been borrowed"), QMessageBox::Ok);
+                QMessageBox::information(this,tr("Information"), tr("Book isnt available to borrow"), QMessageBox::Ok);
             }
-            Connection_Close();
-            on_Wyswietl_Czytelnicy_Wypozycz_clicked();
-            on_Wyswietl_Ksiazki_Wypozycz_clicked();
         }
     }
     else
