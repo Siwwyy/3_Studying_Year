@@ -141,3 +141,56 @@ from datetime import date
 
 #Zadanie6
 
+file_name = "main.cpp"
+file_data = str()
+output_data = []
+
+
+with open(file_name, "r") as file:
+    file_data = file.readlines()
+
+
+long_comment = False
+for line in file_data:
+    if "/*" in line:
+        long_comment = True
+    if long_comment == False and not "//" in line:
+        output_data.append(line)
+    if "*/" in line:
+        long_comment = False
+    if "//" in line:
+        index = line.find('/')
+        line = line[0: index]
+        output_data.append(line)
+
+
+f = open("main_commentary_deleted.cpp", 'w')
+f.writelines(output_data)
+f.close()
+
+###############################################
+#SAMPLE FILE
+#include <iostream>
+#include <string>
+#include <cstdint>
+
+
+#int main(int argc, char * argv[])
+#{
+#	int32_t val{};
+#	/*
+#		DDDDD
+#	*/
+	
+#	/////DDDDDDD
+	
+#	std::cin.get();
+#	return EXIT_SUCCESS;
+#}
+
+###############################################
+
+
+###########################################################################
+
+#Zadanie7
