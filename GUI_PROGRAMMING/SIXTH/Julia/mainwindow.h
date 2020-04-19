@@ -6,6 +6,8 @@
 #include <QtCore>
 #include <QtMath>
 #include <complex>
+#include <QThread>
+#include <QMutex>
 
 QT_BEGIN_NAMESPACE
 
@@ -57,6 +59,7 @@ public:
 private:
     Ui::MainWindow *ui;
 protected:
+    void Run();
     void paintEvent(QPaintEvent * e);
     int Julia(int x, int y);
     int MangelBot(int x, int y);

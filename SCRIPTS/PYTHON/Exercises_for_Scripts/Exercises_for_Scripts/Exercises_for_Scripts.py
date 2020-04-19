@@ -1,7 +1,11 @@
 import locale
 import calendar
+import numpy
+import itertools
 from sortedcontainers import SortedList
 from datetime import date
+import os 
+
 
 #Zadanie 1
 
@@ -141,32 +145,32 @@ from datetime import date
 
 #Zadanie6
 
-file_name = "main.cpp"
-file_data = str()
-output_data = []
+#file_name = "main.cpp"
+#file_data = str()
+#output_data = []
 
 
-with open(file_name, "r") as file:
-    file_data = file.readlines()
+#with open(file_name, "r") as file:
+#    file_data = file.readlines()
 
 
-long_comment = False
-for line in file_data:
-    if "/*" in line:
-        long_comment = True
-    if long_comment == False and not "//" in line:
-        output_data.append(line)
-    if "*/" in line:
-        long_comment = False
-    if "//" in line:
-        index = line.find('/')
-        line = line[0: index]
-        output_data.append(line)
+#long_comment = False
+#for line in file_data:
+#    if "/*" in line:
+#        long_comment = True
+#    if long_comment == False and not "//" in line:
+#        output_data.append(line)
+#    if "*/" in line:
+#        long_comment = False
+#    if "//" in line:
+#        index = line.find('/')
+#        line = line[0: index]
+#        output_data.append(line)
 
 
-f = open("main_commentary_deleted.cpp", 'w')
-f.writelines(output_data)
-f.close()
+#f = open("main_commentary_deleted.cpp", 'w')
+#f.writelines(output_data)
+#f.close()
 
 ###############################################
 #SAMPLE FILE
@@ -194,3 +198,54 @@ f.close()
 ###########################################################################
 
 #Zadanie7
+
+##operator for sorting
+#def sort_by_Second(val): 
+#    return val[0][1]
+
+##str = input()
+#str = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+
+#Occurences = []
+
+#for char in str:
+#    occurence = str.count(char, 0, len(str))
+#    pair = [(char,int(occurence))]
+#    if pair not in Occurences:
+#        Occurences.append(pair)
+
+
+#Occurences.sort(key = sort_by_Second, reverse = True) 
+#counter = int()
+#for pairs in Occurences:
+#    print(pairs)
+#    counter += 1
+#    if counter == 10:
+#        break
+
+
+###########################################################################
+
+#Zadanie8
+
+##string_to_find = input()
+#string_to_find = "marcin"
+##file_path = input()
+
+##dir_path = os.path.dirname(os.path.realpath(file_path))
+#dir_path = os.path.dirname(os.path.realpath(__file__))
+##cwd = os.getcwd()
+
+#entries = os.listdir(dir_path)
+
+#for file_paths in entries:
+#    with open(file_paths) as file:
+#        if string_to_find in file.read():
+#            print(file_paths, " => contains " , string_to_find)
+
+
+
+###########################################################################
+
+#Zadanie9
+

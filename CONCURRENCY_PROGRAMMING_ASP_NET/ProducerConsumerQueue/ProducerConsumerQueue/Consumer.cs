@@ -53,7 +53,7 @@ namespace ProducerConsumerQueue
                 }
                 if (record == null)
                 {
-                    //Console.WriteLine("Consumer wait for records");
+                    Console.WriteLine("Consumer wait for records");
                     Thread.Sleep(5);
                     continue;
                 }
@@ -64,7 +64,7 @@ namespace ProducerConsumerQueue
 
         private void write(Record record)
         {
-            writer.Write("{0};{1}\n", record.Id, record.Value);
+            writer.Write("Write: {0};{1}\n", record.Id, record.Value);
         }
     }
 }

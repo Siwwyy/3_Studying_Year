@@ -13,6 +13,16 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::Run()
+{
+    const size_t threads_size = 100;
+    QThread * Threads = new QThread[threads_size];
+    for(size_t i = 0; i < threads_size; ++i)
+    {
+        //Threads[i] = QThread::create(paintEvent());
+    }
+}
+
 void MainWindow::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
@@ -28,6 +38,7 @@ void MainWindow::paintEvent(QPaintEvent *e)
 
 
     //Draw Something
+
     for(size_t i = 0; i < QWidget::width(); ++i)
     {
         for(size_t j = 0; j < QWidget::height(); ++j)
