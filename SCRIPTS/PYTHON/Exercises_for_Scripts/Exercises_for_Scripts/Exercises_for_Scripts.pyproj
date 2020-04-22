@@ -11,7 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>Exercises_for_Scripts</Name>
     <RootNamespace>Exercises_for_Scripts</RootNamespace>
-    <InterpreterId>Global|PythonCore|3.7</InterpreterId>
+    <InterpreterId>CondaEnv|CondaEnv|Anaconda3</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,6 +25,7 @@
     <Compile Include="Exercises_for_Scripts.py" />
   </ItemGroup>
   <ItemGroup>
+    <InterpreterReference Include="CondaEnv|CondaEnv|Anaconda3" />
     <InterpreterReference Include="Global|PythonCore|3.7" />
     <InterpreterReference Include="Global|PythonCore|3.7-32" />
   </ItemGroup>

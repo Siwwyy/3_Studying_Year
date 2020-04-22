@@ -249,15 +249,15 @@ import os
 
 #Zadanie9
 
-Unique_File_Names = []
+#Unique_File_Names = []
 
-for dirpath, dirnames, file in os.walk(os.path.dirname(os.path.realpath(__file__))):
-    for single_file in file:
-        if single_file not in Unique_File_Names:
-            Unique_File_Names.append(single_file)
+#for dirpath, dirnames, file in os.walk(os.path.dirname(os.path.realpath(__file__))):
+#    for single_file in file:
+#        if single_file not in Unique_File_Names:
+#            Unique_File_Names.append(single_file)
 
-for file_names in Unique_File_Names:
-    print(file_names, sep = '\n')
+#for file_names in Unique_File_Names:
+#    print(file_names, sep = '\n')
 
 
 ###########################################################################
