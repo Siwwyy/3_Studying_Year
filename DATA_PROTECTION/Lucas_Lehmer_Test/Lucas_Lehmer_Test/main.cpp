@@ -6,11 +6,8 @@
 
 
 const uint64_t Power(uint64_t base, uint64_t power);
-//const uint64_t Lucas_Lehmer(uint64_t last_value, uint64_t k);
 void Lucas_Lehmer(uint64_t p);
 bool Is_Prime(uint64_t number);
-
-
 
 
 int main(int argc, char* argv[])
@@ -24,7 +21,6 @@ int main(int argc, char* argv[])
 			Lucas_Lehmer(static_cast<uint64_t>(i));
 		}
 	}
-
 
 	system("pause");
 	return EXIT_SUCCESS;
@@ -87,15 +83,3 @@ bool Is_Prime(uint64_t number)
 	}
 
 }
-
-//const uint64_t Lucas_Lehmer(uint64_t last_value, uint64_t k)
-//{
-//	if (k == 0)
-//	{
-//		return static_cast<uint64_t>(4);
-//	}
-//	else
-//	{
-//		return static_cast<uint64_t>((Power(last_value,2)) - 2);
-//	}
-//}
