@@ -6,15 +6,27 @@
 #include <cmath>
 
 
+const int32_t powmod(const int32_t a, const int32_t b, const uint32_t mod);
+
 int main(int argc, char* argv[])
 {
 	int32_t a{ 4321 };
 	int32_t b{ 5678 };
 	uint32_t mod{ 9876 };
-	int32_t result{1};
+
+
+	std::cout << powmod(a,b,mod) << '\n';
+
+	system("pause");
+	return EXIT_SUCCESS;
+}
+
+const int32_t powmod(const int32_t a, const int32_t b, const uint32_t mod)
+{
+	int32_t result{ 1 };
 	int32_t temp{};
 
-	std::bitset<sizeof(a)*8> bits(b);
+	std::bitset<sizeof(a) * 8> bits(b);
 
 	temp = a % mod;
 
@@ -28,8 +40,5 @@ int main(int argc, char* argv[])
 		temp = (temp * temp) % mod;
 	}
 
-	std::cout << result << '\n';
-
-	system("pause");
-	return EXIT_SUCCESS;
+	return result;
 }
