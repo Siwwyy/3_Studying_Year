@@ -14,7 +14,6 @@ int main(int argc, char* argv[])
 	int32_t b{ 5678 };
 	uint32_t mod{ 9876 };
 
-
 	std::cout << powmod(a,b,mod) << '\n';
 
 	system("pause");
