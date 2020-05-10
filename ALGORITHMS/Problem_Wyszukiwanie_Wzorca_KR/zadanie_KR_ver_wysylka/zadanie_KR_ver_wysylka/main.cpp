@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <windows.h>
 
 using namespace std;
 
@@ -76,6 +77,7 @@ void inserter();
 int main(int argc, char* argv[])
 {
 	inserter();
+	system("pause");
 	return EXIT_SUCCESS;
 }
 

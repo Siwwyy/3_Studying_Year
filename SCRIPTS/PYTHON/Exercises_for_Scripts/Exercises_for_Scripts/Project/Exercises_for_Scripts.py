@@ -258,36 +258,3 @@ import os
 
 #for file_names in Unique_File_Names:
 #    print(file_names, sep = '\n')
-
-
-import numpy as np
-import matplotlib.pyplot as plt
-
-import pywt
-import pywt.data
-import cv2
-import pandas
-
-# Load image
-#fname = os.path.join(os.path.dirname(__file__), 'wykres.png')
-#camera = np.load(fname)['data']
-#original = camera
-
-image = cv2.imread('wykres.png')
-image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
-
-# Wavelet transform of image, and plot approximation and details
-titles = ['Approximation']
-coeffs2 = pywt.dwt2(image, 'bior1.3')
-
-LL= coeffs2
-fig = plt.figure(figsize=(15, 15))
-ax = fig.add_subplot(1, 1,1)
-ax.imshow(image, interpolation="nearest", cmap=plt.cm.gray)
-ax.set_title(titles[0], fontsize=14)
-ax.set_xticks([])
-ax.set_yticks([])
-
-
-fig.tight_layout()
-plt.show()
