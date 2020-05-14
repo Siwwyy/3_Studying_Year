@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "TF2_QuickStart", "TF2_QuickStart\TF2_QuickStart.pyproj", "{CFF3867C-9E83-4AF6-8BE6-63874A627193}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Self_Photo_Loading", "Self_Photo_Loading\Self_Photo_Loading.pyproj", "{E15143AB-1E9C-4E4C-AF25-68528DA98FCC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CFF3867C-9E83-4AF6-8BE6-63874A627193}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CFF3867C-9E83-4AF6-8BE6-63874A627193}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E15143AB-1E9C-4E4C-AF25-68528DA98FCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E15143AB-1E9C-4E4C-AF25-68528DA98FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
