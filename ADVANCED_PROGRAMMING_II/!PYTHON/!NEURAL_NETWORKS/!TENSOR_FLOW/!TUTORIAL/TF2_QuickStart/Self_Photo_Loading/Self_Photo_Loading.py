@@ -11,49 +11,80 @@ import matplotlib.pyplot as plt
 import os
 import pathlib
 import cv2
+import random
+import pickle
 
 print(tf.__version__)
 
 # Import your own photos
 
-Data_dir = "E:\\!!PROJECTS_VS\\!Data_Sets\\SIGN_ALPHABET\\asl-alphabet\\asl_alphabet_train\\test"
+#Data_dir = "E:\\!!PROJECTS_VS\\!Data_Sets\\SIGN_ALPHABET\\asl-alphabet\\asl_alphabet_train\\test"
 
-Class_names = [ "A", "B" ]
+#Class_names = [ "A", "B" ]
 
-#for category in Class_names:
-#    path = os.path.join(Data_dir,category)  # path to A or B dir
-#    for img in os.listdir(path):
-#        img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_GRAYSCALE)
-#        #plt.imshow(img_array, cmap="gray")
-#        #plt.show()
-#        #break
-#    #break
+##for category in Class_names:
+##    path = os.path.join(Data_dir,category)  # path to A or B dir
+##    for img in os.listdir(path):
+##        img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_GRAYSCALE)
+##        #plt.imshow(img_array, cmap="gray")
+##        #plt.show()
+##        #break
+##    #break
 
-##########################################################################################
+###########################################################################################
 
-#print(len(img_array))
+##print(len(img_array))
 
-IMG_SIZE = 50
+#IMG_SIZE = 50
 
-#new_img_array = cv2.resize(img_array, (IMG_SIZE,IMG_SIZE))
-#plt.imshow(new_img_array, cmap="gray")
-#plt.show()
+##new_img_array = cv2.resize(img_array, (IMG_SIZE,IMG_SIZE))
+##plt.imshow(new_img_array, cmap="gray")
+##plt.show()
 
 
-training_data = []
+#training_data = []
 
-def Create_Training_Data():
-    for category in Class_names:
-        path = os.path.join(Data_dir,category)  # path to A or B dir
-        class_num = Class_names.index(category)
-        for img in os.listdir(path):
-            try:
-                img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_GRAYSCALE)
-                new_img_array = cv2.resize(img_array, (IMG_SIZE,IMG_SIZE))
-                training_data.append([new_array,class_num])
-            except Exception as e:
-                print("Exception")
+#def Create_Training_Data():
+#    for category in Class_names:
+#        path = os.path.join(Data_dir,category)  # path to A or B dir
+#        class_num = Class_names.index(category)
+#        for img in os.listdir(path):
+#            try:
+#                img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_GRAYSCALE)
+#                new_img_array = cv2.resize(img_array, (IMG_SIZE,IMG_SIZE))
+#                training_data.append([new_img_array,class_num])
+#            except Exception as e:
+#                print("Exception")
 
-Create_Training_Data()
+#Create_Training_Data()
 
-print(len(training_data))
+##print(training_data[0])
+##print(len(training_data))
+
+#random.shuffle(training_data)   #shuffle the data
+
+##for sample in training_data[:10]:
+##    print(sample[1])
+
+#X = []
+#Y = []
+
+#for features, labels in training_data:
+#    X.append(features)
+#    Y.append(labels)
+
+
+#X = np.array(X).reshape(-1, IMG_SIZE,IMG_SIZE,1)
+##print(X)
+
+#pickle_out = open("X.pickle","wb")
+#pickle.dump(X, pickle_out)
+#pickle_out.close()
+
+#pickle_out = open("Y.pickle","wb")
+#pickle.dump(Y, pickle_out)
+#pickle_out.close()
+
+# Load back the data
+#pickle_in = open("X.pickle", "rb")
+#X = pickle.load(pickle_in)
