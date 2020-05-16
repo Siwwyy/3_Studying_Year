@@ -16,7 +16,7 @@ import time
 #NAME = "what{}".format(int(time.time()))
 
 #My_TensorBoard = TensorBoard(log_dir="logs/".format(NAME))
-tensorboard_callback = TensorBoard(log_dir=".\\logs")
+
 
 
 X = pickle.load(open("X.pickle", "rb"))
@@ -24,30 +24,52 @@ Y = pickle.load(open("Y.pickle", "rb"))
 
 X = X/255.0
 
+dense_layers = [0]
+layer_sizes = [64]
+conv_layers = [3]
 
-# Neural network
-model = Sequential()
+counter = 0
 
-#First Layer
-model.add(  Conv2D(64, (3,3), input_shape = X.shape[1:])    )
-model.add(  Activation("relu")  )
-model.add(  MaxPooling2D(pool_size=(2,2))    )
+for dense_layer in dense_layers:
+    for layer_size in layer_sizes:
+        for conv_layer in conv_layers:
+            NAME = "{}_conv_{}_nodes_{}_dense_{}".format(conv_layer,layer_size,dense_layer, int(time.time()))
 
-#Second Layer
-model.add(  Conv2D(64, (3,3))   )
-model.add(  Activation("relu")  )
-model.add(  MaxPooling2D(pool_size=(2,2))    )
+            print(NAME)
 
-#Thrid Layer
-#model.add(Flatten(data_format=(3,3)))
-model.add(  Flatten()   )
+            # Neural network
+            model = Sequential()
 
-#Output Layer
-model.add(  Dense(1)    )
-model.add(  Activation("sigmoid")   )
+            #First Layer
+            model.add(  Conv2D(layer_size, (3,3), input_shape = X.shape[1:])    )
+            model.add(  Activation("relu")  )
+            model.add(  MaxPooling2D(pool_size=(2,2))    )
+
+            for l in range(conv_layer-1):
+                #Second Layer
+                model.add(  Conv2D(layer_size, (3,3))   )
+                model.add(  Activation("relu")  )
+                model.add(  MaxPooling2D(pool_size=(2,2))    )
+
+            #Thrid Layer
+            model.add(  Flatten()   )
 
 
-model.compile(loss="binary_crossentropy", optimizer="adam", metrics=['accuracy'])
+            for l in range(dense_layer):
+                #Fourth Layer
+                model.add(Dense(512))
+                model.add(  Activation("relu")  )
+            #model.add(Flatten(data_format=(3,3)))
+
+            #Output Layer
+            model.add(  Dense(1)    )
+            model.add(  Activation("sigmoid")   )
 
 
-model.fit(X,Y, batch_size=32, epochs=20,validation_split=0.3,verbose=1,callbacks=[tensorboard_callback])
+            tensorboard_callback = TensorBoard(log_dir=".\\logs\\{}".format(counter))
+            counter = counter + 1
+
+            model.compile(loss="binary_crossentropy", optimizer="adam", metrics=['accuracy'])
+
+
+            model.fit(X,Y, batch_size=32, epochs=10,validation_split=0.3,verbose=1,callbacks=[tensorboard_callback])

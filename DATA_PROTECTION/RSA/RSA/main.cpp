@@ -80,8 +80,20 @@ int main(int argc, char* argv[])
 			}
 			Blocks_Values[i] = (Blocks[i][0] << 16) + (Blocks[i][1] << 8) + (Blocks[i][2]);	//poniewaz mamy bloki 3 elementowe
 		}
+		std::cout << "bloki= \n";
+		//PODZIAL NA BLOKI
+		for (size_t i = 0; i < amount_of_blocks; ++i)
+		{
+			for (size_t j = 0; j < 3; ++j)
+			{
+				std::cout << Blocks[i][j] << ' ';
+			}
+			std::cout << '\n';
+		}
+		std::cout << '\n';
 
 		//ZASZYFROWANE
+		std::cout << "szyfr= \n";
 		for (size_t i = 0; i < amount_of_blocks; ++i)
 		{
 			std::cout << Blocks_Values[i] << ' ';
