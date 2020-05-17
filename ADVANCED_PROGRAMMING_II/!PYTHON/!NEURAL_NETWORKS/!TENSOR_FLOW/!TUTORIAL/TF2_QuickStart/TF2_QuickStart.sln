@@ -9,6 +9,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Self_Photo_Loading", "Self_
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Convolutional_Neural_Network", "Convolutional_Neural_Network\Convolutional_Neural_Network.pyproj", "{FE463FC4-F765-4565-99D4-2932DD197F8E}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Testing_Trained_Model", "Testing_Trained_Model\Testing_Trained_Model.pyproj", "{1F8E9F69-430E-460D-B7C4-DD8CC5ED1157}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,8 @@ Global
 		{E15143AB-1E9C-4E4C-AF25-68528DA98FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE463FC4-F765-4565-99D4-2932DD197F8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FE463FC4-F765-4565-99D4-2932DD197F8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F8E9F69-430E-460D-B7C4-DD8CC5ED1157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F8E9F69-430E-460D-B7C4-DD8CC5ED1157}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

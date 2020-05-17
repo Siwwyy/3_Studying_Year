@@ -57,7 +57,7 @@ for dense_layer in dense_layers:
 
             for l in range(dense_layer):
                 #Fourth Layer
-                model.add(Dense(512))
+                model.add(  Dense(512)  )
                 model.add(  Activation("relu")  )
             #model.add(Flatten(data_format=(3,3)))
 
@@ -73,3 +73,5 @@ for dense_layer in dense_layers:
 
 
             model.fit(X,Y, batch_size=32, epochs=10,validation_split=0.3,verbose=1,callbacks=[tensorboard_callback])
+
+model.save('64x3-CNN.model')
