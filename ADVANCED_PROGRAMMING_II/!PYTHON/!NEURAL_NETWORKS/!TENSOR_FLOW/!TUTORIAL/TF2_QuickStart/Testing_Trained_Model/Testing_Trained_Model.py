@@ -62,9 +62,9 @@ model = keras.models.load_model("64x3-CNN.model")
 
 
 
-predictions = model.predict([Prepare("my_b_test.jpg")])
+#predictions = model.predict([Prepare("my_b_test.jpg")])
 
-print("You are showing following sign: ",Class_names[int(predictions[0][0])])
+#print("You are showing following sign: ",Class_names[int(predictions[0][0])])
 
 
 #bgr_img = cv2.imread('my_b_test.jpg')
