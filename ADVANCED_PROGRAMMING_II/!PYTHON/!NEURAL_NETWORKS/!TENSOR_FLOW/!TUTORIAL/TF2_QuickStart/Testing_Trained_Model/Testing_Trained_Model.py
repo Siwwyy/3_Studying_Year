@@ -45,51 +45,6 @@ model = keras.models.load_model("64x3-CNN.model")
 #print("You are showing following sign: ",Class_names[int(predictions[0][0])])
 
 
-#bgr_img = cv2.imread('my_b_test.jpg')
-
-#b,g,r = cv2.split(bgr_img)       # get b,g,r
-#rgb_img = cv2.merge([r,g,b])     # switch it to rgb
-
-
-##plt.figure(figsize=(25,25))
-##plt.subplot(10,10)
-#plt.xticks([])
-#plt.yticks([])
-#plt.grid(False)
-#plt.imshow(rgb_img)
-#plt.xlabel(Class_names[int(predictions[0][0])])
-#plt.show()
-
-
-
-#predictions = model.predict([Prepare("my_b_test.jpg")])
-
-#print("You are showing following sign: ",Class_names[int(predictions[0][0])])
-
-
-#bgr_img = cv2.imread('my_b_test.jpg')
-
-#b,g,r = cv2.split(bgr_img)       # get b,g,r
-#rgb_img = cv2.merge([r,g,b])     # switch it to rgb
-
-
-#plt.figure(figsize=(25,25))
-##plt.subplot(10,10)
-#plt.xticks([])
-#plt.yticks([])
-#plt.grid(False)
-#plt.imshow(rgb_img)
-#plt.xlabel(Class_names[int(predictions[0][0])])
-#plt.show()
-
-
-
-
-
-
-
-
-
 
 
 ################################################################################################################################################################################
