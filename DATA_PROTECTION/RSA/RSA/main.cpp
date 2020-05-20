@@ -114,7 +114,15 @@ int main(int argc, char* argv[])
 		}
 		delete[] Blocks;
 		delete[] Blocks_Values;
+		std::cout << '\n';
+		std::cout << '\n';
+		std::cout << '\n';
+		std::cout << NWD(e, fin) << '\n';
 	}
+
+
+
+
 
 	system("pause");
 	return EXIT_SUCCESS;
