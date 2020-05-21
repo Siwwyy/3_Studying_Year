@@ -6,7 +6,7 @@
 
 
 const _STD vector<int32_t>& Get_File_Data(const std::string& file_path);
-const bool Unvalid_Characters(const char character);
+const bool Invalid_Characters(const char character);
 
 int main(int argc, char* argv[])
 {
@@ -58,7 +58,7 @@ const::std::vector<int32_t>& Get_File_Data(const std::string& file_path)
 			std::getline(file_in, temp);
 			for (size_t i = 0; i < temp.size(); ++i)
 			{
-				if (Unvalid_Characters(temp[i]) != false)
+				if (Invalid_Characters(temp[i]) != false)
 				{
 					temp[i] = '/';
 				}
@@ -104,24 +104,24 @@ const::std::vector<int32_t>& Get_File_Data(const std::string& file_path)
 		Coords.emplace_back(std::make_pair(std::make_pair(coords[0], coords[1]), std::make_pair(coords[2], coords[3])));
 	}
 
-	for (size_t i = 0; i < Cities.size(); ++i)	//works
-	{
-		std::cout << Cities[i] << '\n';
-	}
+	//for (size_t i = 0; i < Cities.size(); ++i)	//works
+	//{
+	//	std::cout << Cities[i] << '\n';
+	//}
 
 	for (size_t i = 0; i < Coords.size(); ++i)	//works
 	{
-		std::cout << Coords[i].first.first << " " << Coords[i].first.second << " " << Coords[i].second.first << " " << Coords[i].second.second << '\n';
+		std::cout << Cities[i] << "  | x1:" << Coords[i].first.first << " y1:" << Coords[i].first.second << " | x2:" << Coords[i].second.first << " y2:" << Coords[i].second.second << '\n';
 	}
 
 
 	return Data;
 }
 
-const bool Unvalid_Characters(const char character)
+const bool Invalid_Characters(const char character)
 {
 	std::fstream file_in{};
-	file_in.open("unvalid_characters.in", std::ios_base::in | std::ios_base::binary);
+	file_in.open("invalid_characters.in", std::ios_base::in | std::ios_base::binary);
 
 	if (file_in.good() == false)
 	{
