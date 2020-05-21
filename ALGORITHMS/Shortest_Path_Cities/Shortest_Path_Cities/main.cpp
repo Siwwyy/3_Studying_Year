@@ -84,10 +84,7 @@ const::std::vector<int32_t>& Get_File_Data(const std::string& file_path)
 			{
 				city_name += Temp_Data[i][j];
 			}
-			//if (Temp_Data[i][j] == '/')
-			//{
-			//	break;
-			//}
+
 			/////////////////////////////////////////////////////
 			//Inserting Coords
 			if (static_cast<int32_t>(Temp_Data[i][j]) >= 48 && static_cast<int32_t>(Temp_Data[i][j]) <= 57)
@@ -112,10 +109,10 @@ const::std::vector<int32_t>& Get_File_Data(const std::string& file_path)
 	//	std::cout << Cities[i] << '\n';
 	//}
 
-	for (size_t i = 0; i < Coords.size(); ++i)	//works
-	{
-		std::cout << Coords[i].first.first << " " << Coords[i].first.second << " " << Coords[i].second.first << " " << Coords[i].second.second << '\n';
-	}
+	//for (size_t i = 0; i < Coords.size(); ++i)	//works
+	//{
+	//	std::cout << Coords[i].first.first << " " << Coords[i].first.second << " " << Coords[i].second.first << " " << Coords[i].second.second << '\n';
+	//}
 
 
 	return Data;
