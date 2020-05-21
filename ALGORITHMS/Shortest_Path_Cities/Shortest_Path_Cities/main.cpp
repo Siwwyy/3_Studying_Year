@@ -104,15 +104,15 @@ const::std::vector<int32_t>& Get_File_Data(const std::string& file_path)
 		Coords.emplace_back(std::make_pair(std::make_pair(coords[0], coords[1]), std::make_pair(coords[2], coords[3])));
 	}
 
-	//for (size_t i = 0; i < Cities.size(); ++i)	//works
-	//{
-	//	std::cout << Cities[i] << '\n';
-	//}
+	for (size_t i = 0; i < Cities.size(); ++i)	//works
+	{
+		std::cout << Cities[i] << '\n';
+	}
 
-	//for (size_t i = 0; i < Coords.size(); ++i)	//works
-	//{
-	//	std::cout << Coords[i].first.first << " " << Coords[i].first.second << " " << Coords[i].second.first << " " << Coords[i].second.second << '\n';
-	//}
+	for (size_t i = 0; i < Coords.size(); ++i)	//works
+	{
+		std::cout << Coords[i].first.first << " " << Coords[i].first.second << " " << Coords[i].second.first << " " << Coords[i].second.second << '\n';
+	}
 
 
 	return Data;
