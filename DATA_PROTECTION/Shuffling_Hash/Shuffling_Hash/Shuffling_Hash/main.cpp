@@ -90,7 +90,7 @@ const std::string Get_Text(const size_t size)
 	std::random_device rand;
 
 	std::default_random_engine rand_engine(rand());
-	std::uniform_int_distribution<int> dist(0, alphabet_size - 1);
+	std::uniform_int_distribution<int> dist(0, alphabet_size - 2);
 	for (size_t i = 0; i < size; ++i)
 	{
 		text += alphabet[dist(rand_engine)];
