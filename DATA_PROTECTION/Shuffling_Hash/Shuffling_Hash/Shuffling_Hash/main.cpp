@@ -132,7 +132,7 @@ void Generator(const size_t D, const size_t N, const long long(*ptr_fun)(const s
 	std::cout << "Amount of collisons: " << collision_counter << '\n';
 	if (took_collision == true)
 	{
-		std::cout << text_collision << " " << text_collision2 << " " << control_sum_collision << '\n';
+		std::cout << text_collision << "  |  " << text_collision2 << "  |  " << control_sum_collision << '\n';
 	}
 
 	std::cout << '\n';
