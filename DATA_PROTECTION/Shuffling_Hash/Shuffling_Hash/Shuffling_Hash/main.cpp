@@ -99,7 +99,7 @@ const std::string Get_Text(const size_t size)
 	return text;
 }
 
-void Generator(const size_t N, const size_t D, const int32_t(*ptr_fun)(const std::string&))
+void Generator(const size_t D, const size_t N, const int32_t(*ptr_fun)(const std::string&))
 {
 	size_t collision_counter{};
 	bool took_collision = false;
