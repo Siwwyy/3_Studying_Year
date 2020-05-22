@@ -7,10 +7,10 @@
 constexpr char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 
-const int32_t DJB(const std::string& text);
-const int32_t Adler32(const std::string& text);
+const long long DJB(const std::string& text);
+const long long Adler32(const std::string& text);
 const std::string Get_Text(const size_t size);		//returning text with specified size, text generated from alphabet given above
-void Generator(const size_t N, const size_t D, const int32_t(*ptr_fun)(const std::string&));	//Generator of N times, D size of text and pointer to function DJB or Adler32
+void Generator(const size_t N, const size_t D, const long long(*ptr_fun)(const std::string&));	//Generator of N times, D size of text and pointer to function DJB or Adler32
 
 
 template<typename T, std::size_t N>
@@ -56,30 +56,30 @@ int main(int argc, char* argv[])
 
 
 
-const int32_t DJB(const std::string& text)
+const long long DJB(const std::string& text)
 {
-	int32_t starting_value{ 5381 };
-	int32_t final_hash{ starting_value };
+	long long starting_value{ 5381 };
+	long long final_hash{ starting_value };
 
 	for (size_t i = 0; i < text.size(); ++i)
 	{
-		final_hash = final_hash * 32 + final_hash + static_cast<int32_t>(text[i]);
+		final_hash = final_hash * 32 + final_hash + static_cast<long long>(text[i]);
 	}
 	return final_hash;
 }
 
-const int32_t Adler32(const std::string& text)
+const long long Adler32(const std::string& text)
 {
-	int32_t A{ 1 };
-	int32_t B{ 0 };
-	int32_t P{ 65521 };
+	long long A{ 1 };
+	long long B{ 0 };
+	long long P{ 65521 };
 
 	for (size_t i = 0; i < text.size(); ++i)
 	{
-		A = (A + static_cast<int32_t>(text[i])) % P;
+		A = (A + static_cast<long long>(text[i])) % P;
 		B = (B + A) % P;
 	}
-	return ((B * P) + A);
+	return ((B * 65536) + A);
 }
 
 const std::string Get_Text(const size_t size)
@@ -99,21 +99,21 @@ const std::string Get_Text(const size_t size)
 	return text;
 }
 
-void Generator(const size_t D, const size_t N, const int32_t(*ptr_fun)(const std::string&))
+void Generator(const size_t D, const size_t N, const long long(*ptr_fun)(const std::string&))
 {
 	size_t collision_counter{};
 	bool took_collision = false;
 
 	std::string text_collision{};
 	std::string text_collision2{};
-	int32_t control_sum_collision{};
+	long long control_sum_collision{};
 
 	for (size_t i = 0; i < N; ++i)
 	{
 		const std::string text = Get_Text(D);
-		const int32_t lhs{ ptr_fun(text) };
+		const long long lhs{ ptr_fun(text) };
 		const std::string text2 = Get_Text(D);
-		const int32_t rhs{ ptr_fun(text2) };
+		const long long rhs{ ptr_fun(text2) };
 
 		if (lhs == rhs)
 		{
@@ -130,7 +130,10 @@ void Generator(const size_t D, const size_t N, const int32_t(*ptr_fun)(const std
 	}
 
 	std::cout << "Amount of collisons: " << collision_counter << '\n';
-	std::cout << text_collision << " " << text_collision2 << " " << control_sum_collision << '\n';
+	if (took_collision == true)
+	{
+		std::cout << text_collision << " " << text_collision2 << " " << control_sum_collision << '\n';
+	}
 
 	std::cout << '\n';
 	std::cout << '\n';
