@@ -13,11 +13,13 @@ const std::vector<std::vector<int32_t>> Get_File_Data(const std::string& file_pa
 const bool Invalid_Characters(const char character);
 void Save_To_File(const std::vector<std::vector<int32_t>>& Connections, const std::string& file_path);
 
+std::vector<std::string> Cities{};
+
 int main(int argc, char* argv[])
 {
 	const std::vector<std::vector<int32_t>> File_Data{ Get_File_Data("current.in") };
 	//Save_To_File(File_Data, "correct_my_file.in");
-	inserter_DJIKSTRA("correct_my_file.in");
+	inserter_DJIKSTRA("correct_my_file.in", Cities);
 	//inserter_DJIKSTRA("file.in");
 
 	system("pause");
@@ -42,7 +44,7 @@ const::std::vector<std::vector<int32_t>> Get_File_Data(const std::string& file_p
 {
 	std::vector<std::vector<int32_t>> Data{};
 	std::vector<std::string> Temp_Data{};
-	std::vector<std::string> Cities{};
+
 	std::vector<std::pair<float, float>> Coords{};
 
 

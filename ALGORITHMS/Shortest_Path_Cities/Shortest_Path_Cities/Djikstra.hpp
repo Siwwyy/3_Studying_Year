@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <vector>
+#include <iomanip>
 #include <windows.h>
 #include <fstream>
 #include <math.h>
@@ -155,7 +156,7 @@ public:
 
 //FUNCTION FOR INSERTING VALUES FROM file_in
 void inserter_DJIKSTRA(const std::vector<int32_t>& file_content);
-void inserter_DJIKSTRA(const std::string & file_path);
+void inserter_DJIKSTRA(const std::string & file_path, const std::vector<std::string>& City);
 //////////////////////////////////////////////////////////////////////////////
 
 #endif /* _DJIKSTRA_HPP_ */

@@ -9,7 +9,7 @@
 
 COORD p = { 0, 0 };
 
-
+std::vector<std::string> Cities_2{};
 
 void inserter_DJIKSTRA(const std::vector<int32_t>& file_content)
 {
@@ -78,11 +78,11 @@ void inserter_DJIKSTRA(const std::vector<int32_t>& file_content)
 	}
 }
 
-void inserter_DJIKSTRA(const std::string & file_path)
+void inserter_DJIKSTRA(const std::string & file_path, const std::vector<std::string>& City)
 {
 	std::fstream file_in{};
 	file_in.open(file_path.c_str(), std::ios_base::in);
-
+	Cities_2 = City;
 	int32_t m = 0;			//amount of cities
 	int32_t d = 0;			//amount of ways
 	int32_t c1 = 0;			//number of city
@@ -472,7 +472,7 @@ void _Djikstra::get_results()
 {
 	for (typename std::vector<std::pair<std::pair<int32_t, int32_t>, int32_t>>::const_iterator vec_iterator = Destinations.begin(); vec_iterator != Destinations.end(); ++vec_iterator)
 	{
-		std::cout << vec_iterator->first.first << " -> " << vec_iterator->first.second << "    ";
+		std::cout << Cities_2[(vec_iterator->first.first-1)] << " -> " << Cities_2[(vec_iterator->first.second - 1)] << std::setw(80 - Cities_2[(vec_iterator->first.first - 1)].size() - Cities_2[(vec_iterator->first.second - 1)].size());
 		find_way(vec_iterator->first.first, vec_iterator->first.second, vec_iterator->second);
 	}
 }

@@ -201,6 +201,7 @@ void inserter()
 				MST_Object->get_results();
 				///////////////////////////////////////////////
 				delete MST_Object;
+				system("pause");
 				exit(0);
 			}
 			s = 0;
