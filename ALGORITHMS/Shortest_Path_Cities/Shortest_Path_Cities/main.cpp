@@ -2,18 +2,20 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <iomanip>
+#include <windows.h>
 #include <cmath>
 #include "Djikstra.hpp"
 
 #define M_PI 3.14159265358979323846
 
-const _STD vector<int32_t>& Get_File_Data(const std::string& file_path);
+const std::vector<std::vector<int32_t>> Get_File_Data(const std::string& file_path);
 const bool Invalid_Characters(const char character);
 
 int main(int argc, char* argv[])
 {
 	//inserter_DJIKSTRA();
-	const std::vector<int32_t>& File_Data{ Get_File_Data("current.in") };
+	const std::vector<std::vector<int32_t>> File_Data{ Get_File_Data("current.in") };
 
 
 	system("pause");
@@ -34,16 +36,13 @@ int main(int argc, char* argv[])
 
 //
 
-const::std::vector<int32_t>& Get_File_Data(const std::string& file_path)
+const::std::vector<std::vector<int32_t>> Get_File_Data(const std::string& file_path)
 {
-	std::vector<int32_t> Data{};
-
+	std::vector<std::vector<int32_t>> Data{};
 	std::vector<std::string> Temp_Data{};
-
 	std::vector<std::string> Cities{};
-	/*std::vector<std::pair<std::pair<int32_t, int32_t>, std::pair<int32_t, int32_t>>> Coords{};*/
-
 	std::vector<std::pair<float, float>> Coords{};
+
 
 	std::fstream file_in{};
 	file_in.open(file_path.c_str(), std::ios_base::in | std::ios_base::binary);
@@ -54,7 +53,6 @@ const::std::vector<int32_t>& Get_File_Data(const std::string& file_path)
 	}
 	else
 	{
-		//int32_t temp{};
 		std::string temp{};
 		size_t counter{};
 		while (file_in.eof() == false)	//works
@@ -76,7 +74,6 @@ const::std::vector<int32_t>& Get_File_Data(const std::string& file_path)
 
 	for (size_t i = 0; i < Temp_Data.size(); ++i)	//works
 	{
-		//std::cout << Temp_Data[i] << '\n';
 		std::string city_name{};
 		std::string single_coord{};
 		int32_t coords[2]{};
@@ -114,28 +111,22 @@ const::std::vector<int32_t>& Get_File_Data(const std::string& file_path)
 		//Inserting coordinates
 		y = static_cast<float>(static_cast<float>(coords[1]) / 60.f) + static_cast<float>(coords[0]);
 		Coords.emplace_back(std::make_pair(x, y));
-		//Coords.emplace_back(std::make_pair(std::make_pair(coords[0], coords[1]), std::make_pair(coords[2], coords[3])));
 	}
 
-	//for (size_t i = 0; i < Cities.size(); ++i)	//works
-	//{
-	//	std::cout << Cities[i] << '\n';
-	//}
-
-	//for (size_t i = 0; i < Coords.size(); ++i)	//works
-	//{
-	//	std::cout << Cities[i] << "  | x1:" << Coords[i].first.first << " y1:" << Coords[i].first.second << " | x2:" << Coords[i].second.first << " y2:" << Coords[i].second.second << '\n';
-	//}
-
+	Data.resize(Cities.size());
+	for (size_t i = 0; i < Data.size(); ++i)	//works
+	{
+		Data[i].resize(Cities.size());
+	}
 
 	for (size_t i = 0; i < Coords.size(); ++i)	//works
 	{
-		for (size_t j = 0; j < Coords.size(); ++j)
+		for (size_t j = i+1; j < Coords.size(); ++j)
 		{
 			float distance{};
 			if (i == j)
 			{
-				Data.emplace_back(0);
+				Data[i][j] = static_cast<int32_t>(0);
 				continue;
 			}
 			else
@@ -146,38 +137,31 @@ const::std::vector<int32_t>& Get_File_Data(const std::string& file_path)
 				float y2{ Coords[j].first };
 
 				distance = static_cast<float>(sqrt(pow((x2 - x1), 2) + pow(cos((x1 * M_PI) / 180) * (y2 - y1), 2))) * static_cast<float>(40075.704f / 360.f);
-				Data.emplace_back(static_cast<int32_t>(distance));
+				Data[i][j] = static_cast<int32_t>(distance);
+				Data[j][i] = static_cast<int32_t>(distance);
 			}
 		}
 	}
+	std::cin.get();
 	size_t cities_counter{};
 	for (size_t i = 0; i < Data.size(); ++i)	//works
 	{
-		//if (i == 0)
-		//{
-		//	for (size_t j = 0; j < Cities.size(); ++j)	//works
-		//	{
-		//		std::cout << Cities[j][0] << Cities[j][1] << Cities[j][2] << ' ';
-		//	}
-		//	std::cout << '\n';
-		//}
-		if (i == 0)
-		{
-			std::cout << Cities[cities_counter] << "	 ";
-			++cities_counter;
-		}
-		if (i % Coords.size() == 0 && i > 0)
-		{
-			std::cout << '\n' << Cities[cities_counter] << "	  ";
-			++cities_counter;
-		}
+		COORD p = { 0, i };
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
+		std::cout << Cities[cities_counter];
+		++cities_counter;
+		p.X = 27;
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
 
-		std::cout << Data[i] << ' ';
-
+		for (size_t j = 0; j < Data[i].size(); ++j)
+		{
+			std::cout << Data[i][j] << ' ';
+			p.X = (p.X + 4);
+			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
+		}
+		//std::cout << '\n';
 	}
 	std::cout << '\n';
-
-
 	return Data;
 }
 
