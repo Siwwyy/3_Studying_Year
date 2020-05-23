@@ -12,7 +12,7 @@ const uint64_t Adler32(const std::string& text);
 const std::string Get_Text(const size_t size);		//returning text with specified size, text generated from alphabet given above
 const std::vector<std::string> Generator(const size_t D, const size_t N);	//Generator of N times, D size of text
 const std::vector<uint64_t> Generate_Hash(const uint64_t(*ptr_fun)(const std::string&), const std::vector<std::string>& text_array);	//Generator of text vector (currently size = 100 000) and length of each string 8 or 100
-void Find_Duplicates(const std::vector<std::string>& text_array, const std::vector<uint64_t>& hash_array);	//finding duplicates of hash
+void Find_Duplicates(const std::vector<std::string>& text_array, std::vector<uint64_t>& hash_array);	//finding duplicates of hash
 
 
 template<typename T, std::size_t N>
@@ -133,7 +133,7 @@ const std::vector<uint64_t> Generate_Hash(const uint64_t(*ptr_fun)(const std::st
 	return hash_array;
 }
 
-void Find_Duplicates(const std::vector<std::string>& text_array, const std::vector<uint64_t>& hash_array)
+void Find_Duplicates(const std::vector<std::string>& text_array, std::vector<uint64_t>& hash_array)
 {
 	bool had_collision{};
 	size_t collision_counter{};
@@ -143,19 +143,23 @@ void Find_Duplicates(const std::vector<std::string>& text_array, const std::vect
 
 	for (size_t i = 0; i < hash_array.size(); ++i)
 	{
-		for (size_t j = i + 1; j < hash_array.size(); ++j)
+		if (hash_array[i] != 0)
 		{
-			if (hash_array[i] == hash_array[j])
+			for (size_t j = i + 1; j < hash_array.size(); ++j)
 			{
-				if (had_collision == false)
+				if (hash_array[i] == hash_array[j])
 				{
-					text_collision = text_array[i];
-					text_collision2 = text_array[j];
-					control_sum_collision = hash_array[i];
+					hash_array[j] = 0;
+					if (had_collision == false)
+					{
+						text_collision = text_array[i];
+						text_collision2 = text_array[j];
+						control_sum_collision = hash_array[i];
 
-					had_collision = true;
+						had_collision = true;
+					}
+					++collision_counter;
 				}
-				++collision_counter;
 			}
 		}
 	}
