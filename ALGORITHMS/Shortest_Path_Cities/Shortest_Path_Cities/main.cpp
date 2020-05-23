@@ -18,8 +18,8 @@ std::vector<std::string> Cities{};
 
 int main(int argc, char* argv[])
 {
-	std::vector<std::vector<int32_t>> File_Data{ Get_File_Data("current.in") };
-	Find_Path(File_Data);
+	//std::vector<std::vector<int32_t>> File_Data{ Get_File_Data("current.in") };
+	//Find_Path(File_Data);
 	//Save_To_File(File_Data, "correct_my_file.in");
 	//inserter_DJIKSTRA("correct_my_file.in", Cities);
 	//inserter_DJIKSTRA("file.in");
@@ -240,7 +240,7 @@ void Find_Path(std::vector<std::vector<int32_t>>& Connections)
 		int32_t smallest_cost{ 9999 };
 		for (size_t j = 0; j < Connections.size(); ++j)
 		{
-			if (smallest_cost >= Connections[current_city][j] && Connections[current_city][j] != 0 && std::find(Visited_Cities.begin(), Visited_Cities.end(),j) == Visited_Cities.end())
+			if (smallest_cost >= Connections[current_city][j] && Connections[current_city][j] != 0 && std::find(Visited_Cities.begin(), Visited_Cities.end(), j) == Visited_Cities.end())
 			{
 				current_city_temp = j;
 				smallest_cost = Connections[current_city][j];
@@ -261,31 +261,56 @@ void Find_Path(std::vector<std::vector<int32_t>>& Connections)
 
 	}
 
+	//current_city = 0;
+	//std::cout << Cities[current_city] << '\n';
+	//std::fstream file_in{};
+	//file_in.open("final_map_adjency_matrix.out", std::ios_base::out);
+	//for (size_t i = 0; i < Connections.size() - 1; ++i)
+	//{
+	//	for (size_t j = 0; j < Connections.size(); ++j)
+	//	{
+	//		if (Connections[current_city][j] != 0)
+	//		{
+	//			current_city = j;
+	//			break;
+	//		}
+	//	}
+	//	std::cout << Cities[current_city] << '\n';
+	//}
+	//file_in.close();
 
 	//std::cin.get();
-	////std::fstream file_in{};
-	////file_in.open("final_map.out", std::ios_base::out);
+	//std::fstream file_in{};
+	//file_in.open("final_map.out", std::ios_base::out);
 	//size_t cities_counter{};
 	//for (size_t i = 0; i < Connections.size(); ++i)	//works
 	//{
 	//	COORD p = { 0, i };
 	//	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
-	//	std::cout << Cities[cities_counter];
-	//	//file_in << Cities[cities_counter] << std::setw(50 - Cities[cities_counter].size());
+	//	//std::cout << Cities[cities_counter];
+	//	file_in << Cities[cities_counter] << std::setw(50 - Cities[cities_counter].size());
 	//	++cities_counter;
 	//	p.X = 27;
 	//	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
 
 	//	for (size_t j = 0; j < Connections[i].size(); ++j)
 	//	{
-	//		std::cout << Connections[i][j] << ' ';
+	//		//std::cout << Connections[i][j] << ' ';
 	//		//file_in << Connections[i][j] << ' ';
+	//		if (Connections[i][j] != 0)
+	//		{
+	//			file_in << 1 << ' ';
+	//		}
+	//		else
+	//		{
+	//			file_in << 0 << ' ';
+	//		}
 	//		p.X = (p.X + 4);
 	//		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
 	//	}
 	//	//std::cout << '\n';
-	//	//file_in << '\n';
+	//	file_in << '\n';
 	//}
 	//std::cout << '\n';
-	////file_in.close();
+	//file_in.close();
 }
