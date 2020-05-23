@@ -347,7 +347,8 @@ void _Djikstra::find_way(const int32_t from, const int32_t to, const int32_t way
 		destination_verticle = from_;
 		current_verticle = to_;
 		minimal_spanning_tree_creator(from_);	//create Djikstra for this case
-		std::cout << "	       Road through: ";
+		std::cout << "Road through: ";
+		int32_t cost{};
 		for (int32_t i = _Djikstra_Matrix_lenght - 1; i >= 0; --i)
 		{
 			if (Djikstra_Matrix[i].get_verticle() == destination_verticle)
@@ -359,10 +360,11 @@ void _Djikstra::find_way(const int32_t from, const int32_t to, const int32_t way
 			{
 				current_verticle = Djikstra_Matrix[i].get_edge();
 				std::cout << Djikstra_Matrix[i].get_verticle() << " -> ";
+				cost += Djikstra_Matrix[i].get_cost();
 			}
 		}
+		std::cout << " Cost:" << cost;
 		std::cout << '\n';
-		system("pause");
 	}
 }
 
@@ -468,10 +470,9 @@ void _Djikstra::minimal_spanning_tree_creator(const int32_t the_beginning)
 
 void _Djikstra::get_results()
 {
-	print_graph();
-	system("pause");
 	for (typename std::vector<std::pair<std::pair<int32_t, int32_t>, int32_t>>::const_iterator vec_iterator = Destinations.begin(); vec_iterator != Destinations.end(); ++vec_iterator)
 	{
+		std::cout << vec_iterator->first.first << " -> " << vec_iterator->first.second << "    ";
 		find_way(vec_iterator->first.first, vec_iterator->first.second, vec_iterator->second);
 	}
 }
@@ -495,8 +496,6 @@ void _Djikstra::print_graph() const
 		p.X = 27;
 		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
 		Graph[i].print_connections();
-		//std::cout << '\n';
-		//system("pause");
 		std::cout << '\n';
 	}
 	std::cout << '\n';

@@ -146,26 +146,26 @@ const::std::vector<std::vector<int32_t>> Get_File_Data(const std::string& file_p
 	}
 
 	//Printing matrix
-	std::cin.get();
-	size_t cities_counter{};
-	for (size_t i = 0; i < Data.size(); ++i)	//works
-	{
-		COORD p = { 0, i };
-		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
-		std::cout << Cities[cities_counter];
-		++cities_counter;
-		p.X = 27;
-		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
+	//std::cin.get();
+	//size_t cities_counter{};
+	//for (size_t i = 0; i < Data.size(); ++i)	//works
+	//{
+	//	COORD p = { 0, i };
+	//	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
+	//	std::cout << Cities[cities_counter];
+	//	++cities_counter;
+	//	p.X = 27;
+	//	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
 
-		for (size_t j = 0; j < Data[i].size(); ++j)
-		{
-			std::cout << Data[i][j] << ' ';
-			p.X = (p.X + 4);
-			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
-		}
-		//std::cout << '\n';
-	}
-	std::cout << '\n';
+	//	for (size_t j = 0; j < Data[i].size(); ++j)
+	//	{
+	//		std::cout << Data[i][j] << ' ';
+	//		p.X = (p.X + 4);
+	//		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
+	//	}
+	//	//std::cout << '\n';
+	//}
+	//std::cout << '\n';
 	return Data;
 }
 
@@ -210,7 +210,7 @@ void Save_To_File(const std::vector<std::vector<int32_t>>& Connections, const st
 		{
 			file_out << (i+1) << ' ' << (j + 1) << ' ' << Connections[i][j] << '\n';
 		}
-		file_out << (i + 1) << ' ' << (Connections.size()) << ' ' << Connections[i][Connections.size() - 1] << '\n';
+		//file_out << (i + 1) << ' ' << (Connections.size()) << ' ' << Connections[i][Connections.size() - 1] << '\n';
 	}
 	for (size_t i = 0; i < Connections.size() - 1; ++i)	//works
 	{
