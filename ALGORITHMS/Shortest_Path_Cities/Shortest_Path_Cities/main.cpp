@@ -12,14 +12,16 @@
 const std::vector<std::vector<int32_t>> Get_File_Data(const std::string& file_path);
 const bool Invalid_Characters(const char character);
 void Save_To_File(const std::vector<std::vector<int32_t>>& Connections, const std::string& file_path);
+void Find_Path(std::vector<std::vector<int32_t>>& Connections);
 
 std::vector<std::string> Cities{};
 
 int main(int argc, char* argv[])
 {
-	const std::vector<std::vector<int32_t>> File_Data{ Get_File_Data("current.in") };
+	std::vector<std::vector<int32_t>> File_Data{ Get_File_Data("current.in") };
+	Find_Path(File_Data);
 	//Save_To_File(File_Data, "correct_my_file.in");
-	inserter_DJIKSTRA("correct_my_file.in", Cities);
+	//inserter_DJIKSTRA("correct_my_file.in", Cities);
 	//inserter_DJIKSTRA("file.in");
 
 	system("pause");
@@ -203,24 +205,87 @@ void Save_To_File(const std::vector<std::vector<int32_t>>& Connections, const st
 	file_out.open(file_path.c_str(), std::ios_base::out | std::ios_base::binary);
 
 	file_out << static_cast<int32_t>(Connections.size()) << ' ';
-	file_out << static_cast<int32_t>(Connections.size()-1);
+	file_out << static_cast<int32_t>(Connections.size() - 1);
 	file_out << '\n';
 
 	for (size_t i = 0; i < Connections.size(); ++i)	//works
 	{
 		for (size_t j = i + 1; j < Connections.size() - 1; ++j)	//works
 		{
-			file_out << (i+1) << ' ' << (j + 1) << ' ' << Connections[i][j] << '\n';
+			file_out << (i + 1) << ' ' << (j + 1) << ' ' << Connections[i][j] << '\n';
 		}
 		//file_out << (i + 1) << ' ' << (Connections.size()) << ' ' << Connections[i][Connections.size() - 1] << '\n';
 	}
 	for (size_t i = 0; i < Connections.size() - 1; ++i)	//works
 	{
-		for (size_t j = i+1; j < Connections.size(); ++j)	//works
+		for (size_t j = i + 1; j < Connections.size(); ++j)	//works
 		{
 			file_out << (i + 1) << ' ' << (j + 1) << ' ' << 1 << '\n';
-		}		
+		}
 	}
 	file_out << 0 << ' ' << 0;	//our end of file
 	file_out.close();
+}
+
+void Find_Path(std::vector<std::vector<int32_t>>& Connections)
+{
+	std::vector<int32_t> Visited_Cities{};
+	int32_t current_city{ 0 };
+	int32_t current_city_temp{ 0 };
+
+	Visited_Cities.emplace_back(current_city);
+
+	for (size_t i = 0; i < Connections.size(); ++i)
+	{
+		int32_t smallest_cost{ 9999 };
+		for (size_t j = 0; j < Connections.size(); ++j)
+		{
+			if (smallest_cost >= Connections[current_city][j] && Connections[current_city][j] != 0 && std::find(Visited_Cities.begin(), Visited_Cities.end(),j) == Visited_Cities.end())
+			{
+				current_city_temp = j;
+				smallest_cost = Connections[current_city][j];
+			}
+		}
+
+
+
+		for (size_t j = 0; j < Connections.size(); ++j)
+		{
+			if (j != current_city && j != current_city_temp/* && std::find(Visited_Cities.begin(), Visited_Cities.end(), j) == Visited_Cities.end()*/)
+			{
+				Connections[current_city][j] = 0;
+			}
+		}
+		current_city = current_city_temp;
+		Visited_Cities.emplace_back(current_city);
+
+	}
+
+
+	//std::cin.get();
+	////std::fstream file_in{};
+	////file_in.open("final_map.out", std::ios_base::out);
+	//size_t cities_counter{};
+	//for (size_t i = 0; i < Connections.size(); ++i)	//works
+	//{
+	//	COORD p = { 0, i };
+	//	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
+	//	std::cout << Cities[cities_counter];
+	//	//file_in << Cities[cities_counter] << std::setw(50 - Cities[cities_counter].size());
+	//	++cities_counter;
+	//	p.X = 27;
+	//	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
+
+	//	for (size_t j = 0; j < Connections[i].size(); ++j)
+	//	{
+	//		std::cout << Connections[i][j] << ' ';
+	//		//file_in << Connections[i][j] << ' ';
+	//		p.X = (p.X + 4);
+	//		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
+	//	}
+	//	//std::cout << '\n';
+	//	//file_in << '\n';
+	//}
+	//std::cout << '\n';
+	////file_in.close();
 }
