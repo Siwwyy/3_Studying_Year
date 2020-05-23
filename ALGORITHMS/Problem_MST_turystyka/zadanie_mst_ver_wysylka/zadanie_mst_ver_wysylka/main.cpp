@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <vector>
+#include <fstream>
 #include <math.h>
 
 //CLASS OF _MST_ELEMENT, for inserting values
@@ -21,7 +22,7 @@ private:
 	int Cost;
 	int Edge;
 	//////////////////////////////////
-	int * Connections;
+	int* Connections;
 	size_t _Connections_size;
 	//////////////////////////////////////////////////////////////////////////////
 public:
@@ -31,7 +32,7 @@ public:
 	*/
 	_MST_Element();
 	_MST_Element(const int Verticle, const int Cost, const int Edge);
-	_MST_Element(const _MST_Element & Object);
+	_MST_Element(const _MST_Element& Object);
 	//////////////////////////////////////////////////////////////////////////////
 	/*
 		FUNKCJE PUBLIC
@@ -52,7 +53,7 @@ public:
 		OPERATORY PUBLIC
 	*/
 	//JEDNOARGUMENTOWE
-	_MST_Element & operator=(const _MST_Element & Object);
+	_MST_Element& operator=(const _MST_Element& Object);
 	//DWUARGUMENTOWE
 	//////////////////////////////////////////////////////////////////////////////
 	/*
@@ -62,7 +63,7 @@ public:
 	int get_cost() const;
 	int get_edge() const;
 	size_t get_connections_size() const;
-	int & get_connections_array(const size_t counter) const;
+	int& get_connections_array(const size_t counter) const;
 	//////////////////////////////////////////////////////////////////////////////
 	/*
 		DESTRUKTOR
@@ -80,13 +81,13 @@ private:
 		ZMIENNE PRIVATE
 	*/
 	/////////////////////////////////////////////////////////////////////////
-	_MST_Element * Graph;
+	_MST_Element* Graph;
 	size_t _Graph_lenght;
 	/////////////////////////////////////////////////////////////////////////
-	_MST_Element * Prims_Matrix;
+	_MST_Element* Prims_Matrix;
 	size_t _Prims_Matrix_lenght;
 	/////////////////////////////////////////////////////////////////////////
-	int * Q;
+	int* Q;
 	size_t _Q_lenght;
 	int _Q_counter;
 	/////////////////////////////////////////////////////////////////////////
@@ -106,7 +107,7 @@ public:
 	*/
 	_MST();
 	_MST(const size_t _Graph_lenght);
-	_MST(const _MST & Object);
+	_MST(const _MST& Object);
 	//////////////////////////////////////////////////////////////////////////////
 	/*
 		FUNKCJE PUBLIC
@@ -130,7 +131,7 @@ public:
 		OPERATORY PUBLIC
 	*/
 	//JEDNOARGUMENTOWE
-	_MST & operator=(const _MST & Object);
+	_MST& operator=(const _MST& Object);
 	//DWUARGUMENTOWE
 	//////////////////////////////////////////////////////////////////////////////
 	/*
@@ -159,6 +160,8 @@ int main(int argc, char* argv[])
 
 void inserter()
 {
+	std::fstream file_in{};
+	file_in.open("correct_my_file.in", std::ios_base::in);
 	int m = 0;			//amount of cities
 	int d = 0;			//amount of ways
 	int c1 = 0;			//number of city
@@ -169,17 +172,19 @@ void inserter()
 	int t = 0;			//amount of max passengers to move by bus
 	while (true)
 	{
-		std::cin >> m;
-		std::cin >> d;
-		_MST * MST_Object = new _MST(m);
+		file_in >> m;
+		file_in >> d;
+		_MST* MST_Object = new _MST(m);
 		while (d > 0)
 		{
-			std::cin >> c1;
-			std::cin >> c2;
-			std::cin >> p;
+			file_in >> c1;
+			file_in >> c2;
+			file_in >> p;
 			//both times cause each road is in both ways
-			MST_Object->push(c1, c2, (-1)*p);
-			MST_Object->push(c2, c1, (-1)*p);
+			//MST_Object->push(c1, c2, (-1) * p);
+			MST_Object->push(c1, c2, p);
+			//MST_Object->push(c2, c1, (-1) * p);
+			MST_Object->push(c2, c1, p);
 			--d;
 			c1 = 0;
 			c2 = 0;
@@ -187,11 +192,11 @@ void inserter()
 		}
 		while (true)
 		{
-			std::cin >> s;
-			std::cin >> e;
+			file_in >> s;
+			file_in >> e;
 			if (s != 0 && e != 0)
 			{
-				std::cin >> t;
+				file_in >> t;
 				MST_Object->push_directions(s, e, t);
 			}
 			else
@@ -211,6 +216,7 @@ void inserter()
 		d = 0;
 		m = 0;
 	}
+	file_in.close();
 }
 
 ////////////////////////////////////////////////////
@@ -248,7 +254,7 @@ _MST_Element::_MST_Element(const int Verticle, const int Cost, const int Edge) :
 	}
 }
 
-_MST_Element::_MST_Element(const _MST_Element & Object) :
+_MST_Element::_MST_Element(const _MST_Element& Object) :
 	_Connections_size(Object._Connections_size),
 	Verticle(Object.Verticle),
 	Cost(Object.Cost),
@@ -300,7 +306,7 @@ void _MST_Element::set_edge(const int edge)
 	this->Edge = edge;
 }
 
-_MST_Element & _MST_Element::operator=(const _MST_Element & Object)
+_MST_Element& _MST_Element::operator=(const _MST_Element& Object)
 {
 	if (this != &Object)
 	{
@@ -338,7 +344,7 @@ size_t _MST_Element::get_connections_size() const
 	return this->_Connections_size;
 }
 
-int & _MST_Element::get_connections_array(const size_t counter) const
+int& _MST_Element::get_connections_array(const size_t counter) const
 {
 	return this->Connections[counter];
 }
@@ -392,7 +398,7 @@ _MST::_MST(const size_t _Graph_lenght) :
 	}
 }
 
-_MST::_MST(const _MST & Object) :
+_MST::_MST(const _MST& Object) :
 	_Graph_lenght(Object._Graph_lenght),
 	_Prims_Matrix_lenght(Object._Prims_Matrix_lenght),
 	_Q_lenght(Object._Q_lenght),
@@ -491,8 +497,34 @@ void _MST::minimal_spanning_tree_creator(const int the_beginning)
 
 void _MST::get_results()
 {
+	//for (size_t i = 0; i < _Graph_lenght; ++i)
+	//{
+	//	for (size_t j = 0; j < _Graph_lenght; ++j)
+	//	{
+	//		std::cout << Graph->get_connections_array(j) << ' ';
+	//	}
+
+	//}
+	std::cin.get();
+	std::cout << "  ";
+	for (size_t i = 0; i < this->_Graph_lenght; ++i)
+	{
+		std::cout << (i + 1) << " ";
+	}
+	std::cout << '\n';
+	for (size_t i = 0; i < _Graph_lenght; ++i)
+	{
+		for (size_t j = 0; j < _Graph_lenght; ++j)
+		{
+			std::cout << Graph[i].get_connections_array(j) << ' ';
+		}
+		std::cout << '\n';
+	}
+	std::cout << '\n';
+
 	for (typename std::vector<std::pair<std::pair<int, int>, int>>::const_iterator vec_iterator = Destinations.begin(); vec_iterator != Destinations.end(); ++vec_iterator)
 	{
+		std::cout << vec_iterator->first.first << " -> " << vec_iterator->first.second << " ";
 		find_way(vec_iterator->first.first, vec_iterator->first.second, vec_iterator->second);
 	}
 }
@@ -505,7 +537,7 @@ void _MST::find_way(const int from, const int to, const int way_lenght)
 	}
 	else
 	{
-		int * visited = new int[this->_Graph_lenght];
+		int* visited = new int[this->_Graph_lenght];
 		for (size_t i = 0; i < _Graph_lenght; ++i)
 		{
 			visited[i] = 0;
@@ -530,7 +562,7 @@ void _MST::find_way(const int from, const int to, const int way_lenght)
 		}
 
 		minimal_spanning_tree_creator(to_he);	//create MST for this case
-		
+
 		current_verticle = Prims_Matrix[(from_he - 1)].get_edge();
 		if (the_smallest_way < Prims_Matrix[(from_he - 1)].get_cost())
 		{
@@ -563,11 +595,13 @@ void _MST::find_way(const int from, const int to, const int way_lenght)
 		the_smallest_way -= 1;
 		double result = ceil(static_cast<double>(((static_cast<double>(way_lenght) / (the_smallest_way)))));
 		std::cout << result << '\n';
+
+
 		delete[] visited;
 	}
 }
 
-_MST & _MST::operator=(const _MST & Object)
+_MST& _MST::operator=(const _MST& Object)
 {
 	if (this != &Object)
 	{
