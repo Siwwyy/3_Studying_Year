@@ -11,12 +11,14 @@
 
 const std::vector<std::vector<int32_t>> Get_File_Data(const std::string& file_path);
 const bool Invalid_Characters(const char character);
+void Save_To_File(const std::vector<std::vector<int32_t>>& Connections, const std::string& file_path);
 
 int main(int argc, char* argv[])
 {
-	//inserter_DJIKSTRA();
 	const std::vector<std::vector<int32_t>> File_Data{ Get_File_Data("current.in") };
-
+	//Save_To_File(File_Data, "correct_my_file.in");
+	inserter_DJIKSTRA("correct_my_file.in");
+	//inserter_DJIKSTRA("file.in");
 
 	system("pause");
 	return EXIT_SUCCESS;
@@ -121,7 +123,7 @@ const::std::vector<std::vector<int32_t>> Get_File_Data(const std::string& file_p
 
 	for (size_t i = 0; i < Coords.size(); ++i)	//works
 	{
-		for (size_t j = i+1; j < Coords.size(); ++j)
+		for (size_t j = i + 1; j < Coords.size(); ++j)
 		{
 			float distance{};
 			if (i == j)
@@ -142,6 +144,8 @@ const::std::vector<std::vector<int32_t>> Get_File_Data(const std::string& file_p
 			}
 		}
 	}
+
+	//Printing matrix
 	std::cin.get();
 	size_t cities_counter{};
 	for (size_t i = 0; i < Data.size(); ++i)	//works
@@ -189,4 +193,32 @@ const bool Invalid_Characters(const char character)
 	}
 	file_in.close();
 	return false;
+}
+
+void Save_To_File(const std::vector<std::vector<int32_t>>& Connections, const std::string& file_path)
+{
+	std::fstream file_out{};
+	file_out.open(file_path.c_str(), std::ios_base::out | std::ios_base::binary);
+
+	file_out << static_cast<int32_t>(Connections.size()) << ' ';
+	file_out << static_cast<int32_t>(Connections.size()-1);
+	file_out << '\n';
+
+	for (size_t i = 0; i < Connections.size(); ++i)	//works
+	{
+		for (size_t j = i + 1; j < Connections.size() - 1; ++j)	//works
+		{
+			file_out << (i+1) << ' ' << (j + 1) << ' ' << Connections[i][j] << '\n';
+		}
+		file_out << (i + 1) << ' ' << (Connections.size()) << ' ' << Connections[i][Connections.size() - 1] << '\n';
+	}
+	for (size_t i = 0; i < Connections.size() - 1; ++i)	//works
+	{
+		for (size_t j = i+1; j < Connections.size(); ++j)	//works
+		{
+			file_out << (i + 1) << ' ' << (j + 1) << ' ' << 1 << '\n';
+		}		
+	}
+	file_out << 0 << ' ' << 0;	//our end of file
+	file_out.close();
 }

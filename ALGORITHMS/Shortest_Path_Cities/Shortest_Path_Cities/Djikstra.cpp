@@ -6,6 +6,11 @@
 */
 //////////////////////////////////////////////////////
 
+
+COORD p = { 0, 0 };
+
+
+
 void inserter_DJIKSTRA(const std::vector<int32_t>& file_content)
 {
 	int32_t m = 0;			//amount of cities
@@ -71,6 +76,70 @@ void inserter_DJIKSTRA(const std::vector<int32_t>& file_content)
 		d = 0;
 		m = 0;
 	}
+}
+
+void inserter_DJIKSTRA(const std::string & file_path)
+{
+	std::fstream file_in{};
+	file_in.open(file_path.c_str(), std::ios_base::in);
+
+	int32_t m = 0;			//amount of cities
+	int32_t d = 0;			//amount of ways
+	int32_t c1 = 0;			//number of city
+	int32_t c2 = 0;			//number of city
+	int32_t p = 0;			//amount of max passengers between one course
+	int32_t s = 0;			//the beginning of way
+	int32_t e = 0;			//the end of way
+	int32_t t = 0;			//amount of max passengers to move by bus
+	size_t counter{};
+	bool if_break = true;
+	while (if_break)
+	{
+		file_in >> m;
+		file_in >> d;
+		_Djikstra* Djikstra_Object = new _Djikstra(m);
+		while (d > 0)
+		{
+			file_in >> c1;
+			file_in >> c2;
+			file_in >> p;
+			//both times cause each road is in both ways
+			Djikstra_Object->push(c1, c2, p);
+			Djikstra_Object->push(c2, c1, p);
+			counter++;
+			--d;
+			c1 = 0;
+			c2 = 0;
+			p = 0;
+		}
+		while (if_break)
+		{
+			file_in >> s;
+			file_in >> e;
+			if (s != 0 && e != 0)
+			{
+				file_in >> t;
+				Djikstra_Object->push_directions(s, e, t);
+			}
+			else
+			{
+				//here call all needed functions for solve the problem cause if s and e will be equal to 0 problem will be stopped immediately
+				///////////////////////////////////////////////
+				Djikstra_Object->get_results();
+				system("pause");
+				//Djikstra_Object->print_djikstra_matrix();
+				///////////////////////////////////////////////
+				delete Djikstra_Object;
+				if_break = false;
+			}
+			s = 0;
+			e = 0;
+			t = 0;
+		}
+		d = 0;
+		m = 0;
+	}
+	file_in.close();
 }
 
 ////////////////////////////////////////////////////
@@ -145,6 +214,10 @@ void _Djikstra_Element::set_connection(const int32_t value, const size_t counter
 
 void _Djikstra_Element::set_way(const int32_t destination, const int32_t way_lenght)
 {
+	//if (destination == 30)
+	//{
+	//	std::cin.get();
+	//}
 	this->Connections[(destination - 1)] = way_lenght;
 }
 
@@ -168,11 +241,14 @@ void _Djikstra_Element::set_visited_or_not(const bool visited_or_not)
 	this->visited_or_not = visited_or_not;
 }
 
-void _Djikstra_Element::print32_t_connections() const
+void _Djikstra_Element::print_connections() const
 {
+
 	for (size_t i = 0; i < this->_Connections_size; ++i)
 	{
 		std::cout << Connections[i] << ' ';
+		p.X = (p.X + 4);
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
 	}
 }
 
@@ -271,21 +347,22 @@ void _Djikstra::find_way(const int32_t from, const int32_t to, const int32_t way
 		destination_verticle = from_;
 		current_verticle = to_;
 		minimal_spanning_tree_creator(from_);	//create Djikstra for this case
-		//std::cout << "	       Road through: ";
-		//for (int32_t i = _Djikstra_Matrix_lenght - 1; i >= 0; --i)
-		//{
-		//	if (Djikstra_Matrix[i].get_verticle() == destination_verticle)
-		//	{
-		//		std::cout << Djikstra_Matrix[i].get_verticle();
-		//		break;
-		//	}
-		//	else if (Djikstra_Matrix[i].get_verticle() == current_verticle)
-		//	{
-		//		current_verticle = Djikstra_Matrix[i].get_edge();
-		//		std::cout << Djikstra_Matrix[i].get_verticle() << " -> ";
-		//	}
-		//}
-		//std::cout << '\n';
+		std::cout << "	       Road through: ";
+		for (int32_t i = _Djikstra_Matrix_lenght - 1; i >= 0; --i)
+		{
+			if (Djikstra_Matrix[i].get_verticle() == destination_verticle)
+			{
+				std::cout << Djikstra_Matrix[i].get_verticle();
+				break;
+			}
+			else if (Djikstra_Matrix[i].get_verticle() == current_verticle)
+			{
+				current_verticle = Djikstra_Matrix[i].get_edge();
+				std::cout << Djikstra_Matrix[i].get_verticle() << " -> ";
+			}
+		}
+		std::cout << '\n';
+		system("pause");
 	}
 }
 
@@ -391,6 +468,8 @@ void _Djikstra::minimal_spanning_tree_creator(const int32_t the_beginning)
 
 void _Djikstra::get_results()
 {
+	print_graph();
+	system("pause");
 	for (typename std::vector<std::pair<std::pair<int32_t, int32_t>, int32_t>>::const_iterator vec_iterator = Destinations.begin(); vec_iterator != Destinations.end(); ++vec_iterator)
 	{
 		find_way(vec_iterator->first.first, vec_iterator->first.second, vec_iterator->second);
@@ -399,6 +478,8 @@ void _Djikstra::get_results()
 
 void _Djikstra::print_graph() const
 {
+	p.Y = 40;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
 	std::cout << "  ";
 	for (size_t i = 0; i < this->_Graph_lenght; ++i)
 	{
@@ -407,8 +488,15 @@ void _Djikstra::print_graph() const
 	std::cout << '\n';
 	for (size_t i = 0; i < this->_Graph_lenght; ++i)
 	{
+		p.Y = i+41;
+		p.X = 0;
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
 		std::cout << (i + 1) << ' ';
-		Graph[i].print32_t_connections();
+		p.X = 27;
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
+		Graph[i].print_connections();
+		//std::cout << '\n';
+		//system("pause");
 		std::cout << '\n';
 	}
 	std::cout << '\n';

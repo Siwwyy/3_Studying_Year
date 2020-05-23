@@ -11,6 +11,8 @@
 
 #include <iostream>
 #include <vector>
+#include <windows.h>
+#include <fstream>
 #include <math.h>
 
 //#define NEW_LINE '\n'
@@ -56,7 +58,7 @@ public:
 	void set_cost(const int32_t cost);
 	void set_edge(const int32_t edge);
 	void set_visited_or_not(const bool visited_or_not);
-	void print32_t_connections() const;
+	void print_connections() const;
 	//////////////////////////////////////////////////////////////////////////////
 	/*
 		OPERATORY PUBLIC
@@ -153,6 +155,7 @@ public:
 
 //FUNCTION FOR INSERTING VALUES FROM file_in
 void inserter_DJIKSTRA(const std::vector<int32_t>& file_content);
+void inserter_DJIKSTRA(const std::string & file_path);
 //////////////////////////////////////////////////////////////////////////////
 
 #endif /* _DJIKSTRA_HPP_ */
