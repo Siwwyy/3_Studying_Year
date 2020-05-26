@@ -2,13 +2,6 @@
 #define _DJIKSTRA_HPP_
 #pragma once
 
-
-/*
- *			   Copyright (c) by Damian Andrysiak. All rights reserved.
- *					I hope that alghoritm will make right work
- *							Greetings for everyone!
-*/
-
 #include <iostream>
 #include <vector>
 #include <iomanip>

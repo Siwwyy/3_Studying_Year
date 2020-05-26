@@ -18,8 +18,8 @@ std::vector<std::string> Cities{};
 
 int main(int argc, char* argv[])
 {
-	//std::vector<std::vector<int32_t>> File_Data{ Get_File_Data("current.in") };
-	//Find_Path(File_Data);
+	std::vector<std::vector<int32_t>> File_Data{ Get_File_Data("current.in") };
+	Find_Path(File_Data);
 	//Save_To_File(File_Data, "correct_my_file.in");
 	//inserter_DJIKSTRA("correct_my_file.in", Cities);
 	//inserter_DJIKSTRA("file.in");
@@ -259,6 +259,21 @@ void Find_Path(std::vector<std::vector<int32_t>>& Connections)
 		current_city = current_city_temp;
 		Visited_Cities.emplace_back(current_city);
 
+	}
+
+	current_city = 0;
+	for (size_t i = 0; i < Connections.size(); ++i)
+	{
+		std::cout << Cities[current_city] << " -> ";
+		for (size_t j = 0; j < Connections[current_city].size(); ++j)
+		{
+			if (Connections[current_city][j] != 0)
+			{
+				std::cout << Cities[j] << "	  Road: " << Connections[current_city][j] << '\n';
+				current_city = j;
+				break;
+			}
+		}
 	}
 
 	//current_city = 0;
