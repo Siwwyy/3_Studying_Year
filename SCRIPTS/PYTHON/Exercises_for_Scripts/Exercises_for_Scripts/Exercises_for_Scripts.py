@@ -7,7 +7,7 @@ from datetime import date
 import os 
 
 
-#Zadanie 1
+#Zadanie 1  #popraw wpisujesz czerwiec
 
 #locale.setlocale(locale.LC_ALL, 'pl_PL')
 #c = calendar.TextCalendar(calendar.MONDAY);
@@ -23,7 +23,7 @@ import os
 
 ###########################################################################
 
-#Zadanie2
+#Zadanie2   #ok
 
 #class Record(object):
 #    def __init__(self, character, occurence):
@@ -59,11 +59,12 @@ import os
 
 
 #for list_elem in sorted_list:
-#    print(list_elem.Get_Character(),list_elem.Get_Occurence(), sep = " | ")
+#    if list_elem.Get_Occurence() > 1:
+#        print(list_elem.Get_Character(),list_elem.Get_Occurence(), sep = " | ")
 
 ###########################################################################
 
-#Zadanie3
+#Zadanie3   #ok
 
 #print("Podaj zdanie $ ")
 #str = input()
@@ -87,7 +88,7 @@ import os
 
 ###########################################################################
 
-#Zadanie4
+#Zadanie4   #ok
 
 #def int_to_roman(number):
 #    numerals={1:"I", 4:"IV", 5:"V", 9: "IX", 10:"X", 40:"XL", 50:"L",
@@ -105,7 +106,7 @@ import os
 
 ###########################################################################
 
-#Zadanie5
+#Zadanie5   #ok
 
 #def Get_Decimal(str):
 #    day = int()
@@ -143,7 +144,7 @@ import os
 
 ###########################################################################
 
-#Zadanie6
+#Zadanie6   #ok
 
 #file_name = "main.cpp"
 #file_data = str()
@@ -197,9 +198,9 @@ import os
 
 ###########################################################################
 
-#Zadanie7
+#Zadanie7   #dorzuc stream >> file, wywolaj to z wiersza polecen
 
-##operator for sorting
+#operator for sorting
 #def sort_by_Second(val): 
 #    return val[0][1]
 
@@ -226,14 +227,14 @@ import os
 
 ###########################################################################
 
-#Zadanie8
+#Zadanie8   #relatively direct path
 
 ##string_to_find = input()
 #string_to_find = "marcin"
 ##file_path = input()
 
 ##dir_path = os.path.dirname(os.path.realpath(file_path))
-#dir_path = os.path.dirname(os.path.realpath(__file__))
+#dir_path = "dddd"
 ##cwd = os.getcwd()
 
 #entries = os.listdir(dir_path)
@@ -247,7 +248,7 @@ import os
 
 ###########################################################################
 
-#Zadanie9
+#Zadanie9   #ok
 
 #Unique_File_Names = []
 
@@ -260,34 +261,34 @@ import os
 #    print(file_names, sep = '\n')
 
 
-import numpy as np
-import matplotlib.pyplot as plt
+#import numpy as np
+#import matplotlib.pyplot as plt
 
-import pywt
-import pywt.data
-import cv2
-import pandas
+#import pywt
+#import pywt.data
+#import cv2
+#import pandas
 
-# Load image
-#fname = os.path.join(os.path.dirname(__file__), 'wykres.png')
-#camera = np.load(fname)['data']
-#original = camera
+## Load image
+##fname = os.path.join(os.path.dirname(__file__), 'wykres.png')
+##camera = np.load(fname)['data']
+##original = camera
 
-image = cv2.imread('wykres.png')
-image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+#image = cv2.imread('wykres.png')
+#image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
 
-# Wavelet transform of image, and plot approximation and details
-titles = ['Approximation']
-coeffs2 = pywt.dwt2(image, 'bior1.3')
+## Wavelet transform of image, and plot approximation and details
+#titles = ['Approximation']
+#coeffs2 = pywt.dwt2(image, 'bior1.3')
 
-LL= coeffs2
-fig = plt.figure(figsize=(15, 15))
-ax = fig.add_subplot(1, 1,1)
-ax.imshow(image, interpolation="nearest", cmap=plt.cm.gray)
-ax.set_title(titles[0], fontsize=14)
-ax.set_xticks([])
-ax.set_yticks([])
+#LL= coeffs2
+#fig = plt.figure(figsize=(15, 15))
+#ax = fig.add_subplot(1, 1,1)
+#ax.imshow(image, interpolation="nearest", cmap=plt.cm.gray)
+#ax.set_title(titles[0], fontsize=14)
+#ax.set_xticks([])
+#ax.set_yticks([])
 
 
-fig.tight_layout()
-plt.show()
+#fig.tight_layout()
+#plt.show()
