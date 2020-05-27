@@ -7,7 +7,9 @@ from datetime import date
 import os 
 
 
-#Zadanie 1  #popraw wpisujesz czerwiec
+#Zadanie 1
+
+#months = ["styczen","luty","marzec","kwiecien","maj","czerwiec","lipiec","sierpien","wrzesien","pazdziernik","listopad","grudzien"]
 
 #locale.setlocale(locale.LC_ALL, 'pl_PL')
 #c = calendar.TextCalendar(calendar.MONDAY);
@@ -17,7 +19,10 @@ import os
 #print("Podaj miesiac $ ")
 #month = input()
 
-#str = c.formatmonth(int(year, base = 10),int(month, base = 10))
+#month_pos = months.index(month);
+#month_pos += 1
+
+#str = c.formatmonth(int(year, base = 10),int(str(month_pos), base = 10))
 
 #print(str)
 
@@ -227,14 +232,14 @@ import os
 
 ###########################################################################
 
-#Zadanie8   #relatively direct path sprawdz dddd/d
+#Zadanie8
 
 ##string_to_find = input()
 #string_to_find = "marcin"
 ##file_path = input()
 
 ##dir_path = os.path.dirname(os.path.realpath(file_path))
-#dir_path = "dddd"
+#dir_path = "Test"
 ##cwd = os.getcwd()
 
 #entries = os.listdir(dir_path)
