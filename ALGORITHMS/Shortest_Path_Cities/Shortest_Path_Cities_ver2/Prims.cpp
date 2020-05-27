@@ -2,61 +2,6 @@
 
 
 
-void inserter()
-{
-	int m = 0;			//amount of cities
-	int d = 0;			//amount of ways
-	int c1 = 0;			//number of city
-	int c2 = 0;			//number of city
-	int p = 0;			//amount of max passengers between one course
-	int s = 0;			//the beginning of way
-	int e = 0;			//the end of way
-	int t = 0;			//amount of max passengers to move by bus
-	while (true)
-	{
-		std::cin >> m;
-		std::cin >> d;
-		_MST* MST_Object = new _MST(m);
-		while (d > 0)
-		{
-			std::cin >> c1;
-			std::cin >> c2;
-			std::cin >> p;
-			//both times cause each road is in both ways
-			MST_Object->push(c1, c2, (-1) * p);
-			MST_Object->push(c2, c1, (-1) * p);
-			--d;
-			c1 = 0;
-			c2 = 0;
-			p = 0;
-		}
-		while (true)
-		{
-			std::cin >> s;
-			std::cin >> e;
-			if (s != 0 && e != 0)
-			{
-				std::cin >> t;
-				MST_Object->push_directions(s, e, t);
-			}
-			else
-			{
-				//here call all needed functions for solve the problem cause if s and e will be equal to 0 problem will be stopped immediately
-				///////////////////////////////////////////////
-				MST_Object->get_results();
-				///////////////////////////////////////////////
-				delete MST_Object;
-				exit(0);
-			}
-			s = 0;
-			e = 0;
-			t = 0;
-		}
-		d = 0;
-		m = 0;
-	}
-}
-
 ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////
 /*
@@ -374,6 +319,54 @@ void _MST::get_results()
 	{
 		find_way(vec_iterator->first.first, vec_iterator->first.second, vec_iterator->second);
 	}
+}
+
+void _MST::Create_Adjency_Matrix(const std::vector<std::string>& Cities)
+{
+	std::fstream file_out{};
+	file_out.open("adjency_matrix_miasta.out", std::ios_base::out);
+
+	std::vector<std::vector<int32_t>> Adjency_Matrix{};
+
+	Adjency_Matrix.resize(_Graph_lenght);
+	for (size_t i = 0; i < _Graph_lenght; ++i)
+	{
+		Adjency_Matrix[i].resize(_Graph_lenght);
+	}
+
+	for (size_t i = 0; i < _Prims_Matrix_lenght; ++i)
+	{
+		if (Prims_Matrix[i].get_edge() != 9999)
+		{
+			for (size_t j = 0; j < _Graph_lenght; ++j)
+			{
+				if (Prims_Matrix[i].get_edge() == static_cast<int>((j + 1)))
+				{
+					Adjency_Matrix[i][static_cast<size_t>(Prims_Matrix[i].get_edge() - 1)] = 1;
+					Adjency_Matrix[static_cast<size_t>(Prims_Matrix[i].get_edge() - 1)][i] = 1;
+				}
+				else
+				{
+					Adjency_Matrix[i][j] = 0;
+				}
+			}
+		}
+	}
+
+	for (size_t i = 0; i < _Graph_lenght; ++i)
+	{
+		file_out << Cities[i] << std::setw(20 - Cities[i].size());
+		for (size_t j = 0; j < _Graph_lenght; ++j)
+		{
+			file_out << Adjency_Matrix[i][j] << ' ';
+		}
+		if (i < _Graph_lenght - 1)
+		{
+			file_out << '\n';
+		}
+	}
+
+	file_out.close();
 }
 
 void _MST::find_way(const int from, const int to, const int way_lenght)

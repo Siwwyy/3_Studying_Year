@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <vector>
+#include <iomanip>
 #include <fstream>
 #include <math.h>
 
@@ -116,6 +117,7 @@ public:
 	void Print_Graph()const;
 	void Print_Prims_Matrix() const;
 	void get_results();
+	void Create_Adjency_Matrix(const std::vector<std::string>& Cities);
 	//////////////////////////////////////////////////////////////////////////////
 	/*
 		SETTERY PUBLIC
