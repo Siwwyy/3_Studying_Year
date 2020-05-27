@@ -60,7 +60,7 @@ const int32_t powmod(const int32_t a, const int32_t b, const uint32_t mod)
 
 const uint32_t Baby_Giant_Step(const int32_t a, const int32_t mod, const int32_t d)
 {
-	uint32_t result{ static_cast<uint32_t>(a) };
+	/*uint32_t result{ static_cast<uint32_t>(a) };
 	uint64_t x{ 1 };
 	const uint32_t m{ static_cast<uint32_t>(std::ceil(std::sqrt(mod))) };
 	std::vector<uint32_t> array{};
@@ -82,6 +82,75 @@ const uint32_t Baby_Giant_Step(const int32_t a, const int32_t mod, const int32_t
 		{
 			auto cos = std::distance(array.begin(), vec_iterator);
 			return static_cast<uint32_t>(i*m + std::distance(array.begin(), vec_iterator));
+		}
+		x = (x * v);
+		x %= mod;
+	}
+	return 0;*/
+
+	auto Is_Prime = [](uint32_t number) -> bool
+	{
+		bool isPrime = true;
+
+		for (size_t i = 2; i <= static_cast<size_t>(number / 2); ++i)
+		{
+			if (number % i == 0)
+			{
+				isPrime = false;
+				break;
+			}
+		}
+		if (isPrime == true)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	};
+
+
+	auto Hash = [](const uint32_t aj, const uint32_t p) -> uint32_t
+	{
+		uint32_t my_hash{};
+		my_hash = aj % p;
+		return my_hash;
+	};
+
+	uint32_t result{ static_cast<uint32_t>(a) };
+	uint64_t x{ 1 };
+	const uint32_t m{ static_cast<uint32_t>(std::ceil(std::sqrt(mod))) };
+	uint32_t p{};
+	for (uint32_t i = m; i >= 2; ++i)
+	{
+		if (Is_Prime(i) == true)
+		{
+			p = i;
+			break;
+		}
+	}
+
+	std::vector<std::vector<uint32_t>> array{};
+	array.resize(static_cast<size_t>(p));
+
+	for (size_t i = 0; i < static_cast<size_t>(m); ++i)
+	{
+		array[Hash(static_cast<uint32_t>(x),p)].emplace_back(static_cast<uint32_t>(x));
+		x = (x * a);
+		x %= mod;
+	}
+
+	const int32_t v = powmod(a, mod - m - 1, mod);
+	x = d;
+
+	for (size_t i = 0; i < static_cast<size_t>(m); ++i)
+	{
+		const size_t position = static_cast<size_t>(Hash(static_cast<uint32_t>(x), p));
+		std::vector<uint32_t>::iterator vec_iterator{ std::find(array[position].begin(), array[position].end(), x) };
+		if (vec_iterator != array[position].end())
+		{
+			return static_cast<uint32_t>(i * m + std::distance(array[position].begin(), vec_iterator) + i + 1);
 		}
 		x = (x * v);
 		x %= mod;
