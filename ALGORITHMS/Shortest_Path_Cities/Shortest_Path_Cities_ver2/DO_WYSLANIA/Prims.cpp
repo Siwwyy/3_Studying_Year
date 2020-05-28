@@ -97,24 +97,6 @@ void _MST_Element::set_edge(const int edge)
 	this->Edge = edge;
 }
 
-_MST_Element& _MST_Element::operator=(const _MST_Element& Object)
-{
-	if (this != &Object)
-	{
-		this->Verticle = Object.Verticle;
-		this->Cost = Object.Cost;
-		this->Edge = Object.Edge;
-		this->_Connections_size = Object._Connections_size;
-		delete[] this->Connections;
-		this->Connections = new int[this->_Connections_size];
-		for (size_t i = 0; i < this->_Connections_size; ++i)
-		{
-			this->Connections[i] = 0;
-		}
-	}
-	return *this;
-}
-
 int _MST_Element::get_verticle() const
 {
 	return this->Verticle;
@@ -175,25 +157,6 @@ _MST::_MST(const size_t _Graph_lenght) :
 	_Q_lenght(_Graph_lenght),
 	_Q_counter(0),
 	_Prims_Matrix_lenght(_Graph_lenght)
-{
-	this->Graph = new _MST_Element[this->_Graph_lenght];
-	this->Q = new int[this->_Q_lenght];
-	this->Prims_Matrix = new _MST_Element[this->_Prims_Matrix_lenght];
-	for (size_t i = 0; i < this->_Graph_lenght; ++i)
-	{
-		this->Graph[i].set_connections_size(this->_Graph_lenght);
-		this->Q[i] = static_cast<int>((i + 1));
-		this->Prims_Matrix[i].set_verticle(static_cast<int>((i + 1)));
-		this->Prims_Matrix[i].set_cost(0);
-		this->Prims_Matrix[i].set_edge(0);
-	}
-}
-
-_MST::_MST(const _MST& Object) :
-	_Graph_lenght(Object._Graph_lenght),
-	_Prims_Matrix_lenght(Object._Prims_Matrix_lenght),
-	_Q_lenght(Object._Q_lenght),
-	_Q_counter(Object._Q_counter)
 {
 	this->Graph = new _MST_Element[this->_Graph_lenght];
 	this->Q = new int[this->_Q_lenght];
@@ -437,33 +400,6 @@ void _MST::find_way(const int from, const int to, const int way_lenght)
 		std::cout << result << '\n';
 		delete[] visited;
 	}
-}
-
-_MST& _MST::operator=(const _MST& Object)
-{
-	if (this != &Object)
-	{
-		this->_Graph_lenght = Object._Graph_lenght;
-		this->_Q_counter = Object._Q_counter;
-		this->_Q_lenght = Object._Q_lenght;
-		this->_Prims_Matrix_lenght = Object._Prims_Matrix_lenght;
-		delete[] this->Graph;
-		delete[] this->Q;
-		delete[] this->Prims_Matrix;
-		this->F.clear();
-		this->Graph = new _MST_Element[this->_Graph_lenght];
-		this->Q = new int[this->_Q_lenght];
-		this->Prims_Matrix = new _MST_Element[this->_Prims_Matrix_lenght];
-		for (size_t i = 0; i < this->_Graph_lenght; ++i)
-		{
-			this->Graph[i].set_connections_size(this->_Graph_lenght);
-			this->Q[i] = static_cast<int>((i + 1));
-			this->Prims_Matrix[i].set_verticle(static_cast<int>((i + 1)));
-			this->Prims_Matrix[i].set_cost(0);
-			this->Prims_Matrix[i].set_edge(0);
-		}
-	}
-	return *this;
 }
 
 _MST::~_MST()
