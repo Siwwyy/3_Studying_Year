@@ -1,0 +1,17 @@
+52.12 21.02 Warszawa
+53.08 23.10 Bialystok
+53.07 18.00 Bydgoszcz
+50.48 19.07 Czestochowa
+54.22 18.38 Gdansk
+50.15 19.00 Katowice
+50.53 20.37 Kielce
+50.04 19.56 Krakow
+51.47 19.28 Lodz
+51.14 22.34 Lublin
+53.47 20.30 Olsztyn
+52.25 16.55 Poznan
+50.03 22.01 Rzeszow
+54.28 17.01 Slupsk
+53.26 14.34 Szczecin
+53.02 18.37 Torun
+51.07 17.02 Wroclaw

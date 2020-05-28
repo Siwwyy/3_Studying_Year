@@ -6,7 +6,6 @@
 #include <windows.h>
 #include <cmath>
 #include "Prims.h"
-#include "Djikstra.hpp"
 
 #define M_PI 3.14159265358979323846
 
@@ -74,6 +73,50 @@ const::std::vector<std::vector<int32_t>> Get_File_Data(const std::string& file_p
 		}
 	}
 	file_in.close();
+
+
+	//for (size_t i = 0; i < Temp_Data.size(); ++i)	//works, wczytywanie mateusza
+	//{
+	//	std::string city_name{};
+	//	std::string single_coord{};
+	//	int32_t coords[2]{};
+	//	size_t counter{};
+	//	float x{};
+	//	float y{};
+
+	//	for (size_t j = 0; j < Temp_Data[i].size(); ++j)
+	//	{
+	//		//Inserting city name
+	//		if (Temp_Data[i][j] == '(' || Temp_Data[i][j] == ')' || ((static_cast<int32_t>(Temp_Data[i][j]) >= 97 && static_cast<int32_t>(Temp_Data[i][j]) <= 122) || (static_cast<int32_t>(Temp_Data[i][j]) >= 65 && static_cast<int32_t>(Temp_Data[i][j]) <= 90)))
+	//		{
+	//			city_name += Temp_Data[i][j];
+	//		}
+
+	//		/////////////////////////////////////////////////////
+	//		//Inserting Coords
+	//		if (static_cast<int32_t>(Temp_Data[i][j]) >= 48 && static_cast<int32_t>(Temp_Data[i][j]) <= 57)
+	//		{
+	//			single_coord += Temp_Data[i][j];
+	//			if (single_coord.size() == 2)
+	//			{
+	//				coords[counter] = std::stoi(single_coord);
+	//				single_coord.clear();
+	//				++counter;
+	//				if (counter % 2 == 0 && x == 0.f)
+	//				{
+	//					x = static_cast<float>(static_cast<float>(coords[1]) / 60.f) + static_cast<float>(coords[0]);
+	//					counter = 0;
+	//				}
+	//			}
+	//		}
+	//	}
+	//	//Inserting city names
+	//	Cities.emplace_back(city_name);
+	//	//Inserting coordinates
+	//	y = static_cast<float>(static_cast<float>(coords[1]) / 60.f) + static_cast<float>(coords[0]);
+	//	Coords.emplace_back(std::make_pair(x, y));
+	//}
+
 
 
 	for (size_t i = 0; i < Temp_Data.size(); ++i)	//works, wczytywanie sebastiana
@@ -149,6 +192,28 @@ const::std::vector<std::vector<int32_t>> Get_File_Data(const std::string& file_p
 			}
 		}
 	}
+
+	//Printing matrix
+	//std::cin.get();
+	//size_t cities_counter{};
+	//for (size_t i = 0; i < Data.size(); ++i)	//works
+	//{
+	//	COORD p = { 0, i };
+	//	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
+	//	std::cout << Cities[cities_counter];
+	//	++cities_counter;
+	//	p.X = 27;
+	//	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
+
+	//	for (size_t j = 0; j < Data[i].size(); ++j)
+	//	{
+	//		std::cout << Data[i][j] << ' ';
+	//		p.X = (p.X + 4);
+	//		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
+	//	}
+	//	//std::cout << '\n';
+	//}
+	//std::cout << '\n';
 	return Data;
 }
 
@@ -181,24 +246,18 @@ const bool Invalid_Characters(const char character)
 void Create_MST(const std::vector<std::vector<int32_t>>& Connections)
 {
 	_MST* MST_Object = new _MST(Connections.size());
-	_Djikstra* DJIKSTRA_Object = new _Djikstra(Connections.size());
 
 	for (size_t i = 0; i < Connections.size(); ++i)
 	{
 		for (size_t j = 0; j < Connections[i].size(); ++j)
 		{
 			MST_Object->push(static_cast<int>(i + 1), static_cast<int>(j + 1), Connections[i][j]);
-			DJIKSTRA_Object->push(static_cast<int>(i + 1), static_cast<int>(j + 1), Connections[i][j]);
 		}
 	}
 	MST_Object->push_directions(1, Connections.size(),10);
-	MST_Object->minimal_spanning_tree_creator(1);	//numer miasta
-	MST_Object->Print_Prims_Matrix();
-	//MST_Object->Create_Adjency_Matrix(); //zapis do pliku macierzy sasiedztwa
-	std::cin.get();
-	DJIKSTRA_Object->push_directions(1, Connections.size(), 10);
-	DJIKSTRA_Object->minimal_spanning_tree_creator(1);	//numer miasta
-	DJIKSTRA_Object->print_djikstra_matrix();
+	//MST_Object->Print_Graph();
+	MST_Object->minimal_spanning_tree_creator(1);
+	//MST_Object->Print_Prims_Matrix();
+	MST_Object->Create_Adjency_Matrix(Cities);
 	delete MST_Object;
-	delete DJIKSTRA_Object;
 }

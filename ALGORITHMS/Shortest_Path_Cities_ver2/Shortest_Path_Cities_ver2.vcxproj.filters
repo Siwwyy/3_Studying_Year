@@ -21,15 +21,9 @@
     <ClCompile Include="Prims.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Djikstra.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Prims.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Djikstra.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

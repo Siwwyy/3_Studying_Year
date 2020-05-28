@@ -52,6 +52,7 @@ public:
 		OPERATORY PUBLIC
 	*/
 	//JEDNOARGUMENTOWE
+	_MST_Element& operator=(const _MST_Element& Object);
 	//DWUARGUMENTOWE
 	//////////////////////////////////////////////////////////////////////////////
 	/*
@@ -105,6 +106,7 @@ public:
 	*/
 	_MST();
 	_MST(const size_t _Graph_lenght);
+	_MST(const _MST& Object);
 	//////////////////////////////////////////////////////////////////////////////
 	/*
 		FUNKCJE PUBLIC
@@ -131,6 +133,7 @@ public:
 		OPERATORY PUBLIC
 	*/
 	//JEDNOARGUMENTOWE
+	_MST& operator=(const _MST& Object);
 	//DWUARGUMENTOWE
 	//////////////////////////////////////////////////////////////////////////////
 	/*
@@ -138,5 +141,11 @@ public:
 	*/
 	virtual ~_MST();
 };
+
+
+//FUNCTION FOR INSERTING VALUES
+void inserter();
+//////////////////////////////////////////////////////////////////////////////
+
 
 #endif /* _PRIMS_H_ */
