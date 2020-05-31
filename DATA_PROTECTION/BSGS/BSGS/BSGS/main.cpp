@@ -5,17 +5,25 @@
 #include <bitset>
 #include <string>
 #include <math.h>
+#include <cmath>
+#include <iterator>
+#include <cstdint>
+#include <unordered_map>
+
+#define STOPWATCH_ON
+#include "StopWatch.h"
 
 
 const int32_t Multiplication(const int32_t a, const int32_t mod, const int32_t d);
-const int32_t powmod(const int32_t a, const int32_t b, const uint32_t mod);
-const uint32_t Baby_Giant_Step(const int32_t a, const int32_t n, const int32_t d);
+const uint64_t powmod(const uint64_t a, const uint64_t b, const uint64_t mod);
+const uint64_t Baby_Giant_Step(const uint64_t a, const uint64_t mod, const uint64_t d);
 
 
 int main(int argc, char* argv[])
 {
-	std::cout << Multiplication(3, 17, 2) << '\n';
-	std::cout << Baby_Giant_Step(3, 17, 2) << '\n';
+	START_STOPWATCH
+	std::cout << Baby_Giant_Step(1004289383, 1781692777, 847996840) << '\n';
+	STOP_STOPWATCH
 
 	std::cin.get();
 	return EXIT_SUCCESS;
@@ -36,10 +44,10 @@ const int32_t Multiplication(const int32_t a, const int32_t mod, const int32_t d
 	return x;
 }
 
-const int32_t powmod(const int32_t a, const int32_t b, const uint32_t mod)
+const uint64_t powmod(const uint64_t a, const uint64_t b, const uint64_t mod)
 {
-	int32_t result{ 1 };
-	int32_t temp{};
+	uint64_t result{ 1 };
+	uint64_t temp{};
 
 	std::bitset<sizeof(a) * 8> bits(b);
 
@@ -58,37 +66,9 @@ const int32_t powmod(const int32_t a, const int32_t b, const uint32_t mod)
 	return result;
 }
 
-const uint32_t Baby_Giant_Step(const int32_t a, const int32_t mod, const int32_t d)
+const uint64_t Baby_Giant_Step(const uint64_t a, const uint64_t mod, const uint64_t d)
 {
-	/*uint32_t result{ static_cast<uint32_t>(a) };
-	uint64_t x{ 1 };
-	const uint32_t m{ static_cast<uint32_t>(std::ceil(std::sqrt(mod))) };
-	std::vector<uint32_t> array{};
-
-	for (size_t i = 0; i < static_cast<size_t>(m); ++i)
-	{
-		array.emplace_back(static_cast<uint32_t>(x));
-		x = (x * a);
-		x %= mod;
-	}
-
-	const int32_t v = powmod(a, mod - m - 1, mod);
-	x = d;
-
-	for (size_t i = 0; i < static_cast<size_t>(m); ++i)
-	{
-		std::vector<uint32_t>::iterator vec_iterator{ std::find(array.begin(), array.end(), x) };
-		if (vec_iterator != array.end())
-		{
-			auto cos = std::distance(array.begin(), vec_iterator);
-			return static_cast<uint32_t>(i*m + std::distance(array.begin(), vec_iterator));
-		}
-		x = (x * v);
-		x %= mod;
-	}
-	return 0;*/
-
-	auto Is_Prime = [](uint32_t number) -> bool
+	auto Is_Prime = [](uint64_t number) -> bool
 	{
 		bool isPrime = true;
 
@@ -111,18 +91,15 @@ const uint32_t Baby_Giant_Step(const int32_t a, const int32_t mod, const int32_t
 	};
 
 
-	auto Hash = [](const uint32_t aj, const uint32_t p) -> uint32_t
+	auto Hash = [](const uint64_t aj, const uint64_t p) -> uint64_t
 	{
-		uint32_t my_hash{};
-		my_hash = aj % p;
-		return my_hash;
+		return static_cast<uint64_t>(aj % p);
 	};
 
-	uint32_t result{ static_cast<uint32_t>(a) };
 	uint64_t x{ 1 };
-	const uint32_t m{ static_cast<uint32_t>(std::ceil(std::sqrt(mod))) };
-	uint32_t p{};
-	for (uint32_t i = m; i >= 2; ++i)
+	const uint64_t m{ static_cast<uint64_t>(std::ceil(std::sqrt(mod))) };
+	uint64_t p{ 0 };
+	for (uint64_t i = m; i >= 2; --i)
 	{
 		if (Is_Prime(i) == true)
 		{
@@ -131,29 +108,60 @@ const uint32_t Baby_Giant_Step(const int32_t a, const int32_t mod, const int32_t
 		}
 	}
 
-	std::vector<std::vector<uint32_t>> array{};
+	std::vector<std::vector<std::pair<size_t,uint64_t>>> array{};
 	array.resize(static_cast<size_t>(p));
 
 	for (size_t i = 0; i < static_cast<size_t>(m); ++i)
 	{
-		array[Hash(static_cast<uint32_t>(x),p)].emplace_back(static_cast<uint32_t>(x));
+		array[Hash(static_cast<uint64_t>(x), p)].emplace_back(std::make_pair(i,static_cast<uint64_t>(x)));
 		x = (x * a);
 		x %= mod;
 	}
 
-	const int32_t v = powmod(a, mod - m - 1, mod);
+	const uint64_t v = powmod(a, mod - m - 1, mod);
 	x = d;
+
+	auto Comp = [&](const std::pair<size_t, uint64_t>& _pair) -> bool
+	{
+		if (_pair.second == x)
+		{
+			return true;
+		}
+		return false;
+	};
 
 	for (size_t i = 0; i < static_cast<size_t>(m); ++i)
 	{
-		const size_t position = static_cast<size_t>(Hash(static_cast<uint32_t>(x), p));
-		std::vector<uint32_t>::iterator vec_iterator{ std::find(array[position].begin(), array[position].end(), x) };
+		const size_t position = static_cast<size_t>(Hash(static_cast<uint64_t>(x), p));
+		std::vector<std::pair<size_t, uint64_t>>::iterator vec_iterator{ std::find_if(array[position].begin(), array[position].end(), Comp) };
 		if (vec_iterator != array[position].end())
 		{
-			return static_cast<uint32_t>(i * m + std::distance(array[position].begin(), vec_iterator) + i + 1);
+			const size_t j = std::distance(array[position].begin(), vec_iterator);
+			return static_cast<uint64_t>(i * m + vec_iterator->first);
 		}
 		x = (x * v);
 		x %= mod;
 	}
+
+
+	//const auto m = static_cast<std::uint32_t>(std::ceil(std::sqrt(mod)));
+	//auto table = std::unordered_map<std::uint32_t, std::uint32_t>{};
+	//auto e = std::uint64_t{ 1 }; // temporary values may be bigger than 32 bit
+	//for (auto i = std::uint32_t{ 0 }; i < m; ++i) 
+	//{
+	//	table[static_cast<std::uint32_t>(e)] = i;
+	//	e = (e * a) % mod;
+	//}
+	//const auto factor = powmod(a, mod - m - 1, mod);
+	//e = d;
+	//for (auto i = std::uint32_t{}; i < m; ++i)
+	//{
+	//	auto it = table.find(static_cast<uint32_t>(e));
+	//	if (it != table.end()) 
+	//	{
+	//		return { i * m + it->second };
+	//	}
+	//	e = (e * factor) % mod;
+	//}
 	return 0;
 }
