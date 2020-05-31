@@ -64,7 +64,7 @@ const uint64_t powmod(const uint64_t a, const uint64_t b, const uint64_t mod)
 
 const uint64_t Baby_Giant_Step(const uint64_t a, const uint64_t mod, const uint64_t d)
 {
-	auto Is_Prime = [](uint64_t number) -> bool
+	auto Is_Prime = [](uint64_t & number) -> bool
 	{
 		bool isPrime = true;
 
@@ -87,7 +87,7 @@ const uint64_t Baby_Giant_Step(const uint64_t a, const uint64_t mod, const uint6
 	};
 
 
-	auto Hash = [](const uint64_t aj, const uint64_t p) -> uint64_t
+	auto Hash = [](const uint64_t & aj, const uint64_t & p) -> uint64_t
 	{
 		return static_cast<uint64_t>(aj % p);
 	};
