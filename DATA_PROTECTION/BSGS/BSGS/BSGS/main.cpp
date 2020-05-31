@@ -1,14 +1,10 @@
 #include <iostream>
 #include <cstdint>
 #include <vector>
-#include <random>
 #include <bitset>
 #include <string>
 #include <math.h>
 #include <cmath>
-#include <iterator>
-#include <cstdint>
-#include <unordered_map>
 
 #define STOPWATCH_ON
 #include "StopWatch.h"
@@ -142,26 +138,5 @@ const uint64_t Baby_Giant_Step(const uint64_t a, const uint64_t mod, const uint6
 		x = (x * v);
 		x %= mod;
 	}
-
-
-	//const auto m = static_cast<std::uint32_t>(std::ceil(std::sqrt(mod)));
-	//auto table = std::unordered_map<std::uint32_t, std::uint32_t>{};
-	//auto e = std::uint64_t{ 1 }; // temporary values may be bigger than 32 bit
-	//for (auto i = std::uint32_t{ 0 }; i < m; ++i) 
-	//{
-	//	table[static_cast<std::uint32_t>(e)] = i;
-	//	e = (e * a) % mod;
-	//}
-	//const auto factor = powmod(a, mod - m - 1, mod);
-	//e = d;
-	//for (auto i = std::uint32_t{}; i < m; ++i)
-	//{
-	//	auto it = table.find(static_cast<uint32_t>(e));
-	//	if (it != table.end()) 
-	//	{
-	//		return { i * m + it->second };
-	//	}
-	//	e = (e * factor) % mod;
-	//}
 	return 0;
 }
