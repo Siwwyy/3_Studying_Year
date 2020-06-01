@@ -5,6 +5,7 @@ import itertools
 from sortedcontainers import SortedList
 from datetime import date
 import os 
+import sys
 
 
 #Zadanie 1
@@ -206,28 +207,55 @@ import os
 #Zadanie7   #dorzuc stream >> file, wywolaj to z wiersza polecen
 
 #operator for sorting
-#def sort_by_Second(val): 
-#    return val[0][1]
+def sort_by_Second(val): 
+    return val[0][1]
 
-##str = input()
-#str = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-
-#Occurences = []
-
-#for char in str:
-#    occurence = str.count(char, 0, len(str))
-#    pair = [(char,int(occurence))]
-#    if pair not in Occurences:
-#        Occurences.append(pair)
+data=""
+file = 0
+if len(sys.argv) == 1:
+    data = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
 
 
-#Occurences.sort(key = sort_by_Second, reverse = True) 
-#counter = int()
-#for pairs in Occurences:
-#    print(pairs)
-#    counter += 1
-#    if counter == 10:
-#        break
+    Occurences = []
+
+    for char in data:
+        occurence = data.count(char, 0, len(data))
+        pair = [(char,int(occurence))]
+        if pair not in Occurences:
+            Occurences.append(pair)
+
+
+    Occurences.sort(key = sort_by_Second, reverse = True) 
+    counter = int()
+    for pairs in Occurences:
+        print(pairs)
+        counter += 1
+        if counter == 10:
+            break
+else:
+    file = open(str(sys.argv[1]), "r") 
+    data = file.read()
+    
+    file.close()
+
+    Occurences = []
+
+    for char in data:
+        occurence = data.count(char, 0, len(data))
+        pair = [(char,int(occurence))]
+        if pair not in Occurences:
+            Occurences.append(pair)
+
+
+    Occurences.sort(key = sort_by_Second, reverse = True)
+
+    file = open(str(sys.argv[1]), "a+") 
+    counter = int()
+    for pairs in Occurences:
+        file.write(' '.join('\n %s %s' % x for x in pairs))
+        counter += 1
+        if counter == 10:
+            break
 
 
 ###########################################################################
@@ -263,4 +291,4 @@ import os
 #            Unique_File_Names.append(single_file)
 
 #for file_names in Unique_File_Names:
-#    print(file_names, sep = '\n')
+#    print(file_names, sep = '\n')[('a', 7)][('a', 7)][('m', 4)][('d', 3)][('i', 3)][('n', 3)][('\n', 3)][('r', 1)][('c', 1)][('a', 7)][('m', 4)][('d', 3)][('i', 3)][('n', 3)][('\n', 3)][('r', 1)][('c', 1)]aaaaaaaa

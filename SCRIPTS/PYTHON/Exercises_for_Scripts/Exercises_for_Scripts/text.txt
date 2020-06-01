@@ -2,3 +2,12 @@ damian
 damian
 adam
 marcin
+ a 7
+ m 4
+ d 3
+ i 3
+ n 3
+ 
+ 3
+ r 1
+ c 1
