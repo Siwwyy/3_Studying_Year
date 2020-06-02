@@ -12,7 +12,7 @@ import pathlib
 import cv2
 import random
 import pickle
-import keras
+from tensorflow import keras
 from pathlib import Path
 import os, os.path
 
@@ -20,19 +20,23 @@ import os, os.path
 #print(tf.__version__)
 
 
-Class_names = [ "A", "B" ]
+#Class_names = [ "A", "B" , "C" , "D", "del", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "nothing", "O", "P", "Q", "R", "S", "space", "T", "U", "V", "W", "X", "Y", "Z"]
+#Class_names = [ "A", "B" , "C" , "D"]
 
+Class_names = [ "A", "B" , "C" , "D", "del", "E", "F", "G", "H", "I" ]
 
 def Prepare(file_path):
     IMG_SIZE = 50
     img_array = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
     new_img_array = cv2.resize(img_array, (IMG_SIZE,IMG_SIZE))
-    return new_img_array.reshape(-1, IMG_SIZE,IMG_SIZE, 1)
+    return new_img_array.reshape(-1,IMG_SIZE,IMG_SIZE)
 
 
-model = keras.models.load_model("64x3-CNN.model")
+#model = keras.models.load_model("64x3-CNN.model")
+#model = keras.models.load_model("my_model.h5")
+model = keras.models.load_model("my_model_mnist.h5")
 
-#predictions = model.predict([Prepare("A_test.jpg")])
+#predictions = model.predict([Prepare("F_test.jpg")])
 
 #print(Class_names[int(predictions[0][0])])
 
@@ -41,6 +45,8 @@ model = keras.models.load_model("64x3-CNN.model")
 #print(Class_names[int(predictions[0][0])])
 
 #predictions = model.predict([Prepare("my_b_test.jpg")])
+
+#print(np.argmax(predictions[0]))
 
 #print("You are showing following sign: ",Class_names[int(predictions[0][0])])
 
@@ -94,20 +100,33 @@ for imagePath in image_path_list:
     if key == 27: # escape
         break
 
+def scale(image):
+    return tf.cast(image, tf.float32)
 
 
-w=11
-h=11
-fig=plt.figure(figsize=(10, 10))
-columns = 2
-rows = 2
+w=25
+h=25
+fig=plt.figure(figsize=(30, 30))
+columns = 10
+rows = 3
 i = 1
 counter = 0
 for image in images_list:
     fig.add_subplot(rows, columns, i)
-    predictions = model.predict([Prepare(image_path_list[counter])])
+    #img = scale(Prepare(image_path_list[counter]));
+    #predictions = model.predict([scale(Prepare(image_path_list[counter]))])
+    #predictions = model.predict([Prepare(image_path_list[counter])])
+    #predictions = model.predict(img)
+    #probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
+    #predictions = probability_model.predict(img)
     #print("You are showing following sign: ",Class_names[int(predictions[0][0])])
-    plt.xlabel(Class_names[int(predictions[0][0])])
+
+
+    predictions = model.predict([Prepare(image_path_list[counter])])
+    plt.xlabel(Class_names[np.argmax(predictions[0])])
+
+
+
     bgr_img = image
     b,g,r = cv2.split(bgr_img)       # get b,g,r
     rgb_img = cv2.merge([r,g,b])     # switch it to rgb
