@@ -287,7 +287,7 @@ void _MST::get_results()
 void _MST::Create_Adjency_Matrix(const std::vector<std::string>& Cities)
 {
 	std::fstream file_out{};
-	file_out.open("adjency_matrix_miasta.out", std::ios_base::out);
+	file_out.open("adjency_matrix_miasta_prim.out", std::ios_base::out);
 
 	std::vector<std::vector<int32_t>> Adjency_Matrix{};
 
@@ -305,8 +305,11 @@ void _MST::Create_Adjency_Matrix(const std::vector<std::string>& Cities)
 			{
 				if (Prims_Matrix[i].get_edge() == static_cast<int>((j + 1)))
 				{
-					Adjency_Matrix[i][static_cast<size_t>(Prims_Matrix[i].get_edge() - 1)] = 1;
-					Adjency_Matrix[static_cast<size_t>(Prims_Matrix[i].get_edge() - 1)][i] = 1;
+					if (Prims_Matrix[i].get_edge() != Prims_Matrix[i].get_verticle())
+					{
+						Adjency_Matrix[i][static_cast<size_t>(Prims_Matrix[i].get_edge() - 1)] = 1;
+						Adjency_Matrix[static_cast<size_t>(Prims_Matrix[i].get_edge() - 1)][i] = 1;
+					}
 				}
 				else
 				{

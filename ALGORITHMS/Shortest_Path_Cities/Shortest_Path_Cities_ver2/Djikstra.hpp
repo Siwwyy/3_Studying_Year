@@ -121,6 +121,7 @@ public:
 	void get_results();
 	void print_graph() const;
 	void print_djikstra_matrix() const;
+	void Create_Adjency_Matrix(const std::vector < std::string> & Cities);
 	//////////////////////////////////////////////////////////////////////////////
 	/*
 		SETTERY PUBLIC

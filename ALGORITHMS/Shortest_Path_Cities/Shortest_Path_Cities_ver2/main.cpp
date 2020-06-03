@@ -18,13 +18,28 @@ std::vector<std::string> Cities{};
 
 int main(int argc, char* argv[])
 {
-	//std::vector<std::vector<int32_t>> File_Data{ Get_File_Data("current.in") };
 	std::vector<std::vector<int32_t>> File_Data{ Get_File_Data("miasta.txt") };
 	Create_MST(File_Data);
 
 	system("pause");
 	return EXIT_SUCCESS;
 }
+
+/*
+
+50.15 19.00 Katowice
+50.53 20.37 Kielce
+50.04 19.56 Krakow
+51.47 19.28 Lodz
+51.14 22.34 Lublin
+53.47 20.30 Olsztyn
+52.25 16.55 Poznan
+50.03 22.01 Rzeszow
+54.28 17.01 Slupsk
+53.26 14.34 Szczecin
+53.02 18.37 Torun
+51.07 17.02 Wroclaw
+*/
 
 /*
 
@@ -115,7 +130,7 @@ const::std::vector<std::vector<int32_t>> Get_File_Data(const std::string& file_p
 		Cities.emplace_back(city_name);
 		//Inserting coordinates
 		y = static_cast<float>(static_cast<float>(coords[1]) / 60.f) + static_cast<float>(coords[0]);
-		Coords.emplace_back(std::make_pair(y, x));
+		Coords.emplace_back(std::make_pair(x, y));
 	}
 
 
@@ -192,13 +207,15 @@ void Create_MST(const std::vector<std::vector<int32_t>>& Connections)
 		}
 	}
 	MST_Object->push_directions(1, Connections.size(),10);
+	MST_Object->Print_Graph();
 	MST_Object->minimal_spanning_tree_creator(1);	//numer miasta
 	MST_Object->Print_Prims_Matrix();
-	//MST_Object->Create_Adjency_Matrix(); //zapis do pliku macierzy sasiedztwa
+	MST_Object->Create_Adjency_Matrix(Cities); //zapis do pliku macierzy sasiedztwa
 	std::cin.get();
 	DJIKSTRA_Object->push_directions(1, Connections.size(), 10);
 	DJIKSTRA_Object->minimal_spanning_tree_creator(1);	//numer miasta
 	DJIKSTRA_Object->print_djikstra_matrix();
+	DJIKSTRA_Object->Create_Adjency_Matrix(Cities);
 	delete MST_Object;
 	delete DJIKSTRA_Object;
 }

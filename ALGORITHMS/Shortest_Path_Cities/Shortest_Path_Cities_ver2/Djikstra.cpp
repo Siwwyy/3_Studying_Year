@@ -78,7 +78,7 @@ void inserter_DJIKSTRA(const std::vector<int32_t>& file_content)
 	}
 }
 
-void inserter_DJIKSTRA(const std::string & file_path, const std::vector<std::string>& City)
+void inserter_DJIKSTRA(const std::string& file_path, const std::vector<std::string>& City)
 {
 	std::fstream file_in{};
 	file_in.open(file_path.c_str(), std::ios_base::in);
@@ -472,7 +472,7 @@ void _Djikstra::get_results()
 {
 	for (typename std::vector<std::pair<std::pair<int32_t, int32_t>, int32_t>>::const_iterator vec_iterator = Destinations.begin(); vec_iterator != Destinations.end(); ++vec_iterator)
 	{
-		std::cout << Cities_2[(vec_iterator->first.first-1)] << " -> " << Cities_2[(vec_iterator->first.second - 1)] << std::setw(80 - Cities_2[(vec_iterator->first.first - 1)].size() - Cities_2[(vec_iterator->first.second - 1)].size());
+		std::cout << Cities_2[(vec_iterator->first.first - 1)] << " -> " << Cities_2[(vec_iterator->first.second - 1)] << std::setw(80 - Cities_2[(vec_iterator->first.first - 1)].size() - Cities_2[(vec_iterator->first.second - 1)].size());
 		find_way(vec_iterator->first.first, vec_iterator->first.second, vec_iterator->second);
 	}
 }
@@ -489,7 +489,7 @@ void _Djikstra::print_graph() const
 	std::cout << '\n';
 	for (size_t i = 0; i < this->_Graph_lenght; ++i)
 	{
-		p.Y = i+41;
+		p.Y = i + 41;
 		p.X = 0;
 		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
 		std::cout << (i + 1) << ' ';
@@ -509,6 +509,57 @@ void _Djikstra::print_djikstra_matrix() const
 		std::cout << '\n';
 	}
 	std::cout << '\n';
+}
+
+void _Djikstra::Create_Adjency_Matrix(const std::vector<std::string>& Cities)
+{
+	std::fstream file_out{};
+	file_out.open("adjency_matrix_miasta_djikstra.out", std::ios_base::out);
+
+	std::vector<std::vector<int32_t>> Adjency_Matrix{};
+
+	Adjency_Matrix.resize(_Graph_lenght);
+	for (size_t i = 0; i < _Graph_lenght; ++i)
+	{
+		Adjency_Matrix[i].resize(_Graph_lenght);
+	}
+
+	for (size_t i = 0; i < _Djikstra_Matrix_lenght; ++i)
+	{
+		if (Djikstra_Matrix[i].get_edge() != 9999)
+		{
+			for (size_t j = 0; j < _Graph_lenght; ++j)
+			{
+				if (Djikstra_Matrix[i].get_edge() == static_cast<int>((j + 1)))
+				{
+					if (Djikstra_Matrix[i].get_edge() != Djikstra_Matrix[i].get_verticle())
+					{
+						Adjency_Matrix[i][static_cast<size_t>(Djikstra_Matrix[i].get_edge() - 1)] = 1;
+						Adjency_Matrix[static_cast<size_t>(Djikstra_Matrix[i].get_edge() - 1)][i] = 1;
+					}
+				}
+				else
+				{
+					Adjency_Matrix[i][j] = 0;
+				}
+			}
+		}
+	}
+
+	for (size_t i = 0; i < _Graph_lenght; ++i)
+	{
+		file_out << Cities[i] << std::setw(20 - Cities[i].size());
+		for (size_t j = 0; j < _Graph_lenght; ++j)
+		{
+			file_out << Adjency_Matrix[i][j] << ' ';
+		}
+		if (i < _Graph_lenght - 1)
+		{
+			file_out << '\n';
+		}
+	}
+
+	file_out.close();
 }
 
 _Djikstra& _Djikstra::operator=(const _Djikstra& Object)
