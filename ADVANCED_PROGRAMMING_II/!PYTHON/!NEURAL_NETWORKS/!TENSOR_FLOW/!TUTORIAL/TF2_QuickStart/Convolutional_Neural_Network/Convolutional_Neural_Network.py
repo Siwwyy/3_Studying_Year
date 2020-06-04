@@ -33,24 +33,39 @@ Class_names = [ "A", "B" , "C" , "D", "del", "E", "F", "G", "H", "I" ]
 
 X = pickle.load(open("X.pickle", "rb"))
 Y = pickle.load(open("Y.pickle", "rb"))
-X = np.array(X).reshape(-1, IMG_SIZE,IMG_SIZE)
+X = np.array(X).reshape(-1, IMG_SIZE,IMG_SIZE,1)
 Y = np.array(Y)
 X = X/255.0
 
-cos = X.shape[1:]
-
-model = keras.Sequential([
-    keras.layers.Flatten(input_shape = (IMG_SIZE,IMG_SIZE)),
-    keras.layers.Dense(256, activation='relu'),
-    keras.layers.Dense(10)
-])
 
 
+
+#cos = X.shape[1:]
+
+#model = keras.Sequential([
+#    keras.layers.Flatten(input_shape = (IMG_SIZE,IMG_SIZE)),
+#    keras.layers.Dense(256, activation='relu'),
+#    keras.layers.Dense(10)
+#])
+
+
+model = Sequential()
+model.add( Conv2D(32, (3, 3), activation='relu', input_shape=X.shape[1:]))
+model.add( MaxPooling2D((2, 2)))
+model.add( Conv2D(64, (3, 3), activation='relu'))
+model.add( MaxPooling2D((2, 2)))
+model.add( Conv2D(64, (3, 3), activation='relu'))
+
+model.add( Flatten())
+model.add( Dense(64, activation='relu'))
+model.add( Dense(10))
+
+model.summary()
 
 
 model.compile(optimizer='adam',loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True), metrics=['accuracy'])
 
-model.fit(X, Y, epochs=20,validation_split=0.3,verbose=1)
+model.fit(X, Y, epochs=10,validation_split=0.6,verbose=1)
 
 
 

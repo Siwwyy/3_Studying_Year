@@ -29,7 +29,7 @@ def Prepare(file_path):
     IMG_SIZE = 50
     img_array = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
     new_img_array = cv2.resize(img_array, (IMG_SIZE,IMG_SIZE))
-    return new_img_array.reshape(-1,IMG_SIZE,IMG_SIZE)
+    return new_img_array.reshape(-1,IMG_SIZE,IMG_SIZE,1)
 
 
 #model = keras.models.load_model("64x3-CNN.model")
@@ -122,7 +122,7 @@ for image in images_list:
     #print("You are showing following sign: ",Class_names[int(predictions[0][0])])
 
 
-    predictions = model.predict([Prepare(image_path_list[counter])])
+    predictions = model.predict([scale(Prepare(image_path_list[counter]))])
     plt.xlabel(Class_names[np.argmax(predictions[0])])
 
 
