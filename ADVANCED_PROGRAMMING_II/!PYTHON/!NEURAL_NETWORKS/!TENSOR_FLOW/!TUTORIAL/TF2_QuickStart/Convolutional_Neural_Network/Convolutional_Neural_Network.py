@@ -45,7 +45,7 @@ X = X/255.0
 
 
 model = Sequential()
-model.add( Conv2D(32, (3, 3), activation='relu', input_shape=X.shape[1:]))
+model.add( Conv2D(64, (3, 3), activation='relu', input_shape=X.shape[1:]))
 model.add( MaxPooling2D((2, 2)))
 model.add( Conv2D(64, (3, 3), activation='relu'))
 model.add( MaxPooling2D((2, 2)))
@@ -60,11 +60,11 @@ model.summary()
 
 model.compile(optimizer='adam',loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True), metrics=['accuracy'])
 
-model.fit(X, Y, epochs=10,validation_split=0.6,verbose=1)
+model.fit(X, Y, epochs=20,validation_split=0.3,verbose=1)
 
 
 
-model.save('my_model_mnist.h5')
+model.save('my_model_mnist_epochs20.h5')
 
 
 

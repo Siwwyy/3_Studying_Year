@@ -24,7 +24,6 @@ Data_dir = "E:\\!!PROJECTS_VS\\!Data_Sets\\SIGN_ALPHABET\\asl-alphabet\\asl_alph
 
 Class_names = [ "A", "B" , "C" , "D", "del", "E", "F", "G", "H", "I" ]
 
-
 #Class_names = [ "A", "B" , "C" , "D", "del", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "nothing", "O", "P", "Q", "R", "S", "space", "T", "U", "V", "W", "X", "Y", "Z"]
 
 #for category in Class_names:

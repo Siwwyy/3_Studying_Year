@@ -34,7 +34,7 @@ def Prepare(file_path):
 
 #model = keras.models.load_model("64x3-CNN.model")
 #model = keras.models.load_model("my_model.h5")
-model = keras.models.load_model("my_model_mnist.h5")
+model = keras.models.load_model("my_model_mnist_epochs20.h5")
 
 #predictions = model.predict([Prepare("F_test.jpg")])
 
