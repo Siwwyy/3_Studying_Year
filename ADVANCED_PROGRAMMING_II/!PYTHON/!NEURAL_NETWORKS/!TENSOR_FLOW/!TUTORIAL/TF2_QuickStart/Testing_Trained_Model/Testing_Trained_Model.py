@@ -104,11 +104,10 @@ def scale(image):
     return tf.cast(image, tf.float32)
 
 
-w=25
-h=25
+
 fig=plt.figure(figsize=(30, 30))
-columns = 10
-rows = 3
+columns = int(len(image_path_list)/2)
+rows = int(len(image_path_list)/3)
 i = 1
 counter = 0
 for image in images_list:
