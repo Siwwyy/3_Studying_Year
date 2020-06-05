@@ -20,10 +20,6 @@ import cv2
 #My_TensorBoard = TensorBoard(log_dir="logs/".format(NAME))
 
 
-
-
-
-
 IMG_SIZE = 50
 
 
@@ -36,7 +32,6 @@ Y = pickle.load(open("Y.pickle", "rb"))
 X = np.array(X).reshape(-1, IMG_SIZE,IMG_SIZE,1)
 Y = np.array(Y)
 X = X/255.0
-
 
 
 
@@ -58,7 +53,7 @@ model.add( Conv2D(64, (3, 3), activation='relu'))
 
 model.add( Flatten())
 model.add( Dense(64, activation='relu'))
-model.add( Dense(10))
+model.add( Dense(10)) #amout of labels
 
 model.summary()
 

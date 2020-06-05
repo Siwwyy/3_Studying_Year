@@ -67,7 +67,7 @@ images_list = []
 imageDir = "/" #specify your path here
 image_path_list = []
 valid_image_extensions = [".jpg", ".jpeg", ".png", ".tif", ".tiff"] #specify your vald extensions here
-valid_image_extensions = [item.lower() for item in valid_image_extensions]
+valid_image_extensions = [item.lower() for item in valid_image_extensions]  #lower means every Capital letter goes to be small D -> d
  
 #create a list all files in directory and
 #append files with a vaild extention to image_path_list
