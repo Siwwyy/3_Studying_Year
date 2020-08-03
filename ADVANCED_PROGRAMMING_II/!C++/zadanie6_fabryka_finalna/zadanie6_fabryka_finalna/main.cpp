@@ -4,18 +4,23 @@ using namespace std;
 
 int main()
 {
-	_FACTORY f;
-	f.setExterlnalInfo("500 200 100");   //informacje o czestotliwosci itp (wewnetrzne parametry) zobacz: Parser do lancucha znakow
-	f.setOutput(_FACTORY::BEEP);			//rodzaj morsa
-	f.Convert("Ala ma kota");			//co ma wybipac itp
-	f.setOutput(_FACTORY::BLINK);			//rodzaj morsa
-	f.Convert("Ala ma kota");			//co ma wybipac itp
-	f.setOutput(_FACTORY::CONSOLE);			//rodzaj morsa
-	f.Convert("Ala ma kota");			//co ma wybipac itp
-	f.setOutput(_FACTORY::DISK);			//rodzaj morsa
-	f.Convert(" a pies");			//co ma wybipac itp (tutaj rodzaj pliku)
-	f.Convert(123);			//rodzaj morsa
-	f.Convert(1.23);			//rodzaj morsa								//rodzaj mors
+	//_FACTORY f;
+	//f.setExterlnalInfo("500 200 100");   //informacje o czestotliwosci itp (wewnetrzne parametry) zobacz: Parser do lancucha znakow
+	//f.setOutput(_FACTORY::BEEP);			//rodzaj morsa
+	//f.Convert("Ala ma kota");			//co ma wybipac itp
+	//f.setOutput(_FACTORY::BLINK);			//rodzaj morsa
+	//f.Convert("Ala ma kota");			//co ma wybipac itp
+	//f.setOutput(_FACTORY::CONSOLE);			//rodzaj morsa
+	//f.Convert("Ala ma kota");			//co ma wybipac itp
+	//f.setOutput(_FACTORY::DISK);			//rodzaj morsa
+	//f.Convert(" a pies");			//co ma wybipac itp (tutaj rodzaj pliku)
+	//f.Convert(123);			//rodzaj morsa
+	//f.Convert(1.23);			//rodzaj morsa								//rodzaj mors
+
+	_MORSE_BASE* bs = new _MORSE_BEEP("beep");
+	_MORSE_BASE* bs1 = new _MORSE_BEEP("beep");
+	bs = bs1;
+
 	std::cin.get();
 	return 0;
 }

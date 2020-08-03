@@ -11,7 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>Video_Neural_Network</Name>
     <RootNamespace>Video_Neural_Network</RootNamespace>
-    <InterpreterId>Global|PythonCore|3.7</InterpreterId>
+    <InterpreterId>CondaEnv|CondaEnv|Anaconda3</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,6 +26,7 @@
     <Compile Include="Video_Neural_Network.py" />
   </ItemGroup>
   <ItemGroup>
+    <InterpreterReference Include="CondaEnv|CondaEnv|Anaconda3" />
     <InterpreterReference Include="Global|PythonCore|3.7" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />

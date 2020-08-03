@@ -123,7 +123,7 @@ public:
 		OPERATORY PUBLIC
 	*/
 	//JEDNOARGUMENTOWE
-	_MORSE_BASE & operator=(const _MORSE_BASE & Object);							//operator przypisania
+	virtual _MORSE_BASE & operator=(const _MORSE_BASE & Object);							//operator przypisania
 	//////////////////////////////////////////////////////////////////////////////
 	/*
 		DESTRUKTOR

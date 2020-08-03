@@ -130,11 +130,12 @@ const int _MORSE_BEEP::get__CharPause(void) const
 	return m__CharPause;
 }
 
-_MORSE_BEEP & _MORSE_BEEP::operator=(const _MORSE_BEEP & Object)
+_MORSE_BEEP& _MORSE_BEEP::operator=(const _MORSE_BEEP& Object)
 {
 	if (this != &Object)
 	{
-		this->m_name_morse = Object.m_name_morse;
+		//this->m_name_morse = Object.m_name_morse;
+		_MORSE_BASE::operator=(Object);
 		this->m__Freq = Object.m__Freq;
 		this->m__Pause = Object.m__Pause;
 		this->m__DotTime = Object.m__DotTime;

@@ -21,7 +21,8 @@ def draw_foo1(my_capture, my_x, my_y):
 #cap = cv2.VideoCapture('steel_balls.mp4')
 #cap = cv2.VideoCapture('people_moving.mp4')
 #cap = cv2.VideoCapture('People.mp4')
-cap = cv2.VideoCapture('cars_highway.mp4')
+#cap = cv2.VideoCapture('cars_highway.mp4')
+cap = cv2.VideoCapture('in1.mp4')
 
 #cap.set(cv2.CAP_PROP_FRAME_WIDTH, 300)
 #cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 300)
