@@ -74,22 +74,6 @@ Creature::Animal::Animal(const Animal& Object) :
 
 }
 
-void Creature::Animal::Move_Forwards()
-{
-}
-
-void Creature::Animal::Move_Backwards()
-{
-}
-
-void Creature::Animal::Move_Upwards()
-{
-}
-
-void Creature::Animal::Move_Downwards()
-{
-}
-
 Creature::Animal& Creature::Animal::operator=(const Animal& rhs)
 {
 	if (this != std::addressof(rhs))

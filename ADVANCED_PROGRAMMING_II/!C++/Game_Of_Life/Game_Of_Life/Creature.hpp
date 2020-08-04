@@ -8,6 +8,7 @@
 
 namespace Creature
 {
+	
 	class Creature
 	{
 	protected:
@@ -39,6 +40,7 @@ namespace Creature
 
 		virtual ~Creature();
 	};
+
 }
 
 #endif /* _CREATURE_HPP_ */

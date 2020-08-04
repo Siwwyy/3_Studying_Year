@@ -21,11 +21,11 @@ namespace Creature
 		Wolf(const Wolf& Object);
 
 
-		virtual void Set_Breed(const std::string& breed);
-		virtual void Set_Is_Predator(const bool is_predator);
-		virtual void Set_Name(const std::string& name);
-		virtual void Set_Pos_X(const int32_t pos_x);
-		virtual void Set_Pos_Y(const int32_t pos_y);
+		//virtual void Set_Breed(const std::string& breed);
+		//virtual void Set_Is_Predator(const bool is_predator);
+		//virtual void Set_Name(const std::string& name);
+		//virtual void Set_Pos_X(const int32_t pos_x);
+		//virtual void Set_Pos_Y(const int32_t pos_y);
 
 
 		virtual void Move_Forwards();
@@ -35,11 +35,11 @@ namespace Creature
 
 		Wolf& operator=(const Wolf& rhs);
 
-		virtual const std::string& Get_Breed() const;
-		virtual const bool Get_Is_Predator() const;
-		virtual const std::string& Get_Name() const;
-		virtual const int32_t Get_Pos_X() const;
-		virtual const int32_t Get_Pos_Y() const;
+		//virtual const std::string& Get_Breed() const;
+		//virtual const bool Get_Is_Predator() const;
+		//virtual const std::string& Get_Name() const;
+		//virtual const int32_t Get_Pos_X() const;
+		//virtual const int32_t Get_Pos_Y() const;
 
 		virtual ~Wolf();
 	};

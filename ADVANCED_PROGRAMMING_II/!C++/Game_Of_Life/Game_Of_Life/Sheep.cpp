@@ -17,31 +17,6 @@ Creature::Sheep::Sheep(const Sheep& Object) :
 
 }
 
-void Creature::Sheep::Set_Breed(const std::string& breed)
-{
-	Animal::Set_Breed(breed);
-}
-
-void Creature::Sheep::Set_Is_Predator(const bool is_predator)
-{
-	Animal::Set_Is_Predator(is_predator);
-}
-
-void Creature::Sheep::Set_Name(const std::string& name)
-{
-	Creature::Set_Name(name);
-}
-
-void Creature::Sheep::Set_Pos_X(const int32_t pos_x)
-{
-	Creature::Set_Pos_X(pos_x);
-}
-
-void Creature::Sheep::Set_Pos_Y(const int32_t pos_y)
-{
-	Creature::Set_Pos_Y(pos_y);
-}
-
 void Creature::Sheep::Move_Forwards()
 {
 	this->m_pos_x++;
@@ -73,78 +48,32 @@ Creature::Sheep& Creature::Sheep::operator=(const Sheep& rhs)
 	return *this;
 }
 
-//bool Creature::Sheep::operator==(const Sheep& rhs)
+//const std::string& Creature::Sheep::Get_Breed() const
 //{
-//	return Animal::operator==(rhs);
+//	return Animal::Get_Breed();
 //}
 //
-//const std::int32_t Creature::Sheep::operator()(const Sheep& rhs)
+//const bool Creature::Sheep::Get_Is_Predator() const
 //{
-//	return Animal::operator()(rhs);
+//	return Animal::Get_Is_Predator();
 //}
-
-//bool Creature::Sheep::operator==(const Sheep& rhs) const
+//
+//const std::string& Creature::Sheep::Get_Name() const
 //{
-//	if (this->m_pos_x == rhs.m_pos_x && this->m_pos_y == rhs.m_pos_y)
-//	{
-//		return true;
-//	}
-//	return false;
+//	return Creature::Get_Name();
 //}
-
-//bool Creature::Sheep::operator!=(const Sheep& rhs)
+//
+//const int32_t Creature::Sheep::Get_Pos_X() const
 //{
-//	if (this->m_pos_x != rhs.m_pos_x && this->m_pos_y != rhs.m_pos_y)
-//	{
-//		return true;
-//	}
-//	return false;
+//	return Creature::Get_Pos_X();
 //}
-
-const std::string& Creature::Sheep::Get_Breed() const
-{
-	return Animal::Get_Breed();
-}
-
-const bool Creature::Sheep::Get_Is_Predator() const
-{
-	return Animal::Get_Is_Predator();
-}
-
-const std::string& Creature::Sheep::Get_Name() const
-{
-	return Creature::Get_Name();
-}
-
-const int32_t Creature::Sheep::Get_Pos_X() const
-{
-	return Creature::Get_Pos_X();
-}
-
-const int32_t Creature::Sheep::Get_Pos_Y() const
-{
-	return Creature::Get_Pos_Y();
-}
+//
+//const int32_t Creature::Sheep::Get_Pos_Y() const
+//{
+//	return Creature::Get_Pos_Y();
+//}
 
 Creature::Sheep::~Sheep()
 {
 
 }
-
-//bool Creature::operator==(const Sheep& lhs, const Sheep& rhs)
-//{
-//	if (lhs.m_pos_x == rhs.m_pos_x && lhs.m_pos_y == rhs.m_pos_y)
-//	{
-//		return true;
-//	}
-//	return false;
-//}
-
-//bool Creature::operator==(const Sheep& lhs, const Sheep& rhs)
-//{
-//	if (lhs.m_pos_x == rhs.m_pos_x && lhs.m_pos_y == rhs.m_pos_y)
-//	{
-//		return true;
-//	}
-//	return false;
-//}

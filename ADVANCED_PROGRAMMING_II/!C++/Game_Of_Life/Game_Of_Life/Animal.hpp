@@ -10,6 +10,10 @@
 
 namespace Creature
 {
+
+	
+
+
 	class Animal :
 		public Creature
 	{
@@ -43,12 +47,28 @@ namespace Creature
 		virtual void Move_Downwards() = 0;
 
 		Animal& operator=(const Animal& rhs);
-		//virtual bool operator==(const Animal& rhs);
-		//virtual const std::int32_t operator()(const Animal& rhs);
-		//virtual bool operator==(const Animal& rhs);
-		//bool operator==(const Animal& rhs);
-		//const std::string& operator()(const Animal& rhs) const;
 	};
+
+	struct Animal_Hash
+	{
+		const std::size_t operator()(const Animal* ptr) const
+		{
+			return ptr->Get_Pos_X();
+		}
+	};
+
+	struct Animal_Equal
+	{
+		bool operator()(const Animal* lhs, const Animal* rhs) const
+		{
+			if (lhs->Get_Pos_X() == rhs->Get_Pos_X() && lhs->Get_Pos_Y() == rhs->Get_Pos_Y())
+			{
+				return true;
+			}
+			return false;
+		}
+	};
+
 }
 
 #endif /* _ANIMAL_HPP_ */

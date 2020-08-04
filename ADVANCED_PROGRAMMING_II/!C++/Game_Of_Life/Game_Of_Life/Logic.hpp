@@ -21,25 +21,7 @@
 
 namespace Engine
 {
-	struct Hasher
-	{
-		const std::size_t operator()(const Creature::Animal* ptr) const
-		{
-			return ptr->Get_Pos_X();
-		}
-	};
 
-	struct Equals
-	{
-		bool operator()(const Creature::Animal* lhs, const Creature::Animal* rhs) const
-		{
-			if (lhs->Get_Pos_X() == rhs->Get_Pos_X() && lhs->Get_Pos_Y() == rhs->Get_Pos_Y())
-			{
-				return true;
-			}
-			return false;
-		}
-	};
 
 	class Logic
 	{
@@ -54,7 +36,7 @@ namespace Engine
 		std::random_device rand{};
 
 
-		std::unordered_set<Creature::Animal*, Hasher, Equals> Sheeps;
+		std::unordered_set< Creature::Animal*, Creature::Animal_Hash, Creature::Animal_Equal >m_Sheeps;
 
 		void Draw_Objects();
 		void Clear_Objects();
@@ -62,7 +44,10 @@ namespace Engine
 		void Key();
 		void Move();
 		void Add_Sheep();
-		void Game();
+		void Game_Draw();
+		void Game_Logic();
+		void Difusion();
+		void Collision();
 
 	public:
 		Logic() = delete;
