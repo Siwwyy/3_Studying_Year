@@ -73,6 +73,19 @@ Creature::Creature& Creature::Creature::operator=(const Creature& rhs)
 	return *this;
 }
 
+//bool Creature::Creature::operator==(const Creature& rhs)
+//{
+//	if (this->m_pos_x == rhs.m_pos_x && this->m_pos_y == rhs.m_pos_y)
+//	{
+//		return true;
+//	}
+//	return false;
+//}
+//
+//const std::int32_t Creature::Creature::operator()(const Creature& rhs)
+//{
+//	return std::hash<std::string>()(rhs.m_name);
+//}
 
 Creature::Creature::~Creature()
 {

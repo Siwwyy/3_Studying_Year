@@ -6,9 +6,12 @@
 #include <iostream>
 #include <cstdint>
 #include <unordered_set>
+#include <set>
 #include <algorithm>
 #include <thread>
 #include <vector>
+#include <random>
+#include <mutex>
 #include <windows.h>
 
 #include "Sheep.hpp"
@@ -18,26 +21,53 @@
 
 namespace Engine
 {
+	struct Hasher
+	{
+		const std::size_t operator()(const Creature::Animal* ptr) const
+		{
+			return ptr->Get_Pos_X();
+		}
+	};
+
+	struct Equals
+	{
+		bool operator()(const Creature::Animal* lhs, const Creature::Animal* rhs) const
+		{
+			if (lhs->Get_Pos_X() == rhs->Get_Pos_X() && lhs->Get_Pos_Y() == rhs->Get_Pos_Y())
+			{
+				return true;
+			}
+			return false;
+		}
+	};
+
 	class Logic
 	{
 	private:
 		Drawing Draw;
 		Keyboard_Event Key_Event;
+		Creature::Animal* m_Wolf;
 
 		volatile bool is_not_end = true;
-		//std::unordered_set<std::unique_ptr<Creature::Sheep*>> Sheeps;
-		std::vector<Creature::Animal*> Sheeps;
+		std::mutex Wolf_Resources{};
+		std::mutex Sheep_Resources{};
+		std::random_device rand{};
+
+
+		std::unordered_set<Creature::Animal*, Hasher, Equals> Sheeps;
 
 		void Draw_Objects();
 		void Clear_Objects();
-		
+
 		void Key();
+		void Move();
+		void Add_Sheep();
 		void Game();
 
 	public:
 		Logic() = delete;
 		Logic(const int32_t width, const int32_t height);
-		Logic(const Logic & Object);
+		Logic(const Logic& Object);
 
 		void Run_Game();
 

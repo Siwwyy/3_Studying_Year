@@ -34,7 +34,8 @@ namespace Creature
 		virtual void Move_Downwards() = 0;
 
 		Creature& operator=(const Creature& rhs);
-		//bool operator!=() const;
+		//virtual bool operator==(const Creature& rhs);
+		//virtual const std::int32_t operator()(const Creature& rhs);
 
 		virtual ~Creature();
 	};

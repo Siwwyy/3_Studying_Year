@@ -14,7 +14,7 @@ Creature::Sheep::Sheep(const std::string& name, const int32_t pos_x, const int32
 Creature::Sheep::Sheep(const Sheep& Object) :
 	Animal(Object)
 {
-	
+
 }
 
 void Creature::Sheep::Set_Breed(const std::string& breed)
@@ -73,14 +73,33 @@ Creature::Sheep& Creature::Sheep::operator=(const Sheep& rhs)
 	return *this;
 }
 
-bool Creature::Sheep::operator!=(const Sheep& rhs)
-{
-	if (this->m_pos_x == rhs.m_pos_x && this->m_pos_y == rhs.m_pos_y)
-	{
-		return true;
-	}
-	return false;
-}
+//bool Creature::Sheep::operator==(const Sheep& rhs)
+//{
+//	return Animal::operator==(rhs);
+//}
+//
+//const std::int32_t Creature::Sheep::operator()(const Sheep& rhs)
+//{
+//	return Animal::operator()(rhs);
+//}
+
+//bool Creature::Sheep::operator==(const Sheep& rhs) const
+//{
+//	if (this->m_pos_x == rhs.m_pos_x && this->m_pos_y == rhs.m_pos_y)
+//	{
+//		return true;
+//	}
+//	return false;
+//}
+
+//bool Creature::Sheep::operator!=(const Sheep& rhs)
+//{
+//	if (this->m_pos_x != rhs.m_pos_x && this->m_pos_y != rhs.m_pos_y)
+//	{
+//		return true;
+//	}
+//	return false;
+//}
 
 const std::string& Creature::Sheep::Get_Breed() const
 {
@@ -111,3 +130,21 @@ Creature::Sheep::~Sheep()
 {
 
 }
+
+//bool Creature::operator==(const Sheep& lhs, const Sheep& rhs)
+//{
+//	if (lhs.m_pos_x == rhs.m_pos_x && lhs.m_pos_y == rhs.m_pos_y)
+//	{
+//		return true;
+//	}
+//	return false;
+//}
+
+//bool Creature::operator==(const Sheep& lhs, const Sheep& rhs)
+//{
+//	if (lhs.m_pos_x == rhs.m_pos_x && lhs.m_pos_y == rhs.m_pos_y)
+//	{
+//		return true;
+//	}
+//	return false;
+//}

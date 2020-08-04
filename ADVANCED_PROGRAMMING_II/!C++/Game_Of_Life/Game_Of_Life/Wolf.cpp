@@ -100,4 +100,5 @@ const int32_t Creature::Wolf::Get_Pos_Y() const
 
 Creature::Wolf::~Wolf()
 {
+
 }

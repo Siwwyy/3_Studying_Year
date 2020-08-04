@@ -34,9 +34,12 @@ namespace Creature
 		virtual void Move_Upwards();
 		virtual void Move_Downwards();
 
-		Sheep& operator=(const Sheep& rhs);
-		bool operator!=(const Sheep& rhs);
-	
+		Sheep& operator=(const Sheep& rhs);	
+		//virtual bool operator==(const Sheep& rhs);
+		//friend bool operator==(const Sheep& lhs, const Sheep& rhs);
+		//virtual bool operator==(const Sheep& rhs);
+		//virtual const std::int32_t operator()(const Sheep& rhs);
+
 		virtual const std::string& Get_Breed() const;
 		virtual const bool Get_Is_Predator() const;
 		virtual const std::string& Get_Name() const;
