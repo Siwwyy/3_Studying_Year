@@ -2,15 +2,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>66266564-e63d-4e8d-acb4-0460d3b82190</ProjectGuid>
+    <ProjectGuid>a12637e8-3ac5-4822-b59e-dfc338c5b47f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Final_Project.py</StartupFile>
+    <StartupFile>Exercise_1.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>Final_Project</Name>
-    <RootNamespace>Final_Project</RootNamespace>
+    <Name>Exercise_1</Name>
+    <RootNamespace>Exercise_1</RootNamespace>
+    <InterpreterId>CondaEnv|CondaEnv|Anaconda3</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,19 +22,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Cube.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Final_Project.py" />
-    <Compile Include="Neural_Network.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Obstacle.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Perceptron.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Exercise_1.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="CondaEnv|CondaEnv|Anaconda3" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -1,10 +1,10 @@
-Waszyngton         0 1 0 0 0 1 1 0 0 0 
+Waszyngton         0 1 0 0 0 0 1 0 0 0 
 NowyJork           1 0 1 0 0 0 0 0 0 0 
 SanFrancisco       0 1 0 1 0 0 0 0 0 1 
 Seattle            0 0 1 0 0 0 0 0 0 0 
-Dallas             0 0 0 0 0 1 0 1 0 0 
-Chicago            1 0 0 0 0 0 0 0 0 0 
+Dallas             0 0 0 0 0 0 0 1 0 0 
+Chicago            0 0 0 0 0 0 1 1 0 0 
 Miami              1 0 0 0 0 0 0 0 0 0 
-Huston             0 0 0 0 1 0 0 0 0 0 
+Huston             0 0 0 0 0 1 0 0 0 0 
 LosAngeles         0 0 0 0 0 0 0 0 0 1 
 LasVegas           0 0 1 0 0 0 0 0 0 0 
